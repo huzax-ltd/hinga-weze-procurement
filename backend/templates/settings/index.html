@@ -1,0 +1,57 @@
+{% extends '_include/base-dashboard.html' %}
+{% block head %}
+    {% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
+{% endblock %}
+
+{% block body %}
+    {% load static %}{% csrf_token %}
+    <ol class="breadcrumb" style="padding-left:0;">
+        <li><a href="{% url 'operators_dashboard' %}">Home</a></li>
+        <li class="active">{{ title }}</li>
+    </ol>
+    <div class="panel">
+        <div class="panel-body" style="padding-top: 0;">
+            <h3>{{ title }}</h3>
+            <div>
+                {% if ACCESS_PERMISSION_SETTINGS_VIEW in auth_permissions.values %}
+                    <a href="{% url 'backup_restore' %}" class="btn btn-default">Backup/Restore</a>
+                {% endif %}
+                {% if ACCESS_PERMISSION_SETTINGS_VIEW in auth_permissions.values %}
+                    <a href="{% url 'hardware' ip='-' port='-' command='-' %}" class="btn btn-default">Hardware</a>
+                {% endif %}
+                {% if ACCESS_PERMISSION_SETTINGS_VIEW in auth_permissions.values %}
+                    <a href="javascript:synchronizeHardwareLogs();" class="btn btn-default">Synchronize
+                        Hardware Logs</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!--suppress JSIgnoredPromiseFromCall, EqualityComparisonWithCoercionJS -->
+    <script>
+        var synchronizeHardwareLogs;
+        synchronizeHardwareLogs = function synchronizeHardwareLogs() {
+            var url = "{% url 'synchronize_hardware_logs' %}";
+            bootbox.dialog({
+                closeButton: false,
+                title: "Message",
+                message: '' + '<p>Please wait while loading ...</p>' + '<div class="active progress progress-lg progress-striped"><div style="width: 100%;" class="progress-bar progress-bar-primary"></div></div>' + ''
+            });
+            jQuery(function ($) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    success: function (result) {
+                        console.log(result);
+                        bootbox.hideAll();
+                    },
+                    error: function (result) {
+                        console.log(JSON.stringify(result));
+                        bootbox.hideAll();
+                    }
+                });
+                return false;
+            });
+        };
+    </script>
+{% endblock %}

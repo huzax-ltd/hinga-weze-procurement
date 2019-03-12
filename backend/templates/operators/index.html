@@ -1,0 +1,132 @@
+{% extends '_include/base-index.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block head %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
+{% endblock %}
+{% block body %}
+    {% load static %}{% csrf_token %}
+    <div class='panel panel-dark' id='div-search'>
+        <div class='panel-heading'>
+            <div class='panel-control'>
+                <button class='btn btn-default' data-target='#search-panel-collapse' data-toggle='collapse'
+                        aria-expanded='true'><i class='demo-pli-arrow-down'></i></button>
+                <a href='javascript:displayDivSearch();'>
+                    <button class='btn btn-default'><i class='demo-pli-cross'></i></button>
+                </a></div>
+            <h3 class='panel-title'>Advanced Search</h3>
+        </div>
+        <div id='search-panel-collapse' class='collapse in' aria-expanded='true'>
+            <div class='panel-body'>
+                <form method="post" action="">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>
+                                    {{ search_form.gender.label }}
+                                    <label style="color: red; margin-bottom: 0;">
+                                        {% if search_form.gender.field.required %} * {% endif %}
+                                    </label>
+                                </label>
+                                <br>{{ search_form.gender }}{{ search_form.gender.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"> Submit</button>
+                    <a class="btn btn-default" href="{{ index_url }}">Reset</a></form>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h2
+                class="panel-title">{{ title }}</h2>
+        </div>
+        <div class="panel-body" style="padding:15px 0 15px 0;">
+            <div class="dt-buttons" style="margin-left:15px; margin-right:3px;">
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        Multiple
+                        Action &nbsp;&nbsp;<i class="fa fa-caret-down"></i></button>
+                    <ul class="dropdown-menu">
+                        <div class="dt-button-collection">
+                            {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                <a class="btn btn-default btn-block"
+                                   href="#"
+                                   onclick="multipleSelect('{{ multiple_select_url }}', 'verify');">
+                                    Verify Selected
+                                </a>
+                            {% endif %}
+                            {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                <a class="btn btn-default btn-block"
+                                   href="#"
+                                   onclick="multipleSelect('{{ multiple_select_url }}', 'approve');">
+                                    Approve Selected
+                                </a>
+                            {% endif %}
+                            {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                <a class="btn btn-default btn-block"
+                                   href="#"
+                                   onclick="multipleSelect('{{ multiple_select_url }}', 'block');">
+                                    Block Selected
+                                </a>
+                            {% endif %}
+                            {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                <a class="btn btn-default btn-block"
+                                   href="#"
+                                   onclick="multipleSelect('{{ multiple_select_url }}', 'unblock');">
+                                    Unblock Selected
+                                </a>
+                            {% endif %}
+                            {% if ACCESS_PERMISSION_OPERATOR_DELETE in auth_permissions.values %}
+                                <a class="btn btn-default btn-block"
+                                   href="#"
+                                   onclick="multipleSelect('{{ multiple_select_url }}', 'delete');">
+                                    Delete Selected
+                                </a>
+                            {% endif %}
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <div class="dt-buttons" style="margin-right:3px;">
+                {% if ACCESS_PERMISSION_OPERATOR_CREATE in auth_permissions.values %}
+                    <a class="btn btn-default"
+                       href="{% url 'operators_create' %}">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add
+                    </a>
+                {% endif %}
+                {#                {% if ACCESS_PERMISSION_OPERATOR_VIEW in auth_permissions.values %}#}
+                {#                    <a class="btn btn-default" href="#" onclick="displayDivSearch();">#}
+                {#                        <i class="fa fa-search" aria-hidden="true"></i> Search#}
+                {#                    </a>#}
+                {#                {% endif %}#}
+            </div>
+            {% render_table table %}
+        </div>
+    </div>
+    <!--suppress ES6ConvertVarToLetConst -->
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $("#search-input-select-gender").select2({placeholder: "--select--", allowClear: true});
+            var search = document.getElementById("div-search");
+            if ('{{display_search}}' === 'True') {
+                search.style.display = "block";
+            } else {
+                search.style.display = "none";
+            }
+        });
+        displayDivSearch();
+
+        function displayDivSearch() {
+            var search = document.getElementById("div-search");
+            if (search.style.display === 'none') {
+                search.style.display = "block";
+            } else {
+                search.style.display = "none";
+            }
+        }
+
+    </script>
+    {% include '_include/single_select.html' %}
+    {% include '_include/multiple_select.html' %}
+{% endblock %}

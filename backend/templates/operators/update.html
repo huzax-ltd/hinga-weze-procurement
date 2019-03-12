@@ -1,0 +1,96 @@
+{% extends '_include/base-general.html' %}
+{% block head %}
+    {% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
+{% endblock %}
+
+{% block body %}
+    {% load static %}{% csrf_token %}
+
+    <ol class="breadcrumb" style="padding-left:0;">
+        <li><a href="{% url 'operators_dashboard' %}">Home</a></li>
+        <li><a href="{% url 'operators_index' %}">{{ title }}</a></li>
+        <li><a href="{% url 'operators_view' pk=model.operator_id %}">{{ model.operator_id }}</a></li>
+        <li class="active">Update</li>
+    </ol>
+    <div class="panel">
+        <div class="panel-body" style="padding-top: 0;">
+            <h3>Update</h3>
+            <div>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>
+                            {{ form.email.label }}
+                            <label style="color: red; margin-bottom: 0;">
+                                {% if form.email.field.required %} * {% endif %}
+                            </label>
+                        </label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            {{ form.name.label }}
+                            <label style="color: red; margin-bottom: 0;">
+                                {% if form.name.field.required %} * {% endif %}
+                            </label>
+                        </label>
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>
+                                    {{ form.type.label }}
+                                    <label style="color: red; margin-bottom: 0;">
+                                        {% if form.type.field.required %} * {% endif %}
+                                    </label>
+                                </label>
+                                {{ form.type }}
+                                {{ form.type.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>
+                                    {{ form.gender.label }}
+                                    <label style="color: red; margin-bottom: 0;">
+                                        {% if form.gender.field.required %} * {% endif %}
+                                    </label>
+                                </label>
+                                {{ form.gender }}
+                                {{ form.gender.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>
+                                    {{ form.phone_number.label }}
+                                    <label style="color: red; margin-bottom: 0;">
+                                        {% if form.phone_number.field.required %} * {% endif %}
+                                    </label>
+                                </label>
+                                {{ form.phone_number }}
+                                {{ form.phone_number.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-lg btn-block btn-primary"> Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--suppress ES6ConvertVarToLetConst -->
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $("#search-input-select-type").select2({placeholder: "--select--", allowClear: true});
+            $("#search-input-select-gender").select2({placeholder: "--select--", allowClear: true});
+        });
+
+
+    </script>
+{% endblock %}

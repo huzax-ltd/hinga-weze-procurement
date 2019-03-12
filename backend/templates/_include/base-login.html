@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include '_include/header.html' %}{% load static %}
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap-3.3.7.min.css' %}">
+    <link rel="stylesheet" href="{% static 'templates/nifty/css/nifty.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/pace/css/pace.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'app/css/app-site.css' %}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+<div id="container" class="cls-container" style="background-color: {{ COLOR_PRIMARY }}">
+    <div id="bg-overlay" class="responsive-image bg-img"
+         style="background-image: url('{% static 'app/images/bg-img/bg5.jpg' %}');"></div>
+    {% block body %}{% endblock %}
+</div>
+{% load static %}
+<script type="text/javascript" charset="utf-8" src="{% static 'app/js/jquery-ui-1.12.1.min.js' %}"></script>
+<script type="text/javascript" charset="utf-8"
+        src="{% static 'plugins/bootstrap/js/bootstrap-3.3.7.min.js' %}"></script>
+<script type="text/javascript" charset="utf-8"
+        src="{% static 'app/service-worker/service-worker-registration.js' %}"></script>
+<script type="text/javascript" charset="utf-8"
+        src="{% static 'plugins/scroll-passive/js/scroll-passive.js' %}"></script>
+<script type="text/javascript" charset="utf-8" src="{% static 'templates/nifty/js/nifty.min.js' %}"></script>
+<script type="text/javascript" charset="utf-8"
+        src="{% static 'templates/nifty/js/demo/bg-images.js' %}"></script>
+<script type="text/javascript" charset="utf-8" src="{% static 'plugins/pace/js/pace.min.js' %}"></script>
+</body>
+</html>

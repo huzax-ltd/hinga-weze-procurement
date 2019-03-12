@@ -1,0 +1,43 @@
+{% extends '_include/base-index.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block head %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
+{% endblock %}
+{% block body %}
+    {% load static %}{% csrf_token %}
+    <ol class="breadcrumb" style="padding-left:0;">
+        <li><a href="{% url 'operators_dashboard' %}">Home</a></li>
+        <li><a href="{% url 'settings_index' %}">Settings</a></li>
+        <li class="active">{{ title }}</li>
+    </ol>
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h2
+                class="panel-title">{{ title }}</h2>
+        </div>
+        <div class="panel-body" style="padding:15px 0 15px 0;">
+            <div class="dt-buttons" style="margin-left:15px; margin-right:3px;">
+                {% if ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values %}
+
+                    <a class="btn btn-success"
+                       href="#"
+                       onclick="singleSelect('{{ single_select_url }}', 'backup', '');">
+                        <i class="fa fa-plus" aria-hidden="true"></i> New Backup
+                    </a>
+                {% endif %}
+            </div>
+            {% render_table table %}
+        </div>
+    </div>
+    <!--suppress ES6ConvertVarToLetConst -->
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $("#search-input-select-gender").select2({placeholder: "--select--", allowClear: true});
+            var table = $('#{{table.attrs.id}}').DataTable();
+            table.order([1, 'desc']).draw();
+        });
+
+    </script>
+    {% include '_include/single_select.html' %}
+    {% include '_include/multiple_select.html' %}
+{% endblock %}

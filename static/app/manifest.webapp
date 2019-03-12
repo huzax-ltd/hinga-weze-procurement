@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "name": "QT-VMS",
+  "launch_path": "/index.php",
+  "description": "QT-EMS developed by QT Software Ltd.",
+  "icons": {
+    "128": "android-icon-144x144.png"
+  },
+  "developer": {
+    "name": "QT Software Ltd.",
+    "url": "http://qtsoftwareltd.com"
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "en",
+  "permissions": {
+  },
+  "locales": {
+    "en": {
+      "name": "QT-VMS",
+      "description": "QT-VMS developed by QT Software Ltd."
+    }
+  }
+}
