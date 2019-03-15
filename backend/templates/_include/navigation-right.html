@@ -23,22 +23,3 @@
     <div class="divider"></div>
 
 </div>
-
-<script>
-    var today = new Date();
-    var todayDate = today.getDate();
-    $("#text-day").text(today.getDaysInMonth());
-    $("#text-date").text(todayDate + "");
-    var dateth = "th";
-    if (todayDate == 1 || todayDate == 21 || todayDate == 31) {
-        dateth = "st";
-    }
-    if (todayDate == 2 || todayDate == 22) {
-        dateth = "nd";
-    }
-    if (todayDate == 3 || todayDate == 23) {
-        dateth = "rd";
-    }
-    $("#text-dateth").text(dateth);
-    $("#text-month").text(today.getFullYear() + "");
-</script>
