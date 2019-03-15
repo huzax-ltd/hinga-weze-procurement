@@ -11,11 +11,11 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Operator_Logs, Failed_Login, Access_Permissions, Operator_Access_Permissions
+from app.models import Operators, Operator_Logs, Failed_Login
 from app.utils import Utils
 from backend.forms.operator_forms import OperatorSignUpForm, OperatorSignInForm, OperatorForgotPasswordForm, \
     OperatorResetPasswordForm, OperatorSearchIndexForm, OperatorCreateForm, OperatorUpdateForm, \
-    OperatorChangePasswordForm
+    OperatorUpdateProfileForm, OperatorChangePasswordForm
 from backend.tables.operator_tables import OperatorsTable
 
 
@@ -43,7 +43,6 @@ def signup(request):
         # noinspection PyArgumentList
         if form.is_valid():
             model = Operators()
-            model.operator_type = Operators.TYPE_OTHER
             model.operator_username = form.cleaned_data['email']
 
             # generate operator auth token which
@@ -563,7 +562,7 @@ def index(request):
                     'search_form': search_form,
                     'display_search': display_search,
                     'index_url': reverse("operators_index"),
-                    'multiple_select_url': reverse("operators_multiple_select"),
+                    'select_multiple_url': reverse("operators_select_multiple"),
                 }
             )
         else:
@@ -572,7 +571,7 @@ def index(request):
 
 @csrf_exempt
 # noinspection PyUnusedLocal
-def single_select(request):
+def select_single(request):
     if request.is_ajax():
         operator = Operators.login_required(request)
         if operator is None:
@@ -700,7 +699,7 @@ def single_select(request):
 
 @csrf_exempt
 # noinspection PyUnusedLocal
-def multiple_select(request):
+def select_multiple(request):
     if request.is_ajax():
         operator = Operators.login_required(request)
         if operator is None:
@@ -852,7 +851,6 @@ def create(request):
                 # noinspection PyArgumentList
                 if form.is_valid():
                     model = Operators()
-                    model.operator_type = form.cleaned_data['type']
                     model.operator_username = form.cleaned_data['email']
 
                     model.operator_auth_key = Operators.generate_unique_token(Operators, 'operator_auth_key')
@@ -860,8 +858,8 @@ def create(request):
                     model.operator_password_hash = make_password(form.cleaned_data['password'])
                     model.operator_password_reset_token = ''
                     model.operator_name = form.cleaned_data['name']
-                    model.operator_gender = form.cleaned_data['gender']
-                    model.operator_contact_phone_number = form.cleaned_data['phone_number']
+                    model.operator_department = form.cleaned_data['department']
+                    model.operator_role = form.cleaned_data['role']
                     model.operator_contact_email_id = form.cleaned_data['email']
                     model.operator_profile_photo_file_path = ''
                     model.operator_created_at = Utils.get_current_datetime_utc()
@@ -922,6 +920,7 @@ def create(request):
                             'operator': operator,
                             'auth_permissions': auth_permissions,
                             'form': form,
+                            'index_url': reverse("operators_index"),
                         }
                     )
             else:
@@ -936,6 +935,7 @@ def create(request):
                     'operator': operator,
                     'auth_permissions': auth_permissions,
                     'form': form,
+                    'index_url': reverse("operators_index"),
                 }
             )
         else:
@@ -962,7 +962,8 @@ def update(request, pk):
                     if form.is_valid():
                         model.operator_username = form.cleaned_data['email']
                         model.operator_name = form.cleaned_data['name']
-                        model.operator_type = form.cleaned_data['type']
+                        model.operator_department = form.cleaned_data['department']
+                        model.operator_role = form.cleaned_data['role']
                         model.operator_gender = form.cleaned_data['gender']
                         model.operator_contact_phone_number = form.cleaned_data['phone_number']
 
@@ -993,6 +994,7 @@ def update(request, pk):
                                 'auth_permissions': auth_permissions,
                                 'form': form,
                                 'model': model,
+                                'index_url': reverse("operators_index"),
                             }
                         )
                 else:
@@ -1000,7 +1002,8 @@ def update(request, pk):
                         initial={
                             'email': model.operator_username,
                             'name': model.operator_name,
-                            'type': model.operator_type,
+                            'department': model.operator_department,
+                            'role': model.operator_role,
                             'gender': model.operator_gender,
                             'phone_number': model.operator_contact_phone_number,
                         }
@@ -1016,140 +1019,13 @@ def update(request, pk):
                         'auth_permissions': auth_permissions,
                         'form': form,
                         'model': model,
+                        'index_url': reverse("operators_index"),
                     }
                 )
             except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
                 return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
-
-
-# noinspection PyUnusedLocal, PyShadowingBuiltins
-def update_permissions_view(request, pk):
-    template_url = 'operators/update-permissions.html'
-    operator = Operators.login_required(request)
-    if operator is None:
-        Operators.set_redirect_field_name(request, request.path)
-        return redirect(reverse("operators_signin"))
-    else:
-        auth_permissions = Operators.get_auth_permissions(operator)
-        if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values():
-            try:
-                model = Operators.objects.get(operator_id=pk)
-                if request.method == 'POST':
-
-                    form = OperatorUpdateForm(request.POST)
-
-                    # noinspection PyArgumentList
-                    if form.is_valid():
-
-                        model.save()
-
-                        Operator_Logs.add(
-                            model.operator_id,
-                            model.operator_username,
-                            model.operator_name,
-                            'Updated ' + Operators.SINGULAR_TITLE,
-                            Utils.get_browser_details_from_request(request),
-                            Utils.get_ip_address(request),
-                            operator.operator_username,
-                        )
-
-                        messages.success(request, 'Updated permissions successfully.')
-                        return redirect(reverse("operators_view", args=[model.operator_id]))
-                    else:
-                        return render(
-                            request, template_url,
-                            {
-                                'section': settings.BACKEND_SECTION_OPERATORS,
-                                'title': Operators.TITLE,
-                                'name': Operators.NAME,
-                                'operator': operator,
-                                'auth_permissions': auth_permissions,
-                                'form': form,
-                                'model': model,
-                            }
-                        )
-                else:
-                    form = OperatorUpdateForm(
-                        initial={
-                            'email': model.operator_username,
-                            'name': model.operator_name,
-                            'type': model.operator_type,
-                            'gender': model.operator_gender,
-                            'phone_number': model.operator_contact_phone_number,
-                        }
-                    )
-                    form.fields['name'].widget.attrs['readonly'] = 'true'
-                    form.fields['name'].widget.attrs['disabled'] = 'true'
-
-                return render(
-                    request, template_url,
-                    {
-                        'section': settings.BACKEND_SECTION_OPERATORS,
-                        'title': Operators.TITLE,
-                        'name': Operators.NAME,
-                        'operator': operator,
-                        'auth_permissions': auth_permissions,
-                        'form': form,
-                        'model': model,
-                        'all_auth_permissions': Access_Permissions.get_access_permissions(),
-                        'operator_auth_permissions': Operator_Access_Permissions.get_access_permissions(
-                            model.operator_id),
-                    }
-                )
-            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
-                return HttpResponseNotFound('Not Found', content_type='text/plain')
-        else:
-            return HttpResponseForbidden('Forbidden', content_type='text/plain')
-
-
-# noinspection PyUnusedLocal
-def update_permissions_action(request):
-    if request.is_ajax():
-        operator = Operators.login_required(request)
-        if operator is None:
-            Operators.set_redirect_field_name(request, request.path)
-            return redirect(reverse("operators_signin"))
-        else:
-            auth_permissions = Operators.get_auth_permissions(operator)
-            id = request.POST['id']
-            permissions = request.POST['permissions']
-            print(permissions)
-            permissions_list = None
-            if permissions != '' and permissions != 'null':
-                permissions_list = permissions.split(",")
-                print(len(permissions_list))
-            print(permissions_list)
-
-            if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values():
-                try:
-                    model = Operators.objects.get(operator_id=id)
-                    # delete existing permissions
-                    Operator_Access_Permissions.objects.filter(operators_operator_id=id).delete()
-                    if permissions_list is not None:
-                        # add permission one by one
-                        i = 0
-                        while i < len(permissions_list):
-                            if permissions_list[i]:
-                                access_permission = Access_Permissions.objects.get(
-                                    access_permission_name=permissions_list[i])
-                                operator_access_permission = Operator_Access_Permissions()
-                                operator_access_permission.access_permissions_access_permission_name = access_permission
-                                operator_access_permission.operators_operator_id = model
-                                operator_access_permission.operator_access_permission_updated_at = Utils.get_current_datetime_utc()
-                                operator_access_permission.operator_access_permission_updated_by = operator.operator_username
-                                operator_access_permission.save()
-                            i += 1
-
-                    messages.success(request, 'Updated successfully.')
-                    return HttpResponse('success', content_type='text/plain')
-                except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
-                    return HttpResponseBadRequest('Bad Request', content_type='text/plain')
-            else:
-                return HttpResponseForbidden('Forbidden', content_type='text/plain')
-    else:
-        return HttpResponseForbidden('Forbidden', content_type='text/plain')
 
 
 # noinspection PyUnusedLocal, PyShadowingBuiltins
@@ -1225,6 +1101,7 @@ def update_reset_password(request, pk):
                                 'auth_permissions': auth_permissions,
                                 'form': form,
                                 'model': model,
+                                'index_url': reverse("operators_index"),
                             }
                         )
                 else:
@@ -1241,6 +1118,7 @@ def update_reset_password(request, pk):
                         'auth_permissions': auth_permissions,
                         'form': form,
                         'model': model,
+                        'index_url': reverse("operators_index"),
                     }
                 )
             except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
@@ -1278,7 +1156,7 @@ def view(request, pk):
                         'auth_permissions': auth_permissions,
                         'model': model,
                         'index_url': reverse("operators_index"),
-                        'single_select_url': reverse("operators_single_select"),
+                        'select_single_url': reverse("operators_select_single"),
                     }
                 )
             except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
@@ -1334,13 +1212,11 @@ def profile_update(request):
                 model = operator
                 if request.method == 'POST':
 
-                    form = OperatorUpdateForm(request.POST)
+                    form = OperatorUpdateProfileForm(request.POST)
 
                     # noinspection PyArgumentList
                     if form.is_valid():
-                        model.operator_username = form.cleaned_data['email']
                         model.operator_name = form.cleaned_data['name']
-                        model.operator_type = form.cleaned_data['type']
                         model.operator_gender = form.cleaned_data['gender']
                         model.operator_contact_phone_number = form.cleaned_data['phone_number']
 
@@ -1373,11 +1249,12 @@ def profile_update(request):
                             }
                         )
                 else:
-                    form = OperatorUpdateForm(
+                    form = OperatorUpdateProfileForm(
                         initial={
                             'email': model.operator_username,
                             'name': model.operator_name,
-                            'type': model.operator_type,
+                            'department': model.operator_department,
+                            'role': model.operator_role,
                             'gender': model.operator_gender,
                             'phone_number': model.operator_contact_phone_number,
                         }

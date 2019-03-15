@@ -1,4 +1,4 @@
-{% extends '_include/base-index.html' %}{% load static %}{% load render_table from django_tables2 %}
+{% extends '_include/base-form.html' %}{% load static %}{% load render_table from django_tables2 %}
 {% block head %}
     <title>{{ APP_CONSTANT_APP_NAME }}:{{ title }}</title>{% endblock %}{% block body %}
     {% load static %}{% csrf_token %}
@@ -16,11 +16,11 @@
                         <div class="dt-button-collection">
                             <a class="btn btn-default btn-block"
                                href="#"
-                               onclick="multipleSelect('{{ multiple_select_url }}', 'delete');">
+                               onclick="multipleSelect('{{ select_multiple_url }}', 'delete');">
                                 Delete Selected </a>
                             <a class="btn btn-default btn-block"
                                href="#"
-                               onclick="multipleSelect('{{ multiple_select_url }}', 'delete-all');">
+                               onclick="multipleSelect('{{ select_multiple_url }}', 'delete-all');">
                                 Delete All </a>
                         </div>
                     </ul>
@@ -29,6 +29,6 @@
             {% render_table table %}
         </div>
     </div>
-    {% include '_include/single_select.html' %}
-    {% include '_include/multiple_select.html' %}
+    {% include '_include/select_single.html' %}
+    {% include '_include/select_multiple.html' %}
 {% endblock %}

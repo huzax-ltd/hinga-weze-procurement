@@ -62,8 +62,8 @@ class Operators(models.Model):
     DEPARTMENT_MAV = 'MAE'  # Monitoring and Evaluation
     DEPARTMENT_GRANT_MANAGER = 'GRANT-MANAGER'  # Grant Managers
     ARRAY_OPERATOR_DEPARTMENTS = [
-        'None',
-        'Deputy COP',
+        DEPARTMENT_NONE,
+        'Deputy COP (Agriculture)',
         'Business, Finance & Marketing',
         'Nutrition',
         'Administrative and Finance',
@@ -72,7 +72,8 @@ class Operators(models.Model):
     ]
     OPERATOR_DEPARTMENTS = (
         ('', '--select--'),
-        (DEPARTMENT_DCOP, 'Deputy COP'),
+        (DEPARTMENT_NONE, 'NONE'),
+        (DEPARTMENT_DCOP, 'Deputy COP (Agriculture)'),
         (DEPARTMENT_BFM, 'Business, Finance & Marketing'),
         (DEPARTMENT_NUTRITION, 'Nutrition'),
         (DEPARTMENT_DAF, 'Administrative and Finance'),
@@ -99,15 +100,22 @@ class Operators(models.Model):
 
     ARRAY_OPERATOR_ROLES = [
         ROLE_NONE,
-        'Deputy COP',
-        'Business, Finance & Marketing',
-        'Nutrition',
-        'Administrative and Finance',
-        'Monitoring and Evaluation',
-        'Grant Manager',
+        ROLE_COP,
+        ROLE_OPM,
+        ROLE_DIRECTOR,
+        ROLE_ADVISER,
+        ROLE_REGIONAL_MANAGER,
+        ROLE_DISTRICT_MANAGER,
+        ROLE_FIELD_OFFICER,
+        ROLE_PROCUREMENT_OFFICER,
+        ROLE_HR_MANAGER,
+        ROLE_STOCK_ADMIN,
+        ROLE_ACCOUNTANT_MANAGER,
+        ROLE_ACCOUNTANT_OFFICER,
     ]
     OPERATOR_ROLES = (
         ('', '--select--'),
+        (ROLE_NONE, ROLE_NONE),
         (ROLE_COP, ROLE_COP),
         (ROLE_OPM, ROLE_OPM),
         (ROLE_DIRECTOR, ROLE_DIRECTOR),
@@ -163,12 +171,12 @@ class Operators(models.Model):
     operator_password_reset_token = models.CharField('Password reset token', max_length=255, blank=True)
     operator_name = models.CharField('Name', max_length=100, blank=False)
     operator_gender = models.CharField('Gender', max_length=6, choices=ARRAY_GENDER, default='')
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                 message="Phone number must be entered in the format: '+250123456789'. Up to 13 digits allowed.")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,17}$',
+                                 message="Phone number must be entered in the format: '1-(555)-555-5555'. Up to 17 digits allowed.")
     operator_contact_phone_number = models.CharField('Phone Number',
-                                                     validators=[phone_regex, MinLengthValidator(10),
-                                                                 MaxLengthValidator(13)],
-                                                     max_length=13, blank=True)
+                                                     validators=[phone_regex, MinLengthValidator(9),
+                                                                 MaxLengthValidator(17)],
+                                                     max_length=17, blank=True)
     operator_contact_email_id = models.EmailField('Email id', max_length=100, blank=True)
     operator_profile_photo_file_path = models.CharField('Profile photo file path', max_length=255, blank=True)
     operator_created_at = models.DateTimeField('Created by', default=settings.APP_CONSTANT_DEFAULT_DATETIME)

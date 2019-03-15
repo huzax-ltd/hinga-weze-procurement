@@ -20,8 +20,8 @@ class OperatorSignUpForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Firstname Lastname',
-                'autocomplete': 'name',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -35,8 +35,8 @@ class OperatorSignUpForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -50,7 +50,7 @@ class OperatorSignUpForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -65,7 +65,7 @@ class OperatorSignUpForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Repeat Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -154,8 +154,8 @@ class OperatorSignInForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -169,7 +169,7 @@ class OperatorSignInForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -237,8 +237,8 @@ class OperatorForgotPasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -284,8 +284,8 @@ class OperatorResetPasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -299,7 +299,7 @@ class OperatorResetPasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -314,7 +314,7 @@ class OperatorResetPasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Repeat Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -411,52 +411,38 @@ class OperatorCreateForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Firstname Lastname',
-                'autocomplete': 'name',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
-    type = forms.ChoiceField(
-        choices=Operators.OPERATOR_TYPES,
+    department = forms.ChoiceField(
+        choices=Operators.OPERATOR_DEPARTMENTS,
         initial='',
-        label='Type',
+        label='Department',
         required=True,
         validators=[],
         widget=forms.Select(
             attrs={
-                'id': 'search-input-select-type',
+                'id': 'search-input-select-department',
                 'class': 'form-control',
                 'style': 'width:100%;',
                 'placeholder': '--select--',
                 'aria-label': 'form-label',
             }
         ))
-    gender = forms.ChoiceField(
-        choices=ARRAY_GENDER,
+    role = forms.ChoiceField(
+        choices=Operators.OPERATOR_ROLES,
         initial='',
-        label='Gender',
+        label='Role',
         required=True,
         validators=[],
         widget=forms.Select(
             attrs={
-                'id': 'search-input-select-gender',
+                'id': 'search-input-select-role',
                 'class': 'form-control',
                 'style': 'width:100%;',
                 'placeholder': '--select--',
-                'aria-label': 'form-label',
-            }
-        ))
-    phone_number = forms.CharField(
-        label='Phone Number',
-        min_length=9,
-        max_length=13,
-        validators=[MinLengthValidator(9), MaxLengthValidator(13), IsPhoneNumberValidator],
-        required=True,
-        widget=forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'eg.,+250712345678',
-                'autocomplete': 'phone_number',
                 'aria-label': 'form-label',
             }
         ))
@@ -469,8 +455,8 @@ class OperatorCreateForm(forms.ModelForm):
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -483,7 +469,7 @@ class OperatorCreateForm(forms.ModelForm):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -497,7 +483,7 @@ class OperatorCreateForm(forms.ModelForm):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Repeat Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -510,20 +496,12 @@ class OperatorCreateForm(forms.ModelForm):
         #     raise forms.ValidationError('Enter a valid name')
         return data
 
-    def clean_type(self):
-        data = self.cleaned_data['type']
+    def clean_department(self):
+        data = self.cleaned_data['department']
         return data
 
-    def clean_gender(self):
-        data = self.cleaned_data['gender']
-        return data
-
-    def clean_phone_number(self):
-        data = self.cleaned_data['phone_number']
-        try:
-            validate_integer(data)
-        except ValidationError:
-            raise forms.ValidationError('Enter a valid phone number')
+    def clean_role(self):
+        data = self.cleaned_data['role']
         return data
 
     def clean_email(self):
@@ -577,9 +555,8 @@ class OperatorCreateForm(forms.ModelForm):
         model = Operators
         fields = (
             'name',
-            'type',
-            'gender',
-            'phone_number',
+            'department',
+            'role',
             'email',
             'password',
             'repeat_password'
@@ -596,8 +573,8 @@ class OperatorUpdateForm(forms.ModelForm):
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
                 'readonly': True,
             }
@@ -611,20 +588,35 @@ class OperatorUpdateForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Firstname Lastname',
-                'autocomplete': 'name',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
-    type = forms.ChoiceField(
-        choices=Operators.OPERATOR_TYPES,
+    department = forms.ChoiceField(
+        choices=Operators.OPERATOR_DEPARTMENTS,
         initial='',
-        label='Type',
+        label='Department',
         required=True,
         validators=[],
         widget=forms.Select(
             attrs={
-                'id': 'search-input-select-type',
+                'id': 'search-input-select-department',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+    role = forms.ChoiceField(
+        choices=Operators.OPERATOR_ROLES,
+        initial='',
+        label='Role',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-role',
                 'class': 'form-control',
                 'style': 'width:100%;',
                 'placeholder': '--select--',
@@ -655,8 +647,8 @@ class OperatorUpdateForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'eg.,+250712345678',
-                'autocomplete': 'phone_number',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -668,8 +660,12 @@ class OperatorUpdateForm(forms.ModelForm):
         #     raise forms.ValidationError('Enter a valid name')
         return data
 
-    def clean_type(self):
-        data = self.cleaned_data['type']
+    def clean_department(self):
+        data = self.cleaned_data['department']
+        return data
+
+    def clean_role(self):
+        data = self.cleaned_data['role']
         return data
 
     def clean_gender(self):
@@ -708,7 +704,155 @@ class OperatorUpdateForm(forms.ModelForm):
         fields = (
             'email',
             'name',
-            'type',
+            'department',
+            'role',
+            'gender',
+            'phone_number',
+        )
+
+
+class OperatorUpdateProfileForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Email Id',
+        min_length=5,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(5), MaxLengthValidator(100), EmailValidator],
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    name = forms.CharField(
+        label='Name',
+        min_length=3,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(3), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    department = forms.ChoiceField(
+        choices=Operators.OPERATOR_DEPARTMENTS,
+        initial='',
+        label='Department',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-department',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    role = forms.ChoiceField(
+        choices=Operators.OPERATOR_ROLES,
+        initial='',
+        label='Role',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-role',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    gender = forms.ChoiceField(
+        choices=ARRAY_GENDER,
+        initial='',
+        label='Gender',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-gender',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+    phone_number = forms.CharField(
+        label='Phone Number',
+        min_length=9,
+        max_length=17,
+        validators=[MinLengthValidator(9), MaxLengthValidator(17), IsPhoneNumberValidator],
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'tel',
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        # try:
+        # except ValidationError:
+        #     raise forms.ValidationError('Enter a valid name')
+        return data
+
+    def clean_department(self):
+        data = self.cleaned_data['department']
+        return data
+
+    def clean_role(self):
+        data = self.cleaned_data['role']
+        return data
+
+    def clean_gender(self):
+        data = self.cleaned_data['gender']
+        return data
+
+    def clean_phone_number(self):
+        data = self.cleaned_data['phone_number']
+        return data
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        try:
+            validate_email(data)
+        except ValidationError:
+            raise forms.ValidationError('Enter a valid email address')
+        try:
+            operator = Operators.objects.get(operator_username=data)
+        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+            operator = None
+        if operator is None:
+            raise forms.ValidationError(u'Email Id: "%s" does not exist.' % data)
+        else:
+            return data
+
+    def clean(self):
+        cleaned_data = super(OperatorUpdateProfileForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Operators
+        fields = (
+            'email',
+            'name',
+            'department',
+            'role',
             'gender',
             'phone_number',
         )
@@ -726,8 +870,8 @@ class OperatorChangePasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Email Id',
-                'autocomplete': 'email',
+                'placeholder': '',
+                'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
         ))
@@ -741,7 +885,7 @@ class OperatorChangePasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Current Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -756,7 +900,7 @@ class OperatorChangePasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'New Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }
@@ -771,7 +915,7 @@ class OperatorChangePasswordForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'style': 'font-weight:bold',
-                'placeholder': 'Repeat Password',
+                'placeholder': '',
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
             }

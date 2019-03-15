@@ -1,0 +1,89 @@
+<!--suppress ES6ConvertVarToLetConst -->
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        var search = document.getElementById("div-search");
+        if ('{{display_search}}' === 'True') {
+            search.style.display = "block";
+        } else {
+            search.style.display = "none";
+        }
+    });
+
+    $("#dt-button-reset-filter").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        table.search('').columns().search('').draw();
+        {% for column in table.columns %}
+            {% if column.attrs.search_filter == 'input-text'%}
+                $("#search-input-text{{ forloop.counter0 }}").val('');
+            {% elif column.attrs.search_filter == 'input-select'%}
+                $("#search-input-select{{ forloop.counter0 }}").select2('val', ['']);
+            {% elif column.attrs.search_filter == 'input-date'%}
+                $("#search-input-date{{ forloop.counter0 }}").val('');
+            {% else %}
+
+            {% endif %}
+        {% endfor %}
+        table.order([0, 'asc']).draw();
+    });
+
+    $("#dt-button-show-length-10").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        $("#dt-button-show-length").html("Show 10 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
+        table.page.len(10).draw();
+    });
+
+    $("#dt-button-show-length-20").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        $("#dt-button-show-length").html("Show 20 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
+        table.page.len(20).draw();
+    });
+
+    $("#dt-button-show-length-50").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        $("#dt-button-show-length").html("Show 50 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
+        table.page.len(50).draw();
+    });
+
+    $("#dt-button-show-length-100").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        $("#dt-button-show-length").html("Show 100 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
+        table.page.len(100).draw();
+    });
+
+    $("#dt-button-show-length-all").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        $("#dt-button-show-length").html("Show All Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
+        table.page.len(-1).draw();
+    });
+
+    $("#dt-button-export-copy").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        table.buttons('.buttons-copy').trigger();
+    });
+
+    $("#dt-button-export-excel").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        table.buttons('.buttons-excel').trigger();
+    });
+
+    $("#dt-button-export-print").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        table.buttons('.buttons-print').trigger();
+    });
+
+    $("#dt-button-export-pdf").click(function () {
+        var table = $('#{{table.attrs.id}}').DataTable();
+        table.buttons('.buttons-pdf').trigger();
+    });
+
+    displayDivSearch();
+
+    function displayDivSearch() {
+        var search = document.getElementById("div-search");
+        if (search.style.display === 'none') {
+            search.style.display = "block";
+        } else {
+            search.style.display = "none";
+        }
+    }
+</script>

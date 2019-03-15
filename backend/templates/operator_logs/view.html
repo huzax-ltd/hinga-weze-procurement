@@ -19,7 +19,7 @@
             <div>
                 {% if ACCESS_PERMISSION_LOG_DELETE in auth_permissions.values %}
                     <a href="#"
-                       onclick="singleSelect('{{ single_select_url }}', 'delete', '{{ model.operator_log_id }}', '{{ index_url }}');"
+                       onclick="singleSelect('{{ select_single_url }}', 'delete', '{{ model.operator_log_id }}', '{{ index_url }}');"
                        class="btn btn-default">Delete</a>
                 {% endif %}
             </div>
@@ -65,5 +65,5 @@
             </table>
         </div>
     </div>
-    {% include '_include/single_select.html' %}
+    {% include '_include/select_single.html' %}
 {% endblock %}

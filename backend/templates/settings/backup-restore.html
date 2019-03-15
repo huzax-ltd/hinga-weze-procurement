@@ -1,4 +1,4 @@
-{% extends '_include/base-index.html' %}
+{% extends '_include/base-form.html' %}
 {% load static %}
 {% load render_table from django_tables2 %}
 {% block head %}
@@ -21,7 +21,7 @@
 
                     <a class="btn btn-success"
                        href="#"
-                       onclick="singleSelect('{{ single_select_url }}', 'backup', '');">
+                       onclick="singleSelect('{{ select_single_url }}', 'backup', '');">
                         <i class="fa fa-plus" aria-hidden="true"></i> New Backup
                     </a>
                 {% endif %}
@@ -38,6 +38,6 @@
         });
 
     </script>
-    {% include '_include/single_select.html' %}
-    {% include '_include/multiple_select.html' %}
+    {% include '_include/select_single.html' %}
+    {% include '_include/select_multiple.html' %}
 {% endblock %}

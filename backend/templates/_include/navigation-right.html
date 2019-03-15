@@ -1,0 +1,44 @@
+{% load static %}
+<div class="quick-panel-sidebar custom-scrollbar" fuse-cloak data-fuse-bar="quick-panel-sidebar"
+     data-fuse-bar-position="right">
+    <div class="list-group" class="date">
+
+        <div class="list-group-item subheader">TODAY</div>
+
+        <div class="list-group-item two-line">
+
+            <div class="text-muted">
+
+                <div id="text-day" class="h1"> Friday</div>
+
+                <div class="h2 row no-gutters align-items-start">
+                    <span id="text-date"> 5</span>
+                    <span id="text-dateth" class="h6">th</span>
+                    <span id="text-month" class="ml-1"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+</div>
+
+<script>
+    var today = new Date();
+    var todayDate = today.getDate();
+    $("#text-day").text(today.getDaysInMonth());
+    $("#text-date").text(todayDate + "");
+    var dateth = "th";
+    if (todayDate == 1 || todayDate == 21 || todayDate == 31) {
+        dateth = "st";
+    }
+    if (todayDate == 2 || todayDate == 22) {
+        dateth = "nd";
+    }
+    if (todayDate == 3 || todayDate == 23) {
+        dateth = "rd";
+    }
+    $("#text-dateth").text(dateth);
+    $("#text-month").text(today.getFullYear() + "");
+</script>

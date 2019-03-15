@@ -1,135 +1,206 @@
-{% extends '_include/base-general.html' %}
-{% block head %}
-    {% load static %}
-    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
-{% endblock %}
-
-{% block body %}
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+{% block body %}{% load static %}
     {% load static %}{% csrf_token %}
-    <ol class="breadcrumb" style="padding-left:0;">
-        <li><a href="{% url 'operators_dashboard' %}">Home</a></li>
-        <li><a href="{{ index_url }}">{{ title }}</a></li>
-        <li class="active">{{ model.operator_id }}</li>
-        <li class="active">Details</li>
-    </ol>
-    <div class="panel">
-        <div class="panel-body" style="padding-top: 0;">
-            <h3>Details</h3>
-            <div>
-                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                    <a href="{% url 'operators_update' pk=model.operator_id %}" class="btn btn-default">Update</a>
-                    <a href="{% url 'operators_update_permissions_view' pk=model.operator_id %}"
-                       class="btn btn-default">Update
-                        Permissions</a>
-                    <a href="{% url 'operators_update_reset_password' pk=model.operator_id %}" class="btn btn-default">Reset
-                        Password</a>
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <a class="breadcrumb-item" href="{{ index_url }}">{{ title }}</a>
+                        <span class="breadcrumb-item active">{{ model.operator_id }}</span>
+                        <span class="breadcrumb-item active">Details</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
                 {% endif %}
-                {% if operator.operator_id != 1 or operator.operator_id != model.operator_id %}
-                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                        {% if model.operator_status == model.STATUS_UNVERIFIED %}
-                            <a href="#"
-                               onclick="singleSelect('{{ single_select_url }}', 'verify', '{{ model.operator_id }}');"
-                               class="btn btn-default">Verify</a>
-                        {% endif %}
-                    {% endif %}
-                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                        {% if model.operator_status == model.STATUS_UNAPPROVED %}
-                            <a href="#"
-                               onclick="singleSelect('{{ single_select_url }}', 'approve', '{{ model.operator_id }}');"
-                               class="btn btn-default">Approve</a>
-                        {% endif %}
-                    {% endif %}
-                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                        {% if model.operator_status == model.STATUS_ACTIVE or model.operator_status == model.STATUS_INACTIVE %}
-                            <a href="#"
-                               onclick="singleSelect('{{ single_select_url }}', 'block', '{{ model.operator_id }}');"
-                               class="btn btn-default">Block</a>
-                        {% endif %}
-                    {% endif %}
-                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                        {% if model.operator_status == model.STATUS_BLOCKED %}
-                            <a href="#"
-                               onclick="singleSelect('{{ single_select_url }}', 'unblock', '{{ model.operator_id }}');"
-                               class="btn btn-default">Unblock</a>
-                        {% endif %}
-                    {% endif %}
-                    {% if ACCESS_PERMISSION_OPERATOR_DELETE in auth_permissions.values %}
-                        <a href="#"
-                           onclick="singleSelect('{{ single_select_url }}', 'delete', '{{ model.operator_id }}', '{{ index_url }}');"
-                           class="btn btn-default">Delete</a>
-                    {% endif %}
-                {% endif %}
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Profile Details</span>
+                        </div>
+
+                        <div class="btn-dropdown">
+                            <button role="button" type="button" class="btn btn-icon fuse-ripple-ready"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <i class="icon icon-dots-vertical text-white"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                    <a class="dropdown-item" href="{% url 'operators_update' pk=model.operator_id %}">Update</a>
+                                    <a class="dropdown-item"
+                                       href="{% url 'operators_update_reset_password' pk=model.operator_id %}">Reset
+                                        Password</a>
+                                {% endif %}
+
+                                {% if operator.operator_id != 1 or operator.operator_id != model.operator_id %}
+                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                        {% if model.operator_status == model.STATUS_UNVERIFIED %}
+                                            <a href="#"
+                                               onclick="singleSelect('{{ select_single_url }}', 'verify', '{{ model.operator_id }}');"
+                                               class="dropdown-item">Verify</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                        {% if model.operator_status == model.STATUS_UNAPPROVED %}
+                                            <a href="#"
+                                               onclick="singleSelect('{{ select_single_url }}', 'approve', '{{ model.operator_id }}');"
+                                               class="dropdown-item">Approve</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                        {% if model.operator_status == model.STATUS_ACTIVE or model.operator_status == model.STATUS_INACTIVE %}
+                                            <a href="#"
+                                               onclick="singleSelect('{{ select_single_url }}', 'block', '{{ model.operator_id }}');"
+                                               class="dropdown-item">Block</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                        {% if model.operator_status == model.STATUS_BLOCKED %}
+                                            <a href="#"
+                                               onclick="singleSelect('{{ select_single_url }}', 'unblock', '{{ model.operator_id }}');"
+                                               class="dropdown-item">Unblock</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if ACCESS_PERMISSION_OPERATOR_DELETE in auth_permissions.values %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'delete', '{{ model.operator_id }}', '{{ index_url }}');"
+                                           class="dropdown-item">Delete</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <br>
-            <table class="table table-bordered table-hover" cellspacing="0" width="100%">
-                <thead>
-                <tr style="background-color:{{ COLOR_PRIMARY }};">
-                    <th style="width:20%; color:#fff;">Key</th>
-                    <th style="width:80%; color:#fff;">Value</th>
-                </tr>
-                <tr>
-                    <td>Operator Id</td>
-                    <td>{{ model.operator_id }}</td>
-                </tr>
-                <tr>
-                    <td>Type</td>
-                    <td>{{ model.operator_type }}</td>
-                </tr>
-                <tr>
-                    <td>Email Id</td>
-                    <td>{{ model.operator_username }}</td>
-                </tr>
-                <tr>
-                    <td>Name</td>
-                    <td>{{ model.operator_name }}</td>
-                </tr>
-                <tr>
-                    <td>Gender</td>
-                    <td>{{ model.operator_gender }}</td>
-                </tr>
-                <tr>
-                    <td>Contact Number</td>
-                    <td>{{ model.operator_contact_phone_number }}</td>
-                </tr>
-                <tr>
-                    <td>Created At</td>
-                    <td>{{ model.operator_created_at }}</td>
-                </tr>
-                <tr>
-                    <td>Created By</td>
-                    <td>{{ model.operator_created_by }}</td>
-                </tr>
-                <tr>
-                    <td>Updated At</td>
-                    <td>{{ model.operator_updated_at }}</td>
-                </tr>
-                <tr>
-                    <td>Updated By</td>
-                    <td>{{ model.operator_updated_by }}</td>
-                </tr>
-                <tr>
-                    <td>Status</td>
-                    <td>
-                        {% if model.operator_status == model.STATUS_ACTIVE %}
-                            <div style="width:100px;">{{ model.HTML_TAG_STATUS_ACTIVE_COLOR | safe }}</div>
-                        {% endif %}
-                        {% if model.operator_status == model.STATUS_INACTIVE %}
-                            <div style="width:100px;">{{ model.HTML_TAG_STATUS_INACTIVE_COLOR | safe }}</div>
-                        {% endif %}
-                        {% if model.operator_status == model.STATUS_BLOCKED %}
-                            <div style="width:100px;">{{ model.HTML_TAG_STATUS_BLOCKED_COLOR | safe }}</div>
-                        {% endif %}
-                        {% if model.operator_status == model.STATUS_UNVERIFIED %}
-                            <div style="width:100px;">{{ model.HTML_TAG_STATUS_UNVERIFIED_COLOR | safe }}</div>
-                        {% endif %}
-                        {% if model.operator_status == model.STATUS_UNAPPROVED %}
-                            <div style="width:100px;">{{ model.HTML_TAG_STATUS_UNAPPROVED_COLOR | safe }}</div>
-                        {% endif %}
-                    </td>
-                </tr>
-                </thead>
-            </table>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <div>
+                            {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                <a href="{% url 'operators_update' pk=model.operator_id %}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Update</a>
+                                <a href="{% url 'operators_update_reset_password' pk=model.operator_id %}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Reset
+                                    Password</a>
+                            {% endif %}
+
+                            {% if operator.operator_id != 1 or operator.operator_id != model.operator_id %}
+                                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                    {% if model.operator_status == model.STATUS_UNVERIFIED %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'verify', '{{ model.operator_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Verify</a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                    {% if model.operator_status == model.STATUS_UNAPPROVED %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'approve', '{{ model.operator_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Approve</a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                    {% if model.operator_status == model.STATUS_ACTIVE or model.operator_status == model.STATUS_INACTIVE %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'block', '{{ model.operator_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Block</a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
+                                    {% if model.operator_status == model.STATUS_BLOCKED %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'unblock', '{{ model.operator_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Unblock</a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if ACCESS_PERMISSION_OPERATOR_DELETE in auth_permissions.values %}
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'delete', '{{ model.operator_id }}', '{{ index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Delete</a>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">Personal</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Id</td>
+                                        <td>{{ model.operator_username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>{{ model.operator_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>{{ model.operator_gender }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contact Number</td>
+                                        <td>{{ model.operator_contact_phone_number }}</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="col-sm-6">
+                                <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">Other</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Operator Id</td>
+                                        <td>{{ model.operator_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Department</td>
+                                        <td>{{ model.operator_department }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Role</td>
+                                        <td>{{ model.operator_role }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td>
+                                            {% if model.operator_status == model.STATUS_ACTIVE %}
+                                                <div style="width:100px;">{{ model.HTML_TAG_STATUS_ACTIVE_COLOR | safe }}</div>
+                                            {% endif %}
+                                            {% if model.operator_status == model.STATUS_INACTIVE %}
+                                                <div style="width:100px;">{{ model.HTML_TAG_STATUS_INACTIVE_COLOR | safe }}</div>
+                                            {% endif %}
+                                            {% if model.operator_status == model.STATUS_BLOCKED %}
+                                                <div style="width:100px;">{{ model.HTML_TAG_STATUS_BLOCKED_COLOR | safe }}</div>
+                                            {% endif %}
+                                            {% if model.operator_status == model.STATUS_UNVERIFIED %}
+                                                <div style="width:100px;">{{ model.HTML_TAG_STATUS_UNVERIFIED_COLOR | safe }}</div>
+                                            {% endif %}
+                                            {% if model.operator_status == model.STATUS_UNAPPROVED %}
+                                                <div style="width:100px;">{{ model.HTML_TAG_STATUS_UNAPPROVED_COLOR | safe }}</div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    {% include '_include/single_select.html' %}
+    {% include '_include/select_single.html' %}
+    {% include '_include/tab_index.html' %}
 {% endblock %}

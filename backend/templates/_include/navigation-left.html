@@ -1,0 +1,77 @@
+{% load static %}
+<aside id="aside" class="aside aside-left" data-fuse-bar="aside" data-fuse-bar-media-step="md"
+       data-fuse-bar-position="left">
+    <div class="aside-content bg-primary-700 text-auto">
+
+        <div class="aside-toolbar">
+
+            <div class="logo">
+                <span class="logo-icon">
+                    <div class="center-block">
+                        <img class="img-responsive" src="{% static 'app/app-icon-32x32.png' %}" alt="">
+                    </div>
+                </span>
+                <span class="logo-text bold">CNFA</span>
+            </div>
+
+            <button id="toggle-fold-aside-button" type="button" class="btn btn-icon d-none d-lg-block"
+                    data-fuse-aside-toggle-fold>
+                <i class="icon icon-backburger"></i>
+            </button>
+
+        </div>
+
+        <ul class="nav flex-column custom-scrollbar" id="sidenav" data-children=".nav-item">
+
+            <li class="subheader">
+                <span>MENU</span>
+            </li>
+
+            {% if ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values %}
+                {% if section == BACKEND_SECTION_DASHBOARD %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple active" href="{% url 'operators_dashboard' %}">
+
+                            <i class="icon s-4 icon-view-dashboard"></i>
+
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="{% url 'operators_dashboard' %}">
+
+                            <i class="icon s-4 icon-view-dashboard"></i>
+
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if ACCESS_PERMISSION_OPERATOR_VIEW in auth_permissions.values %}
+                {% if section == BACKEND_SECTION_OPERATORS %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple active" href="{% url 'operators_index' %}">
+
+                            <i class="icon s-4 icon-people"></i>
+
+                            <span>Operators</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="{% url 'operators_index' %}">
+
+                            <i class="icon s-4 icon-people"></i>
+
+                            <span>Operators</span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+        </ul>
+    </div>
+
+</aside>

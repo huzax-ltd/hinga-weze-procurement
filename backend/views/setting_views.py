@@ -1,8 +1,6 @@
 import os
-import string
 import time
 
-import requests
 from django.contrib import messages
 from django.core.files import File
 from django.core.management import call_command
@@ -120,8 +118,8 @@ def backup_restore(request):
                     'auth_permissions': auth_permissions,
                     'table': table,
                     'index_url': reverse("backup_restore"),
-                    'single_select_url': reverse("backup_restore_single_select"),
-                    'multiple_select_url': reverse("backup_restore_multiple_select"),
+                    'select_single_url': reverse("backup_restore_select_single"),
+                    'select_multiple_url': reverse("backup_restore_select_multiple"),
                 }
             )
         else:
@@ -130,7 +128,7 @@ def backup_restore(request):
 
 @csrf_exempt
 # noinspection PyUnusedLocal
-def backup_restore_single_select(request):
+def backup_restore_select_single(request):
     if request.is_ajax():
         operator = Operators.login_required(request)
         if operator is None:
@@ -195,7 +193,7 @@ def backup_restore_single_select(request):
 
 @csrf_exempt
 # noinspection PyUnusedLocal
-def backup_restore_multiple_select(request):
+def backup_restore_select_multiple(request):
     if request.is_ajax():
         operator = Operators.login_required(request)
         if operator is None:

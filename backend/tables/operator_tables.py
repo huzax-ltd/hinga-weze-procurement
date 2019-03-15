@@ -13,35 +13,54 @@ from app.models import Operators
 class OperatorsTable(tables.Table):
     auth_permissions = {}
 
-    row_number = tables.Column(
-        verbose_name='Id',
+    row_check = tables.Column(
+        verbose_name='',
         attrs={
             'search_filter': '',
-            'th_style': 'width:60px;',
+            'th_style': 'width:30px;',
         },
         orderable=False,
         empty_values=(),
-        accessor='pk',
+    )
+    row_number = tables.Column(
+        verbose_name='No.',
+        attrs={
+            'search_filter': '',
+            'th_style': 'width:30px;',
+        },
+        orderable=False,
+        empty_values=(),
     )
     operator_username = tables.Column(
         verbose_name='Email Id',
         attrs={
             'search_filter': 'input-text',
+            'th_style': 'width:100px;',
         }
     )
     operator_name = tables.Column(
         verbose_name='Name',
         attrs={
             'search_filter': 'input-text',
+            # 'th_style': 'width:500px;',
         }
     )
-    operator_type = tables.Column(
-        verbose_name='Type',
+    operator_department = tables.Column(
+        verbose_name='Department',
         attrs={
             'search_filter': 'input-select',
-            'search_data': Operators.ARRAY_OPERATOR_TYPES,
-            'th_style': 'width:100px; text-align:center;',
-            'td_style': 'text-align:center;',
+            'search_data': Operators.ARRAY_OPERATOR_DEPARTMENTS,
+            'search_type': 'status',
+            'th_style': 'width:160px;',
+        }
+    )
+    operator_role = tables.Column(
+        verbose_name='Role',
+        attrs={
+            'search_filter': 'input-select',
+            'search_data': Operators.ARRAY_OPERATOR_ROLES,
+            'search_type': 'status',
+            'th_style': 'width:160px;',
         }
     )
     operator_status = tables.Column(
@@ -54,7 +73,7 @@ class OperatorsTable(tables.Table):
         }
     )
     actions = tables.Column(
-        verbose_name='Actions',
+        verbose_name='',
         attrs={
             'search_filter': '',
             'th_style': 'width:60px;',
@@ -70,38 +89,40 @@ class OperatorsTable(tables.Table):
     def set_auth_permissions(self, auth_permissions):
         self.auth_permissions = auth_permissions
 
+    def render_row_check(self, record):
+        return ''
+
     def render_row_number(self, record):
-        value = '<a href=' + str(record.pk) + '>' + '%d' % next(self.counter) + '</a>'
-        return value
+        return next(self.counter)
 
     def render_actions(self, record):
         action_data = ""
         if settings.ACCESS_PERMISSION_OPERATOR_VIEW in self.auth_permissions.values():
             url = reverse("operators_view", args=[record.pk])
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"" + url + "\">View</a>"
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"" + url + "\">View</a>"
         if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in self.auth_permissions.values():
             url = reverse("operators_update", args=[record.pk])
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"" + url + "\">Update</a>"
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"" + url + "\">Update</a>"
         if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in self.auth_permissions.values() and record.operator_status == Operators.STATUS_UNVERIFIED:
-            url = reverse("operators_single_select")
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'verify\', \'" + str(
+            url = reverse("operators_select_single")
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'verify\', \'" + str(
                 record.operator_id) + "\');\">Verify</a>"
         if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in self.auth_permissions.values() and record.operator_status == Operators.STATUS_UNAPPROVED:
-            url = reverse("operators_single_select")
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'approve\', \'" + str(
+            url = reverse("operators_select_single")
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'approve\', \'" + str(
                 record.operator_id) + "\');\">Approve</a>"
         if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in self.auth_permissions.values() and (
                 record.operator_status == Operators.STATUS_ACTIVE or record.operator_status == Operators.STATUS_INACTIVE):
-            url = reverse("operators_single_select")
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'block\', \'" + str(
+            url = reverse("operators_select_single")
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'block\', \'" + str(
                 record.operator_id) + "\');\">Block</a>"
         if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in self.auth_permissions.values() and record.operator_status == Operators.STATUS_BLOCKED:
-            url = reverse("operators_single_select")
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'unblock\', \'" + str(
+            url = reverse("operators_select_single")
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'unblock\', \'" + str(
                 record.operator_id) + "\');\">Unblock</a>"
         if settings.ACCESS_PERMISSION_OPERATOR_DELETE in self.auth_permissions.values():
-            url = reverse("operators_single_select")
-            action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'delete\', \'" + str(
+            url = reverse("operators_select_single")
+            action_data = action_data + "<a class=\"dropdown-item\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'delete\', \'" + str(
                 record.operator_id) + "\');\">Delete</a>"
         return action_data
 
@@ -136,17 +157,20 @@ class OperatorsTable(tables.Table):
             'width': '100%',
         }
         sequence = (
+            'row_check',
             'row_number',
             'operator_username',
             'operator_name',
-            'operator_type',
+            'operator_department',
+            'operator_role',
             'operator_status',
             'actions'
         )
         fields = (
             'operator_username',
             'operator_name',
-            'operator_type',
+            'operator_department',
+            'operator_role',
             'operator_status',
         )
         template_name = '_include/bootstrap-datatable.html'

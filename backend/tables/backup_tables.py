@@ -73,15 +73,15 @@ class BackupsTable(tables.Table):
     def render_actions(self, record):
         action_data = ""
         # if settings.ACCESS_PERMISSION_DASHBOARD_VIEW in self.auth_permissions.values():
-        #     url = reverse("backup_restore_single_select")
+        #     url = reverse("backup_restore_select_single")
         #     action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'restore\', \'" + str(
         #         record.backup_file_name) + "\');\">Restore</a>"
         if settings.ACCESS_PERMISSION_SETTINGS_VIEW in self.auth_permissions.values():
-            url = reverse("backup_restore_single_select")
+            url = reverse("backup_restore_select_single")
             action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'download\', \'" + str(
                 record.backup_file_name) + "\');\">Download</a>"
         if settings.ACCESS_PERMISSION_SETTINGS_VIEW in self.auth_permissions.values():
-            url = reverse("backup_restore_single_select")
+            url = reverse("backup_restore_select_single")
             action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'delete\', \'" + str(
                 record.backup_file_name) + "\');\">Delete</a>"
         return action_data

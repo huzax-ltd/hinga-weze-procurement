@@ -8,8 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
 from app.models import Operators, Operator_Logs
-from backend.tables.operator_log_tables import OperatorLogsTable
 from app.utils import Utils
+from backend.tables.operator_log_tables import OperatorLogsTable
 
 
 # noinspection PyUnusedLocal
@@ -51,7 +51,7 @@ def index(request):
                     'auth_permissions': auth_permissions,
                     'table': table,
                     'index_url': reverse("operator_logs_index"),
-                    'multiple_select_url': reverse("operator_logs_multiple_select"),
+                    'select_multiple_url': reverse("operator_logs_select_multiple"),
                 }
             )
         else:
@@ -60,7 +60,7 @@ def index(request):
 
 @csrf_exempt
 # noinspection PyUnusedLocal
-def single_select(request):
+def select_single(request):
     if request.is_ajax():
         operator = Operators.login_required(request)
         if operator is None:
@@ -92,7 +92,7 @@ def single_select(request):
 
 @csrf_exempt
 # noinspection PyUnusedLocal
-def multiple_select(request):
+def select_multiple(request):
     if request.is_ajax():
         operator = Operators.login_required(request)
         if operator is None:
@@ -160,7 +160,7 @@ def view(request, pk):
                         'auth_permissions': auth_permissions,
                         'model': model,
                         'index_url': reverse("operator_logs_index"),
-                        'single_select_url': reverse("operator_logs_single_select"),
+                        'select_single_url': reverse("operator_logs_select_single"),
                     }
                 )
             except(TypeError, ValueError, OverflowError, Operator_Logs.DoesNotExist):

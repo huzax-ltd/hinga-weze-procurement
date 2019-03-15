@@ -42,8 +42,8 @@ IsNumericValidator = \
 
 IsPhoneNumberValidator = \
     RegexValidator(
-        '^[0-9+]+$',
-        message='Numeric characters only.',
+        '^[0-9+()-]+$',
+        message='Invalid phone number.',
         code='Invalid value'
     )
 

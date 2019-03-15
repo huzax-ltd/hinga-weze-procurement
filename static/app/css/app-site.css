@@ -3,34 +3,6 @@ body {
     height: 100%;
 }
 
-.wrap {
-    min-height: 100%;
-    height: auto;
-    margin: 0 auto -60px;
-    padding: 0 0 60px;
-}
-
-.wrap > .container {
-    padding: 70px 15px 20px;
-}
-
-.footer {
-    height: 60px;
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
-    padding-top: 20px;
-}
-
-.jumbotron {
-    text-align: center;
-    background-color: transparent;
-}
-
-.jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-}
-
 .not-set {
     color: red;
     font-style: italic;
@@ -95,41 +67,41 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
-/* align the logout "link" (button in form) of the navbar */
-.nav li > form > button.logout {
-    padding: 15px;
-    border: none;
-}
+/*!* align the logout "link" (button in form) of the navbar *!*/
+/*.nav li > form > button.logout {*/
+/*padding: 15px;*/
+/*border: none;*/
+/*}*/
 
-@media (max-width: 767px) {
-    .nav li > form > button.logout {
-        display: block;
-        text-align: left;
-        width: 100%;
-        padding: 10px 15px;
-    }
-}
+/*@media (max-width: 767px) {*/
+/*.nav li > form > button.logout {*/
+/*display: block;*/
+/*text-align: left;*/
+/*width: 100%;*/
+/*padding: 10px 15px;*/
+/*}*/
+/*}*/
 
-.nav > li > form > button.logout:focus,
-.nav > li > form > button.logout:hover {
-    text-decoration: none;
-}
+/*.nav > li > form > button.logout:focus,*/
+/*.nav > li > form > button.logout:hover {*/
+/*text-decoration: none;*/
+/*}*/
 
-.nav > li > form > button.logout:focus {
-    outline: none;
-}
+/*.nav > li > form > button.logout:focus {*/
+/*outline: none;*/
+/*}*/
 
-label {
-    color:#888;
-}
+/*label {*/
+/*color:#888;*/
+/*}*/
 
-body{
-    color: #222;
-}
+/*body{*/
+/*color: #222;*/
+/*}*/
 
-.form-control{
-    color: #222;
-}
+/*.form-control{*/
+/*color: #222;*/
+/*}*/
 
 .errorlist {
     color: red;
@@ -158,4 +130,189 @@ form div.required label.control-label:after {
 input[required="required"]::after {
     content: " * ";
     color: red;
+}
+
+.breadcrumb {
+    margin-bottom: 0 !important;
+    /*background-color: #EFEFEF !important;*/
+    border-radius: 0 !important;
+}
+
+.page-layout.simple.full-width > .page-header, .page-layout.simple.inner-sidebar > .page-header {
+    height: auto;
+    min-height: auto;
+    max-height: 100%;
+    /*background-image: none !important;*/
+    /*background-color: #C6C6C8 !important;*/
+}
+
+.body-content-p-b-5 {
+    padding-bottom: 0 !important;
+}
+
+.body-content-p-t-5 {
+    padding-top: 0 !important;
+}
+
+.body-content-card {
+    border: 0 !important;
+}
+
+.custom-label {
+    color: rgba(0, 0, 0, 0.38) !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 0.04rem !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* start of select2 css */
+.select2-container--default .select2-selection--single:hover {
+    border-bottom: 2px solid #2D323D;
+}
+
+.select2-container--open .select2-selection--single:hover {
+    border-bottom: 0;
+    padding-left: 8px;
+}
+
+.select2-container--open .select2-selection--single {
+    border-bottom: 1px solid #eee;
+    padding-left: 8px;
+}
+
+.select2-selection__rendered {
+    color: #495057 !important;
+    font-size: 1.4rem !important;
+    font-weight: 400 !important;
+    padding-left: 0 !important;
+}
+
+/* start of disabled or readonly css */
+input[readonly].form-control {
+    pointer-events: none;
+    touch-action: none;
+    border-bottom: 1px solid #eee !important;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+select[readonly].select2-hidden-accessible + .select2-container {
+    pointer-events: none;
+    touch-action: none;
+}
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection {
+    background: #FFF;
+    box-shadow: none;
+    border-bottom: 1px solid #eee !important;
+}
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection__clear {
+    display: none;
+}
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection--single .select2-selection__arrow b {
+    border-color: #eee transparent transparent transparent;
+}
+
+/* start of table and datatable css */
+
+table.dataTable, td, th {
+    border: 1px solid #f0f0f0 !important;
+}
+
+th {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+td {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+table.dataTable {
+    box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+}
+
+.datatable-dropdown-menu {
+    position: relative !important;
+    margin-top: -27px !important;
+    overflow: auto !important;
+}
+
+.dataTables_info {
+    color: #666 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-left: 3px !important;
+    font-weight: normal !important;
+}
+
+.dataTables_paginate {
+    color: #666 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.paginate_button {
+    border: 1px solid #f0f0f0 !important;
+    margin: 0 !important;
+}
+
+/* start of icons css */
+.icon {
+    color: #3C4252;
+}
+
+/* start of spinner preloader css */
+.load-bar {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background-color: #fdba2c;
+}
+
+.bar {
+    content: "";
+    display: inline;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: 50%;
+    text-align: center;
+}
+
+.bar:nth-child(1) {
+    background-color: #da4733;
+    animation: loading 3s linear infinite;
+}
+
+.bar:nth-child(2) {
+    background-color: #3b78e7;
+    animation: loading 3s linear 1s infinite;
+}
+
+.bar:nth-child(3) {
+    background-color: #fdba2c;
+    animation: loading 3s linear 2s infinite;
+}
+
+@keyframes loading {
+    from {
+        left: 50%;
+        width: 0;
+        z-index: 100;
+    }
+    33.3333% {
+        left: 0;
+        width: 100%;
+        z-index: 10;
+    }
+    to {
+        left: 0;
+        width: 100%;
+    }
 }

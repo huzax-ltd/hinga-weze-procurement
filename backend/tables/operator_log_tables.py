@@ -76,7 +76,7 @@ class OperatorLogsTable(tables.Table):
             url = reverse("operator_logs_view", args=[record.pk])
             action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"" + url + "\">View</a>"
         if settings.ACCESS_PERMISSION_LOG_DELETE in self.auth_permissions.values():
-            url = reverse("operator_logs_single_select")
+            url = reverse("operator_logs_select_single")
             action_data = action_data + "<a class=\"btn btn-default btn-block\" href=\"#\" onclick=\"javascript: singleSelect(\'" + url + "\', \'delete\', \'" + str(
                 record.operator_log_id) + "\');\">Delete</a>"
         return action_data

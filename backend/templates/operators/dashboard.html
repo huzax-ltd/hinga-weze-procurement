@@ -1,67 +1,24 @@
-{% extends '_include/base-dashboard.html' %}
-{% block head %}
-    {% load static %}
-    <title>{{ APP_CONSTANT_APP_NAME }} : Dashboard</title>
-{% endblock %}
-
-{% block body %}
-    {% load static %}
-    <h3>Dashboard</h3>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-dark panel-colorful">
-                <div class="pad-all">
-                    <p class="text-lg text-semibold">Visitors</p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold">764</span>
-                        Today
-                    </p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold">1,332</span>
-                        Last 30 Days
-                    </p>
+{% extends '_include/base-dashboard.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }}: Dashboard</title>{% endblock %}
+{% block body %}{% load static %}
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Dashboard</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="pad-all text-center">
-                    <!--Placeholder-->
-                    <div id="visitors-sparkline-line"></div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <a href="{% url 'operators_index' %}">
-                <div class="panel panel-dark panel-colorful">
-                    <div class="pad-all text-center">
-                        <span class="text-3x text-thin">{{ operators }}</span>
-                        <p style="color: #FFF;">{{ MODEL_OPERATORS_PLURAL_TITLE }}</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <script>
-        $(document).ready(function () {
-            $("#visitors-sparkline-line").sparkline([345, 404, 305, 455, 378, 567, 586, 378, 567, 586, 345, 404, 305, 455, 378, 567, 586, 378, 567, 586, 345, 404, 305, 455, 378, 567, 586, 378, 567, 586], {
-                type: 'line',
-                width: '100%',
-                height: '40',
-                spotRadius: 4,
-                lineWidth: 1,
-                lineColor: '#ffffff',
-                fillColor: false,
-                minSpotColor: false,
-                maxSpotColor: false,
-                highlightLineColor: '#ffffff',
-                highlightSpotColor: '#ffffff',
-                tooltipChartTitle: 'Visitors',
-                tooltipPrefix: '',
-                spotColor: '#ffffff',
-                valueSpots: {
-                    '0:': '#ffffff'
-                }
-            });
-        });
-    </script>
 {% endblock %}

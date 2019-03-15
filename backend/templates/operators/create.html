@@ -1,119 +1,123 @@
-{% extends '_include/base-general.html' %}
-{% block head %}
-    {% load static %}
-    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
-    <style>.errorlist {
-        color: red;
-        text-align: left;
-        padding-left: 15px;
-        padding-right: 0;
-    }
-    </style>
-{% endblock %}
-
-{% block body %}
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+{% block body %}{% load static %}
     {% load static %}{% csrf_token %}
-    <ol class="breadcrumb" style="padding-left:0;">
-        <li><a href="{% url 'operators_dashboard' %}">Home</a></li>
-        <li><a href="{% url 'operators_index' %}">{{ title }}</a></li>
-        <li class="active">Add</li>
-    </ol>
-    <div class="panel">
-        <div class="panel-body" style="padding-top: 0;">
-            <h3>Add New Operator</h3>
-            <div>
-                <form method="post" action="">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label>
-                            {{ form.name.label }}
-                            <label style="color: red; margin-bottom: 0;">
-                                {% if form.name.field.required %} * {% endif %}
-                            </label>
-                        </label>
-                        {{ form.name }}
-                        {{ form.name.errors }}
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>
-                                    {{ form.type.label }}
-                                    <label style="color: red; margin-bottom: 0;">
-                                        {% if form.type.field.required %} * {% endif %}
-                                    </label>
-                                </label>
-                                {{ form.type }}
-                                {{ form.type.errors }}
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>
-                                    {{ form.gender.label }}
-                                    <label style="color: red; margin-bottom: 0;">
-                                        {% if form.gender.field.required %} * {% endif %}
-                                    </label>
-                                </label>
-                                {{ form.gender }}
-                                {{ form.gender.errors }}
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>
-                                    {{ form.phone_number.label }}
-                                    <label style="color: red; margin-bottom: 0;">
-                                        {% if form.phone_number.field.required %} * {% endif %}
-                                    </label>
-                                </label>
-                                {{ form.phone_number }}
-                                {{ form.phone_number.errors }}
-                            </div>
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <a class="breadcrumb-item" href="{{ index_url }}">{{ title }}</a>
+                        <span class="breadcrumb-item active">Add</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
+                {% endif %}
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Create New</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>
-                            {{ form.email.label }}
-                            <label style="color: red; margin-bottom: 0;">
-                                {% if form.email.field.required %} * {% endif %}
-                            </label>
-                        </label>
-                        {{ form.email }}
-                        {{ form.email.errors }}
+                </div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.email.label }}
+                                                {% if form.email.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.email }}
+                                        </div>
+                                        {{ form.email.errors }}
+                                    </div>
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.password.label }}
+                                                {% if form.password.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.password }}
+                                        </div>
+                                        {{ form.password.errors }}
+                                    </div>
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.repeat_password.label }}
+                                                {% if form.repeat_password.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.repeat_password }}
+                                        </div>
+                                        {{ form.repeat_password.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.name.label }}
+                                                {% if form.name.field.required %}<b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.name }}
+                                        </div>
+                                        {{ form.name.errors }}
+                                    </div>
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label mb-0">
+                                                {{ form.department.label }}
+                                                {% if form.department.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.department }}
+                                        </div>
+                                        {{ form.department.errors }}
+                                    </div>
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label mb-0">
+                                                {{ form.role.label }}
+                                                {% if form.role.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.role }}
+                                        </div>
+                                        {{ form.role.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-secondary btn-block fuse-ripple-ready"
+                                    aria-label="aria-label">
+                                SUBMIT
+                            </button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label>
-                            {{ form.password.label }}
-                            <label style="color: red; margin-bottom: 0;">
-                                {% if form.password.field.required %} * {% endif %}
-                            </label>
-                        </label>
-                        {{ form.password }}
-                        {{ form.password.errors }}
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            {{ form.repeat_password.label }}
-                            <label style="color: red; margin-bottom: 0;">
-                                {% if form.repeat_password.field.required %} * {% endif %}
-                            </label>
-                        </label>
-                        {{ form.repeat_password }}
-                        {{ form.repeat_password.errors }}
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-lg btn-block btn-primary"> Submit
-                    </button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
     <!--suppress ES6ConvertVarToLetConst -->
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            $("#search-input-select-type").select2({placeholder: "--select--", allowClear: true});
+            $("#search-input-select-department").select2({placeholder: "--select--", allowClear: false});
+            $("#search-input-select-role").select2({placeholder: "--select--", allowClear: false});
             $("#search-input-select-gender").select2({placeholder: "--select--", allowClear: true});
         });
     </script>
+    {% include '_include/tab_index.html' %}
 {% endblock %}

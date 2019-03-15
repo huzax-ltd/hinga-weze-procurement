@@ -27,10 +27,10 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
-    url(r'^settings/backup_restore/single-select/$', setting_views.backup_restore_single_select,
-        name='backup_restore_single_select'),
-    url(r'^settings/backup_restore/multiple-select/$', setting_views.backup_restore_multiple_select,
-        name='backup_restore_multiple_select'),
+    url(r'^settings/backup_restore/select-single/$', setting_views.backup_restore_select_single,
+        name='backup_restore_select_single'),
+    url(r'^settings/backup_restore/select-multiple/$', setting_views.backup_restore_select_multiple,
+        name='backup_restore_select_multiple'),
 
     # operators (removed - {'template_name': 'operators/signup.html'})
     path('', operator_views.index, name='index'),
@@ -84,10 +84,10 @@ urlpatterns = [
         name='service-worker.js'),
 
     # single or multiple select
-    url(r'^operators/single-select/$', operator_views.single_select,
-        name='operators_single_select'),
-    url(r'^operators/multiple-select/$', operator_views.multiple_select,
-        name='operators_multiple_select'),
+    url(r'^operators/select-single/$', operator_views.select_single,
+        name='operators_select_single'),
+    url(r'^operators/select-multiple/$', operator_views.select_multiple,
+        name='operators_select_multiple'),
 
     # create
     url(r'^operators/create/$', operator_views.create, name='operators_create'),
@@ -102,16 +102,6 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
-
-    # update permissions
-    url(r'^operators/update/permissions/(?P<pk>\d+)/$', operator_views.update_permissions_view,
-        name='operators_update_permissions_view'),
-    url(r'^operators/update/permissions/(?P<pk>\d+)/service-worker.js',
-        (TemplateView.as_view(template_name="service-worker/service-worker.js",
-                              content_type='application/javascript', )),
-        name='service-worker.js'),
-    url(r'^operators/update/permissions/$', operator_views.update_permissions_action,
-        name='operators_update_permissions_action'),
 
     # view
     url(r'^operators/view/(?P<pk>\d+)/$', operator_views.view, name='operators_view'),
@@ -158,10 +148,10 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
-    url(r'^operator-logs/single-select/$', operator_log_views.single_select,
-        name='operator_logs_single_select'),
-    url(r'^operator-logs/multiple-select/$', operator_log_views.multiple_select,
-        name='operator_logs_multiple_select'),
+    url(r'^operator-logs/select-single/$', operator_log_views.select_single,
+        name='operator_logs_select_single'),
+    url(r'^operator-logs/select-multiple/$', operator_log_views.select_multiple,
+        name='operator_logs_select_multiple'),
     url(r'^operator-logs/(?P<pk>\d+)/$', operator_log_views.view, name='operator_logs_view'),
     url(r'^operator-logs/(?P<pk>\d+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
