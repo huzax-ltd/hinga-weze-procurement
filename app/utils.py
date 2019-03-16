@@ -146,6 +146,11 @@ class Utils(object):
         value = datetime.strptime(value, '%Y-%m-%d').strftime('%d %b %Y')
         return value
 
+    @staticmethod
+    def get_us_format_date(value):
+        value = datetime.strptime(value, '%Y-%m-%d').strftime('%m/%d/%Y')
+        return value
+
     # noinspection PyShadowingNames
     @staticmethod
     def pretty_date(time=False):

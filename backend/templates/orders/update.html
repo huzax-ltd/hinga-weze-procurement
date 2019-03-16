@@ -1,0 +1,218 @@
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+{% block body %}{% load static %}
+    {% load static %}{% csrf_token %}
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <a class="breadcrumb-item" href="{{ index_url }}">{{ title }}</a>
+                        <a class="breadcrumb-item"
+                           href="{% url 'orders_view' pk=model.order_id %}">{{ model.order_code }}</a>
+                        <span class="breadcrumb-item active">Edit</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
+                {% endif %}
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Update</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.requester_name.label }}
+                                                {% if form.requester_name.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.requester_name }}
+                                        </div>
+                                        {{ form.requester_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.project_name.label }}
+                                                {% if form.project_name.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.project_name }}
+                                        </div>
+                                        {{ form.project_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.requisition_number.label }}
+                                                {% if form.requisition_number.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.requisition_number }}
+                                        </div>
+                                        {{ form.requisition_number.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.award_number.label }}
+                                                {% if form.award_number.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.award_number }}
+                                        </div>
+                                        {{ form.award_number.errors }}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.project_code.label }}
+                                                {% if form.project_code.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.project_code }}
+                                        </div>
+                                        {{ form.project_code.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.charge_code.label }}
+                                                {% if form.charge_code.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.charge_code }}
+                                        </div>
+                                        {{ form.charge_code.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.donor.label }}
+                                                {% if form.donor.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.donor }}
+                                        </div>
+                                        {{ form.donor.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.project_geo_code.label }}
+                                                {% if form.project_geo_code.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.project_geo_code }}
+                                        </div>
+                                        {{ form.project_geo_code.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.anticipated_award_mechanism.label }}
+                                                {% if form.anticipated_award_mechanism.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.anticipated_award_mechanism }}
+                                        </div>
+                                        {{ form.anticipated_award_mechanism.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.anticipated_start_date.label }}
+                                                {% if form.anticipated_start_date.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.anticipated_start_date }}
+                                        </div>
+                                        {{ form.anticipated_start_date.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.anticipated_end_date.label }}
+                                                {% if form.anticipated_end_date.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.anticipated_end_date }}
+                                        </div>
+                                        {{ form.anticipated_end_date.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.description.label }}
+                                                {% if form.description.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.description }}
+                                        </div>
+                                        {{ form.description.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.special_considerations.label }}
+                                                {% if form.special_considerations.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.special_considerations }}
+                                        </div>
+                                        {{ form.special_considerations.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-secondary btn-block fuse-ripple-ready"
+                                    aria-label="aria-label">
+                                SUBMIT
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include '_include/tab_index.html' %}
+{% endblock %}

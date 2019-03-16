@@ -98,6 +98,7 @@ class OperatorsTable(tables.Table):
     def set_auth_permissions(self, auth_permissions):
         self.auth_permissions = auth_permissions
 
+    @staticmethod
     def render_row_check(self, record):
         return ''
 

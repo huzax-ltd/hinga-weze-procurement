@@ -481,13 +481,15 @@ class Orders(models.Model):
     )
 
     order_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    order_code = models.CharField('Order Id', max_length=8, unique=True, blank=False, default=None)
     order_requester_name = models.CharField('Requester Name', max_length=100, blank=False)
     order_project_name = models.CharField('Project Name', max_length=100, blank=False)
     order_project_code = models.CharField('Project Code', max_length=100, blank=True)
     order_project_geo_code = models.CharField('Project GeoCode', max_length=100, blank=True)
     order_charge_code = models.CharField('Charge Code', max_length=100, blank=True)
     order_award_number = models.CharField('Award Number', max_length=100, blank=True)
-    order_requisition_number = models.CharField('Requisition Number', max_length=100, blank=True)
+    order_requisition_number = models.CharField('Requester Number', max_length=100, blank=True)
+    order_donor = models.CharField('Donor', max_length=100, blank=True)
     order_description = models.CharField('Description', max_length=255, blank=True)
     order_anticipated_award_mechanism = models.CharField('Anticipated Award Mechanism', max_length=255, blank=True)
     order_anticipated_start_date = models.DateField('Anticipated Start Date',
@@ -519,6 +521,10 @@ class Orders(models.Model):
     order_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
     order_updated_by = models.CharField('Updated By', max_length=100, blank=True)
     order_updated_role = models.CharField('Updated Title', max_length=100, blank=True)
+    order_requested_at = models.DateTimeField('Requested At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_requested_id = models.CharField('Requested ID', max_length=100, blank=True)
+    order_requested_by = models.CharField('Requested By', max_length=100, blank=True)
+    order_requested_role = models.CharField('Requested Title', max_length=100, blank=True)
     order_approval_no_of_levels = models.IntegerField('Approval Levels', blank=False, default=0)
     order_reviewed_at = models.DateTimeField('Reviewed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_reviewed_id = models.CharField('Reviewed ID', max_length=100, blank=True)
@@ -569,7 +575,7 @@ class Orders(models.Model):
         unique_token_found = False
         while not unique_token_found:
             token = get_random_string(length, allowed_chars='0123456789')
-            if (not token.startswith('0')) and Offices.objects.filter(**{attribute: token}).count() is 0:
+            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
                 unique_token_found = True
         return token
 
@@ -935,10 +941,10 @@ class Notifications(models.Model):
     notification_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     notification_from_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
                                               default=TYPE_SYSTEM)
-    notification_from_id = models.IntegerField('From Id', max_length=100, blank=False, default=0)
+    notification_from_id = models.IntegerField('From Id', blank=False, default=0)
     notification_to_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
                                             default=TYPE_SYSTEM)
-    notification_to_id = models.IntegerField('To Id', max_length=100, blank=False, default=0)
+    notification_to_id = models.IntegerField('To Id', blank=False, default=0)
     notification_message = models.CharField('Message', max_length=255, blank=False)
     notification_url = models.CharField('URL', max_length=255, blank=False)
     notification_created_at = models.DateTimeField('Created at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)

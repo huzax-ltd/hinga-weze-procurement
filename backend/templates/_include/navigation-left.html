@@ -27,6 +27,17 @@
                 <span>MENU</span>
             </li>
 
+            {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                <li class="nav-item">
+                    <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                        <i class="icon s-4 icon-plus-box"></i>
+
+                        <span>New Procurement Request</span>
+                    </a>
+                </li>
+            {% endif %}
+
             {% if ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values %}
                 {% if section == BACKEND_SECTION_DASHBOARD %}
                     <li class="nav-item">
@@ -44,6 +55,28 @@
                             <i class="icon s-4 icon-view-dashboard"></i>
 
                             <span>Dashboard</span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values %}
+                {% if section == BACKEND_SECTION_ORDERS %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple active" href="{% url 'orders_index' %}">
+
+                            <i class="icon s-4 icon-shopping"></i>
+
+                            <span>Procurement Requests</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                            <i class="icon s-4 icon-shopping"></i>
+
+                            <span>Procurement Requests</span>
                         </a>
                     </li>
                 {% endif %}

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 from django.views.generic import TemplateView
 
-from backend.views import operator_views, operator_log_views, site_views, setting_views
+from backend.views import operator_views, operator_log_views, order_views, site_views, setting_views
 
 urlpatterns = [
 
@@ -141,6 +141,44 @@ urlpatterns = [
     url(r'^operators/update/reset-password/(?P<pk>\d+)/$', operator_views.update_reset_password,
         name='operators_update_reset_password'),
     url(r'^operators/update/reset-password/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # orders
+    path('', order_views.index, name='index'),
+
+    # index
+    url(r'^orders/json/$', order_views.json_orders, name='json_orders'),
+    url(r'^orders/index/$', order_views.index, name='orders_index'),
+    url(r'^orders/index/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # single or multiple select
+    url(r'^orders/select-single/$', order_views.select_single,
+        name='orders_select_single'),
+    url(r'^orders/select-multiple/$', order_views.select_multiple,
+        name='orders_select_multiple'),
+
+    # create
+    url(r'^orders/create/$', order_views.create, name='orders_create'),
+    url(r'^orders/create/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update
+    url(r'^orders/update/(?P<pk>\d+)/$', order_views.update, name='orders_update'),
+    url(r'^orders/update/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # view
+    url(r'^orders/view/(?P<pk>\d+)/$', order_views.view, name='orders_view'),
+    url(r'^orders/view/(?P<pk>\d+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

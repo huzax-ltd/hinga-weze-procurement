@@ -1,0 +1,225 @@
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+{% block body %}{% load static %}
+    {% load static %}{% csrf_token %}
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <a class="breadcrumb-item" href="{{ index_url }}">{{ title }}</a>
+                        <span class="breadcrumb-item active">{{ model.order_code }}</span>
+                        <span class="breadcrumb-item active">Details</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
+                {% endif %}
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Procurement Request Details</span>
+                        </div>
+
+                        <div class="btn-dropdown">
+                            <button role="button" type="button" class="btn btn-icon fuse-ripple-ready"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <i class="icon icon-dots-vertical text-white"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                {% if ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values %}
+                                    {#                                    <a class="dropdown-item"#}
+                                    {#                                       href="{% url 'orders_update' pk=model.order_id %}">Update</a>#}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <div>
+                            {% if ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values %}
+                                <a href="{% url 'orders_update' pk=model.order_id %}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Update</a>
+                            {% endif %}
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <td colspan="1" style="font-weight: bold;">Request Id</td>
+                                        <td colspan="2">{{ model.order_code }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Status</td>
+                                        <td colspan="2">{{ model.order_status }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Requester name</td>
+                                        <td>{{ model.order_requester_name }}</td>
+                                        <td style="font-weight: bold;">Date of Request</td>
+                                        <td>-</td>
+                                        <td style="font-weight: bold;">Project Name</td>
+                                        <td>{{ model.order_project_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Requester Number</td>
+                                        <td>{{ model.order_requisition_number }}</td>
+                                        <td style="font-weight: bold;">Award Number</td>
+                                        <td>{{ model.order_award_number }}</td>
+                                        <td style="font-weight: bold;">Project Code</td>
+                                        <td>{{ model.order_project_code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Charge Code</td>
+                                        <td>{{ model.order_charge_code }}</td>
+                                        <td style="font-weight: bold;">Donor</td>
+                                        <td>{{ model.order_donor }}</td>
+                                        <td style="font-weight: bold;">Project GeoCode</td>
+                                        <td>{{ model.order_project_geo_code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="font-weight: bold;">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">{{ model.order_description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Sr. No</td>
+                                        <td style="font-weight: bold;">Item Name</td>
+                                        <td style="font-weight: bold;">Unit Price</td>
+                                        <td style="font-weight: bold;">Quantity</td>
+                                        <td style="font-weight: bold;">Total Amount</td>
+                                        <td style="font-weight: bold;">Action</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Lunch buffet with soft drink</td>
+                                        <td>-</td>
+                                        <td>30</td>
+                                        <td>90000</td>
+                                        <td>
+                                            <span>
+                                            <button class="btn btn-icon">
+                                                <i class="icon icon-account-edit"></i>
+                                            </button>
+                                            </span>
+                                            <span>
+                                                <button class="btn btn-icon">
+                                                <i class="icon icon-close"></i>
+                                            </button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Tea Break</td>
+                                        <td>-</td>
+                                        <td>30</td>
+                                        <td>75000</td>
+                                        <td>
+                                            <span>
+                                            <button class="btn btn-icon">
+                                                <i class="icon icon-account-edit"></i>
+                                            </button>
+                                            </span>
+                                            <span>
+                                                <button class="btn btn-icon">
+                                                <i class="icon icon-close"></i>
+                                            </button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Catering service(Transport fee)</td>
+                                        <td>-</td>
+                                        <td>1</td>
+                                        <td>20000</td>
+                                        <td>
+                                            <span>
+                                            <button class="btn btn-icon">
+                                                <i class="icon icon-account-edit"></i>
+                                            </button>
+                                            </span>
+                                            <span>
+                                                <button class="btn btn-icon">
+                                                <i class="icon icon-close"></i>
+                                            </button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>
+                                            <button class="btn btn-primary">
+                                                <i class="icon icon-plus"
+                                                   style="font-size: 16px; vertical-align: top !important;"></i> ADD
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold;">Equipment Price</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>0</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold;">Tax Amount</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>0</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold;">Grand Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="font-weight: bold;">185000</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1" style="font-weight: bold;">Anticipated Award Mechanism</td>
+                                        <td colspan="5">{{ model.order_anticipated_award_mechanism }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1" style="font-weight: bold;">Anticipated Start Date</td>
+                                        <td colspan="2">{{ model.order_anticipated_start_date }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Anticipated End Date</td>
+                                        <td colspan="2">{{ model.order_anticipated_end_date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="font-weight: bold;">Special Considerations</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">{{ model.order_special_considerations }}</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include '_include/select_single.html' %}
+    {% include '_include/tab_index.html' %}
+{% endblock %}
