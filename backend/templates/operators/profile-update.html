@@ -30,7 +30,7 @@
                         <form method="post" action="">
                             {% csrf_token %}
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div class="form">
                                         <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
                                             <label class="custom-label">
@@ -42,30 +42,6 @@
                                         </div>
                                         {{ form.email.errors }}
                                     </div>
-                                    <div class="form">
-                                        <div class="form-group mb-4 pt-0">
-                                            <label class="custom-label mb-0">
-                                                {{ form.department.label }}
-                                                {% if form.department.field.required %}
-                                                    <b style="color: red;">*</b>{% endif %}
-                                            </label>
-                                            {{ form.department }}
-                                        </div>
-                                        {{ form.department.errors }}
-                                    </div>
-                                    <div class="form">
-                                        <div class="form-group mb-4 pt-0">
-                                            <label class="custom-label mb-0">
-                                                {{ form.role.label }}
-                                                {% if form.role.field.required %}
-                                                    <b style="color: red;">*</b>{% endif %}
-                                            </label>
-                                            {{ form.role }}
-                                        </div>
-                                        {{ form.role.errors }}
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
                                     <div class="form">
                                         <div class="form-group mb-4 pt-0">
                                             <label class="custom-label">
@@ -114,12 +90,7 @@
     <!--suppress ES6ConvertVarToLetConst -->
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            $("#search-input-select-department").select2({placeholder: "--select--", allowClear: false});
-            $("#search-input-select-role").select2({placeholder: "--select--", allowClear: false});
             $("#search-input-select-gender").select2({placeholder: "--select--", allowClear: true});
-
-            $("#search-input-select-role").prop('readonly', 'readonly');
-            $("#search-input-select-department").prop('readonly', 'readonly');
         });
     </script>
     {% include '_include/tab_index.html' %}

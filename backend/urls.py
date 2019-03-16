@@ -82,6 +82,11 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+    # other
+    url(r'^operators/api/dropdown/roles/(?P<department>.+)/$', operator_views.api_dropdown_roles,
+        name='api_dropdown_roles'),
+    url(r'^operators/api/dropdown/parent-operators/(?P<role>.+)/$', operator_views.api_dropdown_parent_operators,
+        name='api_dropdown_parent_operators'),
 
     # single or multiple select
     url(r'^operators/select-single/$', operator_views.select_single,

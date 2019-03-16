@@ -48,6 +48,13 @@ class Operators(models.Model):
     ]
     OPERATOR_TYPES = (
         ('', '--select--'),
+        # (TYPE_SUPER_ADMIN, (TYPE_SUPER_ADMIN.title()).replace('-', ' ')),
+        (TYPE_ADMIN, (TYPE_ADMIN.title()).replace('-', ' ')),
+        (TYPE_MANAGER, (TYPE_MANAGER.title()).replace('-', ' ')),
+        (TYPE_OTHER, (TYPE_OTHER.title()).replace('-', ' ')),
+    )
+    SUPER_OPERATOR_TYPES = (
+        ('', '--select--'),
         (TYPE_SUPER_ADMIN, (TYPE_SUPER_ADMIN.title()).replace('-', ' ')),
         (TYPE_ADMIN, (TYPE_ADMIN.title()).replace('-', ' ')),
         (TYPE_MANAGER, (TYPE_MANAGER.title()).replace('-', ' ')),
@@ -158,7 +165,8 @@ class Operators(models.Model):
     HTML_TAG_STATUS_UNAPPROVED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unapproved <b></div>'
 
     operator_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
-    operator_type = models.CharField('Type', max_length=20, blank=False, choices=OPERATOR_TYPES, default=TYPE_OTHER)
+    operator_type = models.CharField('Type', max_length=20, blank=False, choices=SUPER_OPERATOR_TYPES,
+                                     default=TYPE_OTHER)
     operator_department = models.CharField('Department', max_length=255, blank=False, choices=OPERATOR_DEPARTMENTS,
                                            default=DEPARTMENT_NONE)
     operator_role = models.CharField('Role', max_length=255, blank=False, choices=OPERATOR_ROLES,
@@ -268,6 +276,60 @@ class Operators(models.Model):
             auth_permissions[counter] = operator_auth_permission.access_permissions_access_permission_name_id
             counter = counter + 1
         return auth_permissions
+
+    @classmethod
+    def update_operator_access_permissions(cls, request, model, operator):
+
+        Operator_Access_Permissions.objects.filter(operators_operator_id_id=model.operator_id).delete()
+
+        if model.operator_type == Operators.TYPE_SUPER_ADMIN or model.operator_type == Operators.TYPE_ADMIN:
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_SETTINGS_VIEW, model,
+                                                                       operator)
+            Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_LOG_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_LOG_VIEW,
+                                                                       model, operator)
+
+        if model.operator_type == Operators.TYPE_SUPER_ADMIN or model.operator_type == Operators.TYPE_ADMIN or model.operator_type == Operators.TYPE_MANAGER:
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_DASHBOARD_VIEW, model,
+                                                                       operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_OPERATOR_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_OPERATOR_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_OPERATOR_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_OPERATOR_VIEW, model,
+                                                                       operator)
+
+        if model.operator_type == Operators.TYPE_SUPER_ADMIN or model.operator_type == Operators.TYPE_ADMIN or model.operator_type == Operators.TYPE_MANAGER or model.operator_type == Operators.TYPE_OTHER:
+            Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_ORDER_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_ORDER_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_ORDER_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_ORDER_VIEW,
+                                                                       model, operator)
+
+        Operator_Logs.add(
+            model.operator_id,
+            model.operator_username,
+            model.operator_name,
+            'Updated ' + Operators.SINGULAR_TITLE + ' Access Permissions',
+            Utils.get_browser_details_from_request(request),
+            Utils.get_ip_address(request),
+            operator.operator_username,
+        )
+
+        model.save()
+        return True
 
     @classmethod
     def delete_operator(cls, request, model, operator):
@@ -814,6 +876,79 @@ class Operator_Access_Permissions(models.Model):
                 counter] = access_permission.access_permissions_access_permission_name.access_permission_name
             counter = counter + 1
         return auth_permissions
+
+    @classmethod
+    def add_operator_access_permission(cls, request, access_permission, model, operator):
+        object_access_permission = Access_Permissions.objects.get(access_permission_name=access_permission)
+        operator_access_permission = Operator_Access_Permissions()
+        operator_access_permission.access_permissions_access_permission_name = object_access_permission
+        operator_access_permission.operators_operator_id = model
+        operator_access_permission.operator_access_permission_updated_at = Utils.get_current_datetime_utc()
+        operator_access_permission.operator_access_permission_updated_by = operator.operator_username
+        operator_access_permission.save()
+        return True
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Notifications(models.Model):
+    TITLE = settings.MODEL_NOTIFICATIONS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_NOTIFICATIONS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    TYPE_SYSTEM = 'system'
+    TYPE_ORDER = 'order'
+    TYPE_OPERATOR = 'operator'
+    ARRAY_TYPES = [
+        (TYPE_SYSTEM.title()).replace('-', ' '),
+        (TYPE_ORDER.title()).replace('-', ' '),
+        (TYPE_OPERATOR.title()).replace('-', ' '),
+    ]
+    DROPDOWN_TYPES = (
+        ('', '--select--'),
+        (TYPE_SYSTEM, (TYPE_SYSTEM.title()).replace('-', ' ')),
+        (TYPE_ORDER, (TYPE_ORDER.title()).replace('-', ' ')),
+        (TYPE_OPERATOR, (TYPE_OPERATOR.title()).replace('-', ' ')),
+    )
+
+    STATUS_UNREAD = 'unread'
+    STATUS_READ = 'read'
+    STATUS_FIXED = 'fixed'
+    ARRAY_STATUSES = [
+        (STATUS_UNREAD.title()).replace('-', ' '),
+        (STATUS_READ.title()).replace('-', ' '),
+        (STATUS_FIXED.title()).replace('-', ' '),
+    ]
+    DROPDOWN_STATUSES = (
+        ('', '--select--'),
+        (STATUS_UNREAD, (STATUS_UNREAD.title()).replace('-', ' ')),
+        (STATUS_READ, (STATUS_READ.title()).replace('-', ' ')),
+        (STATUS_FIXED, (STATUS_FIXED.title()).replace('-', ' ')),
+    )
+
+    HTML_TAG_STATUS_ACTIVE_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_ACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Active <b></div>'
+    HTML_TAG_STATUS_INACTIVE_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_INACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Inactive <b></div>'
+    HTML_TAG_STATUS_BLOCKED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Blocked <b></div>'
+    HTML_TAG_STATUS_UNVERIFIED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNVERIFIED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unverified <b></div>'
+    HTML_TAG_STATUS_UNAPPROVED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unapproved <b></div>'
+
+    notification_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    notification_from_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
+                                              default=TYPE_SYSTEM)
+    notification_from_id = models.IntegerField('From Id', max_length=100, blank=False, default=0)
+    notification_to_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
+                                            default=TYPE_SYSTEM)
+    notification_to_id = models.IntegerField('To Id', max_length=100, blank=False, default=0)
+    notification_message = models.CharField('Message', max_length=255, blank=False)
+    notification_url = models.CharField('URL', max_length=255, blank=False)
+    notification_created_at = models.DateTimeField('Created at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    notification_read_at = models.DateTimeField('Read at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    notification_fixed_at = models.DateTimeField('Fixed at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    notification_status = models.CharField('Status', max_length=20, blank=False, choices=DROPDOWN_STATUSES,
+                                           default=STATUS_UNREAD)
+
+    def __unicode__(self):
+        return self.notification_id
 
 
 # noinspection PyPep8Naming

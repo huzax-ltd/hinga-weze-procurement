@@ -32,6 +32,16 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.name.label }}
+                                                {% if form.name.field.required %}<b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.name }}
+                                        </div>
+                                        {{ form.name.errors }}
+                                    </div>
+                                    <div class="form">
                                         <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
                                             <label class="custom-label">
                                                 {{ form.email.label }}
@@ -68,13 +78,14 @@
                                 <div class="col-sm-6">
                                     <div class="form">
                                         <div class="form-group mb-4 pt-0">
-                                            <label class="custom-label">
-                                                {{ form.name.label }}
-                                                {% if form.name.field.required %}<b style="color: red;">*</b>{% endif %}
+                                            <label class="custom-label mb-0">
+                                                {{ form.type.label }}
+                                                {% if form.type.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
                                             </label>
-                                            {{ form.name }}
+                                            {{ form.type }}
                                         </div>
-                                        {{ form.name.errors }}
+                                        {{ form.type.errors }}
                                     </div>
                                     <div class="form">
                                         <div class="form-group mb-4 pt-0">
@@ -98,6 +109,17 @@
                                         </div>
                                         {{ form.role.errors }}
                                     </div>
+                                    <div class="form" id="div-parent-operator">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label mb-0">
+                                                {{ form.parent_id.label }}
+                                                {% if form.parent_id.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.parent_id }}
+                                        </div>
+                                        {{ form.parent_id.errors }}
+                                    </div>
                                 </div>
                             </div>
                             <br>
@@ -114,10 +136,47 @@
     <!--suppress ES6ConvertVarToLetConst -->
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
+            $("#search-input-select-type").select2({placeholder: "--select--", allowClear: false});
             $("#search-input-select-department").select2({placeholder: "--select--", allowClear: false});
             $("#search-input-select-role").select2({placeholder: "--select--", allowClear: false});
+            $("#search-input-select-parent-id").select2({placeholder: "--select--", allowClear: false});
             $("#search-input-select-gender").select2({placeholder: "--select--", allowClear: true});
+
+            var data = "<option value=''>--select--</option>";
+            data += "<option value='0' selected>NONE</option>";
+            $("select#search-input-select-parent-id").html(data);
+            $("#search-input-select-parent-id").attr("readonly", "readonly");
+            $('#search-input-select-parent-id').trigger('change');
+            {#$("#div-parent-operator").hide();#}
+
         });
+        var onDepartmentSelected;
+        onDepartmentSelected = function onDepartmentSelected() {
+            var department = document.getElementById("search-input-select-department").value;
+            $.get("/backend/operators/api/dropdown/roles/" + department + "/", function (data) {
+                $("select#search-input-select-role").html(data);
+            });
+        };
+        var onRoleSelected;
+        onRoleSelected = function onRoleSelected() {
+            var role = document.getElementById("search-input-select-role").value;
+            $.get("/backend/operators/api/dropdown/parent-operators/" + role + "/", function (data) {
+                // alert(data);
+                if (data != "") {
+                    $("select#search-input-select-parent-id").html(data);
+                    $("#search-input-select-parent-id").removeAttr("readonly");
+                    $('#search-input-select-parent-id').trigger('change');
+                    {#$("#div-parent-operator").show();#}
+                } else {
+                    data = "<option value=''>--select--</option>";
+                    data += "<option value='0' selected>NONE</option>";
+                    $("select#search-input-select-parent-id").html(data);
+                    $("#search-input-select-parent-id").attr("readonly", "readonly");
+                    $('#search-input-select-parent-id').trigger('change');
+                    {#$("#div-parent-operator").hide();#}
+                }
+            });
+        };
     </script>
     {% include '_include/tab_index.html' %}
 {% endblock %}

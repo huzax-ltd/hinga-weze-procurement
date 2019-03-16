@@ -15,7 +15,7 @@ from app.models import Operators, Operator_Logs, Failed_Login
 from app.utils import Utils
 from backend.forms.operator_forms import OperatorSignUpForm, OperatorSignInForm, OperatorForgotPasswordForm, \
     OperatorResetPasswordForm, OperatorSearchIndexForm, OperatorCreateForm, OperatorUpdateForm, \
-    OperatorUpdateProfileForm, OperatorChangePasswordForm
+    SuperOperatorUpdateForm, OperatorUpdateProfileForm, OperatorChangePasswordForm
 from backend.tables.operator_tables import OperatorsTable
 
 
@@ -527,6 +527,127 @@ def json_operators(request):
 
 
 # noinspection PyUnusedLocal
+def api_dropdown_roles(request, department):
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_OPERATOR_VIEW in auth_permissions.values():
+            roles = ""
+            if department == Operators.DEPARTMENT_NONE:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_NONE + "'>" + Operators.ROLE_NONE + "</option>"
+            if department == Operators.DEPARTMENT_DCOP:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
+                roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+                roles += "<option value='" + Operators.ROLE_REGIONAL_MANAGER + "'>" + Operators.ROLE_REGIONAL_MANAGER + "</option>"
+                roles += "<option value='" + Operators.ROLE_DISTRICT_MANAGER + "'>" + Operators.ROLE_DISTRICT_MANAGER + "</option>"
+                roles += "<option value='" + Operators.ROLE_FIELD_OFFICER + "'>" + Operators.ROLE_FIELD_OFFICER + "</option>"
+            if department == Operators.DEPARTMENT_BFM:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
+                roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+            if department == Operators.DEPARTMENT_NUTRITION:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
+                roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+            if department == Operators.DEPARTMENT_DAF:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
+                roles += "<option value='" + Operators.ROLE_OPM + "'>" + Operators.ROLE_OPM + "</option>"
+                roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+                roles += "<option value='" + Operators.ROLE_PROCUREMENT_OFFICER + "'>" + Operators.ROLE_PROCUREMENT_OFFICER + "</option>"
+                roles += "<option value='" + Operators.ROLE_HR_MANAGER + "'>" + Operators.ROLE_HR_MANAGER + "</option>"
+                roles += "<option value='" + Operators.ROLE_STOCK_ADMIN + "'>" + Operators.ROLE_STOCK_ADMIN + "</option>"
+                roles += "<option value='" + Operators.ROLE_ACCOUNTANT_MANAGER + "'>" + Operators.ROLE_ACCOUNTANT_MANAGER + "</option>"
+                roles += "<option value='" + Operators.ROLE_ACCOUNTANT_OFFICER + "'>" + Operators.ROLE_ACCOUNTANT_OFFICER + "</option>"
+            if department == Operators.DEPARTMENT_MAV:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
+                roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+            if department == Operators.DEPARTMENT_GRANT_MANAGER:
+                roles += "<option value=''>--select--</option>"
+                roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
+                roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+
+            if roles == "":
+                roles += "<option value=''>--select--</option>"
+
+            return HttpResponse(roles, content_type="text/plain")
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
+def api_dropdown_parent_operators(request, role):
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_OPERATOR_VIEW in auth_permissions.values():
+            parent_operators = ""
+            if role == Operators.ROLE_NONE:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_COP:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_OPM:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_DIRECTOR:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_ADVISER:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_REGIONAL_MANAGER:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_DISTRICT_MANAGER:
+                parent_operators += "<option value=''>--select--</option>"
+                # get operators of regional managers
+                objects = Operators.objects.all()
+                objects = objects.filter(operator_role=Operators.ROLE_REGIONAL_MANAGER)
+                for operator in objects:
+                    parent_operators += "<option value='" + str(
+                        operator.operator_id) + "'>" + operator.operator_name + "</option>"
+            if role == Operators.ROLE_FIELD_OFFICER:
+                parent_operators += "<option value=''>--select--</option>"
+                # get operators of district managers
+                objects = Operators.objects.all()
+                objects = objects.filter(operator_role=Operators.ROLE_DISTRICT_MANAGER)
+                for operator in objects:
+                    parent_operators += "<option value='" + str(
+                        operator.operator_id) + "'>" + operator.operator_name + "</option>"
+            if role == Operators.ROLE_PROCUREMENT_OFFICER:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_HR_MANAGER:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_STOCK_ADMIN:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_ACCOUNTANT_MANAGER:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_ACCOUNTANT_OFFICER:
+                parent_operators += "<option value=''>--select--</option>"
+                # get operators of account managers
+                objects = Operators.objects.all()
+                objects = objects.filter(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER)
+                for operator in objects:
+                    parent_operators += "<option value='" + str(
+                        operator.operator_id) + "'>" + operator.operator_name + "</option>"
+
+            if parent_operators == "":
+                parent_operators += "<option value=''>--select--</option>"
+
+            if parent_operators == "<option value=''>--select--</option>":
+                parent_operators = ""
+
+            return HttpResponse(parent_operators, content_type="text/plain")
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
 def index(request):
     template_url = 'operators/index.html'
     operator = Operators.login_required(request)
@@ -847,7 +968,6 @@ def create(request):
             if request.method == 'POST':
 
                 form = OperatorCreateForm(request.POST)
-
                 # noinspection PyArgumentList
                 if form.is_valid():
                     model = Operators()
@@ -858,8 +978,10 @@ def create(request):
                     model.operator_password_hash = make_password(form.cleaned_data['password'])
                     model.operator_password_reset_token = ''
                     model.operator_name = form.cleaned_data['name']
+                    model.operator_type = form.cleaned_data['type']
                     model.operator_department = form.cleaned_data['department']
                     model.operator_role = form.cleaned_data['role']
+                    model.operator_parent_id = form.cleaned_data['parent_id']
                     model.operator_contact_email_id = form.cleaned_data['email']
                     model.operator_profile_photo_file_path = ''
                     model.operator_created_at = Utils.get_current_datetime_utc()
@@ -869,6 +991,8 @@ def create(request):
                     model.operator_status = Operators.STATUS_UNVERIFIED
                     # noinspection PyCallByClass,PyTypeChecker
                     model.save('Created')
+
+                    Operators.update_operator_access_permissions(request, model, operator)
 
                     Operator_Logs.add(
                         model.operator_id,
@@ -924,7 +1048,11 @@ def create(request):
                         }
                     )
             else:
-                form = OperatorCreateForm()
+                form = OperatorCreateForm(
+                    initial={
+                        'type': Operators.TYPE_OTHER,
+                    }
+                )
 
             return render(
                 request, template_url,
@@ -952,78 +1080,101 @@ def update(request, pk):
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
         if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values():
-            try:
-                model = Operators.objects.get(operator_id=pk)
-                if request.method == 'POST':
+            # try:
+            model = Operators.objects.get(operator_id=pk)
+            if request.method == 'POST':
 
+                if model.operator_type == Operators.TYPE_SUPER_ADMIN:
+                    form = SuperOperatorUpdateForm(request.POST)
+                else:
                     form = OperatorUpdateForm(request.POST)
 
-                    # noinspection PyArgumentList
-                    if form.is_valid():
-                        model.operator_username = form.cleaned_data['email']
-                        model.operator_name = form.cleaned_data['name']
-                        model.operator_department = form.cleaned_data['department']
-                        model.operator_role = form.cleaned_data['role']
-                        model.operator_gender = form.cleaned_data['gender']
-                        model.operator_contact_phone_number = form.cleaned_data['phone_number']
+                # noinspection PyArgumentList
+                if form.is_valid():
+                    model.operator_username = form.cleaned_data['email']
+                    model.operator_name = form.cleaned_data['name']
+                    model.operator_type = form.cleaned_data['type']
+                    model.operator_department = form.cleaned_data['department']
+                    model.operator_role = form.cleaned_data['role']
+                    model.operator_parent_id = form.cleaned_data['parent_id']
+                    model.operator_gender = form.cleaned_data['gender']
+                    model.operator_contact_phone_number = form.cleaned_data['phone_number']
 
-                        model.operator_updated_at = Utils.get_current_datetime_utc()
-                        model.operator_updated_by = operator.operator_username
-                        model.save()
+                    model.operator_updated_at = Utils.get_current_datetime_utc()
+                    model.operator_updated_by = operator.operator_username
+                    model.save()
 
-                        Operator_Logs.add(
-                            model.operator_id,
-                            model.operator_username,
-                            model.operator_name,
-                            'Updated ' + Operators.SINGULAR_TITLE,
-                            Utils.get_browser_details_from_request(request),
-                            Utils.get_ip_address(request),
-                            operator.operator_username,
-                        )
+                    Operators.update_operator_access_permissions(request, model, operator)
 
-                        messages.success(request, 'Updated successfully.')
-                        return redirect(reverse("operators_view", args=[model.operator_id]))
-                    else:
-                        return render(
-                            request, template_url,
-                            {
-                                'section': settings.BACKEND_SECTION_OPERATORS,
-                                'title': Operators.TITLE,
-                                'name': Operators.NAME,
-                                'operator': operator,
-                                'auth_permissions': auth_permissions,
-                                'form': form,
-                                'model': model,
-                                'index_url': reverse("operators_index"),
-                            }
-                        )
+                    Operator_Logs.add(
+                        model.operator_id,
+                        model.operator_username,
+                        model.operator_name,
+                        'Updated ' + Operators.SINGULAR_TITLE,
+                        Utils.get_browser_details_from_request(request),
+                        Utils.get_ip_address(request),
+                        operator.operator_username,
+                    )
+
+                    messages.success(request, 'Updated successfully.')
+                    return redirect(reverse("operators_view", args=[model.operator_id]))
+                else:
+                    return render(
+                        request, template_url,
+                        {
+                            'section': settings.BACKEND_SECTION_OPERATORS,
+                            'title': Operators.TITLE,
+                            'name': Operators.NAME,
+                            'operator': operator,
+                            'auth_permissions': auth_permissions,
+                            'form': form,
+                            'model': model,
+                            'index_url': reverse("operators_index"),
+                        }
+                    )
+            else:
+                if model.operator_type == Operators.TYPE_SUPER_ADMIN:
+                    form = SuperOperatorUpdateForm(
+                        initial={
+                            'email': model.operator_username,
+                            'name': model.operator_name,
+                            'type': model.operator_type,
+                            'department': model.operator_department,
+                            'role': model.operator_role,
+                            'parent_id': model.operator_parent_id,
+                            'gender': model.operator_gender,
+                            'phone_number': model.operator_contact_phone_number,
+                        }
+                    )
                 else:
                     form = OperatorUpdateForm(
                         initial={
                             'email': model.operator_username,
                             'name': model.operator_name,
+                            'type': model.operator_type,
                             'department': model.operator_department,
                             'role': model.operator_role,
+                            'parent_id': model.operator_parent_id,
                             'gender': model.operator_gender,
                             'phone_number': model.operator_contact_phone_number,
                         }
                     )
 
-                return render(
-                    request, template_url,
-                    {
-                        'section': settings.BACKEND_SECTION_OPERATORS,
-                        'title': Operators.TITLE,
-                        'name': Operators.NAME,
-                        'operator': operator,
-                        'auth_permissions': auth_permissions,
-                        'form': form,
-                        'model': model,
-                        'index_url': reverse("operators_index"),
-                    }
-                )
-            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
-                return HttpResponseNotFound('Not Found', content_type='text/plain')
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_OPERATORS,
+                    'title': Operators.TITLE,
+                    'name': Operators.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'form': form,
+                    'model': model,
+                    'index_url': reverse("operators_index"),
+                }
+            )
+        # except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+        #     return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
 

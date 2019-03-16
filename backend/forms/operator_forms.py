@@ -12,10 +12,10 @@ from app.validators import IsPhoneNumberValidator
 class OperatorSignUpForm(forms.ModelForm):
     name = forms.CharField(
         label='Name',
-        min_length=3,
+        min_length=1,
         max_length=100,
         required=True,
-        validators=[MinLengthValidator(3), MaxLengthValidator(100)],
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -404,15 +404,30 @@ class OperatorSearchIndexForm(forms.ModelForm):
 class OperatorCreateForm(forms.ModelForm):
     name = forms.CharField(
         label='Name',
-        min_length=3,
+        min_length=1,
         max_length=100,
         required=True,
-        validators=[MinLengthValidator(3), MaxLengthValidator(100)],
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
                 'placeholder': '',
                 'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    type = forms.ChoiceField(
+        choices=Operators.OPERATOR_TYPES,
+        initial='',
+        label='Type',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-type',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
                 'aria-label': 'form-label',
             }
         ))
@@ -429,6 +444,7 @@ class OperatorCreateForm(forms.ModelForm):
                 'style': 'width:100%;',
                 'placeholder': '--select--',
                 'aria-label': 'form-label',
+                'onchange': 'onDepartmentSelected();',
             }
         ))
     role = forms.ChoiceField(
@@ -440,6 +456,22 @@ class OperatorCreateForm(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 'id': 'search-input-select-role',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+                'onchange': 'onRoleSelected();',
+            }
+        ))
+    parent_id = forms.ChoiceField(
+        choices=(('', '--select--'), ('0', 'NONE'),),
+        initial='',
+        label='Head Staff',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-parent-id',
                 'class': 'form-control',
                 'style': 'width:100%;',
                 'placeholder': '--select--',
@@ -496,12 +528,20 @@ class OperatorCreateForm(forms.ModelForm):
         #     raise forms.ValidationError('Enter a valid name')
         return data
 
+    def clean_type(self):
+        data = self.cleaned_data['type']
+        return data
+
     def clean_department(self):
         data = self.cleaned_data['department']
         return data
 
     def clean_role(self):
         data = self.cleaned_data['role']
+        return data
+
+    def clean_parent_id(self):
+        data = self.cleaned_data['parent_id']
         return data
 
     def clean_email(self):
@@ -551,10 +591,35 @@ class OperatorCreateForm(forms.ModelForm):
                 self.add_error('repeat_password', msg)
         return cleaned_data
 
+    def __init__(self, *args, **kwargs):
+        super(OperatorCreateForm, self).__init__(*args, **kwargs)
+
+        OPERATORS = (('', '--select--'), ('0', 'NONE'),)
+        operators = Operators.objects.all()
+        for operator in operators:
+            OPERATORS = OPERATORS + ((operator.operator_id, operator.operator_name),)
+
+        self.fields['parent_id'] = forms.ChoiceField(
+            choices=OPERATORS,
+            initial='',
+            label='Head Staff',
+            required=True,
+            validators=[],
+            widget=forms.Select(
+                attrs={
+                    'id': 'search-input-select-parent-id',
+                    'class': 'form-control',
+                    'style': 'width:100%;',
+                    'placeholder': '--select--',
+                    'aria-label': 'form-label',
+                }
+            ))
+
     class Meta:
         model = Operators
         fields = (
             'name',
+            'type',
             'department',
             'role',
             'email',
@@ -581,15 +646,30 @@ class OperatorUpdateForm(forms.ModelForm):
         ))
     name = forms.CharField(
         label='Name',
-        min_length=3,
+        min_length=1,
         max_length=100,
         required=True,
-        validators=[MinLengthValidator(3), MaxLengthValidator(100)],
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
                 'placeholder': '',
                 'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    type = forms.ChoiceField(
+        choices=Operators.OPERATOR_TYPES,
+        initial='',
+        label='Type',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-type',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
                 'aria-label': 'form-label',
             }
         ))
@@ -606,6 +686,7 @@ class OperatorUpdateForm(forms.ModelForm):
                 'style': 'width:100%;',
                 'placeholder': '--select--',
                 'aria-label': 'form-label',
+                'onchange': 'onDepartmentSelected();',
             }
         ))
     role = forms.ChoiceField(
@@ -621,13 +702,29 @@ class OperatorUpdateForm(forms.ModelForm):
                 'style': 'width:100%;',
                 'placeholder': '--select--',
                 'aria-label': 'form-label',
+                'onchange': 'onRoleSelected();',
+            }
+        ))
+    parent_id = forms.ChoiceField(
+        choices=(('', '--select--'), ('0', 'NONE'),),
+        initial='',
+        label='Head Staff',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-parent-id',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
             }
         ))
     gender = forms.ChoiceField(
         choices=ARRAY_GENDER,
         initial='',
         label='Gender',
-        required=True,
+        required=False,
         validators=[],
         widget=forms.Select(
             attrs={
@@ -643,7 +740,7 @@ class OperatorUpdateForm(forms.ModelForm):
         min_length=9,
         max_length=13,
         validators=[MinLengthValidator(9), MaxLengthValidator(13), IsPhoneNumberValidator],
-        required=True,
+        required=False,
         widget=forms.NumberInput(
             attrs={
                 'class': 'form-control',
@@ -660,6 +757,10 @@ class OperatorUpdateForm(forms.ModelForm):
         #     raise forms.ValidationError('Enter a valid name')
         return data
 
+    def clean_type(self):
+        data = self.cleaned_data['type']
+        return data
+
     def clean_department(self):
         data = self.cleaned_data['department']
         return data
@@ -668,16 +769,21 @@ class OperatorUpdateForm(forms.ModelForm):
         data = self.cleaned_data['role']
         return data
 
+    def clean_parent_id(self):
+        data = self.cleaned_data['parent_id']
+        return data
+
     def clean_gender(self):
         data = self.cleaned_data['gender']
         return data
 
     def clean_phone_number(self):
         data = self.cleaned_data['phone_number']
-        try:
-            validate_integer(data)
-        except ValidationError:
-            raise forms.ValidationError('Enter a valid phone number')
+        if data != '':
+            try:
+                validate_integer(data)
+            except ValidationError:
+                raise forms.ValidationError('Enter a valid phone number')
         return data
 
     def clean_email(self):
@@ -699,6 +805,30 @@ class OperatorUpdateForm(forms.ModelForm):
         cleaned_data = super(OperatorUpdateForm, self).clean()
         return cleaned_data
 
+    def __init__(self, *args, **kwargs):
+        super(OperatorUpdateForm, self).__init__(*args, **kwargs)
+
+        OPERATORS = (('', '--select--'), ('0', 'NONE'),)
+        operators = Operators.objects.all()
+        for operator in operators:
+            OPERATORS = OPERATORS + ((operator.operator_id, operator.operator_name),)
+
+        self.fields['parent_id'] = forms.ChoiceField(
+            choices=OPERATORS,
+            initial='',
+            label='Head Staff',
+            required=True,
+            validators=[],
+            widget=forms.Select(
+                attrs={
+                    'id': 'search-input-select-parent-id',
+                    'class': 'form-control',
+                    'style': 'width:100%;',
+                    'placeholder': '--select--',
+                    'aria-label': 'form-label',
+                }
+            ))
+
     class Meta:
         model = Operators
         fields = (
@@ -706,6 +836,221 @@ class OperatorUpdateForm(forms.ModelForm):
             'name',
             'department',
             'role',
+            'parent_id',
+            'gender',
+            'phone_number',
+        )
+
+
+class SuperOperatorUpdateForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Email Id',
+        min_length=5,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(5), MaxLengthValidator(100), EmailValidator],
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    name = forms.CharField(
+        label='Name',
+        min_length=1,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    type = forms.ChoiceField(
+        choices=Operators.SUPER_OPERATOR_TYPES,
+        initial='',
+        label='Type',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-type',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+    department = forms.ChoiceField(
+        choices=Operators.OPERATOR_DEPARTMENTS,
+        initial='',
+        label='Department',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-department',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+                'onchange': 'onDepartmentSelected();',
+            }
+        ))
+    role = forms.ChoiceField(
+        choices=Operators.OPERATOR_ROLES,
+        initial='',
+        label='Role',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-role',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+                'onchange': 'onRoleSelected();',
+            }
+        ))
+    parent_id = forms.ChoiceField(
+        choices=(('', '--select--'), ('0', 'NONE'),),
+        initial='',
+        label='Head Staff',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-parent-id',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+    gender = forms.ChoiceField(
+        choices=ARRAY_GENDER,
+        initial='',
+        label='Gender',
+        required=False,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-gender',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+    phone_number = forms.CharField(
+        label='Phone Number',
+        min_length=9,
+        max_length=13,
+        validators=[MinLengthValidator(9), MaxLengthValidator(13), IsPhoneNumberValidator],
+        required=False,
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        # try:
+        # except ValidationError:
+        #     raise forms.ValidationError('Enter a valid name')
+        return data
+
+    def clean_type(self):
+        data = self.cleaned_data['type']
+        return data
+
+    def clean_department(self):
+        data = self.cleaned_data['department']
+        return data
+
+    def clean_role(self):
+        data = self.cleaned_data['role']
+        return data
+
+    def clean_parent_id(self):
+        data = self.cleaned_data['parent_id']
+        return data
+
+    def clean_gender(self):
+        data = self.cleaned_data['gender']
+        return data
+
+    def clean_phone_number(self):
+        data = self.cleaned_data['phone_number']
+        if data != '':
+            try:
+                validate_integer(data)
+            except ValidationError:
+                raise forms.ValidationError('Enter a valid phone number')
+        return data
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        try:
+            validate_email(data)
+        except ValidationError:
+            raise forms.ValidationError('Enter a valid email address')
+        try:
+            operator = Operators.objects.get(operator_username=data)
+        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+            operator = None
+        if operator is None:
+            raise forms.ValidationError(u'Email Id: "%s" does not exist.' % data)
+        else:
+            return data
+
+    def clean(self):
+        cleaned_data = super(SuperOperatorUpdateForm, self).clean()
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(SuperOperatorUpdateForm, self).__init__(*args, **kwargs)
+
+        OPERATORS = (('', '--select--'), ('0', 'NONE'),)
+        operators = Operators.objects.all()
+        for operator in operators:
+            OPERATORS = OPERATORS + ((operator.operator_id, operator.operator_name),)
+
+        self.fields['parent_id'] = forms.ChoiceField(
+            choices=OPERATORS,
+            initial='',
+            label='Head Staff',
+            required=True,
+            validators=[],
+            widget=forms.Select(
+                attrs={
+                    'id': 'search-input-select-parent-id',
+                    'class': 'form-control',
+                    'style': 'width:100%;',
+                    'placeholder': '--select--',
+                    'aria-label': 'form-label',
+                }
+            ))
+
+    class Meta:
+        model = Operators
+        fields = (
+            'email',
+            'name',
+            'department',
+            'role',
+            'parent_id',
             'gender',
             'phone_number',
         )
@@ -729,10 +1074,10 @@ class OperatorUpdateProfileForm(forms.ModelForm):
         ))
     name = forms.CharField(
         label='Name',
-        min_length=3,
+        min_length=1,
         max_length=100,
         required=True,
-        validators=[MinLengthValidator(3), MaxLengthValidator(100)],
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',

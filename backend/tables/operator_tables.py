@@ -63,6 +63,15 @@ class OperatorsTable(tables.Table):
             'th_style': 'width:160px;',
         }
     )
+    # operator_type = tables.Column(
+    #     verbose_name='Type',
+    #     attrs={
+    #         'search_filter': 'input-select',
+    #         'search_data': Operators.ARRAY_OPERATOR_TYPES,
+    #         'search_type': 'status',
+    #         'th_style': 'width:160px;',
+    #     }
+    # )
     operator_status = tables.Column(
         verbose_name='Status',
         attrs={
@@ -163,6 +172,7 @@ class OperatorsTable(tables.Table):
             'operator_name',
             'operator_department',
             'operator_role',
+            # 'operator_type',
             'operator_status',
             'actions'
         )
@@ -171,6 +181,7 @@ class OperatorsTable(tables.Table):
             'operator_name',
             'operator_department',
             'operator_role',
+            # 'operator_type',
             'operator_status',
         )
         template_name = '_include/bootstrap-datatable.html'
