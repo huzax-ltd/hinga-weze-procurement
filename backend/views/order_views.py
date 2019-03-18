@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Orders
+from app.models import Operators, Orders, Order_Items
 from app.utils import Utils
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm
 from backend.tables.order_tables import OrdersTable
@@ -156,6 +156,7 @@ def create(request):
                     model.order_equipment_price = 0
                     model.order_tax_price = 0
                     model.order_grand_total_price = model.order_total_price + model.order_equipment_price + model.order_tax_price
+                    model.order_currency = Orders.CURRENCY_RWF
 
                     model.order_supplier_category = ''
                     model.order_proposal_id = 0
@@ -272,85 +273,87 @@ def update(request, pk):
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
         if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
-            # try:
-            model = Orders.objects.get(order_id=pk)
-            if request.method == 'POST':
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
 
-                form = OrderUpdateForm(request.POST)
+                    form = OrderUpdateForm(request.POST)
 
-                # noinspection PyArgumentList
-                if form.is_valid():
-                    model.order_requester_name = form.cleaned_data['requester_name']
-                    model.order_project_name = form.cleaned_data['project_name']
-                    model.order_project_code = form.cleaned_data['project_code']
-                    model.order_project_geo_code = form.cleaned_data['project_geo_code']
-                    model.order_charge_code = form.cleaned_data['charge_code']
-                    model.order_award_number = form.cleaned_data['award_number']
-                    model.order_requisition_number = form.cleaned_data['requisition_number']
-                    model.order_donor = form.cleaned_data['donor']
-                    model.order_description = form.cleaned_data['description']
-                    model.order_anticipated_award_mechanism = form.cleaned_data['anticipated_award_mechanism']
-                    model.order_anticipated_start_date = form.cleaned_data['anticipated_start_date']
-                    model.order_anticipated_end_date = form.cleaned_data['anticipated_end_date']
-                    model.order_special_considerations = form.cleaned_data['special_considerations']
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        model.order_requester_name = form.cleaned_data['requester_name']
+                        model.order_project_name = form.cleaned_data['project_name']
+                        model.order_project_code = form.cleaned_data['project_code']
+                        model.order_project_geo_code = form.cleaned_data['project_geo_code']
+                        model.order_charge_code = form.cleaned_data['charge_code']
+                        model.order_award_number = form.cleaned_data['award_number']
+                        model.order_requisition_number = form.cleaned_data['requisition_number']
+                        model.order_donor = form.cleaned_data['donor']
+                        model.order_description = form.cleaned_data['description']
+                        model.order_anticipated_award_mechanism = form.cleaned_data['anticipated_award_mechanism']
+                        model.order_anticipated_start_date = form.cleaned_data['anticipated_start_date']
+                        model.order_anticipated_end_date = form.cleaned_data['anticipated_end_date']
+                        model.order_special_considerations = form.cleaned_data['special_considerations']
 
-                    model.order_updated_at = Utils.get_current_datetime_utc()
-                    model.order_updated_id = operator.operator_id
-                    model.order_updated_by = operator.operator_name
-                    model.order_updated_role = operator.operator_role
+                        model.order_updated_at = Utils.get_current_datetime_utc()
+                        model.order_updated_id = operator.operator_id
+                        model.order_updated_by = operator.operator_name
+                        model.order_updated_role = operator.operator_role
+                        model.save()
 
-                    messages.success(request, 'Updated successfully.')
-                    return redirect(reverse("orders_view", args=[model.order_id]))
+                        messages.success(request, 'Updated successfully.')
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        return render(
+                            request, template_url,
+                            {
+                                'section': settings.BACKEND_SECTION_ORDERS,
+                                'title': Orders.TITLE,
+                                'name': Orders.NAME,
+                                'operator': operator,
+                                'auth_permissions': auth_permissions,
+                                'form': form,
+                                'model': model,
+                                'index_url': reverse("orders_index"),
+                            }
+                        )
                 else:
-                    return render(
-                        request, template_url,
-                        {
-                            'section': settings.BACKEND_SECTION_ORDERS,
-                            'title': Orders.TITLE,
-                            'name': Orders.NAME,
-                            'operator': operator,
-                            'auth_permissions': auth_permissions,
-                            'form': form,
-                            'model': model,
-                            'index_url': reverse("orders_index"),
+                    model.order_anticipated_start_date = Utils.get_us_format_date(
+                        str(model.order_anticipated_start_date))
+                    model.order_anticipated_end_date = Utils.get_us_format_date(str(model.order_anticipated_end_date))
+                    form = OrderUpdateForm(
+                        initial={
+                            'requester_name': model.order_requester_name,
+                            'project_name': model.order_project_name,
+                            'project_code': model.order_project_code,
+                            'project_geo_code': model.order_project_geo_code,
+                            'charge_code': model.order_charge_code,
+                            'award_number': model.order_award_number,
+                            'requisition_number': model.order_requisition_number,
+                            'donor': model.order_donor,
+                            'description': model.order_description,
+                            'anticipated_award_mechanism': model.order_anticipated_award_mechanism,
+                            'anticipated_start_date': model.order_anticipated_start_date,
+                            'anticipated_end_date': model.order_anticipated_end_date,
+                            'special_considerations': model.order_special_considerations,
                         }
                     )
-            else:
-                model.order_anticipated_start_date = Utils.get_us_format_date(str(model.order_anticipated_start_date))
-                model.order_anticipated_end_date = Utils.get_us_format_date(str(model.order_anticipated_end_date))
-                form = OrderUpdateForm(
-                    initial={
-                        'requester_name': model.order_requester_name,
-                        'project_name': model.order_project_name,
-                        'project_code': model.order_project_code,
-                        'project_geo_code': model.order_project_geo_code,
-                        'charge_code': model.order_charge_code,
-                        'award_number': model.order_award_number,
-                        'requisition_number': model.order_requisition_number,
-                        'donor': model.order_donor,
-                        'description': model.order_description,
-                        'anticipated_award_mechanism': model.order_anticipated_award_mechanism,
-                        'anticipated_start_date': model.order_anticipated_start_date,
-                        'anticipated_end_date': model.order_anticipated_end_date,
-                        'special_considerations': model.order_special_considerations,
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                        'index_url': reverse("orders_index"),
                     }
                 )
-
-            return render(
-                request, template_url,
-                {
-                    'section': settings.BACKEND_SECTION_ORDERS,
-                    'title': Orders.TITLE,
-                    'name': Orders.NAME,
-                    'operator': operator,
-                    'auth_permissions': auth_permissions,
-                    'form': form,
-                    'model': model,
-                    'index_url': reverse("orders_index"),
-                }
-            )
-        # except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
-        #     return HttpResponseNotFound('Not Found', content_type='text/plain')
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
 
@@ -374,6 +377,8 @@ def view(request, pk):
                                                                     settings.TIME_ZONE,
                                                                     settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
 
+                order_items = Order_Items.objects.filter(orders_order_id=pk).all()
+
                 return render(
                     request, template_url,
                     {
@@ -385,6 +390,10 @@ def view(request, pk):
                         'model': model,
                         'index_url': reverse("orders_index"),
                         'select_single_url': reverse("orders_select_single"),
+                        'order_items': order_items,
+                        'order_items_size': order_items,
+                        'item_index_url': reverse("orders_view", kwargs={'pk': pk}),
+                        'item_select_single_url': reverse("order_item_select_single"),
                     }
                 )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):

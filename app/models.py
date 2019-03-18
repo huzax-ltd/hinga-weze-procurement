@@ -398,6 +398,19 @@ class Orders(models.Model):
     SINGULAR_TITLE = settings.MODEL_ORDERS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
+    CURRENCY_USD = 'USD'
+    CURRENCY_RWF = 'RWF'
+
+    ARRAY_CURRENCIES = [
+        CURRENCY_USD,
+        CURRENCY_RWF,
+    ]
+    DROPDOWN_CURRENCIES = (
+        ('', '--select--'),
+        (CURRENCY_USD, CURRENCY_USD),
+        (CURRENCY_RWF, CURRENCY_RWF),
+    )
+
     STATUS_PENDING = 'pending'
     STATUS_REQUESTED = 'requested'
     STATUS_LEVEL1_APPROVED = 'level1-approved'
@@ -508,6 +521,8 @@ class Orders(models.Model):
     order_equipment_price = models.DecimalField('Equipment Cost', max_digits=10, decimal_places=0, default=Decimal(0))
     order_tax_price = models.DecimalField('Tax Amount', max_digits=10, decimal_places=0, default=Decimal(0))
     order_grand_total_price = models.DecimalField('Grand Total', max_digits=10, decimal_places=0, default=Decimal(0))
+    order_currency = models.CharField('Currency', max_length=255, blank=False, choices=DROPDOWN_CURRENCIES,
+                                      default=CURRENCY_RWF)
     order_supplier_category = models.CharField('Vendor Category', max_length=255, blank=True)
     order_proposal_id = models.IntegerField('Proposal Id', blank=False, default=0)
     order_proposal_due_date = models.DateField('Proposal Due Date', default=settings.APP_CONSTANT_DEFAULT_DATE)
@@ -578,6 +593,25 @@ class Orders(models.Model):
             if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
                 unique_token_found = True
         return token
+
+    @classmethod
+    def update_grand_total(cls, request, model, operator):
+
+        order_items = Order_Items.objects.filter(orders_order_id=model.order_id).all()
+
+        currency = Orders.CURRENCY_RWF
+        order_total_price = 0
+        for order_item in order_items:
+            order_total_price += order_item.order_item_total_price
+            currency = order_item.order_item_currency
+
+        model.order_no_of_items = order_items.count()
+        model.order_total_price = order_total_price
+        model.order_grand_total_price = model.order_total_price + model.order_equipment_price + model.order_tax_price
+        model.order_currency = currency
+
+        model.save()
+        return True
 
     @classmethod
     def delete_order(cls, request, model, operator):
@@ -802,6 +836,19 @@ class Order_Items(models.Model):
     SINGULAR_TITLE = settings.MODEL_ORDER_ITEM_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
+    CURRENCY_USD = 'USD'
+    CURRENCY_RWF = 'RWF'
+
+    ARRAY_CURRENCIES = [
+        CURRENCY_USD,
+        CURRENCY_RWF,
+    ]
+    DROPDOWN_CURRENCIES = (
+        ('', '--select--'),
+        (CURRENCY_USD, CURRENCY_USD),
+        (CURRENCY_RWF, CURRENCY_RWF),
+    )
+
     STATUS_PENDING = 'pending'
     STATUS_RECEIVED = 'received'
 
@@ -819,11 +866,14 @@ class Order_Items(models.Model):
     orders_order_id = models.IntegerField('Order Id', blank=False)
     order_item_title = models.CharField('Item Details', max_length=255, blank=False)
     order_item_sub_title = models.CharField('Item Details', max_length=255, blank=True)
+    order_item_duration = models.IntegerField('Time in Days', blank=False, default=0)
     order_item_quantity_ordered = models.DecimalField('Quantity Ordered', max_digits=10, decimal_places=0,
                                                       default=Decimal(0))
     order_item_quantity_unit = models.CharField('Quantity Unit', max_length=255, blank=True)
     order_item_unit_price = models.DecimalField('Unit Price', max_digits=10, decimal_places=0, default=Decimal(0))
     order_item_total_price = models.DecimalField('Total Price', max_digits=10, decimal_places=0, default=Decimal(0))
+    order_item_currency = models.CharField('Currency', max_length=255, blank=False, choices=DROPDOWN_CURRENCIES,
+                                           default=CURRENCY_RWF)
     order_item_usaid_approval = models.BooleanField('USAID Approval', default=False)
     order_item_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_item_created_id = models.CharField('Created ID', max_length=100, blank=True)
@@ -842,6 +892,11 @@ class Order_Items(models.Model):
 
     def __unicode__(self):
         return self.order_item_id
+
+    @classmethod
+    def delete_order_item(cls, request, model, operator):
+        model.delete()
+        return True
 
 
 # noinspection PyPep8Naming

@@ -38,10 +38,8 @@
 
     <!-- JAVASCRIPT -->
     <!-- jQuery -->
-    <script type="text/javascript" charset="utf-8"
-            src="{% static 'app/js/jquery-3.2.1.min.js' %}"></script>
-    {#    <script type="text/javascript"#}
-    {#            src="{% static 'templates/fuse/assets/node_modules/jquery/dist/jquery.min.js' %}"></script>#}
+    <script type="text/javascript"
+            src="{% static 'templates/fuse/assets/node_modules/jquery/dist/jquery.min.js' %}"></script>
     <!-- Mobile Detect -->
     <script type="text/javascript"
             src="{% static 'templates/fuse/assets/node_modules/mobile-detect/mobile-detect.min.js' %}"></script>
@@ -111,12 +109,9 @@
         <div class="bar"></div>
     </div>
     <div id="wrapper">
-        {% include '_include/navigation-left.html' %}
         <div class="content-wrapper">
-            {% include '_include/navigation-top.html' %}
             {% block body %}{% endblock %}
         </div>
-        {% include '_include/navigation-right.html' %}
     </div>
 </main>
 </body>

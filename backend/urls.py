@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 from django.views.generic import TemplateView
 
-from backend.views import operator_views, operator_log_views, order_views, site_views, setting_views
+from backend.views import operator_views, operator_log_views, order_views, order_item_views, site_views, setting_views
 
 urlpatterns = [
 
@@ -182,6 +182,24 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+
+    # order items
+    # create
+    url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_item_create'),
+    url(r'^order-items/create/(?P<order_id>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update
+    url(r'^order-items/update/(?P<pk>.+)/$', order_item_views.update, name='order_item_update'),
+    url(r'^order-items/update/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # single or multiple select
+    url(r'^order-items/select-single/$', order_item_views.select_single, name='order_item_select_single'),
 
     # operator_logs
     path('', operator_log_views.index, name='index'),

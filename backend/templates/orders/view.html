@@ -55,161 +55,147 @@
                                 <table class="table table-bordered table-hover" cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
-                                        <td colspan="1" style="font-weight: bold;">Request Id</td>
-                                        <td colspan="2">{{ model.order_code }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Requester Id</td>
+                                        <td colspan="3">{{ model.order_code }}</td>
                                         <td colspan="1" style="font-weight: bold;">Status</td>
-                                        <td colspan="2">{{ model.order_status }}</td>
+                                        <td colspan="7">{{ model.order_status }}</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold;">Requester name</td>
-                                        <td>{{ model.order_requester_name }}</td>
-                                        <td style="font-weight: bold;">Date of Request</td>
-                                        <td>-</td>
-                                        <td style="font-weight: bold;">Project Name</td>
-                                        <td>{{ model.order_project_name }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Requester name</td>
+                                        <td colspan="3">{{ model.order_requester_name }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Date of Request</td>
+                                        <td colspan="3">-</td>
+                                        <td colspan="1" style="font-weight: bold;">Project Name</td>
+                                        <td colspan="3">{{ model.order_project_name }}</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold;">Requester Number</td>
-                                        <td>{{ model.order_requisition_number }}</td>
-                                        <td style="font-weight: bold;">Award Number</td>
-                                        <td>{{ model.order_award_number }}</td>
-                                        <td style="font-weight: bold;">Project Code</td>
-                                        <td>{{ model.order_project_code }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Requester Number</td>
+                                        <td colspan="3">{{ model.order_requisition_number }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Award Number</td>
+                                        <td colspan="3">{{ model.order_award_number }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Project Code</td>
+                                        <td colspan="3">{{ model.order_project_code }}</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold;">Charge Code</td>
-                                        <td>{{ model.order_charge_code }}</td>
-                                        <td style="font-weight: bold;">Donor</td>
-                                        <td>{{ model.order_donor }}</td>
-                                        <td style="font-weight: bold;">Project GeoCode</td>
-                                        <td>{{ model.order_project_geo_code }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Charge Code</td>
+                                        <td colspan="3">{{ model.order_charge_code }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Donor</td>
+                                        <td colspan="3">{{ model.order_donor }}</td>
+                                        <td colspan="1" style="font-weight: bold;">Project GeoCode</td>
+                                        <td colspan="3">{{ model.order_project_geo_code }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" style="font-weight: bold;">Description</td>
+                                        <td colspan="12" style="font-weight: bold;">Description</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6">{{ model.order_description }}</td>
+                                        <td colspan="12">{{ model.order_description }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6"></td>
+                                        <td colspan="12"></td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold;">Sr. No</td>
-                                        <td style="font-weight: bold;">Item Name</td>
-                                        <td style="font-weight: bold;">Unit Price</td>
-                                        <td style="font-weight: bold;">Quantity</td>
-                                        <td style="font-weight: bold;">Total Amount</td>
-                                        <td style="font-weight: bold;">Action</td>
+                                        <td colspan="1" style="font-weight: bold;">Sr. No</td>
+                                        <td colspan="3" style="font-weight: bold;">Item Name</td>
+                                        <td colspan="1" style="font-weight: bold;">Time in Days</td>
+                                        <td colspan="2" style="font-weight: bold;">Unit Price</td>
+                                        <td colspan="1" style="font-weight: bold;">Quantity</td>
+                                        <td colspan="2" style="font-weight: bold;">Total Amount
+                                            in {{ model.order_currency }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Action</td>
                                     </tr>
+
+                                    {% for order_item in order_items %}
+                                        <tr>
+                                            <td colspan="1">{{ forloop.counter }}</td>
+                                            <td colspan="3">{{ order_item.order_item_title }}</td>
+                                            <td colspan="1">{{ order_item.order_item_duration }}</td>
+                                            <td colspan="2">{{ order_item.order_item_unit_price }}</td>
+                                            <td colspan="1">{{ order_item.order_item_quantity_ordered }} {{ order_item.order_item_quantity_unit }}</td>
+                                            <td colspan="2">{{ order_item.order_item_total_price }}</td>
+                                            <td colspan="2">
+                                                <div class="btn-group">
+                                                    <button class="btn btn-icon ml-1"
+                                                            id="btn-edit-order-item-{{ order_item.order_item_id }}">
+                                                        <i class="icon icon-account-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-icon mr-1" href="#"
+                                                            id="btn-delete-order-item-{{ order_item.order_item_id }}"
+                                                            onclick="singleSelect('{{ item_select_single_url }}', 'delete', '{{ order_item.order_item_id }}', '{{ item_index_url }}');">
+                                                        <i class="icon icon-close"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                     <tr>
-                                        <td>1</td>
-                                        <td>Lunch buffet with soft drink</td>
-                                        <td>-</td>
-                                        <td>30</td>
-                                        <td>90000</td>
-                                        <td>
-                                            <span>
-                                            <button class="btn btn-icon">
-                                                <i class="icon icon-account-edit"></i>
-                                            </button>
-                                            </span>
-                                            <span>
-                                                <button class="btn btn-icon">
-                                                <i class="icon icon-close"></i>
-                                            </button>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Tea Break</td>
-                                        <td>-</td>
-                                        <td>30</td>
-                                        <td>75000</td>
-                                        <td>
-                                            <span>
-                                            <button class="btn btn-icon">
-                                                <i class="icon icon-account-edit"></i>
-                                            </button>
-                                            </span>
-                                            <span>
-                                                <button class="btn btn-icon">
-                                                <i class="icon icon-close"></i>
-                                            </button>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Catering service(Transport fee)</td>
-                                        <td>-</td>
-                                        <td>1</td>
-                                        <td>20000</td>
-                                        <td>
-                                            <span>
-                                            <button class="btn btn-icon">
-                                                <i class="icon icon-account-edit"></i>
-                                            </button>
-                                            </span>
-                                            <span>
-                                                <button class="btn btn-icon">
-                                                <i class="icon icon-close"></i>
-                                            </button>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>
-                                            <button class="btn btn-primary">
+                                        <td colspan="1">{{ model.order_no_of_items|add:1 }}</td>
+                                        <td colspan="3">-</td>
+                                        <td colspan="1">-</td>
+                                        <td colspan="2">-</td>
+                                        <td colspan="1">-</td>
+                                        <td colspan="2">-</td>
+                                        <td colspan="2">
+                                            <button class="btn btn-primary"
+                                                    id="btn-add-order-item">
                                                 <i class="icon icon-plus"
                                                    style="font-size: 16px; vertical-align: top !important;"></i> ADD
                                             </button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="font-weight: bold;">Equipment Price</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>0</td>
-                                        <td></td>
+                                        <td colspan="4" style="font-weight: bold;">Sub Total</td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2">{{ model.order_total_price }}</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="font-weight: bold;">Tax Amount</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>0</td>
-                                        <td></td>
+                                        <td colspan="4" style="font-weight: bold;">Equipment Price</td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2">{{ model.order_equipment_price }}</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="font-weight: bold;">Grand Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td style="font-weight: bold;">185000</td>
-                                        <td></td>
+                                        <td colspan="4" style="font-weight: bold;">Tax Amount</td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2">{{ model.order_tax_price }}</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6"></td>
+                                        <td colspan="4" style="font-weight: bold;">Grand Total
+                                            in {{ model.order_currency }}</td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2"><b>{{ model.order_grand_total_price }}</b></td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="1" style="font-weight: bold;">Anticipated Award Mechanism</td>
-                                        <td colspan="5">{{ model.order_anticipated_award_mechanism }}</td>
+                                        <td colspan="12"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="1" style="font-weight: bold;">Anticipated Start Date</td>
-                                        <td colspan="2">{{ model.order_anticipated_start_date }}</td>
-                                        <td colspan="1" style="font-weight: bold;">Anticipated End Date</td>
-                                        <td colspan="2">{{ model.order_anticipated_end_date }}</td>
+                                        <td colspan="12" style="font-weight: bold;">Anticipated Award Mechanism</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" style="font-weight: bold;">Special Considerations</td>
+                                        <td colspan="12">{{ model.order_anticipated_award_mechanism }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6">{{ model.order_special_considerations }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Anticipated Start Date</td>
+                                        <td colspan="4">{{ model.order_anticipated_start_date }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Anticipated End Date</td>
+                                        <td colspan="4">{{ model.order_anticipated_end_date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="12" style="font-weight: bold;">Special Considerations</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="12">{{ model.order_special_considerations }}</td>
                                     </tr>
                                     </thead>
                                 </table>
@@ -220,6 +206,32 @@
             </div>
         </div>
     </div>
+    <div class="bootbox modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#modal").on("hidden.bs.modal", function () {
+                // location.reload();
+            });
+            var url = "{% url 'order_item_create' order_id='P1' %}";
+            url = url.replace("P1", "{{ model.order_id }}");
+            $("#btn-add-order-item").modalForm({
+                formURL: url
+            });
+
+            {% for order_item in order_items %}
+                url = "{% url 'order_item_update' pk='P1' %}";
+                url = url.replace("P1", "{{ order_item.order_item_id }}");
+                $("#btn-edit-order-item-{{ order_item.order_item_id }}").modalForm({
+                    formURL: url
+                });
+            {% endfor %}
+        });
+    </script>
     {% include '_include/select_single.html' %}
     {% include '_include/tab_index.html' %}
 {% endblock %}
