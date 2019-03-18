@@ -6,6 +6,7 @@ from django.core.validators import MinLengthValidator
 from django.core.validators import RegexValidator
 from django.core.validators import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.middleware.csrf import rotate_token
 from django.utils.crypto import get_random_string, salted_hmac, constant_time_compare
 
@@ -70,7 +71,7 @@ class Operators(models.Model):
     DEPARTMENT_GRANT_MANAGER = 'GRANT-MANAGER'  # Grant Managers
     ARRAY_OPERATOR_DEPARTMENTS = [
         DEPARTMENT_NONE,
-        'Deputy COP (Agriculture)',
+        'Deputy COP',
         'Business, Finance & Marketing',
         'Nutrition',
         'Administrative and Finance',
@@ -80,7 +81,7 @@ class Operators(models.Model):
     OPERATOR_DEPARTMENTS = (
         ('', '--select--'),
         (DEPARTMENT_NONE, 'NONE'),
-        (DEPARTMENT_DCOP, 'Deputy COP (Agriculture)'),
+        (DEPARTMENT_DCOP, 'Deputy COP'),
         (DEPARTMENT_BFM, 'Business, Finance & Marketing'),
         (DEPARTMENT_NUTRITION, 'Nutrition'),
         (DEPARTMENT_DAF, 'Administrative and Finance'),
@@ -332,6 +333,33 @@ class Operators(models.Model):
         return True
 
     @classmethod
+    def get_child_operators(cls, operator):
+        # noinspection PyShadowingNames
+        def get_child_operators_inner(counter, child_operators, operator):
+            operator_id = operator.operator_id
+            operators = Operators.objects.filter(operator_parent_id=operator_id)
+
+            for model in operators:
+                child_operators[counter] = model.operator_id
+                counter = counter + 1
+
+            for model in operators:
+                operators = Operators.objects.filter(operator_parent_id=model.operator_id)
+                if operators.count() > 0:
+                    child_operators = get_child_operators_inner(counter, child_operators, model)
+
+            return child_operators
+
+        child_operators = {0: operator.operator_id}
+        child_operators = get_child_operators_inner(1, child_operators, operator)
+
+        child_operators_array = []
+        for key, value in child_operators.items():
+            child_operators_array.append(value)
+
+        return child_operators_array
+
+    @classmethod
     def delete_operator(cls, request, model, operator):
 
         Operator_Access_Permissions.objects.filter(operators_operator_id_id=model.operator_id).delete()
@@ -514,7 +542,9 @@ class Orders(models.Model):
                                                                default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_procurement_method_updated_id = models.CharField('Procurement Method Updated ID', max_length=100, blank=True)
     order_procurement_method_updated_by = models.CharField('Procurement Method Updated By', max_length=100, blank=True)
-    order_procurement_method_updated_role = models.CharField('Procurement Method Updated Title', max_length=100,
+    order_procurement_method_updated_department = models.CharField('Procurement Method Updated Department',
+                                                                   max_length=255, blank=True)
+    order_procurement_method_updated_role = models.CharField('Procurement Method Updated Role', max_length=255,
                                                              blank=True)
     order_no_of_items = models.DecimalField('No. of Items', max_digits=10, decimal_places=0, default=Decimal(0))
     order_total_price = models.DecimalField('Total Amount', max_digits=10, decimal_places=0, default=Decimal(0))
@@ -531,53 +561,70 @@ class Orders(models.Model):
     order_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_created_id = models.CharField('Created ID', max_length=100, blank=True)
     order_created_by = models.CharField('Created By', max_length=100, blank=True)
-    order_created_role = models.CharField('Created Title', max_length=100, blank=True)
+    order_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    order_created_role = models.CharField('Created Role', max_length=255, blank=True)
     order_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
     order_updated_by = models.CharField('Updated By', max_length=100, blank=True)
-    order_updated_role = models.CharField('Updated Title', max_length=100, blank=True)
+    order_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    order_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
     order_requested_at = models.DateTimeField('Requested At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_requested_id = models.CharField('Requested ID', max_length=100, blank=True)
     order_requested_by = models.CharField('Requested By', max_length=100, blank=True)
-    order_requested_role = models.CharField('Requested Title', max_length=100, blank=True)
+    order_requested_department = models.CharField('Requested Department', max_length=255, blank=True)
+    order_requested_role = models.CharField('Requested Role', max_length=255, blank=True)
     order_approval_no_of_levels = models.IntegerField('Approval Levels', blank=False, default=0)
     order_reviewed_at = models.DateTimeField('Reviewed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_reviewed_id = models.CharField('Reviewed ID', max_length=100, blank=True)
     order_reviewed_by = models.CharField('Reviewed By', max_length=100, blank=True)
-    order_reviewed_role = models.CharField('Reviewed Title', max_length=100, blank=True)
+    order_reviewed_department = models.CharField('Reviewed Department', max_length=255, blank=True)
+    order_reviewed_role = models.CharField('Reviewed Role', max_length=255, blank=True)
     order_approved_at = models.DateTimeField('Approved At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_approved_id = models.CharField('Approved ID', max_length=100, blank=True)
     order_approved_by = models.CharField('Approved By', max_length=100, blank=True)
-    order_approved_role = models.CharField('Approved Title', max_length=100, blank=True)
+    order_approved_department = models.CharField('Approved Department', max_length=255, blank=True)
+    order_approved_role = models.CharField('Approved Role', max_length=255, blank=True)
     order_assigned_at = models.DateTimeField('Assigned At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_assigned_id = models.CharField('Assigned ID', max_length=100, blank=True)
     order_assigned_by = models.CharField('Assigned By', max_length=100, blank=True)
-    order_assigned_role = models.CharField('Assigned Title', max_length=100, blank=True)
+    order_assigned_department = models.CharField('Assigned Department', max_length=255, blank=True)
+    order_assigned_role = models.CharField('Assigned Role', max_length=255, blank=True)
     order_assigned_to_at = models.DateTimeField('Assigned To At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
-    order_assigned_to_role = models.CharField('Assigned To Title', max_length=100, blank=True)
+    order_assigned_to_id = models.CharField('Assigned To ID', max_length=100, blank=True)
+    order_assigned_to_by = models.CharField('Assigned To By', max_length=100, blank=True)
+    order_assigned_to_department = models.CharField('Assigned To Department', max_length=255, blank=True)
+    order_assigned_to_role = models.CharField('Assigned To Role', max_length=255, blank=True)
     order_proposal_generated_at = models.DateTimeField('Order Proposal Generated At',
                                                        default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_generated_id = models.CharField('Order Proposal Generated ID', max_length=100, blank=True)
     order_proposal_generated_by = models.CharField('Order Proposal Generated By', max_length=100, blank=True)
-    order_proposal_generated_role = models.CharField('Order Proposal Generated Title', max_length=100, blank=True)
+    order_proposal_generated_department = models.CharField('Order Proposal Generated Department', max_length=255,
+                                                           blank=True)
+    order_proposal_generated_role = models.CharField('Order Proposal Generated Role', max_length=255, blank=True)
     order_proposal_requested_at = models.DateTimeField('Order Proposal Requested At',
                                                        default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_requested_id = models.CharField('Order Proposal Requested ID', max_length=100, blank=True)
     order_proposal_requested_by = models.CharField('Order Proposal Requested By', max_length=100, blank=True)
-    order_proposal_requested_role = models.CharField('Order Proposal Requested Title', max_length=100, blank=True)
+    order_proposal_requested_department = models.CharField('Order Proposal Requested Department', max_length=255,
+                                                           blank=True)
+    order_proposal_requested_role = models.CharField('Order Proposal Requested Role', max_length=255, blank=True)
     order_purchase_generated_at = models.DateTimeField('Purchase Order Generated At',
                                                        default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_purchase_generated_id = models.CharField('Purchase Order Generated ID', max_length=100, blank=True)
     order_purchase_generated_by = models.CharField('Purchase Order Generated By', max_length=100, blank=True)
-    order_purchase_generated_role = models.CharField('Purchase Order Generated Title', max_length=100, blank=True)
+    order_purchase_generated_department = models.CharField('Purchase Order Generated Department', max_length=255,
+                                                           blank=True)
+    order_purchase_generated_role = models.CharField('Purchase Order Generated Role', max_length=255, blank=True)
     order_paid_at = models.DateTimeField('Paid At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_paid_id = models.CharField('Paid ID', max_length=100, blank=True)
     order_paid_by = models.CharField('Paid By', max_length=100, blank=True)
-    order_paid_role = models.CharField('Paid Title', max_length=100, blank=True)
+    order_paid_department = models.CharField('Paid Department', max_length=255, blank=True)
+    order_paid_role = models.CharField('Paid Role', max_length=255, blank=True)
     order_closed_at = models.DateTimeField('Closed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_closed_id = models.CharField('Closed ID', max_length=100, blank=True)
     order_closed_by = models.CharField('Closed By', max_length=100, blank=True)
-    order_closed_role = models.CharField('Closed Title', max_length=100, blank=True)
+    order_closed_department = models.CharField('Closed Department', max_length=255, blank=True)
+    order_closed_role = models.CharField('Closed Role', max_length=255, blank=True)
     order_status = models.CharField('Status', max_length=255, blank=False, choices=ORDER_STATUSES,
                                     default=STATUS_PENDING)
 
@@ -612,6 +659,183 @@ class Orders(models.Model):
 
         model.save()
         return True
+
+    @classmethod
+    def get_filtered_orders(cls, operator):
+        if operator.operator_type == Operators.TYPE_SUPER_ADMIN or operator.operator_type == Operators.TYPE_ADMIN or operator.operator_type == Operators.TYPE_MANAGER:
+            objects = Orders.objects.all()
+        else:
+            objects = Orders.objects.all()
+            if operator.operator_department == Operators.DEPARTMENT_NONE:
+                objects = objects.filter(order_created_id=operator.operator_id)
+
+            if operator.operator_department == Operators.DEPARTMENT_DCOP:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                             (Q(order_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DCOP) &
+                        Q(operator_role=Operators.ROLE_REGIONAL_MANAGER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                                 (Q(order_created_id__in=child_operators)))
+
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_REGIONAL_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_DISTRICT_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_FIELD_OFFICER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DCOP) &
+                                             Q(order_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_BFM:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_BFM) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_BFM) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.order_created_department:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_BFM) &
+                                             Q(order_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_NUTRITION:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(order_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_DAF:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_OPM:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(order_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_PROCUREMENT_OFFICER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(order_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_HR_MANAGER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(order_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_STOCK_ADMIN))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(order_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(order_created_id__in=child_operators)))
+
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_HR_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_STOCK_ADMIN:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             Q(order_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_MAV:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(order_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_GRANT_MANAGER:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(order_created_id=operator.operator_id))
+
+        return objects
 
     @classmethod
     def delete_order(cls, request, model, operator):
@@ -680,7 +904,8 @@ class Order_Approvals(models.Model):
     order_approval_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_approval_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
     order_approval_updated_by = models.CharField('Updated By', max_length=100, blank=True)
-    order_approval_updated_role = models.CharField('Updated Title', max_length=100, blank=True)
+    order_approval_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    order_approval_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
     order_approval_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
                                              default=STATUS_NONE)
 
@@ -726,7 +951,8 @@ class Order_Attachments(models.Model):
                                                              default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_attachment_file_uploaded_id = models.CharField('Uploaded ID', max_length=100, blank=True)
     order_attachment_file_uploaded_by = models.CharField('Uploaded By', max_length=100, blank=True)
-    order_attachment_file_uploaded_role = models.CharField('Uploaded Title', max_length=100, blank=True)
+    order_attachment_file_uploaded_department = models.CharField('Uploaded Department', max_length=255, blank=True)
+    order_attachment_file_uploaded_role = models.CharField('Uploaded Role', max_length=255, blank=True)
 
     def __unicode__(self):
         return self.order_attachment_id
@@ -744,7 +970,8 @@ class Order_Payments(models.Model):
     order_payment_paid_at = models.DateTimeField('Paid At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_payment_paid_id = models.CharField('Paid ID', max_length=100, blank=True)
     order_payment_paid_by = models.CharField('Paid By', max_length=100, blank=True)
-    order_payment_paid_role = models.CharField('Paid Title', max_length=100, blank=True)
+    order_payment_paid_department = models.CharField('Paid Department', max_length=255, blank=True)
+    order_payment_paid_role = models.CharField('Paid Role', max_length=255, blank=True)
     order_payment_paid_amount = models.DecimalField('Paid Amount', max_digits=10, decimal_places=0, default=Decimal(0))
     order_payment_paid_pending = models.DecimalField('Pending Amount', max_digits=10, decimal_places=0,
                                                      default=Decimal(0))
@@ -802,26 +1029,32 @@ class Order_Proposals(models.Model):
     order_proposal_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_created_id = models.CharField('Created ID', max_length=100, blank=True)
     order_proposal_created_by = models.CharField('Created By', max_length=100, blank=True)
-    order_proposal_created_role = models.CharField('Created Title', max_length=100, blank=True)
+    order_proposal_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    order_proposal_created_role = models.CharField('Created Role', max_length=255, blank=True)
     order_proposal_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
     order_proposal_updated_by = models.CharField('Updated By', max_length=100, blank=True)
-    order_proposal_updated_role = models.CharField('Updated Title', max_length=100, blank=True)
+    order_proposal_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    order_proposal_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
     order_proposal_evaluated_at = models.DateTimeField('Evaluated At',
                                                        default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_evaluated_id = models.CharField('Evaluated ID', max_length=100, blank=True)
     order_proposal_evaluated_by = models.CharField('Evaluated By', max_length=100, blank=True)
-    order_proposal_evaluated_role = models.CharField('Evaluated Title', max_length=100, blank=True)
+    order_proposal_evaluated_department = models.CharField('Evaluated Department', max_length=255, blank=True)
+    order_proposal_evaluated_role = models.CharField('Evaluated Role', max_length=255, blank=True)
     order_proposal_approval_updated_at = models.DateTimeField('Approval Updated At',
                                                               default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_approval_updated_id = models.CharField('Approval Updated ID', max_length=100, blank=True)
     order_proposal_approval_updated_by = models.CharField('Approval Updated By', max_length=100, blank=True)
-    order_proposal_approval_updated_role = models.CharField('Approval Updated Title', max_length=100, blank=True)
+    order_proposal_approval_updated_department = models.CharField('Approval Updated Department', max_length=255,
+                                                                  blank=True)
+    order_proposal_approval_updated_role = models.CharField('Approval Updated Role', max_length=255, blank=True)
     order_proposal_acknowledged_at = models.DateTimeField('Acknowledged At',
                                                           default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_acknowledged_id = models.CharField('Acknowledged ID', max_length=100, blank=True)
     order_proposal_acknowledged_by = models.CharField('Acknowledged By', max_length=100, blank=True)
-    order_proposal_acknowledged_role = models.CharField('Acknowledged Title', max_length=100, blank=True)
+    order_proposal_acknowledged_department = models.CharField('Acknowledged Department', max_length=255, blank=True)
+    order_proposal_acknowledged_role = models.CharField('Acknowledged Role', max_length=255, blank=True)
     order_proposal_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
                                              default=STATUS_PENDING)
 
@@ -878,15 +1111,18 @@ class Order_Items(models.Model):
     order_item_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_item_created_id = models.CharField('Created ID', max_length=100, blank=True)
     order_item_created_by = models.CharField('Created By', max_length=100, blank=True)
-    order_item_created_role = models.CharField('Created Title', max_length=100, blank=True)
+    order_item_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    order_item_created_role = models.CharField('Created Role', max_length=255, blank=True)
     order_item_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_item_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
     order_item_updated_by = models.CharField('Updated By', max_length=100, blank=True)
-    order_item_updated_role = models.CharField('Updated Title', max_length=100, blank=True)
+    order_item_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    order_item_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
     order_item_received_at = models.DateTimeField('Received At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_item_received_id = models.CharField('Received ID', max_length=100, blank=True)
     order_item_received_by = models.CharField('Received By', max_length=100, blank=True)
-    order_item_received_role = models.CharField('Received Title', max_length=100, blank=True)
+    order_item_received_department = models.CharField('Received Department', max_length=255, blank=True)
+    order_item_received_role = models.CharField('Received Role', max_length=255, blank=True)
     order_item_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
                                          default=STATUS_PENDING)
 

@@ -39,13 +39,16 @@ def index(request):
         auth_permissions = Operators.get_auth_permissions(operator)
         if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
             search_form = OrderSearchIndexForm(request.POST or None)
+            objects = None
+
+            objects = Orders.get_filtered_orders(operator)
+
             if request.method == 'POST' and search_form.is_valid():
                 display_search = True
-                objects = Orders.objects.all()
                 table = OrdersTable(objects)
             else:
                 display_search = False
-                table = OrdersTable(Orders.objects.all())
+                table = OrdersTable(objects)
 
             table.set_auth_permissions(auth_permissions)
             return render(
@@ -149,6 +152,7 @@ def create(request):
                     model.order_procurement_method_updated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_procurement_method_updated_id = ''
                     model.order_procurement_method_updated_by = ''
+                    model.order_procurement_method_updated_department = ''
                     model.order_procurement_method_updated_role = ''
 
                     model.order_no_of_items = 0
@@ -167,16 +171,19 @@ def create(request):
                     model.order_created_at = Utils.get_current_datetime_utc()
                     model.order_created_id = operator.operator_id
                     model.order_created_by = operator.operator_name
+                    model.order_created_department = operator.operator_department
                     model.order_created_role = operator.operator_role
 
                     model.order_updated_at = Utils.get_current_datetime_utc()
                     model.order_updated_id = operator.operator_id
                     model.order_updated_by = operator.operator_name
+                    model.order_updated_department = operator.operator_department
                     model.order_updated_role = operator.operator_role
 
                     model.order_requested_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_requested_id = ''
                     model.order_requested_by = ''
+                    model.order_requested_department = ''
                     model.order_requested_role = ''
 
                     model.order_approval_no_of_levels = 0
@@ -184,44 +191,55 @@ def create(request):
                     model.order_reviewed_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_reviewed_id = ''
                     model.order_reviewed_by = ''
+                    model.order_reviewed_department = ''
                     model.order_reviewed_role = ''
 
                     model.order_approved_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_approved_id = ''
                     model.order_approved_by = ''
+                    model.order_approved_department = ''
                     model.order_approved_role = ''
 
                     model.order_assigned_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_assigned_id = ''
                     model.order_assigned_by = ''
+                    model.order_assigned_department = ''
                     model.order_assigned_role = ''
 
                     model.order_assigned_to_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_assigned_to_id = ''
+                    model.order_assigned_to_by = ''
+                    model.order_assigned_to_department = ''
                     model.order_assigned_to_role = ''
 
                     model.order_proposal_generated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_proposal_generated_id = ''
                     model.order_proposal_generated_by = ''
+                    model.order_proposal_generated_department = ''
                     model.order_proposal_generated_role = ''
 
                     model.order_proposal_requested_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_proposal_requested_id = ''
                     model.order_proposal_requested_by = ''
+                    model.order_proposal_requested_department = ''
                     model.order_proposal_requested_role = ''
 
                     model.order_purchase_generated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_purchase_generated_id = ''
                     model.order_purchase_generated_by = ''
+                    model.order_purchase_generated_department = ''
                     model.order_purchase_generated_role = ''
 
                     model.order_paid_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_paid_id = ''
                     model.order_paid_by = ''
+                    model.order_paid_department = ''
                     model.order_paid_role = ''
 
                     model.order_closed_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_closed_id = ''
                     model.order_closed_by = ''
+                    model.order_closed_department = ''
                     model.order_closed_role = ''
 
                     model.order_status = Orders.STATUS_PENDING
@@ -298,6 +316,7 @@ def update(request, pk):
                         model.order_updated_at = Utils.get_current_datetime_utc()
                         model.order_updated_id = operator.operator_id
                         model.order_updated_by = operator.operator_name
+                        model.order_updated_department = operator.operator_department
                         model.order_updated_role = operator.operator_role
                         model.save()
 

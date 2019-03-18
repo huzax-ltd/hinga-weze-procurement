@@ -58,16 +58,19 @@ def create(request, order_id):
                         model.order_item_created_at = Utils.get_current_datetime_utc()
                         model.order_item_created_id = operator.operator_id
                         model.order_item_created_by = operator.operator_name
+                        model.order_item_created_department = operator.operator_department
                         model.order_item_created_role = operator.operator_role
 
                         model.order_item_updated_at = Utils.get_current_datetime_utc()
                         model.order_item_updated_id = operator.operator_id
                         model.order_item_updated_by = operator.operator_name
+                        model.order_item_updated_department = operator.operator_department
                         model.order_item_updated_role = operator.operator_role
 
                         model.order_item_received_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                         model.order_item_received_id = ''
                         model.order_item_received_by = ''
+                        model.order_item_received_department = ''
                         model.order_item_received_role = ''
 
                         model.order_item_status = Orders.STATUS_PENDING
@@ -141,6 +144,7 @@ def update(request, pk):
                         model.order_item_updated_at = Utils.get_current_datetime_utc()
                         model.order_item_updated_id = operator.operator_id
                         model.order_item_updated_by = operator.operator_name
+                        model.order_item_updated_department = operator.operator_department
                         model.order_item_updated_role = operator.operator_role
                         model.save()
 
