@@ -7,12 +7,51 @@ from datetime import datetime
 
 import pytz
 from django.utils import dateparse
-from django.utils import timezone
+from django.utils import timezone, timesince
 
 from app import settings
 
 
 class Utils(object):
+    # Operators
+    HTML_TAG_STATUS_ACTIVE_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_ACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Active <b></div>'
+    HTML_TAG_STATUS_INACTIVE_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_INACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Inactive <b></div>'
+    HTML_TAG_STATUS_BLOCKED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Blocked <b></div>'
+    HTML_TAG_STATUS_UNVERIFIED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNVERIFIED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unverified <b></div>'
+    HTML_TAG_STATUS_UNAPPROVED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unapproved <b></div>'
+
+    # Orders
+    HTML_TAG_ORDER_STATUS_PENDING = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_RED + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
+    HTML_TAG_ORDER_STATUS_REQUESTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Requested <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL0_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-0 Approved <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL1_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-1 Approved  <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL2_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-2 Approved  <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL3_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-3 Approved  <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL4_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-4 Approved  <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL1_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-1 Rejected  <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL2_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-2 Rejected <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL3_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-3 Rejected <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL4_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-4 Rejected <b></div>'
+    HTML_TAG_ORDER_STATUS_REVIEWED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Reviewed <b></div>'
+    HTML_TAG_ORDER_STATUS_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Approved <b></div>'
+    HTML_TAG_ORDER_STATUS_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Rejected <b></div>'
+    HTML_TAG_ORDER_STATUS_ASSIGNED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Assigned <b></div>'
+    HTML_TAG_ORDER_STATUS_PROPOSAL_GENERATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Generated <b></div>'
+    HTML_TAG_ORDER_STATUS_PROPOSAL_REQUESTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Requested <b></div>'
+    HTML_TAG_ORDER_STATUS_PROPOSAL_EVALUATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Evaluated <b></div>'
+    HTML_TAG_ORDER_STATUS_PROPOSAL_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Approved <b></div>'
+    HTML_TAG_ORDER_STATUS_PROPOSAL_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Rejected  <b></div>'
+    HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Purchase Generated <b></div>'
+    HTML_TAG_ORDER_STATUS_PROPOSAL_ACKNOWLEDGED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Acknowledged <b></div>'
+    HTML_TAG_ORDER_STATUS_RECEIVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Received <b></div>'
+    HTML_TAG_ORDER_STATUS_PARTIALLY_PAID = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Partially Paid <b></div>'
+    HTML_TAG_ORDER_STATUS_PAID = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Paid <b></div>'
+    HTML_TAG_ORDER_STATUS_CLOSED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Closed <b></div>'
+
+    # Notifications
+    HTML_TAG_STATUS_UNREAD_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
+    HTML_TAG_STATUS_READ_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unresolved <b></div>'
+    HTML_TAG_STATUS_FIXED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_ACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Fixed <b></div>'
 
     @staticmethod
     def format_device_date(value):
@@ -293,6 +332,25 @@ class Utils(object):
         if re.match(r'^<.+>$', data):
             return 2
         return 0
+
+    @staticmethod
+    def timesince(timestamp):
+        """Convert a timestamp to human readable time since"""
+
+        mapping = {'minute': 'min',
+                   'hour': 'hr',
+                   'week': 'wk',
+                   'month': 'mo',
+                   'year': 'yr'}
+
+        if timestamp is None:
+            return "Never"
+
+        text = timesince.timesince(timestamp)
+        for key in mapping.keys():
+            text = text.replace(key, mapping[key])
+
+        return text
 
 
 class FileObject:

@@ -84,6 +84,19 @@ def select_single(request):
             action = request.POST['action']
             id = request.POST['id']
             if action != '' and id is not None:
+                if action == 'order-request':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+                            if model.order_created_id == str(operator.operator_id):
+                                Orders.request_order(request, model, operator)
+                                messages.success(request, 'Order requested successfully.')
+                            else:
+                                messages.success(request, 'Forbidden')
+                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
                 return HttpResponse('success', content_type='text/plain')
             else:
                 return HttpResponseBadRequest('Bad Request', content_type='text/plain')
@@ -398,6 +411,9 @@ def view(request, pk):
 
                 order_items = Order_Items.objects.filter(orders_order_id=pk).all()
 
+                if model.order_created_id == Operators.operator_id and model.order_status == Orders.STATUS_PENDING:
+                    template_url = 'orders/view-edit.html'
+
                 return render(
                     request, template_url,
                     {
@@ -413,6 +429,7 @@ def view(request, pk):
                         'order_items_size': order_items,
                         'item_index_url': reverse("orders_view", kwargs={'pk': pk}),
                         'item_select_single_url': reverse("order_item_select_single"),
+                        'status_html_tag': Orders.get_status_html_tag(model)
                     }
                 )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):

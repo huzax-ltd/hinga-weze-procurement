@@ -668,7 +668,8 @@ def index(request):
                 table = OperatorsTable(objects)
             else:
                 display_search = False
-                table = OperatorsTable(Operators.objects.order_by('operator_name').all())
+                objects = Operators.objects.order_by('operator_name').all()
+                table = OperatorsTable(objects)
 
             table.set_auth_permissions(auth_permissions)
             return render(
@@ -1314,6 +1315,41 @@ def view(request, pk):
                 return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def view_profile(request, pk):
+    template_url = 'operators/view-profile.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        try:
+            model = Operators.objects.get(operator_id=pk)
+            model.operator_created_at = Utils.get_convert_datetime(model.operator_created_at,
+                                                                   settings.TIME_ZONE,
+                                                                   settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+            model.operator_updated_at = Utils.get_convert_datetime(model.operator_updated_at,
+                                                                   settings.TIME_ZONE,
+                                                                   settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_OPERATORS,
+                    'title': Operators.TITLE,
+                    'name': Operators.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'model': model,
+                    'index_url': reverse("operators_index"),
+                    'select_single_url': reverse("operators_select_single"),
+                }
+            )
+        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+            return HttpResponseNotFound('Not Found', content_type='text/plain')
 
 
 # noinspection PyUnusedLocal, PyShadowingBuiltins

@@ -1,4 +1,4 @@
-{% extends '_include/base-timeline.html' %}{% block head %}{% load static %}
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
     <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
 {% block body %}{% load static %}
     {% load static %}{% csrf_token %}
@@ -40,21 +40,23 @@
             <div class="page-content p-5 body-content-p-t-5">
                 <div class="card body-content-card">
                     <div class="card-body p-5">
-
                         <div>
-                            <a data-toggle="collapse" href="#collapseTimeline"
-                               aria-expanded="false"
-                               aria-controls="collapseTimeline" class="btn btn-outline-primary fuse-ripple-ready">View
-                                Timeline</a>
-                        </div>
+                            {% if ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values %}
+                                {% if model.order_created_id|striptags == operator.operator_id|striptags %}
 
+                                    <a href="{% url 'orders_update' pk=model.order_id %}"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Update</a>
+
+                                    {% if model.order_status == model.STATUS_PENDING %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'order-request', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Request</a>
+                                    {% endif %}
+
+                                {% endif %}
+                            {% endif %}
+                        </div>
                         <br>
-                        <div class="collapse mb-5" id="collapseTimeline">
-                            <div class="card card-block">
-                                <div id="order-timeline"></div>
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-hover" cellspacing="0" width="100%">
@@ -102,10 +104,11 @@
                                         <td colspan="1" style="font-weight: bold;">Sr. No</td>
                                         <td colspan="3" style="font-weight: bold;">Item Name</td>
                                         <td colspan="1" style="font-weight: bold;">Time in Days</td>
-                                        <td colspan="3" style="font-weight: bold;">Unit Price</td>
+                                        <td colspan="2" style="font-weight: bold;">Unit Price</td>
                                         <td colspan="1" style="font-weight: bold;">Quantity</td>
-                                        <td colspan="3" style="font-weight: bold;">Total Amount
+                                        <td colspan="2" style="font-weight: bold;">Total Amount
                                             in {{ model.order_currency }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Action</td>
                                     </tr>
 
                                     {% for order_item in order_items %}
@@ -113,39 +116,72 @@
                                             <td colspan="1">{{ forloop.counter }}</td>
                                             <td colspan="3">{{ order_item.order_item_title }}</td>
                                             <td colspan="1">{{ order_item.order_item_duration }}</td>
-                                            <td colspan="3">{{ order_item.order_item_unit_price }}</td>
+                                            <td colspan="2">{{ order_item.order_item_unit_price }}</td>
                                             <td colspan="1">{{ order_item.order_item_quantity_ordered }} {{ order_item.order_item_quantity_unit }}</td>
-                                            <td colspan="3">{{ order_item.order_item_total_price }}</td>
+                                            <td colspan="2">{{ order_item.order_item_total_price }}</td>
+                                            <td colspan="2">
+                                                <div class="btn-group">
+                                                    <button class="btn btn-icon ml-1"
+                                                            id="btn-edit-order-item-{{ order_item.order_item_id }}">
+                                                        <i class="icon icon-account-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-icon mr-1" href="#"
+                                                            id="btn-delete-order-item-{{ order_item.order_item_id }}"
+                                                            onclick="singleSelect('{{ item_select_single_url }}', 'delete', '{{ order_item.order_item_id }}', '{{ item_index_url }}');">
+                                                        <i class="icon icon-close"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     <tr>
+                                        <td colspan="1">{{ model.order_no_of_items|add:1 }}</td>
+                                        <td colspan="3">-</td>
+                                        <td colspan="1">-</td>
+                                        <td colspan="2">-</td>
+                                        <td colspan="1">-</td>
+                                        <td colspan="2">-</td>
+                                        <td colspan="2">
+                                            <button class="btn btn-primary"
+                                                    id="btn-add-order-item">
+                                                <i class="icon icon-plus"
+                                                   style="font-size: 16px; vertical-align: top !important;"></i> ADD
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="4" style="font-weight: bold;">Sub Total</td>
                                         <td colspan="1"></td>
-                                        <td colspan="3"></td>
+                                        <td colspan="2"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="3">{{ model.order_total_price }}</td>
+                                        <td colspan="2">{{ model.order_total_price }}</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" style="font-weight: bold;">Equipment Price</td>
                                         <td colspan="1"></td>
-                                        <td colspan="3"></td>
+                                        <td colspan="2"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="3">{{ model.order_equipment_price }}</td>
+                                        <td colspan="2">{{ model.order_equipment_price }}</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" style="font-weight: bold;">Tax Amount</td>
                                         <td colspan="1"></td>
-                                        <td colspan="3"></td>
+                                        <td colspan="2"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="3">{{ model.order_tax_price }}</td>
+                                        <td colspan="2">{{ model.order_tax_price }}</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" style="font-weight: bold;">Grand Total
                                             in {{ model.order_currency }}</td>
                                         <td colspan="1"></td>
-                                        <td colspan="3"></td>
+                                        <td colspan="2"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="3"><b>{{ model.order_grand_total_price }}</b></td>
+                                        <td colspan="2"><b>{{ model.order_grand_total_price }}</b></td>
+                                        <td colspan="2"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="12"></td>
@@ -201,81 +237,6 @@
                     formURL: url
                 });
             {% endfor %}
-
-
-            var events = [
-                {
-                    date: 'Q1 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q1 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small><small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q1 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q1 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                }
-            ];
-
-            $('#order-timeline').roadmap(events, {
-                eventsPerSlide: 6,
-                slide: 1,
-                prevArrow: '<i class="icon icon-arrow-left"></i>',
-                nextArrow: '<i class="icon icon-arrow-right"></i>'
-            });
         });
     </script>
     {% include '_include/select_single.html' %}

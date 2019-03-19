@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from app import settings
-from app.models import Operators, Orders
+from app.models import Orders
 
 
 class OrdersTable(tables.Table):
@@ -125,9 +125,8 @@ class OrdersTable(tables.Table):
         return action_data
 
     @staticmethod
-    def render_operator_status(record):
-        value = Operators.HTML_TAG_STATUS_INACTIVE_COLOR
-        return value
+    def render_order_status(record):
+        return Orders.get_status_html_tag(record)
 
     class Meta:
         model = Orders

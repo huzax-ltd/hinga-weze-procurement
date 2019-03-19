@@ -165,6 +165,9 @@ class Operators(models.Model):
     HTML_TAG_STATUS_UNVERIFIED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNVERIFIED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unverified <b></div>'
     HTML_TAG_STATUS_UNAPPROVED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unapproved <b></div>'
 
+    operator_notifications_count = 0
+    operator_notifications_json = None
+
     operator_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     operator_type = models.CharField('Type', max_length=20, blank=False, choices=SUPER_OPERATOR_TYPES,
                                      default=TYPE_OTHER)
@@ -251,6 +254,13 @@ class Operators(models.Model):
             operator_id = request.session.get(Operators.SESSION_KEY, '0')
             try:
                 operator = Operators.objects.get(operator_id=operator_id)
+                notifications = Notifications.objects.filter(
+                    Q(notification_to_id=operator.operator_id) &
+                    Q(notification_status=Notifications.STATUS_UNREAD)
+                )
+                operator.operator_notifications_count = notifications.count()
+                operator.operator_notifications_json = notifications
+
             except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
                 operator = None
             return operator
@@ -441,6 +451,7 @@ class Orders(models.Model):
 
     STATUS_PENDING = 'pending'
     STATUS_REQUESTED = 'requested'
+    STATUS_LEVEL0_APPROVED = 'level0-approved'
     STATUS_LEVEL1_APPROVED = 'level1-approved'
     STATUS_LEVEL2_APPROVED = 'level2-approved'
     STATUS_LEVEL3_APPROVED = 'level3-approved'
@@ -468,6 +479,7 @@ class Orders(models.Model):
     ARRAY_ORDER_STATUSES = [
         (STATUS_PENDING.title()).replace('-', ' '),
         (STATUS_REQUESTED.title()).replace('-', ' '),
+        (STATUS_LEVEL0_APPROVED.title()).replace('-', ' '),
         (STATUS_LEVEL1_APPROVED.title()).replace('-', ' '),
         (STATUS_LEVEL2_APPROVED.title()).replace('-', ' '),
         (STATUS_LEVEL3_APPROVED.title()).replace('-', ' '),
@@ -496,6 +508,7 @@ class Orders(models.Model):
         ('', '--select--'),
         (STATUS_PENDING, (STATUS_PENDING.title()).replace('-', ' ')),
         (STATUS_REQUESTED, (STATUS_REQUESTED.title()).replace('-', ' ')),
+        (STATUS_LEVEL0_APPROVED, (STATUS_LEVEL0_APPROVED.title()).replace('-', ' ')),
         (STATUS_LEVEL1_APPROVED, (STATUS_LEVEL1_APPROVED.title()).replace('-', ' ')),
         (STATUS_LEVEL2_APPROVED, (STATUS_LEVEL2_APPROVED.title()).replace('-', ' ')),
         (STATUS_LEVEL3_APPROVED, (STATUS_LEVEL3_APPROVED.title()).replace('-', ' ')),
@@ -642,23 +655,61 @@ class Orders(models.Model):
         return token
 
     @classmethod
-    def update_grand_total(cls, request, model, operator):
-
-        order_items = Order_Items.objects.filter(orders_order_id=model.order_id).all()
-
-        currency = Orders.CURRENCY_RWF
-        order_total_price = 0
-        for order_item in order_items:
-            order_total_price += order_item.order_item_total_price
-            currency = order_item.order_item_currency
-
-        model.order_no_of_items = order_items.count()
-        model.order_total_price = order_total_price
-        model.order_grand_total_price = model.order_total_price + model.order_equipment_price + model.order_tax_price
-        model.order_currency = currency
-
-        model.save()
-        return True
+    def get_status_html_tag(cls, record):
+        value = None
+        if record.order_status == Orders.STATUS_PENDING:
+            value = Utils.HTML_TAG_ORDER_STATUS_PENDING
+        elif record.order_status == Orders.STATUS_REQUESTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
+        elif record.order_status == Orders.STATUS_LEVEL0_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL0_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL1_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL1_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL2_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL2_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL3_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL3_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL4_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL4_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL1_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL1_REJECTED
+        elif record.order_status == Orders.STATUS_LEVEL2_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL2_REJECTED
+        elif record.order_status == Orders.STATUS_LEVEL3_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL3_REJECTED
+        elif record.order_status == Orders.STATUS_LEVEL4_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL4_REJECTED
+        elif record.order_status == Orders.STATUS_REVIEWED:
+            value = Utils.HTML_TAG_ORDER_STATUS_REVIEWED
+        elif record.order_status == Orders.STATUS_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_APPROVED
+        elif record.order_status == Orders.STATUS_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
+        elif record.order_status == Orders.STATUS_ASSIGNED:
+            value = Utils.HTML_TAG_ORDER_STATUS_ASSIGNED
+        elif record.order_status == Orders.STATUS_PROPOSAL_GENERATED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_GENERATED
+        elif record.order_status == Orders.STATUS_PROPOSAL_REQUESTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_REQUESTED
+        elif record.order_status == Orders.STATUS_PROPOSAL_EVALUATED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_EVALUATED
+        elif record.order_status == Orders.STATUS_PROPOSAL_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_APPROVED
+        elif record.order_status == Orders.STATUS_PROPOSAL_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_REJECTED
+        elif record.order_status == Orders.STATUS_PURCHASE_GENERATED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED
+        elif record.order_status == Orders.STATUS_PROPOSAL_ACKNOWLEDGED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_ACKNOWLEDGED
+        elif record.order_status == Orders.STATUS_RECEIVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_RECEIVED
+        elif record.order_status == Orders.STATUS_PARTIALLY_PAID:
+            value = Utils.HTML_TAG_ORDER_STATUS_PARTIALLY_PAID
+        elif record.order_status == Orders.STATUS_PAID:
+            value = Utils.HTML_TAG_ORDER_STATUS_PAID
+        elif record.order_status == Orders.STATUS_CLOSED:
+            value = Utils.HTML_TAG_ORDER_STATUS_CLOSED
+        return value
 
     @classmethod
     def get_filtered_orders(cls, operator):
@@ -838,6 +889,156 @@ class Orders(models.Model):
         return objects
 
     @classmethod
+    def update_grand_total(cls, request, model, operator):
+
+        order_items = Order_Items.objects.filter(orders_order_id=model.order_id).all()
+
+        currency = Orders.CURRENCY_RWF
+        order_total_price = 0
+        for order_item in order_items:
+            order_total_price += order_item.order_item_total_price
+            currency = order_item.order_item_currency
+
+        model.order_no_of_items = order_items.count()
+        model.order_total_price = order_total_price
+        model.order_grand_total_price = model.order_total_price + model.order_equipment_price + model.order_tax_price
+        model.order_currency = currency
+
+        model.save()
+        return True
+
+    @classmethod
+    def request_order(cls, request, model, operator):
+        model.order_requested_at = Utils.get_current_datetime_utc()
+        model.order_requested_id = operator.operator_id
+        model.order_requested_by = operator.operator_name
+        model.order_requested_department = operator.operator_department
+        model.order_requested_role = operator.operator_role
+        model.order_status = Orders.STATUS_REQUESTED
+        model.save()
+
+        if operator.operator_parent_id != 0:
+            model.order_approval_no_of_levels = 1
+            model.save()
+
+            # order_approval = Order_Approvals()
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+            # order_approval.orders_order_id = model.order_id
+
+            # order_approval.order_requested_at = Utils.get_current_datetime_utc()
+            # model.order_requested_id = operator.operator_id
+            # model.order_requested_by = operator.operator_name
+            # model.order_requested_department = operator.operator_department
+            # model.order_requested_role = operator.operator_role
+            # model.order_status = Orders.STATUS_REQUESTED
+            # model.save()
+
+            Notifications.add_notification(
+                Notifications.TYPE_OPERATOR,
+                operator.operator_id,
+                Notifications.TYPE_OPERATOR,
+                operator.operator_parent_id,
+                Notifications.TYPE_ORDER,
+                model.order_id,
+                "Created a purchase request to review.",
+                "/backend/orders/view/" + str(model.order_id) + "/"
+            )
+        else:
+            operators = None
+            if operator.operator_type == Operators.TYPE_SUPER_ADMIN or operator.operator_type == Operators.TYPE_ADMIN:
+                model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                model.save()
+                operators = Operators.objects.all().filter(operator_role=Operators.ROLE_OPM)
+            else:
+                if operator.operator_department == Operators.DEPARTMENT_NONE:
+                    model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                    model.save()
+                    operators = Operators.objects.all().filter(operator_role=Operators.ROLE_OPM)
+
+                if operator.operator_department == Operators.DEPARTMENT_DCOP:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
+                        model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                        model.save()
+                        operators = Operators.objects.all().filter(
+                            operator_role=Operators.ROLE_OPM)
+                    if operator.operator_role == Operators.ROLE_REGIONAL_MANAGER or operator.operator_role == Operators.ROLE_DISTRICT_MANAGER or operator.operator_role == Operators.ROLE_FIELD_OFFICER:
+                        operators = Operators.objects.all().filter(
+                            (Q(operator_department=Operators.DEPARTMENT_DCOP) &
+                             Q(operator_role=ROLE_DIRECTOR)))
+
+                if operator.operator_department == Operators.DEPARTMENT_BFM:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
+                        model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                        model.save()
+                        operators = Operators.objects.all().filter(
+                            operator_role=Operators.ROLE_OPM)
+
+                if operator.operator_department == Operators.DEPARTMENT_NUTRITION:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
+                        model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                        model.save()
+                        operators = Operators.objects.all().filter(
+                            operator_role=Operators.ROLE_OPM)
+
+                if operator.operator_department == Operators.DEPARTMENT_DAF:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER or operator.operator_role == Operators.ROLE_OPM:
+                        model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                        model.save()
+                        operators = Operators.objects.all().filter(
+                            operator_role=Operators.ROLE_OPM)
+
+                    if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER or operator.operator_role == Operators.ROLE_HR_MANAGER or operator.operator_role == Operators.ROLE_STOCK_ADMIN or operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER or operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
+                        operators = Operators.objects.all().filter(
+                            (Q(operator_department=Operators.DEPARTMENT_DCOP) &
+                             Q(operator_role=ROLE_DIRECTOR)))
+
+                if operator.operator_department == Operators.DEPARTMENT_MAV:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
+                        model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                        model.save()
+                        operators = Operators.objects.all().filter(
+                            operator_role=Operators.ROLE_OPM)
+
+                if operator.operator_department == Operators.DEPARTMENT_GRANT_MANAGER:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
+                        model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                        model.save()
+                        operators = Operators.objects.all().filter(
+                            operator_role=Operators.ROLE_OPM)
+
+            if operators.count() == 0:
+                model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                model.save()
+                operators = Operators.objects.all().filter(operator_role=Operators.ROLE_OPM)
+
+            if operators.count() == 0:
+                model.order_status = Orders.STATUS_LEVEL0_APPROVED
+                model.save()
+                operators = Operators.objects.all().filter(operator_type=Operators.TYPE_ADMIN)
+
+            for item in operators:
+                Notifications.add_notification(
+                    Notifications.TYPE_OPERATOR,
+                    operator.operator_id,
+                    Notifications.TYPE_OPERATOR,
+                    item.operator_id,
+                    Notifications.TYPE_ORDER,
+                    model.order_id,
+                    "An order has been requested by <a href='/backend/operators/view/profile/" + str(
+                        operator.operator_id) + "/' style='text-decoration:underline; color:#1B82DC;'>" + str(
+                        operator.operator_name) + "</a>.",
+                    "/backend/orders/view/" + str(model.order_id) + "/"
+                )
+        return True
+
+    @classmethod
     def delete_order(cls, request, model, operator):
 
         Order_Logs.add(
@@ -901,6 +1102,11 @@ class Order_Approvals(models.Model):
     order_approval_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     orders_order_id = models.IntegerField('Order Id', blank=False)
     order_approval_level = models.IntegerField('Approval Level', blank=False)
+    order_approval_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_approval_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    order_approval_created_by = models.CharField('Created By', max_length=100, blank=True)
+    order_approval_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    order_approval_created_role = models.CharField('Updated Role', max_length=255, blank=True)
     order_approval_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_approval_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
     order_approval_updated_by = models.CharField('Updated By', max_length=100, blank=True)
@@ -1223,11 +1429,9 @@ class Notifications(models.Model):
         (STATUS_FIXED, (STATUS_FIXED.title()).replace('-', ' ')),
     )
 
-    HTML_TAG_STATUS_ACTIVE_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_ACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Active <b></div>'
-    HTML_TAG_STATUS_INACTIVE_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_INACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Inactive <b></div>'
-    HTML_TAG_STATUS_BLOCKED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Blocked <b></div>'
-    HTML_TAG_STATUS_UNVERIFIED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNVERIFIED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unverified <b></div>'
-    HTML_TAG_STATUS_UNAPPROVED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unapproved <b></div>'
+    HTML_TAG_STATUS_UNREAD_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
+    HTML_TAG_STATUS_READ_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unresolved <b></div>'
+    HTML_TAG_STATUS_FIXED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_ACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Fixed <b></div>'
 
     notification_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     notification_from_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
@@ -1236,6 +1440,9 @@ class Notifications(models.Model):
     notification_to_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
                                             default=TYPE_SYSTEM)
     notification_to_id = models.IntegerField('To Id', blank=False, default=0)
+    notification_model_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
+                                               default=TYPE_SYSTEM)
+    notification_model_id = models.IntegerField('Model Id', blank=False, default=0)
     notification_message = models.CharField('Message', max_length=255, blank=False)
     notification_url = models.CharField('URL', max_length=255, blank=False)
     notification_created_at = models.DateTimeField('Created at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
@@ -1246,6 +1453,22 @@ class Notifications(models.Model):
 
     def __unicode__(self):
         return self.notification_id
+
+    @classmethod
+    def add_notification(cls, from_type, from_id, to_type, to_id, model_type, model_id, message, url):
+        notification = Notifications()
+        notification.notification_from_type = from_type
+        notification.notification_from_id = from_id
+        notification.notification_to_type = to_type
+        notification.notification_to_id = to_id
+        notification.notification_model_type = model_type
+        notification.notification_model_id = model_id
+        notification.notification_message = message
+        notification.notification_url = url
+        notification.notification_created_at = Utils.get_current_datetime_utc()
+        notification.notification_read_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+        notification.notification_fixed_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+        notification.save()
 
 
 # noinspection PyPep8Naming

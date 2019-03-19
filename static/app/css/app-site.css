@@ -166,6 +166,23 @@ input[required="required"]::after {
     padding-top: 0 !important;
 }
 
+.badge {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: -10px;
+    content: attr(data-count);
+    font-size: 10px;
+    padding: .6em;
+    border-radius: 999px;
+    line-height: .75em;
+    color: white;
+    background: #da4733;
+    text-align: center;
+    min-width: 2em;
+    font-weight: bold;
+}
+
 /* start of select2 css */
 .select2-container--default .select2-selection--single:hover {
     border-bottom: 2px solid #2D323D;

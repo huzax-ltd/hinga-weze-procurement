@@ -3,7 +3,8 @@ from django.conf.urls import url
 from django.urls import path
 from django.views.generic import TemplateView
 
-from backend.views import operator_views, operator_log_views, order_views, order_item_views, site_views, setting_views
+from backend.views import operator_views, operator_log_views, order_views, order_item_views, site_views, setting_views, \
+    notification_views
 
 urlpatterns = [
 
@@ -115,6 +116,13 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # view-profile
+    url(r'^operators/view/profile/(?P<pk>\d+)/$', operator_views.view_profile, name='operators_view_profile'),
+    url(r'^operators/view/profile/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
     # profile-view
     url(r'^operators/profile/view/$', operator_views.profile_view, name='operators_profile_view'),
     url(r'^operators/profile/view/service-worker.js',
@@ -200,6 +208,17 @@ urlpatterns = [
 
     # single or multiple select
     url(r'^order-items/select-single/$', order_item_views.select_single, name='order_item_select_single'),
+
+    # notifications
+    path('', notification_views.index, name='index'),
+
+    # index
+    url(r'^notifications/json/$', notification_views.json_notifications, name='json_notifications'),
+    url(r'^notifications/index/$', notification_views.index, name='notifications_index'),
+    url(r'^notifications/index/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
 
     # operator_logs
     path('', operator_log_views.index, name='index'),

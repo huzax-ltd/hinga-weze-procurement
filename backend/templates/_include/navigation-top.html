@@ -14,6 +14,88 @@
 
                 <div class="toolbar-separator d-block d-lg-none"></div>
 
+                <div class="shortcuts-wrapper row no-gutters align-items-center px-0 px-sm-2">
+
+                    <div class="shortcuts row no-gutters align-items-center d-none d-md-flex">
+
+                    </div>
+
+                    <div class="add-shortcut-menu-button dropdown px-1 px-sm-3 show">
+
+                        <div class="dropdown-toggle btn btn-icon fuse-ripple-ready" role="button"
+                             id="dropdownNotificationsMenu" data-toggle="dropdown" aria-haspopup="true"
+                             aria-expanded="true">
+                            <i class="icon icon-email">
+                                {% if  operator.operator_notifications_count != 0 %}
+                                    <h6 class="badge">{{ operator.operator_notifications_count }}</h6>
+                                {% endif %}
+                            </i>
+                        </div>
+
+                        {% if  operator.operator_notifications_count != 0 %}
+                            <div class="dropdown-menu mt-2" aria-labelledby="dropdownNotificationsMenu"
+                                 x-placement="bottom-start"
+                                 style="position: absolute; transform: translate3d(12px, 40px, 0px); top: 0px; left: 0px; will-change: transform; width: 300px;">
+                        {% else %}
+                            <div class="dropdown-menu mt-4" aria-labelledby="dropdownNotificationsMenu"
+                                 x-placement="bottom-start"
+                                 style="position: absolute; transform: translate3d(12px, 40px, 0px); top: 0px; left: 0px; will-change: transform; width: 300px;">
+                        {% endif %}
+
+                        <div class="dropdown-item fuse-ripple-ready">
+                            <div class="row no-gutters align-items-center justify-content-between flex-nowrap">
+                                <div class="row no-gutters align-items-center flex-nowrap">
+                                    <i class="icon icon-email"></i>
+                                    <span class="px-3">Notifications</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr style="height: 2px; color: black; width: 100%">
+
+                        {% if  operator.operator_notifications_count != 0 %}
+                            <div class="list-group pt-0 pb-0">
+
+                                {% for notification in operator.operator_notifications_json %}
+                                    <a href="{{ notification.notification_url }}"
+                                       class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <p class="mb-1">
+                                            {{ notification.notification_message|safe }}
+                                        </p>
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <small class="text-muted">{{ notification.notification_created_at|timesince }}</small>
+                                            <small class="text-muted">
+                                                Read More
+                                            </small>
+                                        </div>
+                                    </a>
+                                    <hr style="height: 2px; color: black; width: 100%">
+                                {% endfor %}
+
+                            </div>
+                        {% else %}
+                            <div class="fuse-ripple-ready text-center p-20">
+                                    <span class="text-center">
+                                        <img src="{% static 'app/images/notification-empty.png' %}"
+                                             alt="" class="img-responsive" width="100">
+                                    </span>
+                            </div>
+                            <hr style="height: 2px; color: black; width: 100%">
+                        {% endif %}
+
+                        <a class="dropdown-item fuse-ripple-ready text-center"
+                           href="{% url 'notifications_index' %}">
+                            <span class="text-center">View More</span>
+                        </a>
+
+                        {% if  operator.operator_notifications_count != 0 %}
+                            </div>
+                        {% else %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="toolbar-separator d-block d-lg-none"></div>
             </div>
         </div>
 

@@ -104,6 +104,26 @@
                 {% endif %}
             {% endif %}
 
+            {% if section == BACKEND_SECTION_NOTIFICATIONS %}
+                <li class="nav-item">
+                    <a class="nav-link ripple active" href="{% url 'notifications_index' %}">
+
+                        <i class="icon s-4 icon-message-alert"></i>
+
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link ripple" href="{% url 'notifications_index' %}">
+
+                        <i class="icon s-4 icon-message-alert"></i>
+
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            {% endif %}
+
         </ul>
     </div>
 
