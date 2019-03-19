@@ -56,18 +56,23 @@
                             <div class="list-group pt-0 pb-0">
 
                                 {% for notification in operator.operator_notifications_json %}
-                                    <a href="{{ notification.notification_url }}"
-                                       class="list-group-item list-group-item-action flex-column align-items-start">
-                                        <p class="mb-1">
-                                            {{ notification.notification_message|safe }}
-                                        </p>
+                                    <div class="list-group-item list-group-item-action flex-column align-items-start">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <small class="text-muted">{{ notification.notification_created_at|timesince }}</small>
-                                            <small class="text-muted">
-                                                Read More
-                                            </small>
+                                            {#                                            <h6>Field Officer</h6>#}
                                         </div>
-                                    </a>
+                                        <a href="{{ notification.notification_url }}" style="text-decoration: unset;">
+                                            <p class="mb-1">
+                                                {{ notification.notification_message|safe }}
+                                            </p>
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <small class="text-muted">{{ notification.notification_created_at|timesince }}</small>
+                                                <small class="text-muted">
+                                                    <a href="{{ notification.notification_url }}" class="text-grey-500">Read
+                                                        More</a>
+                                                </small>
+                                            </div>
+                                        </a>
+                                    </div>
                                     <hr style="height: 2px; color: black; width: 100%">
                                 {% endfor %}
 
@@ -84,7 +89,7 @@
 
                         <a class="dropdown-item fuse-ripple-ready text-center"
                            href="{% url 'notifications_index' %}">
-                            <span class="text-center">View More</span>
+                            <span class="text-center">View all</span>
                         </a>
 
                         {% if  operator.operator_notifications_count != 0 %}

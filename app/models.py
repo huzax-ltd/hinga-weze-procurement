@@ -456,10 +456,14 @@ class Orders(models.Model):
     STATUS_LEVEL2_APPROVED = 'level2-approved'
     STATUS_LEVEL3_APPROVED = 'level3-approved'
     STATUS_LEVEL4_APPROVED = 'level4-approved'
+    STATUS_LEVEL5_APPROVED = 'level5-approved'
+    STATUS_LEVEL6_APPROVED = 'level6-approved'
     STATUS_LEVEL1_REJECTED = 'level1-rejected'
     STATUS_LEVEL2_REJECTED = 'level2-rejected'
     STATUS_LEVEL3_REJECTED = 'level3-rejected'
     STATUS_LEVEL4_REJECTED = 'level4-rejected'
+    STATUS_LEVEL5_REJECTED = 'level5-rejected'
+    STATUS_LEVEL6_REJECTED = 'level6-rejected'
     STATUS_REVIEWED = 'reviewed'
     STATUS_APPROVED = 'approved'
     STATUS_REJECTED = 'rejected'
@@ -484,10 +488,14 @@ class Orders(models.Model):
         (STATUS_LEVEL2_APPROVED.title()).replace('-', ' '),
         (STATUS_LEVEL3_APPROVED.title()).replace('-', ' '),
         (STATUS_LEVEL4_APPROVED.title()).replace('-', ' '),
+        (STATUS_LEVEL5_APPROVED.title()).replace('-', ' '),
+        (STATUS_LEVEL6_APPROVED.title()).replace('-', ' '),
         (STATUS_LEVEL1_REJECTED.title()).replace('-', ' '),
         (STATUS_LEVEL2_REJECTED.title()).replace('-', ' '),
         (STATUS_LEVEL3_REJECTED.title()).replace('-', ' '),
         (STATUS_LEVEL4_REJECTED.title()).replace('-', ' '),
+        (STATUS_LEVEL5_REJECTED.title()).replace('-', ' '),
+        (STATUS_LEVEL6_REJECTED.title()).replace('-', ' '),
         (STATUS_REVIEWED.title()).replace('-', ' '),
         (STATUS_APPROVED.title()).replace('-', ' '),
         (STATUS_REJECTED.title()).replace('-', ' '),
@@ -513,10 +521,14 @@ class Orders(models.Model):
         (STATUS_LEVEL2_APPROVED, (STATUS_LEVEL2_APPROVED.title()).replace('-', ' ')),
         (STATUS_LEVEL3_APPROVED, (STATUS_LEVEL3_APPROVED.title()).replace('-', ' ')),
         (STATUS_LEVEL4_APPROVED, (STATUS_LEVEL4_APPROVED.title()).replace('-', ' ')),
+        (STATUS_LEVEL5_APPROVED, (STATUS_LEVEL5_APPROVED.title()).replace('-', ' ')),
+        (STATUS_LEVEL6_APPROVED, (STATUS_LEVEL6_APPROVED.title()).replace('-', ' ')),
         (STATUS_LEVEL1_REJECTED, (STATUS_LEVEL1_REJECTED.title()).replace('-', ' ')),
         (STATUS_LEVEL2_REJECTED, (STATUS_LEVEL2_REJECTED.title()).replace('-', ' ')),
         (STATUS_LEVEL3_REJECTED, (STATUS_LEVEL3_REJECTED.title()).replace('-', ' ')),
         (STATUS_LEVEL4_REJECTED, (STATUS_LEVEL4_REJECTED.title()).replace('-', ' ')),
+        (STATUS_LEVEL5_REJECTED, (STATUS_LEVEL5_REJECTED.title()).replace('-', ' ')),
+        (STATUS_LEVEL6_REJECTED, (STATUS_LEVEL6_REJECTED.title()).replace('-', ' ')),
         (STATUS_REVIEWED, (STATUS_REVIEWED.title()).replace('-', ' ')),
         (STATUS_APPROVED, (STATUS_APPROVED.title()).replace('-', ' ')),
         (STATUS_REJECTED, (STATUS_REJECTED.title()).replace('-', ' ')),
@@ -587,6 +599,16 @@ class Orders(models.Model):
     order_requested_department = models.CharField('Requested Department', max_length=255, blank=True)
     order_requested_role = models.CharField('Requested Role', max_length=255, blank=True)
     order_approval_no_of_levels = models.IntegerField('Approval Levels', blank=False, default=0)
+    # order_level_approved_at = models.DateTimeField('Level Approved At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    # order_level_approved_id = models.CharField('Level Approved ID', max_length=100, blank=True)
+    # order_level_approved_by = models.CharField('Level Approved By', max_length=100, blank=True)
+    # order_level_approved_department = models.CharField('Level Approved Department', max_length=255, blank=True)
+    # order_level_approved_role = models.CharField('Level Approved Role', max_length=255, blank=True)
+    # order_level_rejected_at = models.DateTimeField('Level Rejected At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    # order_level_rejected_id = models.CharField('Level Rejected ID', max_length=100, blank=True)
+    # order_level_rejected_by = models.CharField('Level Rejected By', max_length=100, blank=True)
+    # order_level_rejected_department = models.CharField('Level Rejected Department', max_length=255, blank=True)
+    # order_level_rejected_role = models.CharField('Level Rejected Role', max_length=255, blank=True)
     order_reviewed_at = models.DateTimeField('Reviewed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_reviewed_id = models.CharField('Reviewed ID', max_length=100, blank=True)
     order_reviewed_by = models.CharField('Reviewed By', max_length=100, blank=True)
@@ -671,6 +693,10 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_LEVEL3_APPROVED
         elif record.order_status == Orders.STATUS_LEVEL4_APPROVED:
             value = Utils.HTML_TAG_ORDER_STATUS_LEVEL4_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL5_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL5_APPROVED
+        elif record.order_status == Orders.STATUS_LEVEL6_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL6_APPROVED
         elif record.order_status == Orders.STATUS_LEVEL1_REJECTED:
             value = Utils.HTML_TAG_ORDER_STATUS_LEVEL1_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL2_REJECTED:
@@ -679,6 +705,10 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_LEVEL3_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL4_REJECTED:
             value = Utils.HTML_TAG_ORDER_STATUS_LEVEL4_REJECTED
+        elif record.order_status == Orders.STATUS_LEVEL5_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL5_REJECTED
+        elif record.order_status == Orders.STATUS_LEVEL6_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL6_REJECTED
         elif record.order_status == Orders.STATUS_REVIEWED:
             value = Utils.HTML_TAG_ORDER_STATUS_REVIEWED
         elif record.order_status == Orders.STATUS_APPROVED:
@@ -908,48 +938,118 @@ class Orders(models.Model):
         return True
 
     @classmethod
-    def request_order(cls, request, model, operator):
-        model.order_requested_at = Utils.get_current_datetime_utc()
-        model.order_requested_id = operator.operator_id
-        model.order_requested_by = operator.operator_name
-        model.order_requested_department = operator.operator_department
-        model.order_requested_role = operator.operator_role
-        model.order_status = Orders.STATUS_REQUESTED
-        model.save()
+    def add_order_approval(cls, request, type, model, operator, parent_operator, add_approval):
 
-        if operator.operator_parent_id != 0:
-            model.order_approval_no_of_levels = 1
+        if add_approval:
+            if type == 'request':
+                model.order_approval_no_of_levels = 1
+                model.save()
+            if type == 'approve':
+                model.order_approval_no_of_levels = model.order_approval_no_of_levels + 1
+                model.save()
+
+            order_approval = Order_Approvals()
+            order_approval.orders_order_id = model.order_id
+            order_approval.order_approval_level = model.order_approval_no_of_levels
+            order_approval.order_approval_created_at = Utils.get_current_datetime_utc()
+            order_approval.order_approval_created_id = operator.operator_id
+            order_approval.order_approval_created_by = operator.operator_name
+            order_approval.order_approval_created_department = operator.operator_department
+            order_approval.order_approval_created_role = operator.operator_role
+            order_approval.order_approval_updated_at = Utils.get_current_datetime_utc()
+            order_approval.order_approval_updated_id = parent_operator.operator_id
+            order_approval.order_approval_updated_by = parent_operator.operator_name
+            order_approval.order_approval_updated_department = parent_operator.operator_department
+            order_approval.order_approval_updated_role = parent_operator.operator_role
+            order_approval.order_approval_status = Order_Approvals.STATUS_PENDING
+            order_approval.save()
+
+        Notifications.add_notification(
+            Notifications.TYPE_OPERATOR,
+            operator.operator_id,
+            Notifications.TYPE_OPERATOR,
+            parent_operator.operator_id,
+            Notifications.TYPE_ORDER,
+            model.order_id,
+            "Created a purchase request to review.",
+            "/backend/orders/view/" + str(model.order_id) + "/"
+        )
+
+    @classmethod
+    def request_or_level_approval_order(cls, request, type, model, operator):
+
+        if type == 'request':
+            model.order_requested_at = Utils.get_current_datetime_utc()
+            model.order_requested_id = operator.operator_id
+            model.order_requested_by = operator.operator_name
+            model.order_requested_department = operator.operator_department
+            model.order_requested_role = operator.operator_role
+            model.order_status = Orders.STATUS_REQUESTED
             model.save()
 
-            # order_approval = Order_Approvals()
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-            # order_approval.orders_order_id = model.order_id
-
-            # order_approval.order_requested_at = Utils.get_current_datetime_utc()
-            # model.order_requested_id = operator.operator_id
-            # model.order_requested_by = operator.operator_name
-            # model.order_requested_department = operator.operator_department
-            # model.order_requested_role = operator.operator_role
-            # model.order_status = Orders.STATUS_REQUESTED
-            # model.save()
-
-            Notifications.add_notification(
-                Notifications.TYPE_OPERATOR,
-                operator.operator_id,
-                Notifications.TYPE_OPERATOR,
-                operator.operator_parent_id,
-                Notifications.TYPE_ORDER,
-                model.order_id,
-                "Created a purchase request to review.",
-                "/backend/orders/view/" + str(model.order_id) + "/"
+        if type == 'approve' or type == 'reject':
+            order_approvals = Order_Approvals.objects.filter(
+                Q(orders_order_id=model.order_id) &
+                Q(order_approval_updated_id=operator.operator_id) &
+                Q(order_approval_status=Order_Approvals.STATUS_PENDING)
             )
+
+            if order_approvals.count() == 1:
+                for order_approval in order_approvals:
+                    level = order_approval.order_approval_level
+                    order_approval.order_approval_updated_at = Utils.get_current_datetime_utc()
+                    if type == 'approve':
+                        order_approval.order_approval_status = Order_Approvals.STATUS_APPROVED
+                    if type == 'reject':
+                        order_approval.order_approval_status = Order_Approvals.STATUS_REJECTED
+                    order_approval.save()
+                    if type == 'approve':
+                        if level == 1:
+                            model.order_status = Orders.STATUS_LEVEL1_APPROVED
+                        if level == 2:
+                            model.order_status = Orders.STATUS_LEVEL2_APPROVED
+                        if level == 3:
+                            model.order_status = Orders.STATUS_LEVEL3_APPROVED
+                        if level == 4:
+                            model.order_status = Orders.STATUS_LEVEL4_APPROVED
+                        model.save()
+                        Notifications.add_notification(
+                            Notifications.TYPE_OPERATOR,
+                            order_approval.order_approval_updated_id,
+                            Notifications.TYPE_OPERATOR,
+                            order_approval.order_approval_created_id,
+                            Notifications.TYPE_ORDER,
+                            model.order_id,
+                            "Approved your purchase request at level " + str(level) + ".",
+                            "/backend/orders/view/" + str(model.order_id) + "/"
+                        )
+                    if type == 'reject':
+                        if level == 1:
+                            model.order_status = Orders.STATUS_LEVEL1_REJECTED
+                        if level == 2:
+                            model.order_status = Orders.STATUS_LEVEL2_REJECTED
+                        if level == 3:
+                            model.order_status = Orders.STATUS_LEVEL3_REJECTED
+                        if level == 4:
+                            model.order_status = Orders.STATUS_LEVEL4_REJECTED
+                        model.save()
+                        Notifications.add_notification(
+                            Notifications.TYPE_OPERATOR,
+                            order_approval.order_approval_updated_id,
+                            Notifications.TYPE_OPERATOR,
+                            order_approval.order_approval_created_id,
+                            Notifications.TYPE_ORDER,
+                            model.order_id,
+                            "Rejected your purchase request at level " + str(level) + ".",
+                            "/backend/orders/view/" + str(model.order_id) + "/"
+                        )
+
+        parent_operator = None
+        if operator.operator_parent_id != 0:
+            parent_operator = Operators.objects.get(operator_id=operator.operator_parent_id)
+
+        if parent_operator is not None and (type == 'request' or type == 'approve'):
+            Orders.add_order_approval(request, type, model, operator, parent_operator, False)
         else:
             operators = None
             if operator.operator_type == Operators.TYPE_SUPER_ADMIN or operator.operator_type == Operators.TYPE_ADMIN:
@@ -1024,19 +1124,23 @@ class Orders(models.Model):
                 operators = Operators.objects.all().filter(operator_type=Operators.TYPE_ADMIN)
 
             for item in operators:
-                Notifications.add_notification(
-                    Notifications.TYPE_OPERATOR,
-                    operator.operator_id,
-                    Notifications.TYPE_OPERATOR,
-                    item.operator_id,
-                    Notifications.TYPE_ORDER,
-                    model.order_id,
-                    "An order has been requested by <a href='/backend/operators/view/profile/" + str(
-                        operator.operator_id) + "/' style='text-decoration:underline; color:#1B82DC;'>" + str(
-                        operator.operator_name) + "</a>.",
-                    "/backend/orders/view/" + str(model.order_id) + "/"
-                )
+                add_approval = False
+                if model.order_status != Orders.STATUS_LEVEL0_APPROVED:
+                    add_approval = True
+                Orders.add_order_approval(request, type, model, operator, item, add_approval)
+
         return True
+
+    @classmethod
+    def level_approval_order(cls, request, model, operator):
+
+        model.order_requested_at = Utils.get_current_datetime_utc()
+        model.order_requested_id = operator.operator_id
+        model.order_requested_by = operator.operator_name
+        model.order_requested_department = operator.operator_department
+        model.order_requested_role = operator.operator_role
+        model.order_status = Orders.STATUS_REQUESTED
+        model.save()
 
     @classmethod
     def delete_order(cls, request, model, operator):
@@ -1084,17 +1188,18 @@ class Order_Approvals(models.Model):
     SINGULAR_TITLE = settings.MODEL_ORDER_APPROVALS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
-    STATUS_NONE = 'none'
+    STATUS_PENDING = 'pending'
     STATUS_APPROVED = 'approved'
     STATUS_REJECTED = 'rejected'
 
     ARRAY_STATUSES = [
-        (STATUS_NONE.title()).replace('-', ' '),
+        (STATUS_PENDING.title()).replace('-', ' '),
         (STATUS_APPROVED.title()).replace('-', ' '),
         (STATUS_REJECTED.title()).replace('-', ' '),
     ]
     DROPDOWN_STATUSES = (
         ('', '--select--'),
+        (STATUS_PENDING, (STATUS_PENDING.title()).replace('-', ' ')),
         (STATUS_APPROVED, (STATUS_APPROVED.title()).replace('-', ' ')),
         (STATUS_REJECTED, (STATUS_REJECTED.title()).replace('-', ' ')),
     )
@@ -1113,7 +1218,7 @@ class Order_Approvals(models.Model):
     order_approval_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
     order_approval_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
     order_approval_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
-                                             default=STATUS_NONE)
+                                             default=STATUS_PENDING)
 
     def __unicode__(self):
         return self.order_id
@@ -1432,6 +1537,8 @@ class Notifications(models.Model):
     HTML_TAG_STATUS_UNREAD_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
     HTML_TAG_STATUS_READ_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unresolved <b></div>'
     HTML_TAG_STATUS_FIXED_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_ACTIVE_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Fixed <b></div>'
+
+    notification_from_by = ''
 
     notification_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     notification_from_type = models.CharField('Type', max_length=20, blank=False, choices=DROPDOWN_TYPES,
