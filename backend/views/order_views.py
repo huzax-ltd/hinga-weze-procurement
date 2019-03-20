@@ -533,130 +533,130 @@ def view(request, pk):
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
         if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
-            try:
-                model = Orders.objects.get(order_id=pk)
-                model.order_created_at = Utils.get_convert_datetime(model.order_created_at,
-                                                                    settings.TIME_ZONE,
-                                                                    settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                model.order_updated_at = Utils.get_convert_datetime(model.order_updated_at,
-                                                                    settings.TIME_ZONE,
-                                                                    settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+            # try:
+            model = Orders.objects.get(order_id=pk)
+            model.order_created_at = Utils.get_convert_datetime(model.order_created_at,
+                                                                settings.TIME_ZONE,
+                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+            model.order_updated_at = Utils.get_convert_datetime(model.order_updated_at,
+                                                                settings.TIME_ZONE,
+                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
 
-                order_items = Order_Items.objects.filter(orders_order_id=pk).all()
+            order_items = Order_Items.objects.filter(orders_order_id=pk).all()
 
-                if model.order_created_id == str(operator.operator_id) and model.order_status == Orders.STATUS_PENDING:
-                    template_url = 'orders/view-edit.html'
+            if model.order_created_id == str(operator.operator_id) and model.order_status == Orders.STATUS_PENDING:
+                template_url = 'orders/view-edit.html'
 
-                display_level_approval = False
-                if operator.operator_role != Operators.ROLE_OPM:
-                    order_approvals = Order_Approvals.objects.filter(
-                        Q(orders_order_id=model.order_id) &
-                        Q(order_approval_updated_id=operator.operator_id) &
-                        Q(order_approval_status=Order_Approvals.STATUS_PENDING)
-                    )
-                    if order_approvals.count() == 1:
-                        display_level_approval = True
-
-                timeline_notifications = []
-                counter = -1
-                if model.order_requested_at != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = 'Requested <small>by ' + model.order_requested_role + '</small>'
-                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_requested_at,
-                                                                                settings.TIME_ZONE,
-                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_approval_no_of_levels != 0:
-                    order_approvals = Order_Approvals.objects.filter(orders_order_id=model.order_id).order_by(
-                        'order_approval_level')
-                    for order_approval in order_approvals:
-                        message = ''
-                        if order_approval.order_approval_status == Order_Approvals.STATUS_APPROVED:
-                            message = 'Level Approved <small>by ' + order_approval.order_approval_updated_role + '</small>'
-                        if order_approval.order_approval_status == Order_Approvals.STATUS_REJECTED:
-                            message = 'Level Rejected <small>by ' + order_approval.order_approval_updated_role + '</small>'
-
-                        if message != '':
-                            notification_timeline = NotificationsTimeline()
-                            notification_timeline.message = message
-                            notification_timeline.datetime = Utils.get_convert_datetime(
-                                order_approval.order_approval_updated_at,
-                                settings.TIME_ZONE,
-                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                            timeline_notifications.append(notification_timeline)
-
-                if model.order_procurement_method_updated_at != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = 'Added procurement method<small>by ' + model.order_procurement_method_updated_role + '</small>'
-                    notification_timeline.datetime = Utils.get_convert_datetime(
-                        model.order_procurement_method_updated_at,
-                        settings.TIME_ZONE,
-                        settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_reviewed_at != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = 'Reviewed <small>by DAF</small>'
-                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_reviewed_at,
-                                                                                settings.TIME_ZONE,
-                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_approved_at != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = 'Approved <small>by ' + model.order_approved_role + '</small>'
-                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_approved_at,
-                                                                                settings.TIME_ZONE,
-                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_at == settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = "<p class='text-red'>Procurement Method pending from OPM</p>"
-                    notification_timeline.datetime = ''
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_at != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = "<p class='text-red'>Review pending from DAF</p>"
-                    notification_timeline.datetime = ''
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_status == Orders.STATUS_REVIEWED:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = "<p class='text-red'>Approval pending from COP</p>"
-                    notification_timeline.datetime = ''
-                    timeline_notifications.append(notification_timeline)
-
-                if model.order_status == Orders.STATUS_APPROVED:
-                    notification_timeline = NotificationsTimeline()
-                    notification_timeline.message = "<p class='text-red'>Assign pending from OPM</p>"
-                    notification_timeline.datetime = ''
-                    timeline_notifications.append(notification_timeline)
-
-                return render(
-                    request, template_url,
-                    {
-                        'section': settings.BACKEND_SECTION_ORDERS,
-                        'title': Orders.TITLE,
-                        'name': Orders.NAME,
-                        'operator': operator,
-                        'auth_permissions': auth_permissions,
-                        'model': model,
-                        'index_url': reverse("orders_index"),
-                        'select_single_url': reverse("orders_select_single"),
-                        'order_items': order_items,
-                        'order_items_size': order_items,
-                        'item_index_url': reverse("orders_view", kwargs={'pk': pk}),
-                        'item_select_single_url': reverse("order_items_select_single"),
-                        'status_html_tag': Orders.get_status_html_tag(model),
-                        'display_level_approval': display_level_approval,
-                        'timeline_notifications': timeline_notifications,
-                    }
+            display_level_approval = False
+            if operator.operator_role != Operators.ROLE_OPM:
+                order_approvals = Order_Approvals.objects.filter(
+                    Q(orders_order_id=model.order_id) &
+                    Q(order_approval_updated_id=operator.operator_id) &
+                    Q(order_approval_status=Order_Approvals.STATUS_PENDING)
                 )
-            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
-                return HttpResponseNotFound('Not Found', content_type='text/plain')
+                if order_approvals.count() == 1:
+                    display_level_approval = True
+
+            timeline_notifications = []
+            counter = -1
+            if model.order_requested_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Requested <small>by ' + model.order_requested_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_requested_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_approval_no_of_levels != 0:
+                order_approvals = Order_Approvals.objects.filter(orders_order_id=model.order_id).order_by(
+                    'order_approval_level')
+                for order_approval in order_approvals:
+                    message = ''
+                    if order_approval.order_approval_status == Order_Approvals.STATUS_APPROVED:
+                        message = 'Level Approved <small>by ' + order_approval.order_approval_updated_role + '</small>'
+                    if order_approval.order_approval_status == Order_Approvals.STATUS_REJECTED:
+                        message = 'Level Rejected <small>by ' + order_approval.order_approval_updated_role + '</small>'
+
+                    if message != '':
+                        notification_timeline = NotificationsTimeline()
+                        notification_timeline.message = message
+                        notification_timeline.datetime = Utils.get_convert_datetime(
+                            order_approval.order_approval_updated_at,
+                            settings.TIME_ZONE,
+                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                        timeline_notifications.append(notification_timeline)
+
+            if model.order_procurement_method_updated_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Added procurement method<small>by ' + model.order_procurement_method_updated_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(
+                    model.order_procurement_method_updated_at,
+                    settings.TIME_ZONE,
+                    settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_reviewed_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Reviewed <small>by DAF</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_reviewed_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_approved_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Approved <small>by ' + model.order_approved_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_approved_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_id == '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = "<p class='text-red'>Procurement Method pending from OPM</p>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = "<p class='text-red'>Review pending from DAF</p>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_REVIEWED:
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = "<p class='text-red'>Approval pending from COP</p>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_APPROVED:
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = "<p class='text-red'>Assign pending from OPM</p>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'title': Orders.TITLE,
+                    'name': Orders.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'model': model,
+                    'index_url': reverse("orders_index"),
+                    'select_single_url': reverse("orders_select_single"),
+                    'order_items': order_items,
+                    'order_items_size': order_items,
+                    'item_index_url': reverse("orders_view", kwargs={'pk': pk}),
+                    'item_select_single_url': reverse("order_items_select_single"),
+                    'status_html_tag': Orders.get_status_html_tag(model),
+                    'display_level_approval': display_level_approval,
+                    'timeline_notifications': timeline_notifications,
+                }
+            )
+        # except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+        #     return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
 

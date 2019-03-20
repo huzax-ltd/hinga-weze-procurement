@@ -27,7 +27,7 @@ SECRET_KEY = 'usv1c&3$zu#6y0$s@*3c(c-+hc3afa2c#cn!o9qvzf(+0#!jcx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-IS_LOCAL = True
+IS_LOCAL = False
 
 if IS_LOCAL:
     ALLOWED_HOSTS = ['*']
@@ -207,7 +207,7 @@ LANGUAGE_CODE = 'en-us'
 # Datetime
 USE_TZ = True
 TIME_ZONE = 'UTC'
-APP_CONSTANT_DISPLAY_TIME_ZONE = 'Africa/Kigali'
+APP_CONSTANT_DISPLAY_TIME_ZONE = 'Africa/Kigali'  # 'Africa/Kigali'
 APP_CONSTANT_DISPLAY_TIME_ZONE_INFO = '(CAT)'
 APP_CONSTANT_DISPLAY_DATE_FORMAT = '%a, %d %b %Y'
 APP_CONSTANT_DISPLAY_TIME_FORMAT = '%H:%M:%S'
