@@ -224,14 +224,14 @@
             $("#modal").on("hidden.bs.modal", function () {
                 // location.reload();
             });
-            var url = "{% url 'order_item_create' order_id='P1' %}";
+            var url = "{% url 'order_items_create' order_id='P1' %}";
             url = url.replace("P1", "{{ model.order_id }}");
             $("#btn-add-order-item").modalForm({
                 formURL: url
             });
 
             {% for order_item in order_items %}
-                url = "{% url 'order_item_update' pk='P1' %}";
+                url = "{% url 'order_items_update' pk='P1' %}";
                 url = url.replace("P1", "{{ order_item.order_item_id }}");
                 $("#btn-edit-order-item-{{ order_item.order_item_id }}").modalForm({
                     formURL: url

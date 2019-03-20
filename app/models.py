@@ -1030,7 +1030,8 @@ class Orders(models.Model):
 
                         level_order_approvals = Order_Approvals.objects.filter(
                             Q(orders_order_id=model.order_id)
-                        ).exclude(Q(order_approval_status=Order_Approvals.STATUS_FIXED))
+                        )
+                        # .exclude(Q(order_approval_status=Order_Approvals.STATUS_FIXED))
                         for level_order_approval in level_order_approvals:
                             Notifications.add_notification(
                                 Notifications.TYPE_OPERATOR,
@@ -1056,7 +1057,8 @@ class Orders(models.Model):
 
                         level_order_approvals = Order_Approvals.objects.filter(
                             Q(orders_order_id=model.order_id)
-                        ).exclude(Q(order_approval_status=Order_Approvals.STATUS_FIXED))
+                        )
+                        # .exclude(Q(order_approval_status=Order_Approvals.STATUS_FIXED))
                         for level_order_approval in level_order_approvals:
                             Notifications.add_notification(
                                 Notifications.TYPE_OPERATOR,
@@ -1642,6 +1644,14 @@ class Backups(models.Model):
     backup_file_size = models.CharField('Size', max_length=100, blank=False)
     backup_file_created_at = models.DateTimeField('Created at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     backup_file_updated_at = models.DateTimeField('Updated at', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+
+    class Meta:
+        managed = False  # disable migration for this mode
+
+
+class NotificationsTimeline(models.Model):
+    message = models.CharField('Message', max_length=255, blank=True)
+    datetime = models.DateTimeField('Time', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
 
     class Meta:
         managed = False  # disable migration for this mode

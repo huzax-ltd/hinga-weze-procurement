@@ -11,6 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hinga_weze_procurement.settings")
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hinga-weze-procurement.settings")
+from app import settings
+
+if settings.IS_LOCAL:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hinga-weze-procurement.settings")
+else:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hinga_weze_procurement.settings")
+
 application = get_wsgi_application()

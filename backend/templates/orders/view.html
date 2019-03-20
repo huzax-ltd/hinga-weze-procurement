@@ -197,7 +197,18 @@
                                         <td colspan="12" style="font-weight: bold;">Special Considerations</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="12">{{ model.order_special_considerations }}</td>
+                                        <td colspan="12">{{ model.order_special_considerations }}
+                                            {#                                            {{ timeline_notification_messages.0 }}#}
+                                            {#                                            {% for item in timeline_notification_messages %}#}
+                                            {#                                                timeline_notification_messages.0#}
+                                            {#events.push(#}
+                                            {#    {#}
+                                            {#        date: timeline_notification.datetime,#}
+                                            {#        content: timeline_notification.message#}
+                                            {#    }#}
+                                            {#);#}
+                                            {#                                            {% endfor %}#}
+                                        </td>
                                     </tr>
                                     </thead>
                                 </table>
@@ -225,72 +236,15 @@
                 formURL: url
             });
 
-            var events = [
-                {
-                    date: 'Q1 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2018',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q1 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small><small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2019',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q1 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2020',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q1 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q2 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q3 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                },
-                {
-                    date: 'Q4 - 2021',
-                    content: 'Lorem ipsum dolor sit amet<small>Consectetur adipisicing elit</small>'
-                }
-            ];
+            var events = [];
+            {% for timeline_notification in timeline_notifications %}
+                events.push(
+                    {
+                        date: "{{ timeline_notification.datetime }}",
+                        content: "{{  timeline_notification.message|safe }}"
+                    }
+                );
+            {% endfor %}
 
             $('#order-timeline').roadmap(events, {
                 eventsPerSlide: 6,
