@@ -91,7 +91,7 @@ class NotificationsTable(tables.Table):
             return '-'
         else:
             return mark_safe(
-                '<a href=\'/backend/operators/view/' + str(
+                '<a href=\'/backend/operators/view/profile/' + str(
                     record.notification_from_id) + '\' style=\'text-decoration:underline; color:#1B82DC;\' >' + str(
                     operator.operator_name) + '</a></p>')
 
@@ -141,4 +141,4 @@ class NotificationsTable(tables.Table):
             'notification_created_at',
             'notification_status',
         )
-        template_name = '_include/bootstrap-datatable-no-action.html'
+        template_name = '_include/bootstrap-datatable-no-checkbox-action.html'

@@ -449,6 +449,19 @@ class Orders(models.Model):
         (CURRENCY_RWF, CURRENCY_RWF),
     )
 
+    PROCUREMENT_METHOD_SINGLE_SOURCING = 'Single Sourcing'
+    PROCUREMENT_METHOD_OPEN_TENDER = 'Open Tender'
+
+    ARRAY_PROCUREMENT_METHODS = [
+        PROCUREMENT_METHOD_SINGLE_SOURCING,
+        PROCUREMENT_METHOD_OPEN_TENDER,
+    ]
+    DROPDOWN_PROCUREMENT_METHODS = (
+        ('', '--select--'),
+        (PROCUREMENT_METHOD_SINGLE_SOURCING, PROCUREMENT_METHOD_SINGLE_SOURCING),
+        (PROCUREMENT_METHOD_OPEN_TENDER, PROCUREMENT_METHOD_OPEN_TENDER),
+    )
+
     STATUS_PENDING = 'pending'
     STATUS_REQUESTED = 'requested'
     STATUS_LEVEL0_APPROVED = 'level0-approved'
@@ -562,7 +575,8 @@ class Orders(models.Model):
                                                     default=settings.APP_CONSTANT_DEFAULT_DATE)
     order_anticipated_end_date = models.DateField('Anticipated End Date', default=settings.APP_CONSTANT_DEFAULT_DATE)
     order_special_considerations = models.CharField('Special Considerations', max_length=255, blank=True)
-    order_procurement_method = models.CharField('Procurement Method', max_length=100, blank=True)
+    order_procurement_method = models.CharField('Procurement Method', max_length=255, blank=False,
+                                                choices=DROPDOWN_PROCUREMENT_METHODS, default='')
     order_procurement_method_updated_at = models.DateTimeField('Procurement Method Updated At',
                                                                default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_procurement_method_updated_id = models.CharField('Procurement Method Updated ID', max_length=100, blank=True)
@@ -1013,16 +1027,22 @@ class Orders(models.Model):
                         if level == 4:
                             model.order_status = Orders.STATUS_LEVEL4_APPROVED
                         model.save()
-                        Notifications.add_notification(
-                            Notifications.TYPE_OPERATOR,
-                            order_approval.order_approval_updated_id,
-                            Notifications.TYPE_OPERATOR,
-                            order_approval.order_approval_created_id,
-                            Notifications.TYPE_ORDER,
-                            model.order_id,
-                            "Approved your purchase request at level " + str(level) + ".",
-                            "/backend/orders/view/" + str(model.order_id) + "/"
-                        )
+
+                        level_order_approvals = Order_Approvals.objects.filter(
+                            Q(orders_order_id=model.order_id)
+                        ).exclude(Q(order_approval_status=Order_Approvals.STATUS_FIXED))
+                        for level_order_approval in level_order_approvals:
+                            Notifications.add_notification(
+                                Notifications.TYPE_OPERATOR,
+                                level_order_approval.order_approval_updated_id,
+                                Notifications.TYPE_OPERATOR,
+                                level_order_approval.order_approval_created_id,
+                                Notifications.TYPE_ORDER,
+                                model.order_id,
+                                "Approved your purchase request at level " + str(level) + ".",
+                                "/backend/orders/view/" + str(model.order_id) + "/"
+                            )
+
                     if type == 'reject':
                         if level == 1:
                             model.order_status = Orders.STATUS_LEVEL1_REJECTED
@@ -1033,23 +1053,28 @@ class Orders(models.Model):
                         if level == 4:
                             model.order_status = Orders.STATUS_LEVEL4_REJECTED
                         model.save()
-                        Notifications.add_notification(
-                            Notifications.TYPE_OPERATOR,
-                            order_approval.order_approval_updated_id,
-                            Notifications.TYPE_OPERATOR,
-                            order_approval.order_approval_created_id,
-                            Notifications.TYPE_ORDER,
-                            model.order_id,
-                            "Rejected your purchase request at level " + str(level) + ".",
-                            "/backend/orders/view/" + str(model.order_id) + "/"
-                        )
+
+                        level_order_approvals = Order_Approvals.objects.filter(
+                            Q(orders_order_id=model.order_id)
+                        ).exclude(Q(order_approval_status=Order_Approvals.STATUS_FIXED))
+                        for level_order_approval in level_order_approvals:
+                            Notifications.add_notification(
+                                Notifications.TYPE_OPERATOR,
+                                level_order_approval.order_approval_updated_id,
+                                Notifications.TYPE_OPERATOR,
+                                level_order_approval.order_approval_created_id,
+                                Notifications.TYPE_ORDER,
+                                model.order_id,
+                                "Rejected your purchase request at level " + str(level) + ".",
+                                "/backend/orders/view/" + str(model.order_id) + "/"
+                            )
 
         parent_operator = None
         if operator.operator_parent_id != 0:
             parent_operator = Operators.objects.get(operator_id=operator.operator_parent_id)
 
         if parent_operator is not None and (type == 'request' or type == 'approve'):
-            Orders.add_order_approval(request, type, model, operator, parent_operator, False)
+            Orders.add_order_approval(request, type, model, operator, parent_operator, True)
         else:
             operators = None
             if operator.operator_type == Operators.TYPE_SUPER_ADMIN or operator.operator_type == Operators.TYPE_ADMIN:
@@ -1124,9 +1149,9 @@ class Orders(models.Model):
                 operators = Operators.objects.all().filter(operator_type=Operators.TYPE_ADMIN)
 
             for item in operators:
-                add_approval = False
+                add_approval = True
                 if model.order_status != Orders.STATUS_LEVEL0_APPROVED:
-                    add_approval = True
+                    add_approval = False
                 Orders.add_order_approval(request, type, model, operator, item, add_approval)
 
         return True

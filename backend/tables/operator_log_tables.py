@@ -14,15 +14,33 @@ from app.utils import Utils
 class OperatorLogsTable(tables.Table):
     auth_permissions = {}
 
-    row_number = tables.Column(
-        verbose_name='Id',
+    row_check = tables.Column(
+        verbose_name='',
         attrs={
             'search_filter': '',
-            'th_style': 'width:60px;',
+            'th_style': 'width:30px;',
         },
         orderable=False,
         empty_values=(),
-        accessor='pk',
+    )
+    row_number = tables.Column(
+        verbose_name='No.',
+        attrs={
+            'search_filter': '',
+            'th_style': 'width:30px;',
+        },
+        orderable=False,
+        empty_values=(),
+    )
+    row_id = tables.Column(
+        verbose_name='Id',
+        attrs={
+            'search_filter': '',
+            'th_style': 'width:0px;',
+        },
+        orderable=False,
+        empty_values=(),
+        visible=True,
     )
     operator_log_id = tables.Column(
         verbose_name='Id',
@@ -66,9 +84,15 @@ class OperatorLogsTable(tables.Table):
     def set_auth_permissions(self, auth_permissions):
         self.auth_permissions = auth_permissions
 
+    @staticmethod
+    def render_row_check(record):
+        return ''
+
     def render_row_number(self, record):
-        value = '<a href=' + str(record.pk) + '>' + '%d' % next(self.counter) + '</a>'
-        return value
+        return next(self.counter)
+
+    def render_row_id(self, record):
+        return str(record.pk)
 
     def render_actions(self, record):
         action_data = ""
@@ -111,7 +135,9 @@ class OperatorLogsTable(tables.Table):
             'width': '100%',
         }
         sequence = (
+            'row_check',
             'row_number',
+            'row_id',
             'operator_log_id',
             'operators_operator_username',
             'operator_log_message',

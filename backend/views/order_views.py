@@ -1,15 +1,18 @@
 from django.contrib import messages
 from django.core import serializers
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Orders, Order_Items
+from app.models import Operators, Orders, Order_Items, Order_Approvals, Notifications
 from app.utils import Utils
-from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm
+from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm
+from backend.forms.order_item_forms import OrderItemSearchIndexForm
+from backend.tables.order_item_tables import OrderItemsTable
 from backend.tables.order_tables import OrdersTable
 
 
@@ -101,11 +104,8 @@ def select_single(request):
                     if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
                         try:
                             model = Orders.objects.get(order_id=id)
-                            if model.order_created_id == str(operator.operator_id):
-                                Orders.request_or_level_approval_order(request, 'approve', model, operator)
-                                messages.success(request, 'Order approved successfully.')
-                            else:
-                                messages.success(request, 'Forbidden')
+                            Orders.request_or_level_approval_order(request, 'approve', model, operator)
+                            messages.success(request, 'Order approved successfully.')
                         except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -114,11 +114,118 @@ def select_single(request):
                     if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
                         try:
                             model = Orders.objects.get(order_id=id)
-                            if model.order_created_id == str(operator.operator_id):
-                                Orders.request_or_level_approval_order(request, 'reject', model, operator)
-                                messages.success(request, 'Order rejected successfully.')
-                            else:
-                                messages.success(request, 'Forbidden')
+                            Orders.request_or_level_approval_order(request, 'reject', model, operator)
+                            messages.success(request, 'Order rejected successfully.')
+                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-review':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_reviewed_at = Utils.get_current_datetime_utc()
+                            model.order_reviewed_id = operator.operator_id
+                            model.order_reviewed_by = operator.operator_name
+                            model.order_reviewed_department = operator.operator_department
+                            model.order_reviewed_role = operator.operator_role
+                            model.order_status = Orders.STATUS_REVIEWED
+                            model.save()
+
+                            # sending notification to COP
+                            operators = Operators.objects.filter(operator_role=Operators.ROLE_COP)
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "A purchase request has been sent for approval.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Order reviewed successfully.')
+                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-approve':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_approved_at = Utils.get_current_datetime_utc()
+                            model.order_approved_id = operator.operator_id
+                            model.order_approved_by = operator.operator_name
+                            model.order_approved_department = operator.operator_department
+                            model.order_approved_role = operator.operator_role
+                            model.order_status = Orders.STATUS_APPROVED
+                            model.save()
+
+                            # sending notification to all
+                            order_approvals = Order_Approvals.objects.filter(orders_order_id=model.order_id)
+                            for item in order_approvals:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.order_approval_created_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Your purchase order request has been approved by COP.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            # sending notification to OPM
+                            operators = Operators.objects.filter(operator_role=Operators.ROLE_OPM)
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "A purchase request has been sent by COP to process ahead.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Order approved successfully.')
+                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-reject':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_approved_at = Utils.get_current_datetime_utc()
+                            model.order_approved_id = operator.operator_id
+                            model.order_approved_by = operator.operator_name
+                            model.order_approved_department = operator.operator_department
+                            model.order_approved_role = operator.operator_role
+                            model.order_status = Orders.STATUS_REJECTED
+                            model.save()
+
+                            # sending notification to all
+                            order_approvals = Order_Approvals.objects.filter(orders_order_id=model.order_id)
+                            for item in order_approvals:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.order_approval_created_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Your purchase order request has been rejeted by COP.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Order rejected successfully.')
                         except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -437,8 +544,18 @@ def view(request, pk):
 
                 order_items = Order_Items.objects.filter(orders_order_id=pk).all()
 
-                if model.order_created_id == Operators.operator_id and model.order_status == Orders.STATUS_PENDING:
+                if model.order_created_id == str(operator.operator_id) and model.order_status == Orders.STATUS_PENDING:
                     template_url = 'orders/view-edit.html'
+
+                display_level_approval = False
+                if operator.operator_role != Operators.ROLE_OPM:
+                    order_approvals = Order_Approvals.objects.filter(
+                        Q(orders_order_id=model.order_id) &
+                        Q(order_approval_updated_id=operator.operator_id) &
+                        Q(order_approval_status=Order_Approvals.STATUS_PENDING)
+                    )
+                    if order_approvals.count() == 1:
+                        display_level_approval = True
 
                 return render(
                     request, template_url,
@@ -454,10 +571,134 @@ def view(request, pk):
                         'order_items': order_items,
                         'order_items_size': order_items,
                         'item_index_url': reverse("orders_view", kwargs={'pk': pk}),
-                        'item_select_single_url': reverse("order_item_select_single"),
-                        'status_html_tag': Orders.get_status_html_tag(model)
+                        'item_select_single_url': reverse("order_items_select_single"),
+                        'status_html_tag': Orders.get_status_html_tag(model),
+                        'display_level_approval': display_level_approval,
                     }
                 )
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update_procurement_method(request, pk):
+    template_url = 'orders/update-procurement-method.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values() and operator.operator_role == Operators.ROLE_OPM:
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
+
+                    form = OrderProcurementForm(request.POST)
+
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        model.order_procurement_method = form.cleaned_data['procurement_method']
+                        model.order_procurement_method_updated_at = Utils.get_current_datetime_utc()
+                        model.order_procurement_method_updated_id = operator.operator_id
+                        model.order_procurement_method_updated_by = operator.operator_name
+                        model.order_procurement_method_updated_department = operator.operator_department
+                        model.order_procurement_method_updated_role = operator.operator_role
+                        model.save()
+
+                        # sending notification to Director of DFA
+                        operators = Operators.objects.all().filter(
+                            Q(operator_department=Operators.DEPARTMENT_DAF) &
+                            Q(operator_role=Operators.ROLE_DIRECTOR)
+                        )
+                        for item in operators:
+                            Notifications.add_notification(
+                                Notifications.TYPE_OPERATOR,
+                                operator.operator_id,
+                                Notifications.TYPE_OPERATOR,
+                                item.operator_id,
+                                Notifications.TYPE_ORDER,
+                                model.order_id,
+                                "Created a purchase request to review.",
+                                "/backend/orders/view/" + str(model.order_id) + "/"
+                            )
+
+                        messages.success(request, 'Updated successfully.')
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                else:
+                    form = OrderProcurementForm(
+                        initial={
+                            'order_id': model.order_code,
+                            'procurement_method': model.order_procurement_method,
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                    }
+                )
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def view_order_items(request, pk):
+    template_url = 'order-items/index.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
+            try:
+                model = Orders.objects.get(order_id=pk)
+
+                search_form = OrderItemSearchIndexForm(request.POST or None)
+                objects = Order_Items.objects.filter(orders_order_id=model.order_id)
+
+                if request.method == 'POST' and search_form.is_valid():
+                    display_search = True
+                    table = OrderItemsTable(objects)
+                else:
+                    display_search = False
+                    table = OrderItemsTable(objects)
+
+                table.set_auth_permissions(auth_permissions)
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'table': table,
+                        'search_form': search_form,
+                        'display_search': display_search,
+                        'index_url': reverse("order_items_index", kwargs={'pk': pk}),
+                        'select_multiple_url': reverse("order_items_select_multiple"),
+                        'model': model,
+                        'item_index_url': reverse("orders_view", kwargs={'pk': pk}),
+                    }
+                )
+
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                 return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:

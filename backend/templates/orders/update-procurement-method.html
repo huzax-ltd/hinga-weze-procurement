@@ -1,0 +1,60 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <div class='modal-header bg-primary-700 text-auto'>
+        <h6 class='modal-title'>Order Procurement Method</h6>
+        <button type="button" class="close btn btn-icon fuse-ripple-ready" data-dismiss="modal"
+                aria-label="Close">
+            <i class="icon icon-close-circle-outline text-white"></i>
+        </button>
+    </div>
+    <div class='modal-body'>
+        <div class='bootbox-body'>
+            <div class="content custom-scrollbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_id.label }}
+                                    {% if form.v.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_id }}
+                            </div>
+                            {{ form.order_id.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0"
+                                 style="border-bottom: 0 !important;">
+                                <label class="custom-label">
+                                    {{ form.procurement_method.label }}
+                                    {% if form.procurement_method.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.procurement_method }}
+                            </div>
+                            {{ form.procurement_method.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-grey-100">
+        <button data-dismiss="modal" type="button"
+                class="btn btn btn-outline-primary fuse-ripple-ready">Cancel
+        </button>
+        <button type="submit" class="btn btn btn-primary fuse-ripple-ready">
+            Submit
+        </button>
+    </div>
+</form>
+<!--suppress ES6ConvertVarToLetConst -->
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $("#search-input-select-procurement-method").select2({placeholder: "--select--", allowClear: false});
+    });
+</script>
+{% include '_include/tab_index.html' %}

@@ -272,13 +272,23 @@
                 <thead>
                 <tr>
                     {% for column in table.columns %}
-                        <th {{ column.attrs.th.as_html }} style="{{ column.attrs.th_style }}">
-                            {% if column.orderable %}
-                                <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a>
-                            {% else %}
-                                {{ column.header }}
-                            {% endif %}
-                        </th>
+                        {% if forloop.counter0 == 0 %}
+                            <th class="select-checkbox" style="{{ column.attrs.th_style }} padding-left: 25px;">
+                                <input id="select-all"
+                                       name="select-all"
+                                       class="magic-checkbox"
+                                       type="checkbox">
+                                <label for="select-all"></label>
+                            </th>
+                        {% else %}
+                            <th {{ column.attrs.th.as_html }} style="{{ column.attrs.th_style }}">
+                                {% if column.orderable %}
+                                    <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a>
+                                {% else %}
+                                    {{ column.header }}
+                                {% endif %}
+                            </th>
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 </thead>
@@ -350,13 +360,23 @@
                 {% for row in table.rows %}{% block table.tbody.row %}
                     <tr {{ row.attrs.as_html }}>
                         {% for column, td in row.items %}
-                            <td {{ column.attrs.td.as_html }} style="{{ column.attrs.td_style }}">
-                                {% if column.safe %}
-                                    {{ td }}
-                                {% else %}
-                                    {{ td|safe }}
-                                {% endif %}
-                            </td>
+                            {% if forloop.counter0 == 0 %}
+                                <td {{ column.attrs.td.as_html }} style="{{ column.attrs.td_style }}">
+                                    {% if column.safe %}
+                                        {{ td }}
+                                    {% else %}
+                                        {{ td|safe }}
+                                    {% endif %}
+                                </td>
+                            {% else %}
+                                <td {{ column.attrs.td.as_html }} style="{{ column.attrs.td_style }}">
+                                    {% if column.safe %}
+                                        {{ td }}
+                                    {% else %}
+                                        {{ td|safe }}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                 {% endblock table.tbody.row %}

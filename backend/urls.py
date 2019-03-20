@@ -191,23 +191,39 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # update procurement method
+    url(r'^order/update/procurement-method/(?P<pk>.+)/$', order_views.update_procurement_method,
+        name='orders_update_procurement_method'),
+    url(r'^order/update/procurement-method/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # view order items
+    url(r'^orders/view/order-items/(?P<pk>\d+)/$', order_views.view_order_items, name='order_items_index'),
+    url(r'^orders/view/order-items/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
     # order items
     # create
-    url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_item_create'),
+    url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_items_create'),
     url(r'^order-items/create/(?P<order_id>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
     # update
-    url(r'^order-items/update/(?P<pk>.+)/$', order_item_views.update, name='order_item_update'),
+    url(r'^order-items/update/(?P<pk>.+)/$', order_item_views.update, name='order_items_update'),
     url(r'^order-items/update/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
     # single or multiple select
-    url(r'^order-items/select-single/$', order_item_views.select_single, name='order_item_select_single'),
+    url(r'^order-items/select-single/$', order_item_views.select_single, name='order_items_select_single'),
+    url(r'^order-items/select-multiple/$', order_item_views.select_multiple, name='order_items_select_multiple'),
 
     # notifications
     path('', notification_views.index, name='index'),

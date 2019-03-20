@@ -32,9 +32,10 @@
 
         //var table = $('#{{table.attrs.id}}').DataTable();
         var table = $('#{{table.attrs.id}}').DataTable({
-            dom: 'Bfrtip',
-            //scrollX: "100%",
-            // scrollCollapse: true,
+            // dom: 'Bfrtip',
+            dom: 'rt<"dataTables_footer"ip>',
+            //scrollX: true,
+            //scrollCollapse: true,
             responsive: false,
             stateSave: true,
             paging: true,
@@ -44,7 +45,9 @@
             ordering: true,
             order: [[0, 'asc'],],
             buttons: [{
-                text: 'Reset Filter', className: 'btn btn-default', action: function (e, dt, node, config) {
+                text: '<i class="icon icon-restore" style="font-size: 16px; vertical-align: top !important;"></i> Reset Filter',
+                className: 'btn btn-outline-primary fuse-ripple-ready',
+                action: function (e, dt, node, config) {
                     var table = $('#{{table.attrs.id}}').DataTable();
                     table.search('').columns().search('').draw();
                     {% for column in table.columns %}
@@ -59,39 +62,40 @@
                         {% endif %}
                     {% endfor %}
                     table.order([0, 'asc']).draw();
-                }, init: function (api, node, config) {
+                },
+                init: function (api, node, config) {
                     $(node).removeClass('dt-button')
                 },
             }, {
                 extend: 'collection',
-                text: 'Export &nbsp;&nbsp;<i class="fa fa-caret-down"></i>',
-                className: 'btn btn-default',
+                text: '<i class="icon icon-export" style="font-size: 16px; vertical-align: top !important;"></i> Export',
+                className: 'btn btn-outline-primary fuse-ripple-ready',
                 autoClose: true,
                 buttons: [{
                     extend: 'copy',
                     text: 'Copy',
-                    className: 'btn btn-default btn-block',
+                    className: 'dropdown-item',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                 }, {
                     extend: 'excel',
                     text: 'Excel',
-                    className: 'btn btn-default btn-block',
+                    className: 'dropdown-item',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                 }, {
                     extend: 'print',
                     text: 'Print',
-                    className: 'btn btn-default btn-block',
+                    className: 'dropdown-item',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                 }, {
                     extend: 'pdf',
                     text: 'PDF',
-                    className: 'btn btn-default btn-block',
+                    className: 'dropdown-item',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
@@ -101,72 +105,72 @@
                 },
             }, {
                 extend: 'collection',
-                text: 'Show 10 Rows &nbsp;&nbsp;<i class="fa fa-caret-down"></i>',
-                className: 'btn btn-default buttons-page-length',
+                text: 'Show 10 Rows <i class="icon icon-menu-down" style="font-size: 20px; vertical-align: top !important;"></i> ',
+                className: 'btn btn-outline-primary fuse-ripple-ready buttons-page-length',
                 autoClose: true,
                 init: function (api, node, config) {
                     $(node).removeClass('dt-button');
                     var table = $('#{{table.attrs.id}}').DataTable();
                     var length = table.page.info().length;
                     if (length === -1) {
-                        table.buttons([2]).text("Show All Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show All Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                     } else {
-                        table.buttons([2]).text("Show " + length + " Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show " + length + " Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                     }
                 },
                 buttons: [{
                     text: 'Show 10 Rows',
-                    className: 'btn btn-default btn-block button-page-length',
+                    className: 'dropdown-item button-page-length',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                     action: function (e, dt, node, config) {
                         var table = $('#{{table.attrs.id}}').DataTable();
-                        table.buttons([2]).text("Show 10 Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show 10 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                         table.page.len(10).draw();
                     },
                 }, {
                     text: 'Show 20 Rows',
-                    className: 'btn btn-default btn-block button-page-length',
+                    className: 'dropdown-item button-page-length',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                     action: function (e, dt, node, config) {
                         var table = $('#{{table.attrs.id}}').DataTable();
-                        table.buttons([2]).text("Show 20 Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show 20 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                         table.page.len(20).draw();
                     },
                 }, {
                     text: 'Show 50 Rows',
-                    className: 'btn btn-default btn-block button-page-length',
+                    className: 'dropdown-item button-page-length',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                     action: function (e, dt, node, config) {
                         var table = $('#{{table.attrs.id}}').DataTable();
-                        table.buttons([2]).text("Show 50 Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show 50 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                         table.page.len(50).draw();
                     },
                 }, {
                     text: 'Show 100 Rows',
-                    className: 'btn btn-default btn-block button-page-length',
+                    className: 'dropdown-item button-page-length',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                     action: function (e, dt, node, config) {
                         var table = $('#{{table.attrs.id}}').DataTable();
-                        table.buttons([2]).text("Show 100 Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show 100 Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                         table.page.len(100).draw();
                     },
                 }, {
                     text: 'Show All Rows',
-                    className: 'btn btn-default btn-block button-page-length',
+                    className: 'dropdown-item button-page-length',
                     init: function (api, node, config) {
                         $(node).removeClass('dt-button')
                     },
                     action: function (e, dt, node, config) {
                         var table = $('#{{table.attrs.id}}').DataTable();
-                        table.buttons([2]).text("Show All Rows &nbsp;&nbsp;<i class='fa fa-caret-down'></i>");
+                        table.buttons([2]).text("Show All Rows <i class=\"icon icon-menu-down\" style=\"font-size: 20px; vertical-align: top !important;\"></i> ");
                         table.page.len(-1).draw();
                     },
                 },],
@@ -187,6 +191,11 @@
                     "searchable": false,
                     "className": 'select-checkbox',
                     "targets": 0
+                },
+                {
+                    "orderable": false,
+                    "searchable": false,
+                    "targets": 1
                 },
                 {
                     "orderable": false,
@@ -253,7 +262,6 @@
             {% endfor %}
         }
     });
-
 </script>
 {% load django_tables2 %}
 {% load i18n %}
@@ -283,8 +291,8 @@
                         {% elif column.attrs.search_filter == 'input-text' %}
                             <th>
                                 <input id='search-input-text{{ forloop.counter0 }}'
-                                       style='width:100%;'
-                                       class='form-control form-control-sm'
+                                       style='width:100%; height: 34px;'
+                                       class='form-control'
                                        type='text'
                                        placeholder=''
                                        onchange='searchColumn({{ forloop.counter0 }}, this.value);'
@@ -320,7 +328,7 @@
                                     <div class="input-group date">
                                         <input id='search-input-date{{ forloop.counter0 }}'
                                                style='width:100%;'
-                                               class="form-control form-control-sm" type='text'
+                                               class="form-control" type='text'
                                                placeholder=''
                                                onchange='searchColumn({{ forloop.counter0 }}, this.value);'
                                                onkeyup='searchColumn({{ forloop.counter0 }}, this.value);'>

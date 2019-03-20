@@ -221,3 +221,53 @@ def select_single(request):
                 return HttpResponseBadRequest('Bad Request', content_type='text/plain')
     else:
         return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+@csrf_exempt
+# noinspection PyUnusedLocal
+def select_multiple(request):
+    if request.is_ajax():
+        operator = Operators.login_required(request)
+        if operator is None:
+            # Operators.set_redirect_field_name(request, request.path)
+            # return redirect(reverse("operators_signin"))
+            return HttpResponse('signin', content_type='text/plain')
+        else:
+            auth_permissions = Operators.get_auth_permissions(operator)
+            action = request.POST['action']
+            ids = request.POST['ids']
+            try:
+                ids = ids.split(",")
+            except(TypeError, ValueError, OverflowError):
+                ids = None
+            if action != '' and ids is not None:
+                if action == 'usaid-approve-yes':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        for id in ids:
+                            try:
+                                model = Order_Items.objects.get(order_item_id=id)
+                                model.order_item_usaid_approval = True
+                                model.save()
+                            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                                continue
+                        messages.success(request, 'Updated successfully.')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'usaid-approve-no':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        for id in ids:
+                            try:
+                                model = Order_Items.objects.get(order_item_id=id)
+                                model.order_item_usaid_approval = False
+                                model.save()
+                            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                                continue
+                        messages.success(request, 'Updated successfully.')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+                return HttpResponse('success', content_type='text/plain')
+            else:
+                return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+    else:
+        return HttpResponseForbidden('Forbidden', content_type='text/plain')

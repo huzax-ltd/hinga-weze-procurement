@@ -23,7 +23,7 @@ class Utils(object):
     # Orders
     HTML_TAG_ORDER_STATUS_PENDING = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_RED + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
     HTML_TAG_ORDER_STATUS_REQUESTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Requested <b></div>'
-    HTML_TAG_ORDER_STATUS_LEVEL0_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-0 Approved <b></div>'
+    HTML_TAG_ORDER_STATUS_LEVEL0_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Review Pending <b></div>'
     HTML_TAG_ORDER_STATUS_LEVEL1_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-1 Approved  <b></div>'
     HTML_TAG_ORDER_STATUS_LEVEL2_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-2 Approved  <b></div>'
     HTML_TAG_ORDER_STATUS_LEVEL3_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Level-3 Approved  <b></div>'

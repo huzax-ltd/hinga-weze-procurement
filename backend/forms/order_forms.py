@@ -1,7 +1,8 @@
+from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
-from app.models import Operators, Orders
+from app.models import Orders
 
 
 class OrderSearchIndexForm(forms.ModelForm):
@@ -262,7 +263,7 @@ class OrderCreateForm(forms.ModelForm):
         return cleaned_data
 
     class Meta:
-        model = Operators
+        model = Orders
         fields = (
             'requester_name',
             'project_name',
@@ -525,7 +526,7 @@ class OrderUpdateForm(forms.ModelForm):
         return cleaned_data
 
     class Meta:
-        model = Operators
+        model = Orders
         fields = (
             'requester_name',
             'project_name',
@@ -540,4 +541,52 @@ class OrderUpdateForm(forms.ModelForm):
             'anticipated_start_date',
             'anticipated_end_date',
             'special_considerations'
+        )
+
+
+class OrderProcurementForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_id = forms.CharField(
+        label='Request Id',
+        min_length=8,
+        max_length=8,
+        required=True,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    procurement_method = forms.ChoiceField(
+        choices=Orders.DROPDOWN_PROCUREMENT_METHODS,
+        initial='',
+        label='Procurement Method',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-procurement-method',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean_procurement_method(self):
+        data = self.cleaned_data['procurement_method']
+        return data
+
+    def clean(self):
+        cleaned_data = super(OrderProcurementForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_id',
+            'procurement_method',
         )

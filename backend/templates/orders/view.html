@@ -46,6 +46,37 @@
                                aria-expanded="false"
                                aria-controls="collapseTimeline" class="btn btn-outline-primary fuse-ripple-ready">View
                                 Timeline</a>
+                            {% if display_level_approval == True %}
+                                <a href="#"
+                                   onclick="singleSelect('{{ select_single_url }}', 'order-level-approve', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Approve</a>
+                                <a href="#"
+                                   onclick="singleSelect('{{ select_single_url }}', 'order-level-reject', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Reject</a>
+                            {% endif %}
+                            {% if operator.operator_role == operator.ROLE_OPM and model.order_status == model.STATUS_LEVEL0_APPROVED %}
+                                <a href="#" id="btn-update-procurement-method-order"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Select Procurement Method</a>
+                            {% endif %}
+                            {% if operator.operator_department == operator.DEPARTMENT_DAF and operator.operator_role == operator.ROLE_DIRECTOR and model.order_procurement_method != '' and model.order_status == model.STATUS_LEVEL0_APPROVED %}
+                                <a href="#"
+                                   onclick="singleSelect('{{ select_single_url }}', 'order-review', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Review</a>
+                            {% endif %}
+                            {% if operator.operator_role == operator.ROLE_COP and model.order_status == model.STATUS_REVIEWED %}
+                                <a href="{% url 'order_items_index' pk=model.order_id %}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Update USAID Approval</a>
+                                <a href="#"
+                                   onclick="singleSelect('{{ select_single_url }}', 'order-approve', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Approve</a>
+                                <a href="#"
+                                   onclick="singleSelect('{{ select_single_url }}', 'order-reject', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Reject</a>
+                            {% endif %}
+                            {% if operator.operator_role == operator.ROLE_OPM and model.order_status == model.STATUS_APPROVED %}
+                                <a href="#" id="btn-assign-order"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Assign Operator</a>
+                            {% endif %}
                         </div>
 
                         <br>
@@ -63,7 +94,7 @@
                                         <td colspan="1" style="font-weight: bold;">Request Id</td>
                                         <td colspan="3">{{ model.order_code }}</td>
                                         <td colspan="1" style="font-weight: bold;">Status</td>
-                                        <td colspan="7">{{ status_html_tag|safe }}</td>
+                                        <td colspan="7">{{ model.order_status }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="1" style="font-weight: bold;">Requester name</td>
@@ -188,20 +219,11 @@
             $("#modal").on("hidden.bs.modal", function () {
                 // location.reload();
             });
-            var url = "{% url 'order_item_create' order_id='P1' %}";
+            var url = "{% url 'orders_update_procurement_method' pk='P1' %}";
             url = url.replace("P1", "{{ model.order_id }}");
-            $("#btn-add-order-item").modalForm({
+            $("#btn-update-procurement-method-order").modalForm({
                 formURL: url
             });
-
-            {% for order_item in order_items %}
-                url = "{% url 'order_item_update' pk='P1' %}";
-                url = url.replace("P1", "{{ order_item.order_item_id }}");
-                $("#btn-edit-order-item-{{ order_item.order_item_id }}").modalForm({
-                    formURL: url
-                });
-            {% endfor %}
-
 
             var events = [
                 {

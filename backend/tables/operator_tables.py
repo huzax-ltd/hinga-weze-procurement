@@ -31,6 +31,16 @@ class OperatorsTable(tables.Table):
         orderable=False,
         empty_values=(),
     )
+    row_id = tables.Column(
+        verbose_name='Id',
+        attrs={
+            'search_filter': '',
+            'th_style': 'width:0px;',
+        },
+        orderable=False,
+        empty_values=(),
+        visible=True,
+    )
     operator_username = tables.Column(
         verbose_name='Email Id',
         attrs={
@@ -105,6 +115,9 @@ class OperatorsTable(tables.Table):
     def render_row_number(self, record):
         return next(self.counter)
 
+    def render_row_id(self, record):
+        return str(record.pk)
+
     def render_actions(self, record):
         action_data = ""
         if settings.ACCESS_PERMISSION_OPERATOR_VIEW in self.auth_permissions.values():
@@ -169,6 +182,7 @@ class OperatorsTable(tables.Table):
         sequence = (
             'row_check',
             'row_number',
+            'row_id',
             'operator_username',
             'operator_name',
             'operator_department',

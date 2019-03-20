@@ -35,6 +35,12 @@
         if (action === 'delete-all') {
             confirmMessage = "Are you sure you want to delete all items?";
         }
+        if (action === 'usaid-approve-yes') {
+            confirmMessage = "Are you sure you want to update selected items?";
+        }
+        if (action === 'usaid-approve-no') {
+            confirmMessage = "Are you sure you want to update selected items?";
+        }
         if (action !== '') {
             var csrfmiddlewaretoken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
             var tableId = "{{table.attrs.id}}";
@@ -42,8 +48,9 @@
             var data = table.rows({selected: true}).data();
             var data_array = [];
             for (var i = 0; i < data.length; i++) {
-                var dom = jQuery.parseHTML("<div>" + data[i][0] + "</div>");
-                var id = $(dom).find("[href]").attr("href");
+                {#var dom = jQuery.parseHTML("<div>" + data[i][0] + "</div>");#}
+                {#var id = $(dom).find("[href]").attr("href");#}
+                var id = data[i][2];
                 data_array.push(id);
             }
             var ids = data_array.join();

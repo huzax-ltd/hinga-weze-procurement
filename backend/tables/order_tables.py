@@ -31,12 +31,15 @@ class OrdersTable(tables.Table):
         orderable=False,
         empty_values=(),
     )
-    order_code = tables.Column(
-        verbose_name='Request Id',
+    row_id = tables.Column(
+        verbose_name='Id',
         attrs={
-            'search_filter': 'input-text',
-            # 'th_style': 'width:100px;',
-        }
+            'search_filter': '',
+            'th_style': 'width:0px;',
+        },
+        orderable=False,
+        empty_values=(),
+        visible=True,
     )
     order_requester_name = tables.Column(
         verbose_name='Requester Name',
@@ -106,6 +109,9 @@ class OrdersTable(tables.Table):
     def render_row_number(self, record):
         return next(self.counter)
 
+    def render_row_id(self, record):
+        return str(record.pk)
+
     @staticmethod
     def render_order_code(record):
         return mark_safe(
@@ -140,6 +146,7 @@ class OrdersTable(tables.Table):
         sequence = (
             'row_check',
             'row_number',
+            'row_id',
             'order_code',
             'order_requester_name',
             'order_project_name',
