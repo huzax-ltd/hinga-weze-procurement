@@ -1,4 +1,3 @@
-import requests
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.core import serializers
@@ -26,19 +25,19 @@ def signup(request):
 
         form = OperatorSignUpForm(request.POST)
 
-        # validating recaptcha
-        request.recaptcha_is_valid = None
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
-        if not result['success']:
-            request.recaptcha_is_valid = False
-            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-            return render(request, template_url, {'form': form})
+        # # validating recaptcha
+        # request.recaptcha_is_valid = None
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # data = {
+        #     'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        #     'response': recaptcha_response
+        # }
+        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        # result = r.json()
+        # if not result['success']:
+        #     request.recaptcha_is_valid = False
+        #     messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+        #     return render(request, template_url, {'form': form})
 
         # noinspection PyArgumentList
         if form.is_valid():
@@ -142,25 +141,25 @@ def signin(request):
 
     display_captcha = False
     if failed_count >= settings.MAX_LOGIN_ATTEMPTS_CAPTCHA:
-        display_captcha = True
+        display_captcha = False
 
     if request.method == 'POST':
         form = OperatorSignInForm(request.POST)
 
-        if display_captcha:
-            request.recaptcha_is_valid = None
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            data = {
-                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_response
-            }
-            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-            result = r.json()
-            if not result['success']:
-                request.recaptcha_is_valid = False
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-                return render(request, template_url,
-                              {'form': form, 'display_captcha': display_captcha})
+        # if display_captcha:
+        #     request.recaptcha_is_valid = None
+        #     recaptcha_response = request.POST.get('g-recaptcha-response')
+        #     data = {
+        #         'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        #         'response': recaptcha_response
+        #     }
+        #     r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        #     result = r.json()
+        #     if not result['success']:
+        #         request.recaptcha_is_valid = False
+        #         messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+        #         return render(request, template_url,
+        #                       {'form': form, 'display_captcha': display_captcha})
 
         if form.is_valid():
             try:
@@ -172,7 +171,7 @@ def signin(request):
                                  Failed_Login.FAILED_LOGIN_FROM_BACKEND,
                                  Utils.get_ip_address(request),
                                  False)
-                messages.error(request, 'Incorrect email address or password3.')
+                messages.error(request, 'Incorrect email address or password.')
                 return render(request, template_url,
                               {'form': form, 'display_captcha': display_captcha})
             else:
@@ -253,9 +252,11 @@ def signin(request):
                                      Utils.get_ip_address(request),
                                      False)
                     messages.error(request, 'Incorrect email address or password.')
+                    # noinspection PyPackageRequirements
                     return render(request, template_url,
                                   {'form': form, 'display_captcha': display_captcha})
         else:
+            messages.success(request, 'Incorrect email address or password.')
             return render(request, template_url, {'form': form, 'display_captcha': display_captcha})
     else:
         form = OperatorSignInForm()
@@ -270,19 +271,19 @@ def forgot_password(request):
     if request.method == 'POST':
         form = OperatorForgotPasswordForm(request.POST)
 
-        request.recaptcha_is_valid = None
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
-        if not result['success']:
-            request.recaptcha_is_valid = False
-            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-            return render(request, template_url,
-                          {'form': form})
+        # request.recaptcha_is_valid = None
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # data = {
+        #     'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        #     'response': recaptcha_response
+        # }
+        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        # result = r.json()
+        # if not result['success']:
+        #     request.recaptcha_is_valid = False
+        #     messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+        #     return render(request, template_url,
+        #                   {'form': form})
 
         if form.is_valid():
             try:
@@ -380,7 +381,9 @@ def forgot_password(request):
                     messages.info(request, 'An email has been sent to reset your password.')
                     form = OperatorForgotPasswordForm()
                     return render(request, template_url, {'form': form})
-
+        else:
+            form = OperatorForgotPasswordForm()
+            return render(request, template_url, {'form': form})
     else:
         form = OperatorForgotPasswordForm()
         return render(request, template_url, {'form': form})

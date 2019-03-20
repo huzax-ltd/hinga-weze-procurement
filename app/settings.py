@@ -29,6 +29,7 @@ SECRET_KEY = 'usv1c&3$zu#6y0$s@*3c(c-+hc3afa2c#cn!o9qvzf(+0#!jcx'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = [u'HingaWeze.pythonanywhere.com']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -70,7 +71,7 @@ INSTALLED_APPS = [
     # django_archive
     'django_archive',
     # django_tinymce
-    'tinymce',
+    # 'tinymce',
     # cors
     'corsheaders',
     # Bootstrap Modals
@@ -132,11 +133,16 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hinga_weze_procurement_test_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '/Applications/AMPPS/var/mysql.sock',
+        # 'NAME': 'hinga_weze_procurement_test_db',
+        'NAME': 'HingaWeze$hinga_weze_procurement_test_db',
+        # 'USER': 'root',
+        # 'PASSWORD': 'root',
+        'USER': 'HingaWeze',
+        'PASSWORD': 'Kigali@321',
+        'HOST': 'HingaWeze.mysql.pythonanywhere-services.com',
         'PORT': '3306',
+        # 'HOST': '/Applications/AMPPS/var/mysql.sock',
+        # 'PORT': '3306',
         # 'HOST': '/var/run/mysqld/mysqld.sock',
         # 'PORT': '3306',
         'OPTIONS': {
@@ -210,7 +216,19 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+# # Local
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+# STATIC_URL = '/static/'
+# # MEDIA_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# MEDIA_URL = '/uploads/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
+
+# Python Anywhere
+# default static files settings for PythonAnywhere.
+# see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
+MEDIA_ROOT = u'/home/HingaWeze/hinga_weze_procurement/media'
+MEDIA_URL = '/media/'
+STATIC_ROOT = u'/home/HingaWeze/hinga_weze_procurement/static'
 STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = (
@@ -229,14 +247,6 @@ COMPRESS_OUTPUT_DIR = 'cache'
 # COMPRESS_JS_FILTERS = ["compressor.filters.jsmin.JSMinFilter"]
 COMPRESS_CSS_FILTERS = ["compressor.filters.yuglify.YUglifyCSSFilter"]
 COMPRESS_JS_FILTERS = ["compressor.filters.yuglify.YUglifyJSFilter"]
-
-# MEDIA_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_URL = '/uploads/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
-
-# Redirect
-LOGIN_URL = '/hinga-weze-procurement/operators/signin'
-CONTACT_URL = '/hinga-weze-procurement/site/contact'
 
 # App Constants
 # Project related

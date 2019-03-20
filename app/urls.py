@@ -25,7 +25,7 @@ from backend.views import operator_views
 
 urlpatterns = [
     # url(r'', include('shrink.urls')),
-    url(r'^tinymce/', include('tinymce.urls')),
+    # url(r'^tinymce/', include('tinymce.urls')),
     path('admin/', admin.site.urls),
     path('backend/', include('backend.urls')),
     url(r'^$', operator_views.signin, name='signin'),

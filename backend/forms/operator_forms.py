@@ -1,4 +1,5 @@
-from captcha.fields import ReCaptchaField
+# from captcha.fields import ReCaptchaField
+# from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.contrib.auth.hashers import check_password
 from django.core.validators import ValidationError, MinLengthValidator, MaxLengthValidator, EmailValidator
@@ -70,13 +71,15 @@ class OperatorSignUpForm(forms.ModelForm):
                 'aria-label': 'form-label',
             }
         ))
-    captcha = ReCaptchaField(
-        required=True,
-        attrs={
-            'theme': 'clean',
-            'style': 'width:100%',
-        }
-    )
+
+    # captcha = ReCaptchaField(
+    #     required=True,
+    #     widget=ReCaptchaV2Checkbox(
+    #         attrs={
+    #             'data-theme': 'clean',
+    #             'data-size': 'compact',
+    #         }
+    #     ))
 
     def clean_name(self):
         data = self.cleaned_data['name']
@@ -139,7 +142,6 @@ class OperatorSignUpForm(forms.ModelForm):
             'email',
             'password',
             'repeat_password',
-            'captcha'
         )
 
 
@@ -174,13 +176,15 @@ class OperatorSignInForm(forms.ModelForm):
                 'aria-label': 'form-label',
             }
         ))
-    captcha = ReCaptchaField(
-        required=False,
-        attrs={
-            'theme': 'clean',
-            'style': 'width:100%',
-        }
-    )
+
+    # captcha = ReCaptchaField(
+    #     required=False,
+    #     widget=ReCaptchaV2Checkbox(
+    #         attrs={
+    #             'data-theme': 'clean',
+    #             'data-size': 'compact',
+    #         }
+    #     ))
 
     def clean_email(self):
         data = self.cleaned_data['email']
@@ -242,13 +246,15 @@ class OperatorForgotPasswordForm(forms.ModelForm):
                 'aria-label': 'form-label',
             }
         ))
-    captcha = ReCaptchaField(
-        required=False,
-        attrs={
-            'theme': 'clean',
-            'style': 'width:100%',
-        }
-    )
+
+    # captcha = ReCaptchaField(
+    #     required=False,
+    #     widget=ReCaptchaV2Checkbox(
+    #         attrs={
+    #             'data-theme': 'clean',
+    #             'data-size': 'compact',
+    #         }
+    #     ))
 
     def clean_email(self):
         data = self.cleaned_data['email']
