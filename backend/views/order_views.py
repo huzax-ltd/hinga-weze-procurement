@@ -611,27 +611,33 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
+            if model.order_status == Orders.STATUS_REQUESTED:
+                notification_timeline = NotificationsTimeline()
+                model.order_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
             if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_id == '':
                 notification_timeline = NotificationsTimeline()
-                notification_timeline.message = "<p class='text-red'>Procurement Method pending from OPM</p>"
+                model.order_status = notification_timeline.message = "<b class='text-red'>Procurement method pending from OPM</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_id != '':
                 notification_timeline = NotificationsTimeline()
-                notification_timeline.message = "<p class='text-red'>Review pending from DAF</p>"
+                model.order_status = notification_timeline.message = "<b class='text-red'>Review pending from DAF</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_REVIEWED:
                 notification_timeline = NotificationsTimeline()
-                notification_timeline.message = "<p class='text-red'>Approval pending from COP</p>"
+                model.order_status = notification_timeline.message = "<b class='text-red'>Approval pending from COP</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_APPROVED:
                 notification_timeline = NotificationsTimeline()
-                notification_timeline.message = "<p class='text-red'>Assign pending from OPM</p>"
+                model.order_status = notification_timeline.message = "<b class='text-red'>Assign pending from OPM</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 

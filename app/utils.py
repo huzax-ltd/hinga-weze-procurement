@@ -162,20 +162,18 @@ class Utils(object):
 
     @staticmethod
     def get_convert_datetime(value, tz_from, tz_to):
-        # value = datetime.strftime(value, settings.APP_CONSTANT_INPUT_DATETIME_FORMAT)
-        # value = dateparse.parse_datetime(value)
-        # # utc_dt = pytz.timezone(tz_from).localize(value)
-        # display_dt = pytz.timezone.localize(value)
-        # display_dt = utc_dt.astimezone(pytz.timezone(tz_to))
-        # return datetime.strftime(value, settings.APP_CONSTANT_DISPLAY_DATETIME_FORMAT)
-        return str(value)
+        value = datetime.strftime(value, settings.APP_CONSTANT_INPUT_DATETIME_FORMAT)
+        value = dateparse.parse_datetime(value)
+        utc_dt = pytz.timezone(str(tz_from)).localize(value)
+        display_dt = utc_dt.astimezone(pytz.timezone(str(tz_to)))
+        return str(datetime.strftime(display_dt, settings.APP_CONSTANT_DISPLAY_DATETIME_FORMAT))
 
     @staticmethod
     def get_convert_datetime_in_milliseconds(value, tz_from, tz_to):
         value = datetime.strftime(value, settings.APP_CONSTANT_INPUT_DATETIME_FORMAT)
         value = dateparse.parse_datetime(value)
-        utc_dt = pytz.timezone(tz_from).localize(value)
-        display_dt = utc_dt.astimezone(pytz.timezone(tz_to))
+        utc_dt = pytz.timezone(str(tz_from)).localize(value)
+        display_dt = utc_dt.astimezone(pytz.timezone(str(tz_to)))
         display_dt = datetime.strftime(display_dt, settings.APP_CONSTANT_DISPLAY_DATETIME_FORMAT)
         d = datetime.strptime(display_dt, settings.APP_CONSTANT_DISPLAY_DATETIME_FORMAT)
         return int(time.mktime(d.timetuple()))

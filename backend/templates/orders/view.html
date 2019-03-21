@@ -94,13 +94,13 @@
                                         <td colspan="1" style="font-weight: bold;">Request Id</td>
                                         <td colspan="3">{{ model.order_code }}</td>
                                         <td colspan="1" style="font-weight: bold;">Status</td>
-                                        <td colspan="7">{{ model.order_status }}</td>
+                                        <td colspan="7">{{ model.order_status|safe }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="1" style="font-weight: bold;">Requester name</td>
                                         <td colspan="3">{{ model.order_requester_name }}</td>
                                         <td colspan="1" style="font-weight: bold;">Date of Request</td>
-                                        <td colspan="3">-</td>
+                                        <td colspan="3">{{ model.order_requested_at|date }}</td>
                                         <td colspan="1" style="font-weight: bold;">Project Name</td>
                                         <td colspan="3">{{ model.order_project_name }}</td>
                                     </tr>
@@ -197,18 +197,50 @@
                                         <td colspan="12" style="font-weight: bold;">Special Considerations</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="12">{{ model.order_special_considerations }}
-                                            {#                                            {{ timeline_notification_messages.0 }}#}
-                                            {#                                            {% for item in timeline_notification_messages %}#}
-                                            {#                                                timeline_notification_messages.0#}
-                                            {#events.push(#}
-                                            {#    {#}
-                                            {#        date: timeline_notification.datetime,#}
-                                            {#        content: timeline_notification.message#}
-                                            {#    }#}
-                                            {#);#}
-                                            {#                                            {% endfor %}#}
-                                        </td>
+                                        <td colspan="12">{{ model.order_special_considerations }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold;">Prepared By</td>
+                                        <td colspan="4">{{ model.order_requested_by }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Title</td>
+                                        <td colspan="4">{{ model.order_requested_role }}</td>
+                                    </tr>
+                                    <tr style="height: 60px;">
+                                        <td colspan="2" style="font-weight: bold;">Signature</td>
+                                        <td colspan="4"></td>
+                                        <td colspan="2" style="font-weight: bold;">Date</td>
+                                        <td colspan="4">{{ model.order_requested_at|date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="12"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold;">Reviewed By</td>
+                                        <td colspan="4">{{ model.order_reviewed_by }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Title</td>
+                                        <td colspan="4">{{ model.order_reviewed_role }}
+                                            of {{ model.order_reviewed_department }}</td>
+                                    </tr>
+                                    <tr style="height: 60px;">
+                                        <td colspan="2" style="font-weight: bold;">Signature</td>
+                                        <td colspan="4"></td>
+                                        <td colspan="2" style="font-weight: bold;">Date</td>
+                                        <td colspan="4">{{ model.order_reviewed_at|date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="12"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold;">Approved By</td>
+                                        <td colspan="4">{{ model.order_approved_by }}</td>
+                                        <td colspan="2" style="font-weight: bold;">Title</td>
+                                        <td colspan="4">{{ model.order_approved_role }}</td>
+                                    </tr>
+                                    <tr style="height: 60px;">
+                                        <td colspan="2" style="font-weight: bold;">Signature</td>
+                                        <td colspan="4"></td>
+                                        <td colspan="2" style="font-weight: bold;">Date</td>
+                                        <td colspan="4">{{ model.order_approved_at|date }}</td>
                                     </tr>
                                     </thead>
                                 </table>
