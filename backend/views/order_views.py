@@ -10,7 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from app import settings
 from app.models import Operators, Orders, Order_Items, Order_Approvals, Notifications, NotificationsTimeline
 from app.utils import Utils
-from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm
+from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
+    OrderAssignmentForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.tables.order_item_tables import OrderItemsTable
 from backend.tables.order_tables import OrdersTable
@@ -611,33 +612,47 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
+            if model.order_assigned_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Assigned <small>to ' + model.order_assigned_role + ' by OPM</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_assigned_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
             if model.order_status == Orders.STATUS_REQUESTED:
                 notification_timeline = NotificationsTimeline()
-                model.order_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_id == '':
                 notification_timeline = NotificationsTimeline()
-                model.order_status = notification_timeline.message = "<b class='text-red'>Procurement method pending from OPM</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Procurement method pending from OPM</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_LEVEL0_APPROVED and model.order_procurement_method_updated_id != '':
                 notification_timeline = NotificationsTimeline()
-                model.order_status = notification_timeline.message = "<b class='text-red'>Review pending from DAF</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Review pending from DAF</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_REVIEWED:
                 notification_timeline = NotificationsTimeline()
-                model.order_status = notification_timeline.message = "<b class='text-red'>Approval pending from COP</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Approval pending from COP</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_APPROVED:
                 notification_timeline = NotificationsTimeline()
-                model.order_status = notification_timeline.message = "<b class='text-red'>Assign pending from OPM</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Assign pending from OPM</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_ASSIGNED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Pending choosing vendor category</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
@@ -784,6 +799,104 @@ def view_order_items(request, pk):
                     }
                 )
 
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update_order_assignment(request, pk):
+    template_url = 'orders/update-order-assignment.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values() and operator.operator_role == Operators.ROLE_OPM:
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
+
+                    form = OrderAssignmentForm(request.POST)
+
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+
+                        model.order_assigned_at = Utils.get_current_datetime_utc()
+                        assign_id = form.cleaned_data['order_assigned_id']
+
+                        item_operator = None
+                        if assign_id != str(0):
+                            item_operator = Operators.objects.get(operator_id=assign_id)
+
+                        if item_operator is None:
+                            model.order_assigned_id = operator.operator_id
+                            model.order_assigned_by = ''
+                        else:
+                            model.order_assigned_id = item_operator.operator_id
+                            model.order_assigned_by = item_operator.operator_name
+                        model.order_assigned_department = Operators.DEPARTMENT_DAF
+                        model.order_assigned_role = form.cleaned_data['order_assigned_role']
+                        model.order_status = Orders.STATUS_ASSIGNED
+                        model.save()
+
+                        if item_operator is None:
+                            # sending notification to Director of DFA
+                            operators = Operators.objects.all().filter(
+                                Q(operator_role=model.order_assigned_role)
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Assigned a purchase request to process ahead.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+                        else:
+                            Notifications.add_notification(
+                                Notifications.TYPE_OPERATOR,
+                                operator.operator_id,
+                                Notifications.TYPE_OPERATOR,
+                                item_operator.operator_id,
+                                Notifications.TYPE_ORDER,
+                                model.order_id,
+                                "Assigned a purchase request to process ahead.",
+                                "/backend/orders/view/" + str(model.order_id) + "/"
+                            )
+
+                        messages.success(request, 'Updated successfully.')
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                else:
+                    form = OrderAssignmentForm(
+                        initial={
+                            'order_id': model.order_code,
+                            'order_assigned_role': model.order_assigned_role,
+                            'order_assigned_id': model.order_assigned_id,
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                    }
+                )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                 return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:

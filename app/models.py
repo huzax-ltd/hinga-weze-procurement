@@ -559,6 +559,8 @@ class Orders(models.Model):
         (STATUS_CLOSED, (STATUS_CLOSED.title()).replace('-', ' ')),
     )
 
+    order_readable_status = ''
+
     order_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     order_code = models.CharField('Order Id', max_length=8, unique=True, blank=False, default=None)
     order_requester_name = models.CharField('Requester Name', max_length=100, blank=False)

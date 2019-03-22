@@ -88,6 +88,8 @@ urlpatterns = [
         name='api_dropdown_roles'),
     url(r'^operators/api/dropdown/parent-operators/(?P<role>.+)/$', operator_views.api_dropdown_parent_operators,
         name='api_dropdown_parent_operators'),
+    url(r'^operators/api/dropdown/role/operators/(?P<role>.+)/$', operator_views.api_dropdown_role_operators,
+        name='api_dropdown_role_operators'),
 
     # single or multiple select
     url(r'^operators/select-single/$', operator_views.select_single,
@@ -192,9 +194,9 @@ urlpatterns = [
         name='service-worker.js'),
 
     # update procurement method
-    url(r'^order/update/procurement-method/(?P<pk>.+)/$', order_views.update_procurement_method,
-        name='orders_update_procurement_method'),
-    url(r'^order/update/procurement-method/(?P<pk>.+)/service-worker.js',
+    url(r'^order/update/assignment/(?P<pk>.+)/$', order_views.update_order_assignment,
+        name='orders_update_assignment'),
+    url(r'^order/update/assignment/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
@@ -202,6 +204,14 @@ urlpatterns = [
     # view order items
     url(r'^orders/view/order-items/(?P<pk>\d+)/$', order_views.view_order_items, name='order_items_index'),
     url(r'^orders/view/order-items/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update order assignment
+    url(r'^order/update/procurement-method/(?P<pk>.+)/$', order_views.update_order_assignment,
+        name='orders_update_procurement_method'),
+    url(r'^order/update/procurement-method/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

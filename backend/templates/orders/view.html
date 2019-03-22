@@ -74,8 +74,8 @@
                                    class="btn btn-outline-primary fuse-ripple-ready">Reject</a>
                             {% endif %}
                             {% if operator.operator_role == operator.ROLE_OPM and model.order_status == model.STATUS_APPROVED %}
-                                <a href="#" id="btn-assign-order"
-                                   class="btn btn-outline-primary fuse-ripple-ready">Assign Operator</a>
+                                <a href="#" id="btn-update-order-assignment"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Assign Officer</a>
                             {% endif %}
                         </div>
 
@@ -94,7 +94,7 @@
                                         <td colspan="1" style="font-weight: bold;">Request Id</td>
                                         <td colspan="3">{{ model.order_code }}</td>
                                         <td colspan="1" style="font-weight: bold;">Status</td>
-                                        <td colspan="7">{{ model.order_status|safe }}</td>
+                                        <td colspan="7">{{ model.order_readable_status|safe }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="1" style="font-weight: bold;">Requester name</td>
@@ -199,6 +199,7 @@
                                     <tr>
                                         <td colspan="12">{{ model.order_special_considerations }}</td>
                                     </tr>
+                                    <td colspan="12"></td>
                                     <tr>
                                         <td colspan="2" style="font-weight: bold;">Prepared By</td>
                                         <td colspan="4">{{ model.order_requested_by }}</td>
@@ -265,6 +266,11 @@
             var url = "{% url 'orders_update_procurement_method' pk='P1' %}";
             url = url.replace("P1", "{{ model.order_id }}");
             $("#btn-update-procurement-method-order").modalForm({
+                formURL: url
+            });
+            url = "{% url 'orders_update_assignment' pk='P1' %}";
+            url = url.replace("P1", "{{ model.order_id }}");
+            $("#btn-update-order-assignment").modalForm({
                 formURL: url
             });
 

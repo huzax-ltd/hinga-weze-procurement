@@ -65,7 +65,7 @@
                                         <td colspan="1" style="font-weight: bold;">Request Id</td>
                                         <td colspan="3">{{ model.order_code }}</td>
                                         <td colspan="1" style="font-weight: bold;">Status</td>
-                                        <td colspan="7">{{ model.order_status|safe }}</td>
+                                        <td colspan="7">{{ model.order_readable_status|safe }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="1" style="font-weight: bold;">Requester name</td>
@@ -204,6 +204,7 @@
                                     <tr>
                                         <td colspan="12">{{ model.order_special_considerations }}</td>
                                     </tr>
+                                    <td colspan="12"></td>
                                     <tr>
                                         <td colspan="2" style="font-weight: bold;">Prepared By</td>
                                         <td colspan="4">{{ model.order_requested_by }}</td>

@@ -651,6 +651,26 @@ def api_dropdown_parent_operators(request, role):
 
 
 # noinspection PyUnusedLocal
+def api_dropdown_role_operators(request, role):
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        operators = ""
+        operators += "<option value=''>--select--</option>"
+        operators += "<option value='0'>NONE</option>"
+        objects = Operators.objects.all()
+        objects = objects.filter(operator_role=role)
+        for item in objects:
+            operators += "<option value='" + str(
+                item.operator_id) + "'>" + item.operator_name + "</option>"
+
+        return HttpResponse(operators, content_type="text/plain")
+
+
+# noinspection PyUnusedLocal
 def index(request):
     template_url = 'operators/index.html'
     operator = Operators.login_required(request)

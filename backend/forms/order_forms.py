@@ -2,7 +2,7 @@ from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
-from app.models import Orders
+from app.models import Orders, Operators
 
 
 class OrderSearchIndexForm(forms.ModelForm):
@@ -589,4 +589,123 @@ class OrderProcurementForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFo
         fields = (
             'order_id',
             'procurement_method',
+        )
+
+
+class OrderAssignmentForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_id = forms.CharField(
+        label='Request Id',
+        min_length=8,
+        max_length=8,
+        required=True,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    order_assigned_role = forms.ChoiceField(
+        choices=(('', '--select--'),),
+        initial='',
+        label='Role',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-order-assign-role',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+                'onchange': 'onRoleSelected();',
+            }
+        ))
+    order_assigned_id = forms.ChoiceField(
+        choices=(('', '--select--'), ('0', 'NONE'),),
+        initial='',
+        label='Operator',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-order-assigned-id',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean_order_assigned_role(self):
+        data = self.cleaned_data['order_assigned_role']
+        return data
+
+    def clean_order_assigned_id(self):
+        data = self.cleaned_data['order_assigned_id']
+        return data
+
+    def clean(self):
+        cleaned_data = super(OrderAssignmentForm, self).clean()
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(OrderAssignmentForm, self).__init__(*args, **kwargs)
+
+        OPERATOR_ROLES = (
+            ('', '--select--'),
+            (Operators.ROLE_PROCUREMENT_OFFICER, Operators.ROLE_PROCUREMENT_OFFICER),
+            (Operators.ROLE_HR_MANAGER, Operators.ROLE_HR_MANAGER),
+            (Operators.ROLE_STOCK_ADMIN, Operators.ROLE_STOCK_ADMIN),
+            (Operators.ROLE_ACCOUNTANT_MANAGER, Operators.ROLE_ACCOUNTANT_MANAGER),
+            (Operators.ROLE_ACCOUNTANT_OFFICER, Operators.ROLE_ACCOUNTANT_OFFICER),
+        )
+
+        self.fields['order_assigned_role'] = forms.ChoiceField(
+            choices=OPERATOR_ROLES,
+            initial='',
+            label='Role',
+            required=True,
+            validators=[],
+            widget=forms.Select(
+                attrs={
+                    'id': 'search-input-select-order-assign-role',
+                    'class': 'form-control',
+                    'style': 'width:100%;',
+                    'placeholder': '--select--',
+                    'aria-label': 'form-label',
+                    'onchange': 'onRoleSelected();',
+                }
+            ))
+
+        OPERATORS = (('', '--select--'), ('0', 'NONE'),)
+        operators = Operators.objects.all()
+        for operator in operators:
+            OPERATORS = OPERATORS + ((operator.operator_id, operator.operator_name),)
+
+        self.fields['order_assigned_id'] = forms.ChoiceField(
+            choices=OPERATORS,
+            initial='',
+            label='Operator',
+            required=True,
+            validators=[],
+            widget=forms.Select(
+                attrs={
+                    'id': 'search-input-select-order-assigned-id',
+                    'class': 'form-control',
+                    'style': 'width:100%;',
+                    'placeholder': '--select--',
+                    'aria-label': 'form-label',
+                }
+            ))
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_id',
+            'order_assigned_role',
+            'order_assigned_id',
         )
