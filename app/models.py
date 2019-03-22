@@ -462,6 +462,19 @@ class Orders(models.Model):
         (PROCUREMENT_METHOD_OPEN_TENDER, PROCUREMENT_METHOD_OPEN_TENDER),
     )
 
+    SUPPLIER_CATEGORY_1 = 'Category 1'
+    SUPPLIER_CATEGORY_2 = 'Category 2'
+
+    ARRAY_SUPPLIER_CATEGORIES = [
+        SUPPLIER_CATEGORY_1,
+        SUPPLIER_CATEGORY_2,
+    ]
+    DROPDOWN_SUPPLIER_CATEGORIES = (
+        ('', '--select--'),
+        (SUPPLIER_CATEGORY_1, SUPPLIER_CATEGORY_1),
+        (SUPPLIER_CATEGORY_2, SUPPLIER_CATEGORY_2),
+    )
+
     STATUS_PENDING = 'pending'
     STATUS_REQUESTED = 'requested'
     STATUS_LEVEL0_APPROVED = 'level0-approved'
@@ -481,6 +494,7 @@ class Orders(models.Model):
     STATUS_APPROVED = 'approved'
     STATUS_REJECTED = 'rejected'
     STATUS_ASSIGNED = 'assigned'
+    STATUS_SUPPLIER_SELECTED = 'supplier-selected'
     STATUS_PROPOSAL_GENERATED = 'proposal-generated'
     STATUS_PROPOSAL_REQUESTED = 'proposal-requested'
     STATUS_PROPOSAL_EVALUATED = 'proposal-evaluated'
@@ -513,6 +527,7 @@ class Orders(models.Model):
         (STATUS_APPROVED.title()).replace('-', ' '),
         (STATUS_REJECTED.title()).replace('-', ' '),
         (STATUS_ASSIGNED.title()).replace('-', ' '),
+        (STATUS_SUPPLIER_SELECTED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_GENERATED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_REQUESTED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_EVALUATED.title()).replace('-', ' '),
@@ -546,6 +561,7 @@ class Orders(models.Model):
         (STATUS_APPROVED, (STATUS_APPROVED.title()).replace('-', ' ')),
         (STATUS_REJECTED, (STATUS_REJECTED.title()).replace('-', ' ')),
         (STATUS_ASSIGNED, (STATUS_ASSIGNED.title()).replace('-', ' ')),
+        (STATUS_SUPPLIER_SELECTED, (STATUS_SUPPLIER_SELECTED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_GENERATED, (STATUS_PROPOSAL_GENERATED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_REQUESTED, (STATUS_PROPOSAL_REQUESTED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_EVALUATED, (STATUS_PROPOSAL_EVALUATED.title()).replace('-', ' ')),
@@ -594,7 +610,14 @@ class Orders(models.Model):
     order_grand_total_price = models.DecimalField('Grand Total', max_digits=10, decimal_places=0, default=Decimal(0))
     order_currency = models.CharField('Currency', max_length=255, blank=False, choices=DROPDOWN_CURRENCIES,
                                       default=CURRENCY_RWF)
-    order_supplier_category = models.CharField('Vendor Category', max_length=255, blank=True)
+    order_supplier_category = models.CharField('Vendor Category', max_length=255, blank=False,
+                                               choices=DROPDOWN_SUPPLIER_CATEGORIES, default='')
+    order_supplier_updated_at = models.DateTimeField('Vendor Updated At',
+                                                     default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_supplier_updated_id = models.CharField('Vendor Updated ID', max_length=100, blank=True)
+    order_supplier_updated_by = models.CharField('Vendor Updated By', max_length=100, blank=True)
+    order_supplier_updated_department = models.CharField('Vendor Updated Department', max_length=255, blank=True)
+    order_supplier_updated_role = models.CharField('Vendor Updated Role', max_length=255, blank=True)
     order_proposal_id = models.IntegerField('Proposal Id', blank=False, default=0)
     order_proposal_due_date = models.DateField('Proposal Due Date', default=settings.APP_CONSTANT_DEFAULT_DATE)
     order_purchase_no = models.CharField('Purchase Order No.', max_length=100, blank=True)
@@ -733,6 +756,8 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_ASSIGNED:
             value = Utils.HTML_TAG_ORDER_STATUS_ASSIGNED
+        elif record.order_status == Orders.STATUS_SUPPLIER_SELECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_SUPPLIER_SELECTED
         elif record.order_status == Orders.STATUS_PROPOSAL_GENERATED:
             value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_GENERATED
         elif record.order_status == Orders.STATUS_PROPOSAL_REQUESTED:

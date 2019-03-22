@@ -216,6 +216,14 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # update supplier category
+    url(r'^order/update/supplier/(?P<pk>.+)/$', order_views.update_supplier,
+        name='orders_update_supplier'),
+    url(r'^order/update/supplier/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
     # order items
     # create
     url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_items_create'),

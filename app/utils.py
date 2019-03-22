@@ -40,6 +40,7 @@ class Utils(object):
     HTML_TAG_ORDER_STATUS_APPROVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_ORANGE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Approved <b></div>'
     HTML_TAG_ORDER_STATUS_REJECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Rejected <b></div>'
     HTML_TAG_ORDER_STATUS_ASSIGNED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Assigned <b></div>'
+    HTML_TAG_ORDER_STATUS_SUPPLIER_SELECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Vendor Category Selected <b></div>'
     HTML_TAG_ORDER_STATUS_PROPOSAL_GENERATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Generated <b></div>'
     HTML_TAG_ORDER_STATUS_PROPOSAL_REQUESTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Requested <b></div>'
     HTML_TAG_ORDER_STATUS_PROPOSAL_EVALUATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Evaluated <b></div>'

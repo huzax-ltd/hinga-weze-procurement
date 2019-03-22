@@ -77,6 +77,17 @@
                                 <a href="#" id="btn-update-order-assignment"
                                    class="btn btn-outline-primary fuse-ripple-ready">Assign Officer</a>
                             {% endif %}
+                            {% if model.order_assigned_to_id != 0|safe %}
+                                {% if operator.operator_id == model.order_assigned_to_id %}
+                                    <a href="#" id="btn-update-order-assignment"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Update Vendor Category</a>
+                                {% endif %}
+                            {% else %}
+                                {% if operator.operator_role == model.order_assigned_to_role %}
+                                    <a href="#" id="btn-update-order-supplier"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Update Vendor Category</a>
+                                {% endif %}
+                            {% endif %}
                         </div>
 
                         <br>
@@ -271,6 +282,11 @@
             url = "{% url 'orders_update_assignment' pk='P1' %}";
             url = url.replace("P1", "{{ model.order_id }}");
             $("#btn-update-order-assignment").modalForm({
+                formURL: url
+            });
+            url = "{% url 'orders_update_supplier' pk='P1' %}";
+            url = url.replace("P1", "{{ model.order_id }}");
+            $("#btn-update-order-supplier").modalForm({
                 formURL: url
             });
 

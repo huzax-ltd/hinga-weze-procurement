@@ -709,3 +709,51 @@ class OrderAssignmentForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
             'order_assigned_role',
             'order_assigned_id',
         )
+
+
+class OrderSupplierForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_id = forms.CharField(
+        label='Request Id',
+        min_length=8,
+        max_length=8,
+        required=True,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    order_supplier_category = forms.ChoiceField(
+        choices=Orders.DROPDOWN_SUPPLIER_CATEGORIES,
+        initial='',
+        label='Vendor Category',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-supplier-category',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean_order_supplier_category(self):
+        data = self.cleaned_data['order_supplier_category']
+        return data
+
+    def clean(self):
+        cleaned_data = super(OrderSupplierForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_id',
+            'order_supplier_category',
+        )
