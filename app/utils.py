@@ -190,8 +190,8 @@ class Utils(object):
         return value
 
     @staticmethod
-    def get_us_format_date(value):
-        value = datetime.strptime(value, '%Y-%m-%d').strftime('%m/%d/%Y')
+    def get_fuse_format_date(value):
+        value = datetime.strptime(value, '%Y-%m-%d').strftime('%Y-%m-%d')
         return value
 
     # noinspection PyShadowingNames

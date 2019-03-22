@@ -423,7 +423,7 @@ class OrderUpdateForm(forms.ModelForm):
             }
         ))
     anticipated_start_date = forms.DateField(
-        label='Anticipated Start Date',
+        label='Anticipated Start Date (MM/DD/YYYY)',
         required=True,
         validators=[],
         input_formats=['%Y-%m-%d', '%d %b %Y'],
@@ -439,7 +439,7 @@ class OrderUpdateForm(forms.ModelForm):
             }
         ))
     anticipated_end_date = forms.DateField(
-        label='Anticipated End Date',
+        label='Anticipated End Date (MM/DD/YYYY)',
         required=True,
         validators=[],
         input_formats=['%Y-%m-%d', '%d %b %Y'],

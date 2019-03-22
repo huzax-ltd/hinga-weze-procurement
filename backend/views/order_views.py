@@ -484,9 +484,9 @@ def update(request, pk):
                             }
                         )
                 else:
-                    model.order_anticipated_start_date = Utils.get_us_format_date(
+                    model.order_anticipated_start_date = Utils.get_fuse_format_date(
                         str(model.order_anticipated_start_date))
-                    model.order_anticipated_end_date = Utils.get_us_format_date(str(model.order_anticipated_end_date))
+                    model.order_anticipated_end_date = Utils.get_fuse_format_date(str(model.order_anticipated_end_date))
                     form = OrderUpdateForm(
                         initial={
                             'requester_name': model.order_requester_name,
@@ -652,7 +652,7 @@ def view(request, pk):
 
             if model.order_status == Orders.STATUS_ASSIGNED:
                 notification_timeline = NotificationsTimeline()
-                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Pending choosing vendor category</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Pending vendor category selection</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
