@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models import Q
 from django.middleware.csrf import rotate_token
 from django.utils.crypto import get_random_string, salted_hmac, constant_time_compare
+from tinymce.models import HTMLField
 
 from app import settings
 from app.data import ARRAY_GENDER
@@ -618,6 +619,19 @@ class Orders(models.Model):
     order_supplier_updated_by = models.CharField('Vendor Updated By', max_length=100, blank=True)
     order_supplier_updated_department = models.CharField('Vendor Updated Department', max_length=255, blank=True)
     order_supplier_updated_role = models.CharField('Vendor Updated Role', max_length=255, blank=True)
+
+    order_email_to_supplier_subject = models.CharField('Email Subject', max_length=255, blank=True)
+    # order_email_to_supplier_message = models.TextField('Email Message', blank=True)
+    order_email_to_supplier_message = HTMLField('Email Message')
+    order_email_to_supplier_proposal_submission_url = models.CharField('Proposal Submission URL', max_length=255,
+                                                                       blank=True)
+    order_email_to_supplier_updated_at = models.DateTimeField('Updated At',
+                                                              default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_email_to_supplier_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    order_email_to_supplier_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    order_email_to_supplier_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    order_email_to_supplier_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
     order_proposal_id = models.IntegerField('Proposal Id', blank=False, default=0)
     order_proposal_due_date = models.DateField('Proposal Due Date', default=settings.APP_CONSTANT_DEFAULT_DATE)
     order_purchase_no = models.CharField('Purchase Order No.', max_length=100, blank=True)

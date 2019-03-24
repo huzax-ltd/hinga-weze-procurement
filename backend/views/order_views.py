@@ -11,7 +11,7 @@ from app import settings
 from app.models import Operators, Orders, Order_Items, Order_Approvals, Notifications, NotificationsTimeline
 from app.utils import Utils
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
-    OrderAssignmentForm, OrderSupplierForm
+    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.tables.order_item_tables import OrderItemsTable
 from backend.tables.order_tables import OrdersTable
@@ -672,7 +672,7 @@ def view(request, pk):
 
             if model.order_status == Orders.STATUS_SUPPLIER_SELECTED:
                 notification_timeline = NotificationsTimeline()
-                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Generate proposal is pending</b>"
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Email draft to vendors is pending</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
@@ -986,5 +986,76 @@ def update_supplier(request, pk):
                 )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                 return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update_email_to_supplier(request, pk):
+    template_url = 'orders/update-email-to-supplier.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            # try:
+            model = Orders.objects.get(order_id=pk)
+            if request.method == 'POST':
+
+                form = OrderEmailToSupplierForm(request.POST)
+
+                # noinspection PyArgumentList
+                if form.is_valid():
+                    model.order_email_to_supplier_subject = form.cleaned_data['order_email_to_supplier_subject']
+                    model.order_email_to_supplier_message = form.cleaned_data['order_email_to_supplier_message']
+
+                    model.order_email_to_supplier_updated_id = Utils.get_current_datetime_utc()
+                    model.order_email_to_supplier_updated_id = operator.operator_id
+                    model.order_email_to_supplier_updated_by = operator.operator_name
+                    model.order_email_to_supplier_updated_department = operator.operator_department
+                    model.order_email_to_supplier_updated_role = operator.operator_role
+                    model.save()
+
+                    messages.success(request, 'Updated successfully.')
+                    return redirect(reverse("orders_view", args=[model.order_id]))
+                else:
+                    return render(
+                        request, template_url,
+                        {
+                            'section': settings.BACKEND_SECTION_ORDERS,
+                            'title': Orders.TITLE,
+                            'name': Orders.NAME,
+                            'operator': operator,
+                            'auth_permissions': auth_permissions,
+                            'form': form,
+                            'model': model,
+                            'index_url': reverse("orders_index"),
+                        }
+                    )
+            else:
+                form = OrderEmailToSupplierForm(
+                    initial={
+                        'order_email_to_supplier_subject': model.order_email_to_supplier_subject,
+                        'order_email_to_supplier_message': model.order_email_to_supplier_message,
+                    }
+                )
+
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'title': Orders.TITLE,
+                    'name': Orders.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'form': form,
+                    'model': model,
+                    'index_url': reverse("orders_index"),
+                }
+            )
+        # except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+        #     return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')

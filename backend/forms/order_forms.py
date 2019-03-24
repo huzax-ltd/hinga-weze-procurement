@@ -1,8 +1,14 @@
 from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.core.validators import MinLengthValidator, MaxLengthValidator
+from tinymce.widgets import TinyMCE
 
 from app.models import Orders, Operators
+
+
+class TinyMCEWidget(TinyMCE):
+    def use_required_attribute(self, *args):
+        return False
 
 
 class OrderSearchIndexForm(forms.ModelForm):
@@ -756,4 +762,51 @@ class OrderSupplierForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
         fields = (
             'order_id',
             'order_supplier_category',
+        )
+
+
+class OrderEmailToSupplierForm(forms.ModelForm):
+    order_email_to_supplier_subject = forms.CharField(
+        label='Subject',
+        min_length=1,
+        max_length=255,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(255)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    order_email_to_supplier_message = forms.CharField(
+        label='Message',
+        required=True,
+        widget=TinyMCE(
+            attrs={
+                'cols': 30,
+                'rows': 10
+            }
+        )
+    )
+
+    def clean_order_email_to_supplier_subject(self):
+        data = self.cleaned_data['order_email_to_supplier_subject']
+        return data
+
+    def clean_order_email_to_supplier_message(self):
+        data = self.cleaned_data['order_email_to_supplier_message']
+        return data
+
+    def clean(self):
+        cleaned_data = super(OrderEmailToSupplierForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_email_to_supplier_subject',
+            'order_email_to_supplier_message',
         )

@@ -194,9 +194,9 @@ urlpatterns = [
         name='service-worker.js'),
 
     # update procurement method
-    url(r'^order/update/assignment/(?P<pk>.+)/$', order_views.update_order_assignment,
+    url(r'^orders/update/assignment/(?P<pk>.+)/$', order_views.update_order_assignment,
         name='orders_update_assignment'),
-    url(r'^order/update/assignment/(?P<pk>.+)/service-worker.js',
+    url(r'^orders/update/assignment/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
@@ -209,17 +209,25 @@ urlpatterns = [
         name='service-worker.js'),
 
     # update order assignment
-    url(r'^order/update/procurement-method/(?P<pk>.+)/$', order_views.update_order_assignment,
+    url(r'^orders/update/procurement-method/(?P<pk>.+)/$', order_views.update_order_assignment,
         name='orders_update_procurement_method'),
-    url(r'^order/update/procurement-method/(?P<pk>.+)/service-worker.js',
+    url(r'^orders/update/procurement-method/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
     # update supplier category
-    url(r'^order/update/supplier/(?P<pk>.+)/$', order_views.update_supplier,
+    url(r'^orders/update/supplier/(?P<pk>.+)/$', order_views.update_supplier,
         name='orders_update_supplier'),
-    url(r'^order/update/supplier/(?P<pk>.+)/service-worker.js',
+    url(r'^orders/update/supplier/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update email to supplier draft
+    url(r'^orders/update/supplier-email/(?P<pk>.+)/$', order_views.update_email_to_supplier,
+        name='orders_update_email_to_supplier'),
+    url(r'^orders/update/supplier-email/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
