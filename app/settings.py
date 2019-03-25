@@ -448,6 +448,11 @@ MAX_IMAGE_UPLOAD_SIZE = 4 * 1024 * 1024  # 4MB
 VALID_IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg']
 VALID_IMAGE_MIMES = ("image/png", "image/jpeg")
 
+# File Extensions
+MAX_FILE_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
+VALID_FILE_EXTENSIONS = ['.pdf', '.doc', '.docx', '.xls', '.xlsx']
+VALID_FILE_MIMES = ("image/png", "image/jpeg")
+
 TINYMCE_DEFAULT_CONFIG = {
     'height': 300,
     'width': '100%',

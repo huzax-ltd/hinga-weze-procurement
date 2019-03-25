@@ -1299,22 +1299,24 @@ class Order_Attachments(models.Model):
     SINGULAR_TITLE = settings.MODEL_ORDER_APPROVALS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
+    UPLOAD_PATH = 'orders/'
+
     TYPE_NONE = 'none'
-    TYPE_ORDER_REQUEST = 'order-request'
+    TYPE_ORDER_EMAIL = 'order-email'
     TYPE_ORDER_PROPOSAL = 'order-proposal'
     TYPE_ORDER_PURCHASE = 'order-purchase'
     TYPE_ORDER_INVOICE = 'order-invoice'
 
     ARRAY_TYPES = [
         (TYPE_NONE.title()).replace('-', ' '),
-        (TYPE_ORDER_REQUEST.title()).replace('-', ' '),
+        (TYPE_ORDER_EMAIL.title()).replace('-', ' '),
         (TYPE_ORDER_PROPOSAL.title()).replace('-', ' '),
         (TYPE_ORDER_PURCHASE.title()).replace('-', ' '),
         (TYPE_ORDER_INVOICE.title()).replace('-', ' '),
     ]
     TYPES = (
         ('', '--select--'),
-        (TYPE_ORDER_REQUEST, (TYPE_ORDER_REQUEST.title()).replace('-', ' ')),
+        (TYPE_ORDER_EMAIL, (TYPE_ORDER_EMAIL.title()).replace('-', ' ')),
         (TYPE_ORDER_PROPOSAL, (TYPE_ORDER_PROPOSAL.title()).replace('-', ' ')),
         (TYPE_ORDER_PURCHASE, (TYPE_ORDER_PURCHASE.title()).replace('-', ' ')),
         (TYPE_ORDER_INVOICE, (TYPE_ORDER_INVOICE.title()).replace('-', ' ')),
@@ -1323,9 +1325,11 @@ class Order_Attachments(models.Model):
     order_attachment_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     orders_order_id = models.IntegerField('Order Id', blank=False)
     order_attachment_type = models.CharField('Type', max_length=255, blank=False, choices=TYPES, default=TYPE_NONE)
-    order_attachment_type_id = models.IntegerField('Proposal Id', blank=False, default=0)
+    order_attachment_type_id = models.IntegerField('Type Id', blank=False, default=0)
     order_attachment_file_name = models.CharField('File Name', max_length=255, blank=True)
-    order_attachment_file_path = models.CharField('File Path', max_length=255, blank=True)
+    order_attachment_file_path = models.FileField('File Path', upload_to=UPLOAD_PATH)
+    order_attachment_file_size = models.CharField('File Size', max_length=255, blank=True)
+    order_attachment_file_type = models.CharField('File Type', max_length=255, blank=True)
     order_attachment_file_uploaded_at = models.DateTimeField('Uploaded At',
                                                              default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_attachment_file_uploaded_id = models.CharField('Uploaded ID', max_length=100, blank=True)

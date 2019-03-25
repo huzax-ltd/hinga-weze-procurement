@@ -46,6 +46,62 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
+                                    <button id="btn-upload-files" type="button" class="btn btn-outline-primary">
+                                    <span class="icon icon-upload"
+                                          style="font-size: 16px; vertical-align: top !important;"></span> Upload files
+                                    </button>
+                                    <button id="btn-upload-files" type="button" class="btn btn-outline-success">
+                                    <span class="icon icon-download text-success"
+                                          style="font-size: 16px; vertical-align: top !important;"></span> Download all
+                                    </button>
+                                    <button id="btn-upload-files" type="button" class="btn btn-outline-danger" href="#"
+                                            onclick="singleSelect('{{ select_single_url }}', 'order-email-attachment-delete-all', '{{ model.order_id }}', '{{ item_index_url }}');">
+                                    <span class="icon icon-delete text-danger"
+                                          style="font-size: 16px; vertical-align: top !important;"></span> Delete all
+                                    </button>
+                                    <input id="id_order_attachment_file_path" type="file"
+                                           name="order_attachment_file_path"
+                                           multiple
+                                           style="display: none;"
+                                           data-url="{% url 'orders_upload_attachments' %}"
+                                           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-email", "id": "{{ model.order_id }}"}'>
+
+                                    <table id="gallery" class="table table-bordered mt-3">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="5">Email Attachments</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for order_attachment in order_attachments %}
+                                            <tr>
+                                                <td width="30px;"><i class="icon icon-file"></i></td>
+                                                <td>
+                                                    <a href="{{ order_attachment.order_attachment_file_path.url }}"
+                                                       target="_blank">{{ order_attachment.order_attachment_file_name }}</a>
+                                                </td>
+                                                <td width="80px;">{{ order_attachment.order_attachment_file_size|filesizeformat }}</td>
+                                                <td width="30px;">
+                                                    <a download
+                                                       href="{{ order_attachment.order_attachment_file_path.url }}"
+                                                       style="text-decoration: none;">
+                                                        <i class="icon icon-download text-success"></i>
+                                                    </a>
+                                                </td>
+                                                <td width="30px;">
+                                                    <a href="#"
+                                                       onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete', '{{ order_attachment.order_attachment_id }}', '{{ item_index_url }}');"
+                                                       style="text-decoration: none;">
+                                                        <i class="icon icon-delete text-danger"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br>
+                                <div class="col-sm-12">
                                     <div class="form">
                                         <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
                                             <label class="custom-label">
@@ -65,10 +121,128 @@
                                 SUBMIT
                             </button>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="progressModal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Uploading...</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;">0%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function hideDialogOnOutsideClick(d) {
+            d[0].addEventListener('keyup', function (e) {
+                {#if (e.target == d[0])#}
+                {#    $(d).modal('hide');#}
+                if (e.which == 27)
+                    $(d).modal('hide');
+                e.stopImmediatePropagation();
+                return false;
+            });
+            d[0].addEventListener('click', function (e) {
+                if (e.target == d[0])
+                    $(d).modal('hide');
+                e.stopImmediatePropagation();
+                return false;
+            });
+            return false;
+        }
+
+        $(function () {
+            var bdialog = null;
+            $("#btn-upload-files").click(function () {
+                $("#id_order_attachment_file_path").click();
+            });
+
+            $("#id_order_attachment_file_path").fileupload({
+                sequentialUploads: true,
+                start: function (e) {
+                    console.log('start');
+                    {#$('#progressModal').modal('show');#}
+                    bdialog = bootbox.dialog({
+                        closeButton: false,
+                        title: "Message",
+                        message: '' + '<p>Please wait while loading ...</p>' + '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%" ></div></div>' + ''
+                    });
+                },
+                stop: function (e) {
+                    {#$('#progressModal').modal('hide');#}
+                    bootbox.hideAll();
+                    hideDialogOnOutsideClick(bdialog);
+                    $(bdialog).modal('hide');
+                    console.log('stop');
+                    location.reload();
+                },
+                progressall: function (e, data) {
+                    console.log('progress-all');
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    var strProgress = progress + "%";
+                    $(".progress-bar").css({"width": strProgress});
+                    $(".progress-bar").text(strProgress);
+                },
+                done: function (e, data) {
+                    console.log('done');
+                    console.log(data);
+                    console.log(data.result);
+                    var response = jQuery.parseJSON(data.result);
+                    console.log(response.error);
+                    console.log(response.message);
+                    if (response.error == false) {
+                        $("#gallery tbody").prepend(
+                            "<tr><td width=\"30px;\"><i class=\"icon icon-file\"></i></td>\n" +
+                            "<td>\n" +
+                            "<a href=\"" + response.url + "\"\n" +
+                            "target=\"_blank\">" + response.name + "</a>\n" +
+                            "</td>\n" +
+                            "<td width=\"80px;\">" + response.size + "</td>\n" +
+                            "<td width=\"30px;\">\n" +
+                            "<a download href=\"" + response.url + "\"\n" +
+                            "style=\"text-decoration: none;\">\n" +
+                            "<i class=\"icon icon-download text-success\"></i>\n" +
+                            "</a>\n" +
+                            "</td>\n" +
+                            "<td width=\"30px;\">\n" +
+                            "<a href=\"#\"\n" +
+                            "onclick=\"singleSelect('{{ select_single_url }}', 'order-attachment-delete', '" + response.id + "', '{{ item_index_url }}');\"\n" +
+                            "style=\"text-decoration: none;\">\n" +
+                            "<i class=\"icon icon-delete text-danger\"></i>\n" +
+                            "</a>\n" +
+                            "</td></tr>"
+                        );
+                    } else {
+
+                    }
+                },
+                error: function (data) {
+                    {#$('#progressModal').modal('hide');#}
+                    bootbox.hideAll();
+                    hideDialogOnOutsideClick(bdialog);
+                    $(bdialog).modal('hide');
+                    console.log('error');
+                    console.log(data);
+                    console.log(data.responseText);
+                },
+                success: function (data) {
+                    console.log('success');
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+    {% include '_include/select_single.html' %}
     {% include '_include/tab_index.html' %}
 {% endblock %}

@@ -1,9 +1,13 @@
 from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from tinymce.widgets import TinyMCE
 
-from app.models import Orders, Operators
+from app.models import Orders, Order_Attachments, Operators
 
 
 class TinyMCEWidget(TinyMCE):
@@ -809,4 +813,54 @@ class OrderEmailToSupplierForm(forms.ModelForm):
         fields = (
             'order_email_to_supplier_subject',
             'order_email_to_supplier_message',
+        )
+
+
+class OrderUploadAttachmentForm(forms.ModelForm):
+    order_attachment_file_path = forms.FileField(
+        label='File',
+        required=True,
+        validators=[],
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+                'aria-label': 'form-label',
+                'accept': '*/*',
+                'style': "display: none;",
+            }
+        ))
+
+    def clean_order_attachment_file_path(self):
+        file = self.cleaned_data['order_attachment_file_path']
+
+        if not file:
+            raise forms.ValidationError('File type - none')
+
+        try:
+            assert isinstance(file,
+                              InMemoryUploadedFile), "File rewrite has been only tested on in-memory upload backend"
+
+            # Make sure the image is not too big, so that PIL trashes the server
+            if file:
+                if file.size > settings.MAX_FILE_UPLOAD_SIZE:
+                    raise forms.ValidationError("File too large - the limit is 10 megabytes")
+
+            filename = file.name
+            temp_file_path = settings.MEDIA_ROOT + '/temp/' + filename
+            default_storage.save(temp_file_path, ContentFile(file.read()))
+
+            return filename
+
+        except Exception as e:
+            print('Exception: ' + str(e))
+            raise forms.ValidationError('Exception: ' + str(e))
+
+    def clean(self):
+        cleaned_data = super(OrderUploadAttachmentForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Order_Attachments
+        fields = (
+            'order_attachment_file_path',
         )

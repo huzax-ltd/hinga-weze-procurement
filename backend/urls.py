@@ -232,6 +232,10 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # upload attachments
+    url(r'^orders/upload/attachments/$', order_views.upload_attachments,
+        name='orders_upload_attachments'),
+
     # order items
     # create
     url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_items_create'),

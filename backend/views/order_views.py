@@ -1,17 +1,22 @@
+import json
+import os
+
 from django.contrib import messages
 from django.core import serializers
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.template import defaultfilters
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Orders, Order_Items, Order_Approvals, Notifications, NotificationsTimeline
+from app.models import Operators, Orders, Order_Items, Order_Approvals, Order_Attachments, Notifications, \
+    NotificationsTimeline
 from app.utils import Utils
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
-    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm
+    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.tables.order_item_tables import OrderItemsTable
 from backend.tables.order_tables import OrdersTable
@@ -97,7 +102,7 @@ def select_single(request):
                                 messages.success(request, 'Order requested successfully.')
                             else:
                                 messages.success(request, 'Forbidden')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -107,7 +112,7 @@ def select_single(request):
                             model = Orders.objects.get(order_id=id)
                             Orders.request_or_level_approval_order(request, 'approve', model, operator)
                             messages.success(request, 'Order approved successfully.')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -117,7 +122,7 @@ def select_single(request):
                             model = Orders.objects.get(order_id=id)
                             Orders.request_or_level_approval_order(request, 'reject', model, operator)
                             messages.success(request, 'Order rejected successfully.')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -149,7 +154,7 @@ def select_single(request):
                                 )
 
                             messages.success(request, 'Order reviewed successfully.')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -195,7 +200,7 @@ def select_single(request):
                                 )
 
                             messages.success(request, 'Order approved successfully.')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -227,7 +232,33 @@ def select_single(request):
                                 )
 
                             messages.success(request, 'Order rejected successfully.')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-attachment-delete':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Order_Attachments.objects.get(order_attachment_id=id)
+                            if model.order_attachment_file_path:
+                                Utils.delete_file(model.order_attachment_file_path.path)
+                            model.delete()
+                        except(TypeError, ValueError, OverflowError, Order_Attachments.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-email-attachment-delete-all':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+                            order_attachments = Order_Attachments.objects.filter(orders_order_id=id,
+                                                                                 order_attachment_type=Order_Attachments.TYPE_ORDER_EMAIL)
+                            for order_attachment in order_attachments:
+                                if order_attachment.order_attachment_file_path:
+                                    Utils.delete_file(order_attachment.order_attachment_file_path.path)
+                                order_attachment.delete()
+                            messages.success(request, 'Attachments deleted successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -1000,62 +1031,155 @@ def update_email_to_supplier(request, pk):
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
         if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
-            # try:
-            model = Orders.objects.get(order_id=pk)
-            if request.method == 'POST':
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
 
-                form = OrderEmailToSupplierForm(request.POST)
+                    form = OrderEmailToSupplierForm(request.POST)
 
-                # noinspection PyArgumentList
-                if form.is_valid():
-                    model.order_email_to_supplier_subject = form.cleaned_data['order_email_to_supplier_subject']
-                    model.order_email_to_supplier_message = form.cleaned_data['order_email_to_supplier_message']
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        model.order_email_to_supplier_subject = form.cleaned_data['order_email_to_supplier_subject']
+                        model.order_email_to_supplier_message = form.cleaned_data['order_email_to_supplier_message']
 
-                    model.order_email_to_supplier_updated_id = Utils.get_current_datetime_utc()
-                    model.order_email_to_supplier_updated_id = operator.operator_id
-                    model.order_email_to_supplier_updated_by = operator.operator_name
-                    model.order_email_to_supplier_updated_department = operator.operator_department
-                    model.order_email_to_supplier_updated_role = operator.operator_role
-                    model.save()
+                        model.order_email_to_supplier_updated_id = Utils.get_current_datetime_utc()
+                        model.order_email_to_supplier_updated_id = operator.operator_id
+                        model.order_email_to_supplier_updated_by = operator.operator_name
+                        model.order_email_to_supplier_updated_department = operator.operator_department
+                        model.order_email_to_supplier_updated_role = operator.operator_role
+                        model.save()
 
-                    messages.success(request, 'Updated successfully.')
-                    return redirect(reverse("orders_view", args=[model.order_id]))
+                        messages.success(request, 'Updated successfully.')
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        return render(
+                            request, template_url,
+                            {
+                                'section': settings.BACKEND_SECTION_ORDERS,
+                                'title': Orders.TITLE,
+                                'name': Orders.NAME,
+                                'operator': operator,
+                                'auth_permissions': auth_permissions,
+                                'form': form,
+                                'model': model,
+                                'index_url': reverse("orders_index"),
+                            }
+                        )
                 else:
-                    return render(
-                        request, template_url,
-                        {
-                            'section': settings.BACKEND_SECTION_ORDERS,
-                            'title': Orders.TITLE,
-                            'name': Orders.NAME,
-                            'operator': operator,
-                            'auth_permissions': auth_permissions,
-                            'form': form,
-                            'model': model,
-                            'index_url': reverse("orders_index"),
+                    form = OrderEmailToSupplierForm(
+                        initial={
+                            'order_email_to_supplier_subject': model.order_email_to_supplier_subject,
+                            'order_email_to_supplier_message': model.order_email_to_supplier_message,
                         }
                     )
-            else:
-                form = OrderEmailToSupplierForm(
-                    initial={
-                        'order_email_to_supplier_subject': model.order_email_to_supplier_subject,
-                        'order_email_to_supplier_message': model.order_email_to_supplier_message,
+
+                attachment_form = OrderUploadAttachmentForm()
+                order_attachments = Order_Attachments.objects.order_by('-order_attachment_id').all()
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                        'index_url': reverse("orders_index"),
+                        'select_single_url': reverse("orders_select_single"),
+                        'attachment_form': attachment_form,
+                        'order_attachments': order_attachments,
                     }
                 )
-
-            return render(
-                request, template_url,
-                {
-                    'section': settings.BACKEND_SECTION_ORDERS,
-                    'title': Orders.TITLE,
-                    'name': Orders.NAME,
-                    'operator': operator,
-                    'auth_permissions': auth_permissions,
-                    'form': form,
-                    'model': model,
-                    'index_url': reverse("orders_index"),
-                }
-            )
-        # except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
-        #     return HttpResponseNotFound('Not Found', content_type='text/plain')
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def upload_attachments(request):
+    operator = Operators.login_required(request)
+    if operator is None:
+        # Operators.set_redirect_field_name(request, request.path)
+        # return redirect(reverse("operators_signin"))
+        return HttpResponse('signin', content_type='text/plain')
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        action = request.POST['action']
+        id = request.POST['id']
+        if action != '' and id is not None:
+            if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                if action == 'upload-order-email':
+                    order = Orders.objects.get(order_id=id)
+                    if order is not None:
+                        model = Order_Attachments()
+                        model.orders_order_id = order.order_id
+                        model.order_attachment_type = Order_Attachments.TYPE_ORDER_EMAIL
+                        model.order_attachment_type_id = 0
+
+                        model.order_attachment_file_uploaded_at = Utils.get_current_datetime_utc()
+                        model.order_attachment_file_uploaded_id = operator.operator_id
+                        model.order_attachment_file_uploaded_by = operator.operator_name
+                        model.order_attachment_file_uploaded_department = operator.operator_department
+                        model.order_attachment_file_uploaded_role = operator.operator_role
+
+                        import magic
+                        mime = magic.Magic(mime=True)
+                        # for file in request.FILES.getlist('order_attachment_file_path'):
+                        form = OrderUploadAttachmentForm(request.POST, request.FILES)
+                        if form.is_valid():
+                            try:
+                                original_filename = form.cleaned_data['order_attachment_file_path']
+                                ext = original_filename.split('.')[-1]
+                                new_filename = 'order_email_' + str(order.order_code) + '_' + str(
+                                    Utils.get_epochtime_ms()) + '.' + str(ext)
+                                temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
+                                order_attachment_file_path = settings.MEDIA_ROOT + Order_Attachments.UPLOAD_PATH + str(
+                                    new_filename)
+                                os.rename(temp_file_path, order_attachment_file_path)
+                                url = Order_Attachments.UPLOAD_PATH + new_filename
+                                size = str(os.path.getsize(order_attachment_file_path))
+                                model.order_attachment_file_name = original_filename
+                                model.order_attachment_file_path = url
+                                model.order_attachment_file_type = str(mime.from_file(order_attachment_file_path))
+                                model.order_attachment_file_size = size
+                                model.save()
+
+                                # return HttpResponse('success', content_type='text/plain')
+                                response = json.dumps({
+                                    'error': False,
+                                    'message': 'success',
+                                    'name': original_filename,
+                                    'url': model.order_attachment_file_path.url,
+                                    'size': defaultfilters.filesizeformat(size),
+                                    'id': model.order_attachment_id,
+                                })
+                                return HttpResponse(str(response), content_type='text/plain')
+
+                            except Exception as e:
+                                print('Exception: ' + str(e))
+                                response = json.dumps({
+                                    'error': True,
+                                    'message': str(e),
+                                })
+                                return HttpResponse(json.loads(response), content_type='application/json')
+                        else:
+                            print(form.errors)
+                            response = json.dumps({
+                                'error': True,
+                                'message': str(form.errors),
+                            })
+                            return HttpResponse(json.loads(response), content_type='application/json')
+                    else:
+                        return HttpResponseNotFound('Not Found', content_type='text/plain')
+                response = json.dumps({
+                    'error': True,
+                    'message': 'Invalid action',
+                })
+                return HttpResponse(json.loads(response), content_type='application/json')
+            else:
+                return HttpResponseForbidden('Forbidden', content_type='text/plain')
+        else:
+            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
