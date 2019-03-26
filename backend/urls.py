@@ -171,6 +171,8 @@ urlpatterns = [
         name='orders_select_single'),
     url(r'^orders/select-multiple/$', order_views.select_multiple,
         name='orders_select_multiple'),
+    url(r'^orders/select-single/external/$', order_views.select_single_external,
+        name='orders_select_single_external'),
 
     # create
     url(r'^orders/create/$', order_views.create, name='orders_create'),
@@ -235,6 +237,8 @@ urlpatterns = [
     # upload attachments
     url(r'^orders/upload/attachments/$', order_views.upload_attachments,
         name='orders_upload_attachments'),
+    url(r'^orders/upload/attachments/external/$', order_views.upload_attachments_external,
+        name='orders_upload_attachments_external'),
 
     # order items
     # create
@@ -254,6 +258,15 @@ urlpatterns = [
     # single or multiple select
     url(r'^order-items/select-single/$', order_item_views.select_single, name='order_items_select_single'),
     url(r'^order-items/select-multiple/$', order_item_views.select_multiple, name='order_items_select_multiple'),
+
+    # order proposals
+    # create
+    url(r'^order-proposals/create/(?P<pk>.+)/(?P<code>.+)/$', order_views.order_proposal_create,
+        name='orders_proposal_create'),
+    url(r'^order-proposals/create/(?P<pk>.+)/(?P<code>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
 
     # notifications
     path('', notification_views.index, name='index'),

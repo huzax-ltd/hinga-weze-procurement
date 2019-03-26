@@ -1303,21 +1303,36 @@ class Order_Attachments(models.Model):
 
     TYPE_NONE = 'none'
     TYPE_ORDER_EMAIL = 'order-email'
-    TYPE_ORDER_PROPOSAL = 'order-proposal'
+    TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE = 'order-proposal-business-license'
+    TYPE_ORDER_PROPOSAL_OFFER_LETTER = 'order-proposal-offer-letter'
+    TYPE_ORDER_PROPOSAL_QUOTATION = 'order-proposal-quotation'
+    TYPE_ORDER_PROPOSAL_VAT_REGISTRATION = 'order-proposal-vat-registration'
+    TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT = 'order-proposal-other-document'
+    TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT = 'order-proposal-reference-document'
     TYPE_ORDER_PURCHASE = 'order-purchase'
     TYPE_ORDER_INVOICE = 'order-invoice'
 
     ARRAY_TYPES = [
         (TYPE_NONE.title()).replace('-', ' '),
         (TYPE_ORDER_EMAIL.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_OFFER_LETTER.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_QUOTATION.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' '),
         (TYPE_ORDER_PURCHASE.title()).replace('-', ' '),
         (TYPE_ORDER_INVOICE.title()).replace('-', ' '),
     ]
     TYPES = (
         ('', '--select--'),
         (TYPE_ORDER_EMAIL, (TYPE_ORDER_EMAIL.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL, (TYPE_ORDER_PROPOSAL.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE, (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_OFFER_LETTER, (TYPE_ORDER_PROPOSAL_OFFER_LETTER.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_QUOTATION, (TYPE_ORDER_PROPOSAL_QUOTATION.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION, (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT, (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT, (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' ')),
         (TYPE_ORDER_PURCHASE, (TYPE_ORDER_PURCHASE.title()).replace('-', ' ')),
         (TYPE_ORDER_INVOICE, (TYPE_ORDER_INVOICE.title()).replace('-', ' ')),
     )
@@ -1326,6 +1341,7 @@ class Order_Attachments(models.Model):
     orders_order_id = models.IntegerField('Order Id', blank=False)
     order_attachment_type = models.CharField('Type', max_length=255, blank=False, choices=TYPES, default=TYPE_NONE)
     order_attachment_type_id = models.IntegerField('Type Id', blank=False, default=0)
+    order_attachment_file_id = models.IntegerField('File Id', blank=False, default=0)
     order_attachment_file_name = models.CharField('File Name', max_length=255, blank=True)
     order_attachment_file_path = models.FileField('File Path', upload_to=UPLOAD_PATH)
     order_attachment_file_size = models.CharField('File Size', max_length=255, blank=True)
@@ -1393,12 +1409,41 @@ class Order_Proposals(models.Model):
         (STATUS_ACKNOWLEDGED, (STATUS_ACKNOWLEDGED.title()).replace('-', ' ')),
     )
 
+    SUPPLIER_TYPE_COMPANY = 'company'
+    SUPPLIER_TYPE_ASSOCIATION = 'association'
+    SUPPLIER_TYPE_INDIVIDUAL = 'individual'
+
+    ARRAY_SUPPLIER_TYPES = [
+        (SUPPLIER_TYPE_COMPANY.title()).replace('-', ' '),
+        (SUPPLIER_TYPE_ASSOCIATION.title()).replace('-', ' '),
+        (SUPPLIER_TYPE_INDIVIDUAL.title()).replace('-', ' '),
+    ]
+    DROPDOWN_SUPPLIER_TYPES = (
+        ('', '--select--'),
+        (SUPPLIER_TYPE_COMPANY, (SUPPLIER_TYPE_COMPANY.title()).replace('-', ' ')),
+        (SUPPLIER_TYPE_ASSOCIATION, (SUPPLIER_TYPE_ASSOCIATION.title()).replace('-', ' ')),
+        (SUPPLIER_TYPE_INDIVIDUAL, (SUPPLIER_TYPE_INDIVIDUAL.title()).replace('-', ' ')),
+    )
+
     order_proposal_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    order_proposal_code = models.CharField('Proposal Id', max_length=8, unique=True, blank=False, default=None)
     orders_order_id = models.IntegerField('Order Id', blank=False)
-    order_proposal_supplier_category = models.CharField('Supplier Category', max_length=255, blank=False)
-    order_proposal_supplier_title = models.CharField('Supplier Name', max_length=255, blank=False)
-    order_proposal_supplier_details = models.CharField('Supplier Details', max_length=255, blank=True)
-    order_proposal_supplier_address = models.CharField('Supplier Address', max_length=255, blank=True)
+    order_proposal_supplier_category = models.CharField('Vendor Category', max_length=255, blank=False)
+    order_proposal_supplier_company_type = models.CharField('Type', max_length=255, blank=True,
+                                                            choices=DROPDOWN_SUPPLIER_TYPES, default='')
+    order_proposal_supplier_title = models.CharField('Name', max_length=255, blank=True)
+    order_proposal_supplier_details = models.CharField('Details', max_length=255, blank=True)
+    order_proposal_supplier_rf_number = models.CharField('RFQ/RFP/RFA', max_length=255, blank=True)
+    order_proposal_supplier_proposal_title = models.CharField('Tender Description Title', max_length=255, blank=True)
+    order_proposal_supplier_legal_representatives = models.CharField('Names of Legal Representatives', max_length=255,
+                                                                     blank=True)
+    order_proposal_supplier_address_plot_no = models.CharField('Plot No.', max_length=255, blank=True)
+    order_proposal_supplier_address_street = models.CharField('Street', max_length=255, blank=True)
+    order_proposal_supplier_address_av_no = models.CharField('AV No.', max_length=255, blank=True)
+    order_proposal_supplier_address_sector = models.CharField('Sector', max_length=255, blank=True)
+    order_proposal_supplier_address_district = models.CharField('District', max_length=255, blank=True)
+    order_proposal_supplier_address_country = models.CharField('Country', max_length=255, blank=True)
+
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+250123456789'. Up to 13 digits allowed.")
     order_proposal_supplier_contact_phone_number = models.CharField('Phone Number',
@@ -1406,6 +1451,46 @@ class Order_Proposals(models.Model):
                                                                                 MaxLengthValidator(13)], max_length=13,
                                                                     blank=True)
     order_proposal_supplier_contact_email_id = models.EmailField('Email id', max_length=100, blank=True)
+    order_proposal_supplier_tin_number = models.CharField('TIN Number', max_length=255, blank=True)
+    order_proposal_supplier_bank_account_details = models.CharField('Bank Account Details', max_length=255, blank=True)
+
+    order_proposal_supplier_previous_reference1_name = models.CharField('Bank Account Details', max_length=255,
+                                                                        blank=True)
+    order_proposal_supplier_previous_reference1_contact_person = models.CharField('Bank Account Details',
+                                                                                  max_length=255, blank=True)
+    order_proposal_supplier_previous_reference1_contact_number = models.CharField('Phone Number',
+                                                                                  validators=[phone_regex,
+                                                                                              MinLengthValidator(10),
+                                                                                              MaxLengthValidator(13)],
+                                                                                  max_length=13,
+                                                                                  blank=True)
+    order_proposal_supplier_previous_reference1_contact_email_id = models.EmailField('Email id', max_length=100,
+                                                                                     blank=True)
+    order_proposal_supplier_previous_reference2_name = models.CharField('Bank Account Details', max_length=255,
+                                                                        blank=True)
+    order_proposal_supplier_previous_reference2_contact_person = models.CharField('Bank Account Details',
+                                                                                  max_length=255, blank=True)
+    order_proposal_supplier_previous_reference2_contact_number = models.CharField('Phone Number',
+                                                                                  validators=[phone_regex,
+                                                                                              MinLengthValidator(10),
+                                                                                              MaxLengthValidator(13)],
+                                                                                  max_length=13,
+                                                                                  blank=True)
+    order_proposal_supplier_previous_reference2_contact_email_id = models.EmailField('Email id', max_length=100,
+                                                                                     blank=True)
+    order_proposal_supplier_previous_reference3_name = models.CharField('Bank Account Details', max_length=255,
+                                                                        blank=True)
+    order_proposal_supplier_previous_reference3_contact_person = models.CharField('Bank Account Details',
+                                                                                  max_length=255, blank=True)
+    order_proposal_supplier_previous_reference3_contact_number = models.CharField('Phone Number',
+                                                                                  validators=[phone_regex,
+                                                                                              MinLengthValidator(10),
+                                                                                              MaxLengthValidator(13)],
+                                                                                  max_length=13,
+                                                                                  blank=True)
+    order_proposal_supplier_previous_reference3_contact_email_id = models.EmailField('Email id', max_length=100,
+                                                                                     blank=True)
+
     order_proposal_cost = models.DecimalField('Proposal Cost', max_digits=10, decimal_places=0, default=Decimal(0))
     order_proposal_evaluated_score = models.IntegerField('Score', blank=False, default=0)
     order_proposal_evaluation_details = models.CharField('Evaluation Details', max_length=255, blank=True)
@@ -1443,6 +1528,16 @@ class Order_Proposals(models.Model):
 
     def __unicode__(self):
         return self.order_proposal_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and Order_Proposals.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token
 
 
 # Create your models here.

@@ -127,43 +127,9 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="progressModal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">Uploading...</h6>
-                </div>
-                <div class="modal-body">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;">0%
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
-        function hideDialogOnOutsideClick(d) {
-            d[0].addEventListener('keyup', function (e) {
-                {#if (e.target == d[0])#}
-                {#    $(d).modal('hide');#}
-                if (e.which == 27)
-                    $(d).modal('hide');
-                e.stopImmediatePropagation();
-                return false;
-            });
-            d[0].addEventListener('click', function (e) {
-                if (e.target == d[0])
-                    $(d).modal('hide');
-                e.stopImmediatePropagation();
-                return false;
-            });
-            return false;
-        }
-
         $(function () {
-            var bdialog = null;
+            var progressDialog = null;
             $("#btn-upload-files").click(function () {
                 $("#id_order_attachment_file_path").click();
             });
@@ -172,20 +138,20 @@
                 sequentialUploads: true,
                 start: function (e) {
                     console.log('start');
-                    {#$('#progressModal').modal('show');#}
-                    bdialog = bootbox.dialog({
+                    progressDialog = bootbox.dialog({
                         closeButton: false,
                         title: "Message",
                         message: '' + '<p>Please wait while loading ...</p>' + '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%" ></div></div>' + ''
                     });
                 },
                 stop: function (e) {
-                    {#$('#progressModal').modal('hide');#}
                     bootbox.hideAll();
-                    hideDialogOnOutsideClick(bdialog);
-                    $(bdialog).modal('hide');
+                    $(progressDialog).modal("hide");
+                    $(progressDialog).hide();
+                    $('.modal-backdrop').hide();
+                    $("body").removeClass("modal-open");
                     console.log('stop');
-                    location.reload();
+                    {#location.reload();#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -228,10 +194,11 @@
                     }
                 },
                 error: function (data) {
-                    {#$('#progressModal').modal('hide');#}
                     bootbox.hideAll();
-                    hideDialogOnOutsideClick(bdialog);
-                    $(bdialog).modal('hide');
+                    $(progressDialog).modal("hide");
+                    $(progressDialog).hide();
+                    $('.modal-backdrop').hide();
+                    $("body").removeClass("modal-open");
                     console.log('error');
                     console.log(data);
                     console.log(data.responseText);
