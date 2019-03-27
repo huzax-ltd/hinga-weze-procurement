@@ -1,0 +1,825 @@
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+{% block body %}{% load static %}
+    {% load static %}{% csrf_token %}
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <a class="breadcrumb-item" href="{{ index_url }}">Procurement Requests</a>
+                        <a class="breadcrumb-item"
+                           href="{% url 'orders_view' pk=order.order_id %}">{{ order.order_code }}</a>
+                        <a class="breadcrumb-item"
+                           href="{% url 'order_proposals_index' pk=order.order_id %}">Proposals</a>
+                        <span class="breadcrumb-item active">{{ model.order_proposal_code }}</span>
+                        <span class="breadcrumb-item active">Proposal Details</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
+                {% endif %}
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Proposal Details</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <div class="card mb-6 mt-6">
+                            <header class="row no-gutters align-items-center justify-content-between">
+                                <div class="user col text-center">
+                                    <div class="row no-gutters align-items-center justify-content-start text-center">
+                                        <div class="col">
+                                            <div class="title font-weight-bold">
+                                                <img class="img-responsive"
+                                                     src="{% static 'app/android-icon-72x72.png' %}" alt="">
+                                                <h5>Cultivating New Frontiers in Agriculture</h5>
+                                                <h6>Vendor Proposal Request Form</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                            <hr style="height: 2px; color: black; width: 100%">
+                            <div class="content p-5">
+                                <div class="message py-2 px-4">
+                                    <form method="post" action="">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                {% load static %}{% include '_include/alert.html' %}
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Proposal Details</p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.rf_number.label }}
+                                                            {% if form.rf_number.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.rf_number }}
+                                                    </div>
+                                                    {{ form.rf_number.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0"
+                                                         style="border-bottom: 0 !important;">
+                                                        <label class="custom-label">
+                                                            {{ form.proposal_title.label }}
+                                                            {% if form.proposal_title.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.proposal_title }}
+                                                    </div>
+                                                    {{ form.proposal_title.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Vendor Details</p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.company_type.label }}
+                                                            {% if form.company_type.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.company_type }}
+                                                    </div>
+                                                    {{ form.company_type.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.title.label }}
+                                                            {% if form.title.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.title }}
+                                                    </div>
+                                                    {{ form.title.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.legal_representatives.label }}
+                                                            {% if form.legal_representatives.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.legal_representatives }}
+                                                    </div>
+                                                    {{ form.legal_representatives.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Contact Details</p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.address_plot_no.label }}
+                                                            {% if form.address_plot_no.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.address_plot_no }}
+                                                    </div>
+                                                    {{ form.address_plot_no.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.address_street.label }}
+                                                            {% if form.address_street.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.address_street }}
+                                                    </div>
+                                                    {{ form.address_street.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.address_av_no.label }}
+                                                            {% if form.address_av_no.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.address_av_no }}
+                                                    </div>
+                                                    {{ form.address_av_no.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.address_sector.label }}
+                                                            {% if form.address_sector.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.address_sector }}
+                                                    </div>
+                                                    {{ form.address_sector.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.address_district.label }}
+                                                            {% if form.address_district.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.address_district }}
+                                                    </div>
+                                                    {{ form.address_district.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.address_country.label }}
+                                                            {% if form.address_country.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.address_country }}
+                                                    </div>
+                                                    {{ form.address_country.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.contact_phone_number.label }}
+                                                            {% if form.contact_phone_number.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.contact_phone_number }}
+                                                    </div>
+                                                    {{ form.contact_phone_number.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.contact_email_id.label }}
+                                                            {% if form.contact_email_id.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.contact_email_id }}
+                                                    </div>
+                                                    {{ form.contact_email_id.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Attachments</p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Business Reg. License / ID for Individual
+                                                            <b style="color: red;">*</b>
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_business_license_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-business-license", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment1 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment1.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment1.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment1 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment1.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Submission Letter
+                                                            <b style="color: red;">*</b>
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_offer_letter_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-offer-letter", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment2 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment2.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment2.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment2 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment2.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Proposal Quotation
+                                                            <b style="color: red;">*</b>
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_quotation_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-quotation", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment3 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment3.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment3.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment3 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment3.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Other Details</p>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.tin_number.label }}
+                                                            {% if form.tin_number.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.tin_number }}
+                                                    </div>
+                                                    {{ form.tin_number.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            TIN/VAT Reg. Document
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_vat_registration_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-vat-registration", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment4 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment4.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment4.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment4 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment4.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Other Document
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_other_document1_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-other-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "1"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment5 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment5.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment5.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment5 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment5.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Other Document
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_other_document2_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-other-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "1"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment6 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment6.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment6.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment6 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment6.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.bank_account_details.label }}
+                                                            {% if form.bank_account_details.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.bank_account_details }}
+                                                    </div>
+                                                    {{ form.bank_account_details.errors }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Previous References</p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference1_name.label }}
+                                                            {% if form.previous_reference1_name.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference1_name }}
+                                                    </div>
+                                                    {{ form.previous_reference1_name.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference1_contact_person.label }}
+                                                            {% if form.previous_reference1_contact_person.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference1_contact_person }}
+                                                    </div>
+                                                    {{ form.previous_reference1_contact_person.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference1_contact_number.label }}
+                                                            {% if form.previous_reference1_contact_number.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference1_contact_number }}
+                                                    </div>
+                                                    {{ form.previous_reference1_contact_number.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference1_contact_email_id.label }}
+                                                            {% if form.previous_reference1_contact_email_id.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference1_contact_email_id }}
+                                                    </div>
+                                                    {{ form.previous_reference1_contact_email_id.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Reference Document
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_reference1_document_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-reference-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "1"}'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment7 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment7.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment7.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment7 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment7.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference2_name.label }}
+                                                            {% if form.previous_reference2_name.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference2_name }}
+                                                    </div>
+                                                    {{ form.previous_reference2_name.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference2_contact_person.label }}
+                                                            {% if form.previous_reference2_contact_person.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference2_contact_person }}
+                                                    </div>
+                                                    {{ form.previous_reference2_contact_person.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference2_contact_number.label }}
+                                                            {% if form.previous_reference2_contact_number.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference2_contact_number }}
+                                                    </div>
+                                                    {{ form.previous_reference2_contact_number.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference2_contact_email_id.label }}
+                                                            {% if form.previous_reference2_contact_email_id.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference2_contact_email_id }}
+                                                    </div>
+                                                    {{ form.previous_reference2_contact_email_id.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Reference Document
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_reference2_document_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-reference-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "2"'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment8 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment8.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment8.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment8 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment8.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference3_name.label }}
+                                                            {% if form.previous_reference3_name.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference3_name }}
+                                                    </div>
+                                                    {{ form.previous_reference3_name.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference3_contact_person.label }}
+                                                            {% if form.previous_reference3_contact_person.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference3_contact_person }}
+                                                    </div>
+                                                    {{ form.previous_reference3_contact_person.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference3_contact_number.label }}
+                                                            {% if form.previous_reference3_contact_number.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference3_contact_number }}
+                                                    </div>
+                                                    {{ form.previous_reference3_contact_number.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            {{ form.previous_reference3_contact_email_id.label }}
+                                                            {% if form.previous_reference3_contact_email_id.field.required %}
+                                                                <b style="color: red;">*</b>{% endif %}
+                                                        </label>
+                                                        {{ form.previous_reference3_contact_email_id }}
+                                                    </div>
+                                                    {{ form.previous_reference3_contact_email_id.errors }}
+                                                </div>
+                                                <div class="form">
+                                                    <div class="form-group mb-4 pt-0">
+                                                        <label class="custom-label">
+                                                            Reference Document
+                                                        </label>
+                                                        <input id="id_order_attachment_proposal_reference3_document_file_path"
+                                                               type="file"
+                                                               name="order_attachment_file_path"
+                                                               style="display: none;"
+                                                               data-url="{% url 'orders_upload_attachments_external' %}"
+                                                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-reference-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "3"'>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td width="30px;"><i class="icon icon-file"></i>
+                                                                </td>
+                                                                <td>
+                                                                    {% if order_attachment9 == '' %}
+                                                                        <a href="#" target="_blank"></a>
+                                                                    {% else %}
+                                                                        <a href="{{ order_attachment9.order_attachment_file_path.url }}"
+                                                                           target="_blank">{{ order_attachment9.order_attachment_file_name }}</a>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td width="30px;">
+                                                                    {% if order_attachment9 == '' %}
+                                                                        <a download href="#"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a download
+                                                                           href="{{ order_attachment9.order_attachment_file_path.url }}"
+                                                                           style="text-decoration: none;">
+                                                                            <i class="icon icon-download text-success"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include '_include/select_single.html' %}
+    {% include '_include/tab_index.html' %}
+{% endblock %}

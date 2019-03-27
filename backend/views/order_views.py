@@ -21,9 +21,9 @@ from app.models import Operators, Orders, Order_Items, Order_Approvals, Order_At
 from app.utils import Utils
 from backend.forms.general_forms import SendEmailForm
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
-    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm, \
-    OrderProposalCreateForm, OrderProposalViewForm
+    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
+from backend.forms.order_proposal_forms import OrderProposalCreateForm, OrderProposalViewForm
 from backend.tables.order_item_tables import OrderItemsTable
 from backend.tables.order_tables import OrdersTable
 
@@ -682,6 +682,14 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
+            if model.order_supplier_updated_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Selected Vendor Category <small>by ' + model.order_supplier_updated_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_supplier_updated_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
             if model.order_proposal_generated_at != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Updated requirements <small>by ' + model.order_proposal_generated_role + '</small>'
@@ -694,22 +702,6 @@ def view(request, pk):
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Published requirements <small>by ' + model.order_proposal_requested_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_requested_at,
-                                                                            settings.TIME_ZONE,
-                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                timeline_notifications.append(notification_timeline)
-
-            if model.order_supplier_updated_id != '':
-                notification_timeline = NotificationsTimeline()
-                notification_timeline.message = 'Selected Vendor Category <small>by ' + model.order_supplier_updated_role + '</small>'
-                notification_timeline.datetime = Utils.get_convert_datetime(model.order_supplier_updated_at,
-                                                                            settings.TIME_ZONE,
-                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
-                timeline_notifications.append(notification_timeline)
-
-            if model.order_supplier_updated_id != '':
-                notification_timeline = NotificationsTimeline()
-                notification_timeline.message = 'Selected Vendor Category <small>by ' + model.order_supplier_updated_role + '</small>'
-                notification_timeline.datetime = Utils.get_convert_datetime(model.order_supplier_updated_at,
                                                                             settings.TIME_ZONE,
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
@@ -1748,7 +1740,7 @@ def order_proposal_create(request, pk, code):
                               'Your proposal request has been submitted successfully.')
 
                 return redirect(
-                    reverse("orders_proposal_create", args=[model.orders_order_id, model.order_proposal_code]))
+                    reverse("order_proposals_create", args=[model.orders_order_id, model.order_proposal_code]))
             else:
                 messages.error(request, str(form.errors))
                 return render(

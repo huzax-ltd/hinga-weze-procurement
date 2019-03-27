@@ -3,7 +3,8 @@ from django.conf.urls import url
 from django.urls import path
 from django.views.generic import TemplateView
 
-from backend.views import operator_views, operator_log_views, order_views, order_item_views, site_views, setting_views, \
+from backend.views import operator_views, operator_log_views, order_views, order_item_views, order_proposal_views, \
+    site_views, setting_views, \
     notification_views
 
 urlpatterns = [
@@ -267,10 +268,31 @@ urlpatterns = [
     url(r'^order-items/select-multiple/$', order_item_views.select_multiple, name='order_items_select_multiple'),
 
     # order proposals
+    path('', order_proposal_views.index, name='index'),
+
+    # index
+    url(r'^order-proposals/index/(?P<pk>\d+)/$', order_proposal_views.index, name='order_proposals_index'),
+    url(r'^order-proposals/index/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # single or multiple select
+    url(r'^order-proposals/select-single/$', order_proposal_views.select_single,
+        name='order_proposals_select_single'),
+    url(r'^order-proposals/select-multiple/$', order_proposal_views.select_multiple,
+        name='order_proposals_select_multiple'),
     # create
-    url(r'^order-proposals/create/(?P<pk>.+)/(?P<code>.+)/$', order_views.order_proposal_create,
-        name='orders_proposal_create'),
+    url(r'^order-proposals/create/(?P<pk>.+)/(?P<code>.+)/$', order_proposal_views.create,
+        name='order_proposals_create'),
     url(r'^order-proposals/create/(?P<pk>.+)/(?P<code>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # view
+    url(r'^order-proposals/view/internal/(?P<pk>.+)/$', order_proposal_views.view_internal,
+        name='order_proposals_view_internal'),
+    url(r'^order-proposals/view/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
