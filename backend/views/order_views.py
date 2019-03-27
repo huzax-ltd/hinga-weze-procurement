@@ -9,7 +9,6 @@ from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.shortcuts import render_to_response
 from django.template import defaultfilters
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -1096,10 +1095,17 @@ def update_email_to_supplier(request, pk):
             try:
                 model = Orders.objects.get(order_id=pk)
 
-                url = "<a title=\"Submit your proposal\" href=\"" + reverse("orders_proposal_create",
-                                                                            kwargs={'pk': str(pk),
-                                                                                    'code': '0'}) + "\" target=\"_blank\" rel=\"noopener\">Submit your proposal</a>"
-                if url not in model.order_email_to_supplier_message:
+                # sending email
+                if settings.IS_LOCAL:
+                    domain = settings.BACKEND_DOMAIN_LOCAL
+                else:
+                    domain = settings.BACKEND_DOMAIN_PROD
+
+                create_url = '/order-proposals/create/' + str(pk) + '/0/'
+                url = "<a title=\"Submit your proposal\" href=\"" + str(
+                    domain) + create_url + "\" target=\"_blank\" rel=\"noopener\">Submit your proposal</a>"
+
+                if create_url not in model.order_email_to_supplier_message:
                     model.order_email_to_supplier_message = model.order_email_to_supplier_message + "<br><p>Link to submit your proposals:&nbsp;" + url + "</p>"
 
                 attachment_form = OrderUploadAttachmentForm()
@@ -1248,27 +1254,25 @@ def send_email_to_supplier(request, pk):
 
                     # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
                     contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
+
+                    if settings.IS_LOCAL:
+                        domain = settings.BACKEND_DOMAIN_LOCAL
+                    else:
+                        domain = settings.BACKEND_DOMAIN_PROD
+                    message = model.email_message.replace("../../../../", str(domain) + "/")
                     html_content = render_to_string(
                         'email/email-app.html',
                         {
                             'logo_url': logo_url,
                             'contact_url': contact_url,
-                            'message': render_to_response(model.email_message),
+                            'message': defaultfilters.safe(message),
                         }
                     )
-                    # html_content = render_to_response(
-                    #     'email/email-app.html',
-                    #     {
-                    #         'logo_url': logo_url,
-                    #         'contact_url': contact_url,
-                    #         'message': model.email_message,
-                    #     }
-                    # )
                     text_content = strip_tags(html_content)
 
                     email_message = EmailMultiAlternatives(
                         subject=model.email_subject,
-                        body=html_content,
+                        body=text_content,
                         from_email=settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
                         to=[model.email_to],
                         cc=[settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID, model.email_cc],
