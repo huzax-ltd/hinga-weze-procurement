@@ -35,13 +35,15 @@ def index(request):
         search_form = NotificationSearchIndexForm(request.POST or None)
         if request.method == 'POST' and search_form.is_valid():
             display_search = True
-            objects = Notifications.objects.filter(notification_to_id=operator.operator_id)
+            objects = Notifications.objects.filter(notification_to_id=operator.operator_id).order_by(
+                '-notification_created_at')
             objects = Operators.objects.order_by('operator_name').all()
 
             table = NotificationsTable(objects)
         else:
             display_search = False
-            objects = Notifications.objects.filter(notification_to_id=operator.operator_id)
+            objects = Notifications.objects.filter(notification_to_id=operator.operator_id).order_by(
+                '-notification_created_at')
             table = NotificationsTable(objects)
 
         table.set_auth_permissions(auth_permissions)

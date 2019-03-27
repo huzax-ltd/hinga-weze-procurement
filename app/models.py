@@ -259,7 +259,13 @@ class Operators(models.Model):
                     Q(notification_to_id=operator.operator_id) &
                     Q(notification_status=Notifications.STATUS_UNREAD)
                 ).order_by('-notification_created_at')
-                operator.operator_notifications_count = notifications.count()
+
+                if notifications.count() > 5:
+                    count = "5+"
+                else:
+                    count = notifications.count()
+                notifications = notifications[: 5]
+                operator.operator_notifications_count = str(count)
                 operator.operator_notifications_json = notifications
 
             except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
@@ -500,7 +506,7 @@ class Orders(models.Model):
     STATUS_PROPOSAL_REQUESTED = 'proposal-requested'
     STATUS_PROPOSAL_SELECTED = 'proposal-selected'
     STATUS_PURCHASE_GENERATED = 'purchase-generated'
-    STATUS_PROPOSAL_ACKNOWLEDGED = 'proposal-acknowledged'
+    STATUS_ACKNOWLEDGED = 'acknowledged'
     STATUS_RECEIVED = 'received'
     STATUS_PARTIALLY_PAID = 'partially-paid'
     STATUS_PAID = 'paid'
@@ -532,7 +538,7 @@ class Orders(models.Model):
         (STATUS_PROPOSAL_REQUESTED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_SELECTED.title()).replace('-', ' '),
         (STATUS_PURCHASE_GENERATED.title()).replace('-', ' '),
-        (STATUS_PROPOSAL_ACKNOWLEDGED.title()).replace('-', ' '),
+        (STATUS_ACKNOWLEDGED.title()).replace('-', ' '),
         (STATUS_RECEIVED.title()).replace('-', ' '),
         (STATUS_PARTIALLY_PAID.title()).replace('-', ' '),
         (STATUS_PAID.title()).replace('-', ' '),
@@ -565,7 +571,7 @@ class Orders(models.Model):
         (STATUS_PROPOSAL_REQUESTED, (STATUS_PROPOSAL_REQUESTED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_SELECTED, (STATUS_PROPOSAL_SELECTED.title()).replace('-', ' ')),
         (STATUS_PURCHASE_GENERATED, (STATUS_PURCHASE_GENERATED.title()).replace('-', ' ')),
-        (STATUS_PROPOSAL_ACKNOWLEDGED, (STATUS_PROPOSAL_ACKNOWLEDGED.title()).replace('-', ' ')),
+        (STATUS_ACKNOWLEDGED, (STATUS_ACKNOWLEDGED.title()).replace('-', ' ')),
         (STATUS_RECEIVED, (STATUS_RECEIVED.title()).replace('-', ' ')),
         (STATUS_PARTIALLY_PAID, (STATUS_PARTIALLY_PAID.title()).replace('-', ' ')),
         (STATUS_PAID, (STATUS_PAID.title()).replace('-', ' ')),
@@ -708,6 +714,13 @@ class Orders(models.Model):
     order_purchase_generated_department = models.CharField('Purchase Order Generated Department', max_length=255,
                                                            blank=True)
     order_purchase_generated_role = models.CharField('Purchase Order Generated Role', max_length=255, blank=True)
+    order_acknowledged_at = models.DateTimeField('Order Acknowledged At',
+                                                 default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_acknowledged_id = models.CharField('Order Acknowledged ID', max_length=100, blank=True)
+    order_acknowledged_by = models.CharField('Order Acknowledged By', max_length=100, blank=True)
+    order_acknowledged_department = models.CharField('Order Acknowledged Department', max_length=255,
+                                                     blank=True)
+    order_acknowledged_role = models.CharField('Order Acknowledged Role', max_length=255, blank=True)
     order_paid_at = models.DateTimeField('Paid At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_paid_id = models.CharField('Paid ID', max_length=100, blank=True)
     order_paid_by = models.CharField('Paid By', max_length=100, blank=True)
@@ -790,8 +803,8 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_SELECTED
         elif record.order_status == Orders.STATUS_PURCHASE_GENERATED:
             value = Utils.HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED
-        elif record.order_status == Orders.STATUS_PROPOSAL_ACKNOWLEDGED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_ACKNOWLEDGED
+        elif record.order_status == Orders.STATUS_ACKNOWLEDGED:
+            value = Utils.HTML_TAG_ORDER_STATUS_ACKNOWLEDGED
         elif record.order_status == Orders.STATUS_RECEIVED:
             value = Utils.HTML_TAG_ORDER_STATUS_RECEIVED
         elif record.order_status == Orders.STATUS_PARTIALLY_PAID:

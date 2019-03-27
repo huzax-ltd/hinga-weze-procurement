@@ -248,6 +248,38 @@ urlpatterns = [
     url(r'^orders/upload/attachments/external/$', order_views.upload_attachments_external,
         name='orders_upload_attachments_external'),
 
+    # update purchase
+    url(r'^orders/update/purchase/(?P<pk>.+)/$', order_views.update_purchase_order,
+        name='orders_update_purchase'),
+    url(r'^orders/update/purchase/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # send purchase
+    url(r'^orders/update/purchase-send/(?P<pk>.+)/$', order_views.send_purchase_order,
+        name='orders_send_purchase'),
+    url(r'^orders/update/purchase-send/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # acknowledge
+    url(r'^orders/update/acknowledge/(?P<pk>.+)/$', order_views.acknowledge_proposal_external,
+        name='orders_acknowledge'),
+    url(r'^orders/update/acknowledge/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update invoice
+    url(r'^orders/update/invoice/(?P<pk>.+)/$', order_views.update_invoice_order,
+        name='orders_update_invoice'),
+    url(r'^orders/update/invoice/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
     # order items
     # create
     url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_items_create'),

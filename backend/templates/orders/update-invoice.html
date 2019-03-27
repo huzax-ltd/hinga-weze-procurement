@@ -1,4 +1,4 @@
-<form method="post" action="">
+<form method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
     <div class='modal-header bg-primary-700 text-auto'>
         <h6 class='modal-title'>Order Procurement Method</h6>
@@ -26,16 +26,28 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="form">
-                            <div class="form-group mb-4 pt-0"
-                                 style="border-bottom: 0 !important;">
+                            <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
-                                    {{ form.procurement_method.label }}
-                                    {% if form.procurement_method.field.required %}
+                                    {{ form.order_invoice_no.label }}
+                                    {% if form.order_invoice_no.field.required %}
                                         <b style="color: red;">*</b>{% endif %}
                                 </label>
-                                {{ form.procurement_method }}
+                                {{ form.order_invoice_no }}
                             </div>
-                            {{ form.procurement_method.errors }}
+                            {{ form.order_invoice_no.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_attachment_file_path.label }}
+                                    {% if form.order_attachment_file_path.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_attachment_file_path }}
+                            </div>
+                            {{ form.order_attachment_file_path.errors }}
                         </div>
                     </div>
                 </div>
@@ -51,10 +63,4 @@
         </button>
     </div>
 </form>
-<!--suppress ES6ConvertVarToLetConst -->
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function () {
-        $("#search-input-select-procurement-method").select2({placeholder: "--select--", allowClear: false});
-    });
-</script>
 {% include '_include/tab_index.html' %}

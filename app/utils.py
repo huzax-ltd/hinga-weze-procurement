@@ -45,7 +45,7 @@ class Utils(object):
     HTML_TAG_ORDER_STATUS_PROPOSAL_REQUESTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Requested <b></div>'
     HTML_TAG_ORDER_STATUS_PROPOSAL_SELECTED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Selected <b></div>'
     HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Purchase Generated <b></div>'
-    HTML_TAG_ORDER_STATUS_PROPOSAL_ACKNOWLEDGED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Acknowledged <b></div>'
+    HTML_TAG_ORDER_STATUS_ACKNOWLEDGED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Acknowledged <b></div>'
     HTML_TAG_ORDER_STATUS_RECEIVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Received <b></div>'
     HTML_TAG_ORDER_STATUS_PARTIALLY_PAID = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Partially Paid <b></div>'
     HTML_TAG_ORDER_STATUS_PAID = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Paid <b></div>'

@@ -865,3 +865,170 @@ class OrderUploadAttachmentForm(forms.ModelForm):
             'order_attachment_file_path',
         )
 
+
+class OrderPurchaseUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_id = forms.CharField(
+        label='Request Id',
+        min_length=8,
+        max_length=8,
+        required=True,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    order_purchase_no = forms.CharField(
+        label='Purchase Order No.',
+        min_length=1,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    order_attachment_file_path = forms.FileField(
+        label='File',
+        required=True,
+        validators=[],
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+                'aria-label': 'form-label',
+                'accept': '*/*',
+            }
+        ))
+
+    def clean_order_purchase_no(self):
+        data = self.cleaned_data['order_purchase_no']
+        return data
+
+    def clean_order_attachment_file_path(self):
+        file = self.cleaned_data['order_attachment_file_path']
+
+        if not file:
+            raise forms.ValidationError('File type - none')
+
+        try:
+            assert isinstance(file,
+                              InMemoryUploadedFile), "File rewrite has been only tested on in-memory upload backend"
+
+            # Make sure the image is not too big, so that PIL trashes the server
+            if file:
+                if file.size > settings.MAX_FILE_UPLOAD_SIZE:
+                    raise forms.ValidationError("File too large - the limit is 10 megabytes")
+
+            filename = file.name
+            temp_file_path = settings.MEDIA_ROOT + '/temp/' + filename
+            default_storage.save(temp_file_path, ContentFile(file.read()))
+
+            return filename
+
+        except Exception as e:
+            print('Exception: ' + str(e))
+            raise forms.ValidationError('Exception: ' + str(e))
+
+    def clean(self):
+        cleaned_data = super(OrderPurchaseUpdateForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_id',
+            'order_purchase_no',
+            'order_attachment_file_path',
+        )
+
+
+class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_id = forms.CharField(
+        label='Request Id',
+        min_length=8,
+        max_length=8,
+        required=True,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    order_invoice_no = forms.CharField(
+        label='Invoice No.',
+        min_length=1,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    order_attachment_file_path = forms.FileField(
+        label='File',
+        required=True,
+        validators=[],
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+                'aria-label': 'form-label',
+                'accept': '*/*',
+            }
+        ))
+
+    def clean_order_purchase_no(self):
+        data = self.cleaned_data['order_purchase_no']
+        return data
+
+    def clean_order_attachment_file_path(self):
+        file = self.cleaned_data['order_attachment_file_path']
+
+        if not file:
+            raise forms.ValidationError('File type - none')
+
+        try:
+            assert isinstance(file,
+                              InMemoryUploadedFile), "File rewrite has been only tested on in-memory upload backend"
+
+            # Make sure the image is not too big, so that PIL trashes the server
+            if file:
+                if file.size > settings.MAX_FILE_UPLOAD_SIZE:
+                    raise forms.ValidationError("File too large - the limit is 10 megabytes")
+
+            filename = file.name
+            temp_file_path = settings.MEDIA_ROOT + '/temp/' + filename
+            default_storage.save(temp_file_path, ContentFile(file.read()))
+
+            return filename
+
+        except Exception as e:
+            print('Exception: ' + str(e))
+            raise forms.ValidationError('Exception: ' + str(e))
+
+    def clean(self):
+        cleaned_data = super(OrderInvoiceUpdateForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_id',
+            'order_invoice_no',
+            'order_attachment_file_path',
+        )

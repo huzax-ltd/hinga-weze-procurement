@@ -75,18 +75,16 @@ class NotificationsTable(tables.Table):
         return next(self.counter)
 
     @staticmethod
-    def render_actions(record):
-        action_data = ""
-        return action_data
-
-    @staticmethod
     def render_notification_message(record):
         return mark_safe(
             '<p>' + str(record.notification_message) + '</p>')
 
     @staticmethod
     def render_notification_from_id(record):
-        operator = Operators.objects.get(operator_id=record.notification_from_id)
+        try:
+            operator = Operators.objects.get(operator_id=record.notification_from_id)
+        except Operators.DoesNotExist:
+            operator = None
         if operator is None:
             return '-'
         else:

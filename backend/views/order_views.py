@@ -21,7 +21,8 @@ from app.models import Operators, Orders, Order_Items, Order_Approvals, Order_At
 from app.utils import Utils
 from backend.forms.general_forms import SendEmailForm
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
-    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm
+    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm, \
+    OrderPurchaseUpdateForm, OrderInvoiceUpdateForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.forms.order_proposal_forms import OrderProposalCreateForm, OrderProposalViewForm
 from backend.tables.order_item_tables import OrderItemsTable
@@ -720,6 +721,22 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
+            if model.order_purchase_generated_at != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Purchase order generated <small>by ' + model.order_purchase_generated_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_purchase_generated_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_acknowledged_at != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Acknowledged order <small>by vendor</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_acknowledged_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
             if model.order_status == Orders.STATUS_REQUESTED:
                 notification_timeline = NotificationsTimeline()
                 model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
@@ -777,6 +794,18 @@ def view(request, pk):
             if model.order_status == Orders.STATUS_PROPOSAL_SELECTED:
                 notification_timeline = NotificationsTimeline()
                 model.order_readable_status = notification_timeline.message = "<b class='text-red'>Generating purchase order is pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_PURCHASE_GENERATED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Vendor acknowledgement is pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_ACKNOWLEDGED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>In Progress</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
@@ -1994,3 +2023,329 @@ def upload_attachments_external(request):
         return HttpResponse(str(response), content_type='text/plain')
     else:
         return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update_purchase_order(request, pk):
+    template_url = 'orders/update-purchase.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
+
+                    print(request.POST)
+                    print(request.FILES)
+
+                    form = OrderPurchaseUpdateForm(request.POST, request.FILES)
+
+                    import magic
+                    mime = magic.Magic(mime=True)
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        try:
+                            order_attachments = Order_Attachments.objects.filter(
+                                Q(orders_order_id=model.order_id) &
+                                Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PURCHASE)
+                            ).all()
+
+                            for order_attachment in order_attachments:
+                                order_attachment.delete()
+
+                            attachment = Order_Attachments()
+                            attachment.orders_order_id = model.order_id
+                            attachment.order_attachment_type_id = 0
+                            attachment.order_attachment_file_id = 0
+                            attachment.order_attachment_type = Order_Attachments.TYPE_ORDER_PURCHASE
+                            attachment.order_attachment_file_uploaded_at = Utils.get_current_datetime_utc()
+                            attachment.order_attachment_file_uploaded_id = operator.operator_id
+                            attachment.order_attachment_file_uploaded_by = operator.operator_name
+                            attachment.order_attachment_file_uploaded_department = operator.operator_department
+                            attachment.order_attachment_file_uploaded_role = operator.operator_role
+
+                            original_filename = form.cleaned_data['order_attachment_file_path']
+
+                            ext = original_filename.split('.')[-1]
+                            new_filename = 'order_purchase_' + str(model.order_code) + '_' + str(
+                                Utils.get_epochtime_ms()) + '.' + str(ext)
+                            temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
+                            order_attachment_file_path = settings.MEDIA_ROOT + Order_Attachments.UPLOAD_PATH + str(
+                                new_filename)
+                            os.rename(temp_file_path, order_attachment_file_path)
+                            url = Order_Attachments.UPLOAD_PATH + new_filename
+                            size = str(os.path.getsize(order_attachment_file_path))
+                            attachment.order_attachment_file_name = original_filename
+                            attachment.order_attachment_file_path = url
+                            attachment.order_attachment_file_type = str(mime.from_file(order_attachment_file_path))
+                            attachment.order_attachment_file_size = size
+                            attachment.save()
+
+                            model.order_purchase_no = form.cleaned_data['order_purchase_no']
+
+                            model.order_purchase_generated_at = Utils.get_current_datetime_utc()
+                            model.order_purchase_generated_id = operator.operator_id
+                            model.order_purchase_generated_by = operator.operator_name
+                            model.order_purchase_generated_department = operator.operator_department
+                            model.order_purchase_generated_role = operator.operator_role
+
+                            model.order_status = Orders.STATUS_PURCHASE_GENERATED
+                            model.save()
+
+                            messages.success(request, 'Updated successfully.')
+                            return redirect(reverse("orders_view", args=[model.order_id]))
+                        except Exception as e:
+                            print('Exception: ' + str(e))
+                            messages.error(request, '' + str(e))
+                            return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                else:
+                    form = OrderPurchaseUpdateForm(
+                        initial={
+                            'order_id': model.order_code,
+                            'order_purchase_no': model.order_purchase_no,
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                    }
+                )
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update_invoice_order(request, pk):
+    template_url = 'orders/update-invoice.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
+
+                    form = OrderInvoiceUpdateForm(request.POST, request.FILES)
+
+                    import magic
+                    mime = magic.Magic(mime=True)
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        try:
+                            order_attachments = Order_Attachments.objects.filter(
+                                Q(orders_order_id=model.order_id) &
+                                Q(order_attachment_type=Order_Attachments.TYPE_ORDER_INVOICE)
+                            ).all()
+
+                            for order_attachment in order_attachments:
+                                order_attachment.delete()
+
+                            attachment = Order_Attachments()
+                            attachment.orders_order_id = model.order_id
+                            attachment.order_attachment_type_id = 0
+                            attachment.order_attachment_file_id = 0
+                            attachment.order_attachment_type = Order_Attachments.TYPE_ORDER_INVOICE
+                            attachment.order_attachment_file_uploaded_at = Utils.get_current_datetime_utc()
+                            attachment.order_attachment_file_uploaded_id = operator.operator_id
+                            attachment.order_attachment_file_uploaded_by = operator.operator_name
+                            attachment.order_attachment_file_uploaded_department = operator.operator_department
+                            attachment.order_attachment_file_uploaded_role = operator.operator_role
+
+                            original_filename = form.cleaned_data['order_attachment_file_path']
+
+                            ext = original_filename.split('.')[-1]
+                            new_filename = 'order_invoice_' + str(model.order_code) + '_' + str(
+                                Utils.get_epochtime_ms()) + '.' + str(ext)
+                            temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
+                            order_attachment_file_path = settings.MEDIA_ROOT + Order_Attachments.UPLOAD_PATH + str(
+                                new_filename)
+                            os.rename(temp_file_path, order_attachment_file_path)
+                            url = Order_Attachments.UPLOAD_PATH + new_filename
+                            size = str(os.path.getsize(order_attachment_file_path))
+                            attachment.order_attachment_file_name = original_filename
+                            attachment.order_attachment_file_path = url
+                            attachment.order_attachment_file_type = str(mime.from_file(order_attachment_file_path))
+                            attachment.order_attachment_file_size = size
+                            attachment.save()
+
+                            model.order_invoice_no = form.cleaned_data['order_invoice_no']
+                            model.save()
+
+                            messages.success(request, 'Updated successfully.')
+                            return redirect(reverse("orders_view", args=[model.order_id]))
+                        except Exception as e:
+                            print('Exception: ' + str(e))
+                            messages.error(request, '' + str(e))
+                            return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                else:
+                    form = OrderInvoiceUpdateForm(
+                        initial={
+                            'order_id': model.order_code,
+                            'order_invoice_no': model.order_invoice_no,
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                    }
+                )
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def send_purchase_order(request, pk):
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            try:
+                model = Orders.objects.get(order_id=pk)
+
+                order_attachment = Order_Attachments.objects.get(
+                    Q(orders_order_id=model.order_id) &
+                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PURCHASE)
+                )
+
+                order_proposal = Order_Proposals.objects.get(order_proposal_id=model.order_proposal_id)
+
+                # sending email confirmation mail
+                if settings.IS_LOCAL:
+                    domain = settings.BACKEND_DOMAIN_LOCAL
+                    logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                else:
+                    domain = settings.BACKEND_DOMAIN_PROD
+                    logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+
+                contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
+                link_url = '{domain}/{path}'.format(
+                    domain=domain,
+                    path="order-proposals/create/" + str(order_proposal.orders_order_id) + "/" + str(
+                        order_proposal.order_proposal_code) + "/"
+                )
+                link_name = "View Details"
+
+                acknowledge_url = '/orders/update/acknowledge/' + str(pk) + '/'
+                acknowledge_url = "<a title=\"link\" href=\"" + str(
+                    domain) + acknowledge_url + "\" target=\"_blank\" rel=\"noopener\">link</a>"
+
+                message = "Please find the attachment for purchase order and acknowledge by clicking on this " + acknowledge_url + "."
+                html_content = render_to_string(
+                    'email/email-info-with-link.html',
+                    {
+                        'logo_url': logo_url,
+                        'contact_url': contact_url,
+                        'link_url': link_url,
+                        'link_name': link_name,
+                        'name': order_proposal.order_proposal_supplier_title,
+                        'message': defaultfilters.safe(message),
+                    }
+                )
+                text_content = strip_tags(html_content)
+
+                email_message = EmailMultiAlternatives(
+                    subject=settings.EMAIL_NOTIFICATION_SUBJECT,
+                    body=text_content,
+                    from_email=settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
+                    to=[order_proposal.order_proposal_supplier_contact_email_id],
+                    cc=[settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID],
+                    reply_to=[settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID],
+                )
+                email_message.attach_alternative(html_content, "text/html")
+
+                email_message.attach_file(order_attachment.order_attachment_file_path.path)
+
+                email_message.send(fail_silently=False)
+
+                messages.success(request, 'Purchase order email sent successfully.')
+
+                return redirect(reverse("orders_view", args=[model.order_id]))
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist, Order_Attachments.DoesNotExist,
+                   Order_Proposals.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+@csrf_exempt
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def acknowledge_proposal_external(request, pk):
+    try:
+        model = Orders.objects.get(order_id=pk)
+        order_proposal = Order_Proposals.objects.get(order_proposal_id=model.order_proposal_id)
+
+        if model.order_status == Orders.STATUS_PURCHASE_GENERATED:
+            model.order_acknowledged_at = Utils.get_current_datetime_utc()
+            model.order_acknowledged_id = ''
+            model.order_acknowledged_by = ''
+            model.order_acknowledged_department = ''
+            model.order_acknowledged_role = ''
+            model.order_status = Orders.STATUS_ACKNOWLEDGED
+            model.save()
+
+        # sending notification to Officer
+        if model.order_assigned_to_id != str(0):
+            operators = Operators.objects.all().filter(
+                Q(operator_id=model.order_assigned_to_id)
+            )
+        else:
+            operators = Operators.objects.all().filter(
+                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                Q(operator_role=model.order_assigned_to_role)
+            )
+
+        for item in operators:
+            Notifications.add_notification(
+                Notifications.TYPE_SUPPLIER,
+                model.order_proposal_id,
+                Notifications.TYPE_OPERATOR,
+                item.operator_id,
+                Notifications.TYPE_ORDER,
+                model.order_id,
+                "Acknowledged purchase order.",
+                "/backend/orders/view/" + str(model.order_id) + "/",
+            )
+
+        messages.success(request, 'Acknowledged successfully.')
+        return redirect(reverse("order_proposals_create", args=[pk, order_proposal.order_proposal_code]))
+
+    except(TypeError, ValueError, OverflowError, Orders.DoesNotExist, Order_Proposals.DoesNotExist):
+        return HttpResponseNotFound('Not Found', content_type='text/plain')
