@@ -296,6 +296,31 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+    # update evaluate
+    url(r'^order-proposals/update/evaluate/(?P<pk>.+)/$', order_proposal_views.evaluate_proposal,
+        name='order_proposals_update_evaluate'),
+    url(r'^order-proposals/update/evaluate/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # update select
+    url(r'^order-proposals/update/select/(?P<pk>.+)/$', order_proposal_views.select_proposal,
+        name='order_proposals_update_select'),
+    url(r'^order-proposals/update/select/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # other
+    url(r'^order-proposals/api/dropdown/proposals/approved/(?P<code>.+)/$',
+        order_proposal_views.api_dropdown_approved_proposals,
+        name='api_dropdown_approved_proposals'),
+    # acknowledge
+    url(r'^order-proposals/update/acknowledge/(?P<pk>.+)/$', order_proposal_views.acknowledge_proposal_external,
+        name='order_proposals_acknowledge'),
+    url(r'^order-proposals/update/acknowledge/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
 
     # notifications
     path('', notification_views.index, name='index'),

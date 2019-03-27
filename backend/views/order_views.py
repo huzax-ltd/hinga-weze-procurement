@@ -451,6 +451,12 @@ def create(request):
                     model.order_closed_department = ''
                     model.order_closed_role = ''
 
+                    model.order_cancelled_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_cancelled_id = ''
+                    model.order_cancelled_by = ''
+                    model.order_cancelled_department = ''
+                    model.order_cancelled_role = ''
+
                     model.order_status = Orders.STATUS_PENDING
                     # noinspection PyCallByClass,PyTypeChecker
                     model.save('Created')
@@ -692,7 +698,7 @@ def view(request, pk):
 
             if model.order_proposal_generated_at != '':
                 notification_timeline = NotificationsTimeline()
-                notification_timeline.message = 'Updated requirements <small>by ' + model.order_proposal_generated_role + '</small>'
+                notification_timeline.message = 'Updated proposal request <small>by ' + model.order_proposal_generated_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_generated_at,
                                                                             settings.TIME_ZONE,
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
@@ -700,8 +706,16 @@ def view(request, pk):
 
             if model.order_proposal_requested_at != '':
                 notification_timeline = NotificationsTimeline()
-                notification_timeline.message = 'Published requirements <small>by ' + model.order_proposal_requested_role + '</small>'
+                notification_timeline.message = 'Published proposal request <small>by ' + model.order_proposal_requested_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_requested_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_proposal_selected_at != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Selected vendor <small>by ' + model.order_proposal_selected_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_selected_at,
                                                                             settings.TIME_ZONE,
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
@@ -742,7 +756,7 @@ def view(request, pk):
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_status == Orders.STATUS_SUPPLIER_SELECTED:
+            if model.order_status == Orders.STATUS_SUPPLIER_UPDATED:
                 notification_timeline = NotificationsTimeline()
                 model.order_readable_status = notification_timeline.message = "<b class='text-red'>Email draft to vendors is pending</b>"
                 notification_timeline.datetime = ''
@@ -757,6 +771,12 @@ def view(request, pk):
             if model.order_status == Orders.STATUS_PROPOSAL_REQUESTED:
                 notification_timeline = NotificationsTimeline()
                 model.order_readable_status = notification_timeline.message = "<b class='text-red'>Evaluating vendors' proposals is pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_PROPOSAL_SELECTED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Generating purchase order is pending</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
@@ -1039,7 +1059,7 @@ def update_supplier(request, pk):
                         model.order_supplier_updated_by = operator.operator_name
                         model.order_supplier_updated_department = operator.operator_department
                         model.order_supplier_updated_role = operator.operator_role
-                        model.order_status = Orders.STATUS_SUPPLIER_SELECTED
+                        model.order_status = Orders.STATUS_SUPPLIER_UPDATED
                         model.save()
 
                         messages.success(request, 'Updated successfully.')

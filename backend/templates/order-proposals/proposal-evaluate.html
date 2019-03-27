@@ -1,0 +1,112 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <div class='modal-header bg-primary-700 text-auto'>
+        <h6 class='modal-title'>Evaluate Proposal</h6>
+        <button type="button" class="close btn btn-icon fuse-ripple-ready" data-dismiss="modal"
+                aria-label="Close">
+            <i class="icon icon-close-circle-outline text-white"></i>
+        </button>
+    </div>
+    <div class='modal-body'>
+        <div class='bootbox-body'>
+            <div class="content custom-scrollbar">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_proposal_code.label }}
+                                    {% if form.order_proposal_code.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_code }}
+                            </div>
+                            {{ form.order_proposal_code.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_proposal_supplier_title.label }}
+                                    {% if form.order_proposal_supplier_title.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_supplier_title }}
+                            </div>
+                            {{ form.order_proposal_supplier_title.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_proposal_cost.label }}
+                                    {% if form.order_proposal_cost.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_cost }}
+                            </div>
+                            {{ form.order_proposal_cost.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0"
+                                 style="border-bottom: 0 !important;">
+                                <label class="custom-label">
+                                    {{ form.order_proposal_cost_currency.label }}
+                                    {% if form.order_proposal_cost_currency.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_cost_currency }}
+                            </div>
+                            {{ form.order_proposal_cost_currency.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_proposal_evaluated_score.label }}
+                                    {% if form.order_proposal_evaluated_score.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_evaluated_score }}
+                            </div>
+                            {{ form.order_proposal_evaluated_score.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_proposal_evaluation_details.label }}
+                                    {% if form.order_proposal_evaluation_details.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_evaluation_details }}
+                            </div>
+                            {{ form.order_proposal_evaluation_details.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-grey-100">
+        <button data-dismiss="modal" type="button"
+                class="btn btn btn-outline-primary fuse-ripple-ready">Cancel
+        </button>
+        <button type="submit" class="btn btn btn-primary fuse-ripple-ready">
+            Submit
+        </button>
+    </div>
+</form>
+<!--suppress ES6ConvertVarToLetConst -->
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $("#search-input-select-currency").select2({placeholder: "--select--", allowClear: false});
+    });
+</script>
+{% include '_include/tab_index.html' %}

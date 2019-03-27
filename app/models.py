@@ -258,7 +258,7 @@ class Operators(models.Model):
                 notifications = Notifications.objects.filter(
                     Q(notification_to_id=operator.operator_id) &
                     Q(notification_status=Notifications.STATUS_UNREAD)
-                )
+                ).order_by('-notification_created_at')
                 operator.operator_notifications_count = notifications.count()
                 operator.operator_notifications_json = notifications
 
@@ -495,18 +495,17 @@ class Orders(models.Model):
     STATUS_APPROVED = 'approved'
     STATUS_REJECTED = 'rejected'
     STATUS_ASSIGNED = 'assigned'
-    STATUS_SUPPLIER_SELECTED = 'supplier-selected'
+    STATUS_SUPPLIER_UPDATED = 'supplier-updated'
     STATUS_PROPOSAL_GENERATED = 'proposal-generated'
     STATUS_PROPOSAL_REQUESTED = 'proposal-requested'
-    STATUS_PROPOSAL_EVALUATED = 'proposal-evaluated'
-    STATUS_PROPOSAL_APPROVED = 'proposal-approved'
-    STATUS_PROPOSAL_REJECTED = 'proposal-rejected'
+    STATUS_PROPOSAL_SELECTED = 'proposal-selected'
     STATUS_PURCHASE_GENERATED = 'purchase-generated'
     STATUS_PROPOSAL_ACKNOWLEDGED = 'proposal-acknowledged'
     STATUS_RECEIVED = 'received'
     STATUS_PARTIALLY_PAID = 'partially-paid'
     STATUS_PAID = 'paid'
     STATUS_CLOSED = 'closed'
+    STATUS_CANCELLED = 'cancelled'
 
     ARRAY_ORDER_STATUSES = [
         (STATUS_PENDING.title()).replace('-', ' '),
@@ -528,18 +527,17 @@ class Orders(models.Model):
         (STATUS_APPROVED.title()).replace('-', ' '),
         (STATUS_REJECTED.title()).replace('-', ' '),
         (STATUS_ASSIGNED.title()).replace('-', ' '),
-        (STATUS_SUPPLIER_SELECTED.title()).replace('-', ' '),
+        (STATUS_SUPPLIER_UPDATED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_GENERATED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_REQUESTED.title()).replace('-', ' '),
-        (STATUS_PROPOSAL_EVALUATED.title()).replace('-', ' '),
-        (STATUS_PROPOSAL_APPROVED.title()).replace('-', ' '),
-        (STATUS_PROPOSAL_REJECTED.title()).replace('-', ' '),
+        (STATUS_PROPOSAL_SELECTED.title()).replace('-', ' '),
         (STATUS_PURCHASE_GENERATED.title()).replace('-', ' '),
         (STATUS_PROPOSAL_ACKNOWLEDGED.title()).replace('-', ' '),
         (STATUS_RECEIVED.title()).replace('-', ' '),
         (STATUS_PARTIALLY_PAID.title()).replace('-', ' '),
         (STATUS_PAID.title()).replace('-', ' '),
         (STATUS_CLOSED.title()).replace('-', ' '),
+        (STATUS_CANCELLED.title()).replace('-', ' '),
     ]
     ORDER_STATUSES = (
         ('', '--select--'),
@@ -562,18 +560,17 @@ class Orders(models.Model):
         (STATUS_APPROVED, (STATUS_APPROVED.title()).replace('-', ' ')),
         (STATUS_REJECTED, (STATUS_REJECTED.title()).replace('-', ' ')),
         (STATUS_ASSIGNED, (STATUS_ASSIGNED.title()).replace('-', ' ')),
-        (STATUS_SUPPLIER_SELECTED, (STATUS_SUPPLIER_SELECTED.title()).replace('-', ' ')),
+        (STATUS_SUPPLIER_UPDATED, (STATUS_SUPPLIER_UPDATED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_GENERATED, (STATUS_PROPOSAL_GENERATED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_REQUESTED, (STATUS_PROPOSAL_REQUESTED.title()).replace('-', ' ')),
-        (STATUS_PROPOSAL_EVALUATED, (STATUS_PROPOSAL_EVALUATED.title()).replace('-', ' ')),
-        (STATUS_PROPOSAL_APPROVED, (STATUS_PROPOSAL_APPROVED.title()).replace('-', ' ')),
-        (STATUS_PROPOSAL_REJECTED, (STATUS_PROPOSAL_REJECTED.title()).replace('-', ' ')),
+        (STATUS_PROPOSAL_SELECTED, (STATUS_PROPOSAL_SELECTED.title()).replace('-', ' ')),
         (STATUS_PURCHASE_GENERATED, (STATUS_PURCHASE_GENERATED.title()).replace('-', ' ')),
         (STATUS_PROPOSAL_ACKNOWLEDGED, (STATUS_PROPOSAL_ACKNOWLEDGED.title()).replace('-', ' ')),
         (STATUS_RECEIVED, (STATUS_RECEIVED.title()).replace('-', ' ')),
         (STATUS_PARTIALLY_PAID, (STATUS_PARTIALLY_PAID.title()).replace('-', ' ')),
         (STATUS_PAID, (STATUS_PAID.title()).replace('-', ' ')),
         (STATUS_CLOSED, (STATUS_CLOSED.title()).replace('-', ' ')),
+        (STATUS_CANCELLED, (STATUS_CANCELLED.title()).replace('-', ' ')),
     )
 
     order_readable_status = ''
@@ -696,6 +693,14 @@ class Orders(models.Model):
     order_proposal_requested_department = models.CharField('Order Proposal Requested Department', max_length=255,
                                                            blank=True)
     order_proposal_requested_role = models.CharField('Order Proposal Requested Role', max_length=255, blank=True)
+    order_proposal_selected_at = models.DateTimeField('Order Proposal Selected At',
+                                                      default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_proposal_selected_id = models.CharField('Order Proposal Selected ID', max_length=100, blank=True)
+    order_proposal_selected_by = models.CharField('Order Proposal Selected By', max_length=100, blank=True)
+    order_proposal_selected_department = models.CharField('Order Proposal Selected Department', max_length=255,
+                                                          blank=True)
+    order_proposal_selected_role = models.CharField('Order Proposal Selected Role', max_length=255, blank=True)
+
     order_purchase_generated_at = models.DateTimeField('Purchase Order Generated At',
                                                        default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_purchase_generated_id = models.CharField('Purchase Order Generated ID', max_length=100, blank=True)
@@ -713,6 +718,11 @@ class Orders(models.Model):
     order_closed_by = models.CharField('Closed By', max_length=100, blank=True)
     order_closed_department = models.CharField('Closed Department', max_length=255, blank=True)
     order_closed_role = models.CharField('Closed Role', max_length=255, blank=True)
+    order_cancelled_at = models.DateTimeField('Cancelled At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_cancelled_id = models.CharField('Cancelled ID', max_length=100, blank=True)
+    order_cancelled_by = models.CharField('Cancelled By', max_length=100, blank=True)
+    order_cancelled_department = models.CharField('Cancelled Department', max_length=255, blank=True)
+    order_cancelled_role = models.CharField('Cancelled Role', max_length=255, blank=True)
     order_status = models.CharField('Status', max_length=255, blank=False, choices=ORDER_STATUSES,
                                     default=STATUS_PENDING)
 
@@ -770,18 +780,14 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_ASSIGNED:
             value = Utils.HTML_TAG_ORDER_STATUS_ASSIGNED
-        elif record.order_status == Orders.STATUS_SUPPLIER_SELECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_SUPPLIER_SELECTED
+        elif record.order_status == Orders.STATUS_SUPPLIER_UPDATED:
+            value = Utils.HTML_TAG_ORDER_STATUS_SUPPLIER_UPDATED
         elif record.order_status == Orders.STATUS_PROPOSAL_GENERATED:
             value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_GENERATED
         elif record.order_status == Orders.STATUS_PROPOSAL_REQUESTED:
             value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_REQUESTED
-        elif record.order_status == Orders.STATUS_PROPOSAL_EVALUATED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_EVALUATED
-        elif record.order_status == Orders.STATUS_PROPOSAL_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_APPROVED
-        elif record.order_status == Orders.STATUS_PROPOSAL_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_REJECTED
+        elif record.order_status == Orders.STATUS_PROPOSAL_SELECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_SELECTED
         elif record.order_status == Orders.STATUS_PURCHASE_GENERATED:
             value = Utils.HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED
         elif record.order_status == Orders.STATUS_PROPOSAL_ACKNOWLEDGED:
@@ -794,6 +800,8 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_PAID
         elif record.order_status == Orders.STATUS_CLOSED:
             value = Utils.HTML_TAG_ORDER_STATUS_CLOSED
+        elif record.order_status == Orders.STATUS_CANCELLED:
+            value = Utils.HTML_TAG_ORDER_STATUS_CANCELLED
         return value
 
     @classmethod
@@ -1387,10 +1395,24 @@ class Order_Proposals(models.Model):
     SINGULAR_TITLE = settings.MODEL_ORDER_PROPOSALS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
+    CURRENCY_USD = 'USD'
+    CURRENCY_RWF = 'RWF'
+
+    ARRAY_CURRENCIES = [
+        CURRENCY_USD,
+        CURRENCY_RWF,
+    ]
+    DROPDOWN_CURRENCIES = (
+        ('', '--select--'),
+        (CURRENCY_USD, CURRENCY_USD),
+        (CURRENCY_RWF, CURRENCY_RWF),
+    )
+
     STATUS_PENDING = 'pending'
     STATUS_EVALUATED = 'evaluated'
     STATUS_APPROVED = 'approved'
     STATUS_REJECTED = 'rejected'
+    STATUS_SELECTED = 'selected'
     STATUS_ACKNOWLEDGED = 'acknowledged'
 
     ARRAY_STATUSES = [
@@ -1398,6 +1420,7 @@ class Order_Proposals(models.Model):
         (STATUS_EVALUATED.title()).replace('-', ' '),
         (STATUS_APPROVED.title()).replace('-', ' '),
         (STATUS_REJECTED.title()).replace('-', ' '),
+        (STATUS_SELECTED.title()).replace('-', ' '),
         (STATUS_ACKNOWLEDGED.title()).replace('-', ' '),
     ]
     DROPDOWN_STATUSES = (
@@ -1406,6 +1429,7 @@ class Order_Proposals(models.Model):
         (STATUS_EVALUATED, (STATUS_EVALUATED.title()).replace('-', ' ')),
         (STATUS_APPROVED, (STATUS_APPROVED.title()).replace('-', ' ')),
         (STATUS_REJECTED, (STATUS_REJECTED.title()).replace('-', ' ')),
+        (STATUS_SELECTED, (STATUS_SELECTED.title()).replace('-', ' ')),
         (STATUS_ACKNOWLEDGED, (STATUS_ACKNOWLEDGED.title()).replace('-', ' ')),
     )
 
@@ -1492,8 +1516,11 @@ class Order_Proposals(models.Model):
                                                                                      blank=True)
 
     order_proposal_cost = models.DecimalField('Proposal Cost', max_digits=10, decimal_places=0, default=Decimal(0))
+    order_proposal_cost_currency = models.CharField('Currency', max_length=255, blank=False,
+                                                    choices=DROPDOWN_CURRENCIES,
+                                                    default=CURRENCY_RWF)
     order_proposal_evaluated_score = models.IntegerField('Score', blank=False, default=0)
-    order_proposal_evaluation_details = models.CharField('Evaluation Details', max_length=255, blank=True)
+    order_proposal_evaluation_details = models.CharField('Comments', max_length=255, blank=True)
     order_proposal_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_created_id = models.CharField('Created ID', max_length=100, blank=True)
     order_proposal_created_by = models.CharField('Created By', max_length=100, blank=True)
@@ -1517,6 +1544,12 @@ class Order_Proposals(models.Model):
     order_proposal_approval_updated_department = models.CharField('Approval Updated Department', max_length=255,
                                                                   blank=True)
     order_proposal_approval_updated_role = models.CharField('Approval Updated Role', max_length=255, blank=True)
+    order_proposal_selected_at = models.DateTimeField('Selected At',
+                                                      default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_proposal_selected_id = models.CharField('Selected ID', max_length=100, blank=True)
+    order_proposal_selected_by = models.CharField('Selected By', max_length=100, blank=True)
+    order_proposal_selected_department = models.CharField('Selected Department', max_length=255, blank=True)
+    order_proposal_selected_role = models.CharField('Selected Role', max_length=255, blank=True)
     order_proposal_acknowledged_at = models.DateTimeField('Acknowledged At',
                                                           default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_proposal_acknowledged_id = models.CharField('Acknowledged ID', max_length=100, blank=True)
@@ -1673,16 +1706,22 @@ class Notifications(models.Model):
 
     TYPE_SYSTEM = 'system'
     TYPE_ORDER = 'order'
+    TYPE_ORDER_PROPOSAL = 'order-proposal'
+    TYPE_SUPPLIER = 'supplier'
     TYPE_OPERATOR = 'operator'
     ARRAY_TYPES = [
         (TYPE_SYSTEM.title()).replace('-', ' '),
         (TYPE_ORDER.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL.title()).replace('-', ' '),
+        (TYPE_SUPPLIER.title()).replace('-', ' '),
         (TYPE_OPERATOR.title()).replace('-', ' '),
     ]
     DROPDOWN_TYPES = (
         ('', '--select--'),
         (TYPE_SYSTEM, (TYPE_SYSTEM.title()).replace('-', ' ')),
         (TYPE_ORDER, (TYPE_ORDER.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL, (TYPE_ORDER_PROPOSAL.title()).replace('-', ' ')),
+        (TYPE_SUPPLIER, (TYPE_SUPPLIER.title()).replace('-', ' ')),
         (TYPE_OPERATOR, (TYPE_OPERATOR.title()).replace('-', ' ')),
     )
 

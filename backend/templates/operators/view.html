@@ -22,59 +22,6 @@
                         <div class="col">
                             <span class="h5 text-white">Profile Details</span>
                         </div>
-
-                        <div class="btn-dropdown">
-                            <button role="button" type="button" class="btn btn-icon fuse-ripple-ready"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <i class="icon icon-dots-vertical text-white"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                                    <a class="dropdown-item" href="{% url 'operators_update' pk=model.operator_id %}">Update</a>
-                                    <a class="dropdown-item"
-                                       href="{% url 'operators_update_reset_password' pk=model.operator_id %}">Reset
-                                        Password</a>
-                                {% endif %}
-
-                                {% if operator.operator_id != 1 or operator.operator_id != model.operator_id %}
-                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                                        {% if model.operator_status == model.STATUS_UNVERIFIED %}
-                                            <a href="#"
-                                               onclick="singleSelect('{{ select_single_url }}', 'verify', '{{ model.operator_id }}');"
-                                               class="dropdown-item">Verify</a>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                                        {% if model.operator_status == model.STATUS_UNAPPROVED %}
-                                            <a href="#"
-                                               onclick="singleSelect('{{ select_single_url }}', 'approve', '{{ model.operator_id }}');"
-                                               class="dropdown-item">Approve</a>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                                        {% if model.operator_status == model.STATUS_ACTIVE or model.operator_status == model.STATUS_INACTIVE %}
-                                            <a href="#"
-                                               onclick="singleSelect('{{ select_single_url }}', 'block', '{{ model.operator_id }}');"
-                                               class="dropdown-item">Block</a>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values %}
-                                        {% if model.operator_status == model.STATUS_BLOCKED %}
-                                            <a href="#"
-                                               onclick="singleSelect('{{ select_single_url }}', 'unblock', '{{ model.operator_id }}');"
-                                               class="dropdown-item">Unblock</a>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if ACCESS_PERMISSION_OPERATOR_DELETE in auth_permissions.values %}
-                                        <a href="#"
-                                           onclick="singleSelect('{{ select_single_url }}', 'delete', '{{ model.operator_id }}', '{{ index_url }}');"
-                                           class="dropdown-item">Delete</a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>

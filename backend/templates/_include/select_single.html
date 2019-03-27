@@ -89,6 +89,13 @@
             confirmMessage = "Are you sure you want to delete all items?";
         }
 
+        if (action === 'order-proposal-approve') {
+            confirmMessage = "Are you sure you want to approve this item?";
+        }
+        if (action === 'order-proposal-reject') {
+            confirmMessage = "Are you sure you want to reject this item?";
+        }
+
         if (action !== '') {
             var csrfmiddlewaretoken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
             bootbox.confirm({

@@ -48,18 +48,6 @@
                         <div class="col">
                             <span class="h5 text-white">{{ title }}</span>
                         </div>
-
-                        <div class="btn-dropdown">
-                            <button role="button" type="button" class="btn btn-icon fuse-ripple-ready"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <i class="icon icon-dots-vertical text-white"></i>
-                            </button>
-                            <div class="dropdown-menu">
-
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -85,12 +73,36 @@
                             </div>
                         {% endif %}
                         {% include '_include/datatable-buttons.html' %}
+                        {% if operator.operator_role == operator.ROLE_COP %}
+                            <div class="dt-buttons" style="margin-right:3px;">
+                                <a href="#" id="btn-update-select"
+                                   class="btn btn-outline-primary fuse-ripple-ready">SELECT ONE VENDOR</a>
+                            </div>
+                        {% endif %}
                         {% render_table table %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="bootbox modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#modal").on("hidden.bs.modal", function () {
+                location.reload();
+            });
+            var url = "{% url 'order_proposals_update_select' pk='P1' %}";
+            url = url.replace("P1", "{{ model.order_id }}");
+            $("#btn-update-select").modalForm({
+                formURL: url
+            });
+        });
+    </script>
     {% include '_include/datatable-js.html' %}
     {% include '_include/select_single.html' %}
     {% include '_include/select_multiple.html' %}

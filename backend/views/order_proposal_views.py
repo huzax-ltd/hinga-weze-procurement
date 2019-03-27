@@ -13,11 +13,11 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Orders, Order_Attachments, Order_Proposals
+from app.models import Operators, Orders, Order_Attachments, Order_Proposals, Notifications
 from app.utils import Utils
 from backend.forms.order_forms import OrderUploadAttachmentForm
 from backend.forms.order_proposal_forms import OrderProposalSearchIndexForm, OrderProposalCreateForm, \
-    OrderProposalViewForm
+    OrderProposalViewForm, OrderProposalEvaluateForm, OrderProposalSelectForm
 from backend.tables.order_proposal_tables import Order_ProposalsTable
 
 
@@ -86,6 +86,58 @@ def select_single(request):
             action = request.POST['action']
             id = request.POST['id']
             if action != '' and id is not None:
+                if action == 'order-proposal-approve':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Order_Proposals.objects.get(order_proposal_id=id)
+
+                            model.order_proposal_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_proposal_approval_updated_id = operator.operator_id
+                            model.order_proposal_approval_updated_by = operator.operator_name
+                            model.order_proposal_approval_updated_department = operator.operator_department
+                            model.order_proposal_approval_updated_role = operator.operator_role
+                            model.order_proposal_status = Order_Proposals.STATUS_APPROVED
+                            model.save()
+
+                            # sending notification to COP and OPM
+                            operators = Operators.objects.filter(
+                                Q(operator_role=Operators.ROLE_COP) |
+                                Q(operator_role=Operators.ROLE_OPM))
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER_PROPOSAL,
+                                    model.order_proposal_id,
+                                    "Some vendors are selected to review.",
+                                    "/backend/order-proposals/index/" + str(model.orders_order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Order_Proposals.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-proposal-reject':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Order_Proposals.objects.get(order_proposal_id=id)
+
+                            model.order_proposal_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_proposal_approval_updated_id = operator.operator_id
+                            model.order_proposal_approval_updated_by = operator.operator_name
+                            model.order_proposal_approval_updated_department = operator.operator_department
+                            model.order_proposal_approval_updated_role = operator.operator_role
+                            model.order_proposal_status = Order_Proposals.STATUS_REJECTED
+                            model.save()
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Order_Proposals.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
                 return HttpResponse('success', content_type='text/plain')
             else:
                 return HttpResponseBadRequest('Bad Request', content_type='text/plain')
@@ -187,6 +239,12 @@ def create(request, pk, code):
             model.order_proposal_approval_updated_department = ''
             model.order_proposal_approval_updated_role = ''
 
+            model.order_proposal_selected_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+            model.order_proposal_selected_id = 0
+            model.order_proposal_selected_by = ''
+            model.order_proposal_selected_department = ''
+            model.order_proposal_selected_role = ''
+
             model.order_proposal_acknowledged_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
             model.order_proposal_acknowledged_id = ''
             model.order_proposal_acknowledged_by = ''
@@ -198,9 +256,6 @@ def create(request, pk, code):
             model.save('Created')
         else:
             model = Order_Proposals.objects.get(order_proposal_code=code)
-
-            if model.order_proposal_status != Order_Proposals.STATUS_PENDING:
-                return HttpResponseForbidden('Forbidden', content_type='text/plain')
 
         order_attachments = Order_Attachments.objects.filter(
             Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE) &
@@ -367,6 +422,29 @@ def create(request, pk, code):
                 model.order_proposal_status = Order_Proposals.STATUS_PENDING
                 # noinspection PyCallByClass,PyTypeChecker
                 model.save()
+
+                # sending notification to Officer
+                if order.order_assigned_to_id != str(0):
+                    operators = Operators.objects.all().filter(
+                        Q(operator_id=order.order_assigned_to_id)
+                    )
+                else:
+                    operators = Operators.objects.all().filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=order.order_assigned_to_role)
+                    )
+
+                for item in operators:
+                    Notifications.add_notification(
+                        Notifications.TYPE_SUPPLIER,
+                        model.order_proposal_id,
+                        Notifications.TYPE_OPERATOR,
+                        item.operator_id,
+                        Notifications.TYPE_ORDER_PROPOSAL,
+                        model.order_proposal_id,
+                        "Submitted a proposal to evaluate.",
+                        "/backend/order-proposals/view/internal/" + str(model.order_proposal_id) + "/"
+                    )
 
                 # sending email confirmation mail
                 if settings.IS_LOCAL:
@@ -670,7 +748,7 @@ def view_internal(request, pk):
                         'form': form,
                         'model': model,
                         'order': order,
-                        'index_url': reverse("orders_index"),
+                        'index_url': reverse("order_proposals_index", kwargs={'pk': order.order_id}),
                         'select_single_url': reverse("order_proposals_select_single"),
                         'order_attachment1': order_attachment1,
                         'order_attachment2': order_attachment2,
@@ -805,3 +883,300 @@ def upload_attachments_external(request):
         return HttpResponse(str(response), content_type='text/plain')
     else:
         return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def evaluate_proposal(request, pk):
+    template_url = 'order-proposals/proposal-evaluate.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            try:
+                model = Order_Proposals.objects.get(order_proposal_id=pk)
+                if request.method == 'POST':
+
+                    form = OrderProposalEvaluateForm(request.POST)
+
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        model.order_proposal_cost = form.cleaned_data['order_proposal_cost']
+                        model.order_proposal_cost_currency = form.cleaned_data['order_proposal_cost_currency']
+                        model.order_proposal_evaluated_score = form.cleaned_data['order_proposal_evaluated_score']
+                        model.order_proposal_evaluation_details = form.cleaned_data['order_proposal_evaluation_details']
+
+                        model.order_proposal_evaluated_at = Utils.get_current_datetime_utc()
+                        model.order_proposal_evaluated_id = operator.operator_id
+                        model.order_proposal_evaluated_by = operator.operator_name
+                        model.order_proposal_evaluated_department = operator.operator_department
+                        model.order_proposal_evaluated_role = operator.operator_role
+                        model.order_proposal_status = Order_Proposals.STATUS_EVALUATED
+                        model.save()
+
+                        messages.success(request, 'Updated successfully.')
+                        return redirect(reverse("order_proposals_view_internal", args=[model.order_proposal_id]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("order_proposals_view_internal", args=[model.order_proposal_id]))
+                else:
+                    form = OrderProposalEvaluateForm(
+                        initial={
+                            'order_proposal_code': model.order_proposal_code,
+                            'order_proposal_supplier_title': model.order_proposal_supplier_title,
+                            'order_proposal_cost': model.order_proposal_cost,
+                            'order_proposal_cost_currency': model.order_proposal_cost_currency,
+                            'order_proposal_evaluated_score': model.order_proposal_evaluated_score,
+                            'order_proposal_evaluation_details': model.order_proposal_evaluation_details,
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Order_Proposals.TITLE,
+                        'name': Order_Proposals.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                    }
+                )
+            except(TypeError, ValueError, OverflowError, Order_Proposals.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
+def api_dropdown_approved_proposals(request, code):
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        proposals = ""
+        proposals += "<option value=''>--select--</option>"
+        order = Orders.objects.get(order_code=code)
+        objects = Order_Proposals.objects.filter(
+            Q(orders_order_id=order.order_id) &
+            (Q(order_proposal_status=Order_Proposals.STATUS_APPROVED) |
+             Q(order_proposal_status=Order_Proposals.STATUS_SELECTED))
+        )
+        for item in objects:
+            proposals += "<option value='" + str(
+                item.order_proposal_id) + "'>" + str(item.order_proposal_code) + " (" + str(
+                item.order_proposal_supplier_title) + ")</option>"
+
+        return HttpResponse(proposals, content_type="text/plain")
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def select_proposal(request, pk):
+    template_url = 'order-proposals/proposal-select.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            try:
+                order = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
+
+                    form = OrderProposalSelectForm(request.POST)
+
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+
+                        order_proposals = Order_Proposals.objects.filter(orders_order_id=pk,
+                                                                         order_proposal_status=Order_Proposals.STATUS_SELECTED)
+                        for order_proposal in order_proposals:
+                            order_proposal.order_proposal_selected_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                            order_proposal.order_proposal_selected_id = ''
+                            order_proposal.order_proposal_selected_by = ''
+                            order_proposal.order_proposal_selected_department = ''
+                            order_proposal.order_proposal_selected_role = ''
+                            order_proposal.order_proposal_status = Order_Proposals.STATUS_APPROVED
+                            order_proposal.save()
+
+                        order_proposal_id = form.cleaned_data['order_proposal_id']
+                        model = Order_Proposals.objects.get(order_proposal_id=order_proposal_id)
+
+                        model.order_proposal_selected_at = Utils.get_current_datetime_utc()
+                        model.order_proposal_selected_id = operator.operator_id
+                        model.order_proposal_selected_by = operator.operator_name
+                        model.order_proposal_selected_department = operator.operator_department
+                        model.order_proposal_selected_role = operator.operator_role
+                        model.order_proposal_status = Order_Proposals.STATUS_SELECTED
+                        model.save()
+
+                        order.order_proposal_id = model.order_proposal_id
+                        order.order_proposal_selected_at = Utils.get_current_datetime_utc()
+                        order.order_proposal_selected_id = operator.operator_id
+                        order.order_proposal_selected_by = operator.operator_name
+                        order.order_proposal_selected_department = operator.operator_department
+                        order.order_proposal_selected_role = operator.operator_role
+                        order.order_status = Orders.STATUS_PROPOSAL_SELECTED
+                        order.save()
+
+                        # sending email confirmation mail
+                        if settings.IS_LOCAL:
+                            domain = settings.BACKEND_DOMAIN_LOCAL
+                            logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                        else:
+                            domain = settings.BACKEND_DOMAIN_PROD
+                            logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+
+                        contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
+                        link_url = '{domain}/{path}'.format(
+                            domain=domain,
+                            path="order-proposals/create/" + str(model.orders_order_id) + "/" + str(
+                                model.order_proposal_code) + "/"
+                        )
+                        link_name = "View Details"
+
+                        acknowledge_url = '/order-proposals/update/acknowledge/' + str(pk) + '/'
+                        acknowledge_url = "<a title=\"link\" href=\"" + str(
+                            domain) + acknowledge_url + "\" target=\"_blank\" rel=\"noopener\">link</a>"
+
+                        message = "Congratulations your proposal has been approved. Please acknowledge by clicking on this " + acknowledge_url + "."
+                        html_content = render_to_string(
+                            'email/email-info-with-link.html',
+                            {
+                                'logo_url': logo_url,
+                                'contact_url': contact_url,
+                                'link_url': link_url,
+                                'link_name': link_name,
+                                'name': model.order_proposal_supplier_title,
+                                'message': defaultfilters.safe(message),
+                            }
+                        )
+                        send_mail(
+                            settings.EMAIL_NOTIFICATION_SUBJECT,
+                            settings.EMAIL_NOTIFICATION_MESSAGE,
+                            settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
+                            [model.order_proposal_supplier_contact_email_id],
+                            fail_silently=False,
+                            html_message=html_content,
+                        )
+
+                        order_proposals = Order_Proposals.objects.filter(orders_order_id=pk).exclude(
+                            order_proposal_status=Order_Proposals.STATUS_SELECTED)
+                        for model in order_proposals:
+                            # sending email confirmation mail
+                            if settings.IS_LOCAL:
+                                domain = settings.BACKEND_DOMAIN_LOCAL
+                                logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                            else:
+                                domain = settings.BACKEND_DOMAIN_PROD
+                                logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+
+                            contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
+                            link_url = '{domain}/{path}'.format(
+                                domain=domain,
+                                path="order-proposals/create/" + str(model.orders_order_id) + "/" + str(
+                                    model.order_proposal_code) + "/"
+                            )
+                            link_name = "View Details"
+                            message = "Sorry, your proposal has been rejected."
+                            html_content = render_to_string(
+                                'email/email-info-with-link.html',
+                                {
+                                    'logo_url': logo_url,
+                                    'contact_url': contact_url,
+                                    'link_url': link_url,
+                                    'link_name': link_name,
+                                    'name': model.order_proposal_supplier_title,
+                                    'message': defaultfilters.safe(message),
+                                }
+                            )
+                            send_mail(
+                                settings.EMAIL_NOTIFICATION_SUBJECT,
+                                settings.EMAIL_NOTIFICATION_MESSAGE,
+                                settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
+                                [model.order_proposal_supplier_contact_email_id],
+                                fail_silently=False,
+                                html_message=html_content,
+                            )
+
+                        messages.success(request, 'Updated successfully.')
+                        return redirect(reverse("order_proposals_index", args=[pk]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("order_proposals_index", args=[pk]))
+                else:
+                    form = OrderProposalSelectForm(
+                        initial={
+                            'order_id': order.order_code,
+                            'order_proposal_id': '',
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'title': Order_Proposals.TITLE,
+                        'name': Order_Proposals.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                    }
+                )
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist, Order_Proposals.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+@csrf_exempt
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def acknowledge_proposal_external(request, pk):
+    try:
+        model = Order_Proposals.objects.get(order_proposal_id=pk)
+        order = Orders.objects.get(order_id=model.orders_order_id)
+        if model.order_proposal_status == Order_Proposals.STATUS_SELECTED:
+            model.order_proposal_acknowledged_at = Utils.get_current_datetime_utc()
+            model.order_proposal_acknowledged_id = ''
+            model.order_proposal_acknowledged_by = ''
+            model.order_proposal_acknowledged_department = ''
+            model.order_proposal_acknowledged_role = ''
+            model.order_proposal_status = Order_Proposals.STATUS_ACKNOWLEDGED
+            model.save()
+
+        # sending notification to Officer
+        if order.order_assigned_to_id != str(0):
+            operators = Operators.objects.all().filter(
+                Q(operator_id=order.order_assigned_to_id)
+            )
+        else:
+            operators = Operators.objects.all().filter(
+                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                Q(operator_role=order.order_assigned_to_role)
+            )
+
+        for item in operators:
+            Notifications.add_notification(
+                Notifications.TYPE_SUPPLIER,
+                model.order_proposal_id,
+                Notifications.TYPE_OPERATOR,
+                item.operator_id,
+                Notifications.TYPE_ORDER_PROPOSAL,
+                model.order_proposal_id,
+                "Acknowledged proposal to generate purchase order.",
+                "/backend/order-proposals/view/internal/" + str(model.order_proposal_id) + "/"
+            )
+
+        messages.success(request, 'Acknowledged successfully.')
+        return redirect(reverse("order_proposals_create", args=[pk, model.order_proposal_code]))
+
+    except(TypeError, ValueError, OverflowError, Orders.DoesNotExist, Order_Proposals.DoesNotExist):
+        return HttpResponseNotFound('Not Found', content_type='text/plain')

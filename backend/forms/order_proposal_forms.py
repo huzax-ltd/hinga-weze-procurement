@@ -1,3 +1,4 @@
+from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.core.validators import ValidationError, MinLengthValidator, MaxLengthValidator, EmailValidator
 from django.core.validators import validate_email, validate_integer
@@ -1292,4 +1293,201 @@ class OrderProposalViewForm(forms.ModelForm):
             'previous_reference3_contact_person',
             'previous_reference3_contact_number',
             'previous_reference3_contact_email_id',
+        )
+
+
+class OrderProposalEvaluateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_proposal_code = forms.CharField(
+        label='Proposal Id',
+        min_length=8,
+        max_length=8,
+        required=False,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+                'disabled': True,
+            }
+        ))
+    order_proposal_supplier_title = forms.CharField(
+        label='Supplier Name',
+        min_length=1,
+        max_length=255,
+        required=False,
+        validators=[MinLengthValidator(1), MaxLengthValidator(255)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+                'disabled': True,
+            }
+        ))
+    order_proposal_cost = forms.DecimalField(
+        label='Cost',
+        required=True,
+        widget=forms.NumberInput(
+            attrs={
+                'type': 'number',
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    order_proposal_cost_currency = forms.ChoiceField(
+        choices=Order_Proposals.DROPDOWN_CURRENCIES,
+        initial='',
+        label='Currency',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-currency',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+    order_proposal_evaluated_score = forms.DecimalField(
+        label='Score',
+        required=True,
+        widget=forms.NumberInput(
+            attrs={
+                'type': 'number',
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    order_proposal_evaluation_details = forms.CharField(
+        label='Comments',
+        min_length=1,
+        max_length=255,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(255)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean_order_proposal_code(self):
+        data = self.cleaned_data['order_proposal_code']
+        return data
+
+    def clean_order_proposal_supplier_title(self):
+        data = self.cleaned_data['order_proposal_supplier_title']
+        return data
+
+    def clean_order_proposal_cost(self):
+        data = self.cleaned_data['order_proposal_cost']
+        return data
+
+    def clean_order_proposal_cost_currency(self):
+        data = self.cleaned_data['order_proposal_cost_currency']
+        return data
+
+    def clean_order_proposal_evaluated_score(self):
+        data = self.cleaned_data['order_proposal_evaluated_score']
+        return data
+
+    def clean_order_proposal_evaluation_details(self):
+        data = self.cleaned_data['order_proposal_evaluation_details']
+        return data
+
+    def clean(self):
+        cleaned_data = super(OrderProposalEvaluateForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Order_Proposals
+        fields = (
+            'order_proposal_code',
+            'order_proposal_supplier_title',
+            'order_proposal_cost',
+            'order_proposal_cost_currency',
+            'order_proposal_evaluated_score',
+            'order_proposal_evaluation_details',
+        )
+
+
+class OrderProposalSelectForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_id = forms.CharField(
+        label='Order Id',
+        min_length=8,
+        max_length=8,
+        required=False,
+        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'id': 'search-input-select-order-id',
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    order_proposal_id = forms.ChoiceField(
+        choices=(('', '--select--'),),
+        initial='',
+        label='Proposal',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-order-proposal-id',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
+
+    def clean(self):
+        cleaned_data = super(OrderProposalSelectForm, self).clean()
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(OrderProposalSelectForm, self).__init__(*args, **kwargs)
+
+        PROPOSALS = (('', '--select--'),)
+        proposals = Order_Proposals.objects.all()
+        for proposal in proposals:
+            PROPOSALS = PROPOSALS + ((proposal.order_proposal_id, str(proposal.order_proposal_code) + " (" + str(
+                proposal.order_proposal_supplier_title) + ")"),)
+
+        self.fields['order_proposal_id'] = forms.ChoiceField(
+            choices=PROPOSALS,
+            initial='',
+            label='Proposal',
+            required=True,
+            validators=[],
+            widget=forms.Select(
+                attrs={
+                    'id': 'search-input-select-order-proposal-id',
+                    'class': 'form-control',
+                    'style': 'width:100%;',
+                    'placeholder': '--select--',
+                    'aria-label': 'form-label',
+                }
+            ))
+
+    class Meta:
+        model = Order_Proposals
+        fields = (
+            'order_id',
+            'order_proposal_id',
         )

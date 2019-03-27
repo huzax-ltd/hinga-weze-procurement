@@ -32,6 +32,64 @@
             <div class="page-content p-5 body-content-p-t-5">
                 <div class="card body-content-card">
                     <div class="card-body p-5">
+                        <div>
+                            {% if order.order_assigned_to_id != 0|safe %}
+                                {% if operator.operator_id == order.order_assigned_to_id %}
+                                    {% if model.order_proposal_status == model.STATUS_PENDING %}
+                                        <a href="#" id="btn-update-evaluate"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Evaluate</a>
+                                    {% endif %}
+                                    {% if model.order_proposal_status == model.STATUS_PENDING or model.order_proposal_status == model.STATUS_EVALUATED %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'order-proposal-approve', '{{ model.order_proposal_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Approve for COP to
+                                            Review</a>
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'order-proposal-reject', '{{ model.order_proposal_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Reject</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                {% if operator.operator_role == order.order_assigned_to_role %}
+                                    {% if model.order_proposal_status == model.STATUS_PENDING %}
+                                        <a href="#" id="btn-update-evaluate"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Evaluate</a>
+                                    {% endif %}
+                                    {% if model.order_proposal_status == model.STATUS_PENDING or model.order_proposal_status == model.STATUS_EVALUATED %}
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'order-proposal-approve', '{{ model.order_proposal_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Approve for COP to
+                                            Review</a>
+                                        <a href="#"
+                                           onclick="singleSelect('{{ select_single_url }}', 'order-proposal-reject', '{{ model.order_proposal_id }}');"
+                                           class="btn btn-outline-primary fuse-ripple-ready">Reject</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <div>
+                            <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <td colspan="1" style="font-weight: bold;">Proposal Id</td>
+                                    <td colspan="2">{{ model.order_proposal_code }}</td>
+                                    <td colspan="1" style="font-weight: bold;">Status</td>
+                                    <td colspan="2">{{ model.order_proposal_status|safe }}</td>
+                                    <td colspan="1" style="font-weight: bold;">Cost</td>
+                                    <td colspan="2">{{ model.order_proposal_cost }} {{ model.order_proposal_cost_currency }}</td>
+                                    <td colspan="1" style="font-weight: bold;">Score</td>
+                                    <td colspan="2">{{ model.order_proposal_evaluated_score }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12" style="font-weight: bold;">Comments</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">{{ model.order_proposal_evaluation_details }}</td>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
                         <div class="card mb-6 mt-6">
                             <header class="row no-gutters align-items-center justify-content-between">
                                 <div class="user col text-center">
@@ -53,9 +111,6 @@
                                     <form method="post" action="">
                                         {% csrf_token %}
                                         <div class="row">
-                                            <div class="col-sm-12">
-                                                {% load static %}{% include '_include/alert.html' %}
-                                            </div>
                                             <div class="col-sm-12">
                                                 <p>Proposal Details</p>
                                             </div>
@@ -820,6 +875,24 @@
             </div>
         </div>
     </div>
+    <div class="bootbox modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#modal").on("hidden.bs.modal", function () {
+                location.reload();
+            });
+            var url = "{% url 'order_proposals_update_evaluate' pk='P1' %}";
+            url = url.replace("P1", "{{ model.order_proposal_id }}");
+            $("#btn-update-evaluate").modalForm({
+                formURL: url
+            });
+        });
+    </script>
     {% include '_include/select_single.html' %}
     {% include '_include/tab_index.html' %}
 {% endblock %}

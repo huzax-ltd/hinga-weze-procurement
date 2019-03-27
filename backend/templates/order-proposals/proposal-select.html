@@ -1,0 +1,71 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <div class='modal-header bg-primary-700 text-auto'>
+        <h6 class='modal-title'>Select Proposal</h6>
+        <button type="button" class="close btn btn-icon fuse-ripple-ready" data-dismiss="modal"
+                aria-label="Close">
+            <i class="icon icon-close-circle-outline text-white"></i>
+        </button>
+    </div>
+    <div class='modal-body'>
+        <div class='bootbox-body'>
+            <div class="content custom-scrollbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.order_id.label }}
+                                    {% if form.order_id.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_id }}
+                            </div>
+                            {{ form.order_id.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label"
+                                       style="border-bottom: 0 !important;">
+                                    {{ form.order_proposal_id.label }}
+                                    {% if form.order_proposal_id.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.order_proposal_id }}
+                            </div>
+                            {{ form.order_proposal_id.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-grey-100">
+        <button data-dismiss="modal" type="button"
+                class="btn btn btn-outline-primary fuse-ripple-ready">Cancel
+        </button>
+        <button type="submit" class="btn btn btn-primary fuse-ripple-ready">
+            Submit
+        </button>
+    </div>
+</form>
+<!--suppress ES6ConvertVarToLetConst -->
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $("#search-input-select-order-proposal-id").select2({placeholder: "--select--", allowClear: false});
+
+        var order_id = document.getElementById("search-input-select-order-id").value;
+        $.get("/backend/order-proposals/api/dropdown/proposals/approved/" + order_id + "/", function (data) {
+            // alert(data);
+            if (data != "") {
+                $("select#search-input-select-order-proposal-id").html(data);
+            } else {
+                data = "<option value=''>--select--</option>";
+                $("select#search-input-select-parent-proposal-id").html(data);
+            }
+        });
+    });
+</script>
+{% include '_include/tab_index.html' %}

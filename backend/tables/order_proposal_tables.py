@@ -131,6 +131,10 @@ class Order_ProposalsTable(tables.Table):
         return action_data
 
     @staticmethod
+    def render_order_proposal_cost(record):
+        return str(record.order_proposal_cost) + ' ' + str(record.order_proposal_cost_currency)
+
+    @staticmethod
     def render_order_status(record):
         return Orders.get_status_html_tag(record)
 
