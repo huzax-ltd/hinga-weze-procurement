@@ -233,6 +233,13 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+    # send email to supplier
+    url(r'^orders/supplier-email/send/(?P<pk>.+)/$', order_views.send_email_to_supplier,
+        name='orders_send_email_to_supplier'),
+    url(r'^orders/supplier-email/send/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
 
     # upload attachments
     url(r'^orders/upload/attachments/$', order_views.upload_attachments,

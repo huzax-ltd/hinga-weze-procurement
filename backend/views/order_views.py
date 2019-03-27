@@ -3,21 +3,24 @@ import os
 
 from django.contrib import messages
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.shortcuts import render_to_response
 from django.template import defaultfilters
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
 from app.models import Operators, Orders, Order_Items, Order_Approvals, Order_Attachments, Order_Proposals, \
-    Notifications, \
-    NotificationsTimeline
+    Notifications, NotificationsTimeline, Emails, Attachments
 from app.utils import Utils
+from backend.forms.general_forms import SendEmailForm
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
     OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm, \
     OrderProposalCreateForm, OrderProposalViewForm
@@ -1182,6 +1185,178 @@ def update_email_to_supplier(request, pk):
                 )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                 return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def send_email_to_supplier(request, pk):
+    template_url = 'orders/send-email-to-supplier.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            # try:
+            order = Orders.objects.get(order_id=pk)
+            model = Emails()
+            model.email_from = settings.EMAIL_HOST_USER
+            model.email_from_name = settings.EMAIL_HOST_NAME
+
+            model.email_subject = order.order_email_to_supplier_subject
+            model.email_message = order.order_email_to_supplier_message
+
+            attachments = Order_Attachments.objects.filter(
+                Q(order_attachment_type=Order_Attachments.TYPE_ORDER_EMAIL) &
+                Q(orders_order_id=order.order_id)
+            ).order_by('-order_attachment_id').all()
+
+            if request.method == 'POST':
+
+                form = SendEmailForm(request.POST)
+
+                # noinspection PyArgumentList
+                if form.is_valid():
+
+                    model.email_to = form.cleaned_data['email_to']
+                    model.email_cc = form.cleaned_data['email_cc']
+
+                    model.email_created_at = Utils.get_current_datetime_utc()
+                    model.email_created_id = operator.operator_id
+                    model.email_created_by = operator.operator_name
+                    model.email_created_department = operator.operator_department
+                    model.email_created_role = operator.operator_role
+
+                    model.email_updated_at = Utils.get_current_datetime_utc()
+                    model.email_updated_id = operator.operator_id
+                    model.email_updated_by = operator.operator_name
+                    model.email_updated_department = operator.operator_department
+                    model.email_updated_role = operator.operator_role
+
+                    model.email_status = Emails.STATUS_PENDING
+                    model.save()
+
+                    # sending email
+                    if settings.IS_LOCAL:
+                        domain = settings.BACKEND_DOMAIN_LOCAL
+                        logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                    else:
+                        domain = settings.BACKEND_DOMAIN_PROD
+                        logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+
+                    # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
+                    html_content = render_to_string(
+                        'email/email-app.html',
+                        {
+                            'logo_url': logo_url,
+                            'contact_url': contact_url,
+                            'message': render_to_response(model.email_message),
+                        }
+                    )
+                    # html_content = render_to_response(
+                    #     'email/email-app.html',
+                    #     {
+                    #         'logo_url': logo_url,
+                    #         'contact_url': contact_url,
+                    #         'message': model.email_message,
+                    #     }
+                    # )
+                    text_content = strip_tags(html_content)
+
+                    email_message = EmailMultiAlternatives(
+                        subject=model.email_subject,
+                        body=html_content,
+                        from_email=settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
+                        to=[model.email_to],
+                        cc=[settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID, model.email_cc],
+                        reply_to=[settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID],
+                    )
+                    email_message.attach_alternative(html_content, "text/html")
+
+                    counter = 0
+                    for attachment in attachments:
+                        counter = counter + 1
+                        app_attachment = Attachments()
+                        app_attachment.attachment_model = Attachments.MODEL_EMAILS
+                        app_attachment.attachment_model_id = model.email_id
+                        app_attachment.attachment_type = Attachments.MODEL_EMAILS
+                        app_attachment.attachment_type_id = model.email_id
+                        app_attachment.attachment_number = counter
+                        app_attachment.attachment_file_name = attachment.order_attachment_file_name
+                        app_attachment.attachment_file_path = attachment.order_attachment_file_path
+                        app_attachment.attachment_file_size = attachment.order_attachment_file_size
+                        app_attachment.attachment_file_type = attachment.order_attachment_file_type
+
+                        app_attachment.attachment_file_uploaded_at = Utils.get_current_datetime_utc()
+                        app_attachment.attachment_file_uploaded_id = operator.operator_id
+                        app_attachment.attachment_file_uploaded_by = operator.operator_name
+                        app_attachment.attachment_file_uploaded_department = operator.operator_department
+                        app_attachment.attachment_file_uploaded_role = operator.operator_role
+
+                        app_attachment.save()
+
+                        email_message.attach_file(attachment.order_attachment_file_path.path)
+
+                    email_message.send(fail_silently=False)
+
+                    model.email_sent_at = Utils.get_current_datetime_utc()
+                    model.email_status = Emails.STATUS_SENT
+                    model.save()
+
+                    model.email_delivered_at = Utils.get_current_datetime_utc()
+                    model.email_status = Emails.STATUS_DELIVERED
+                    model.save()
+
+                    messages.success(request, 'Email sent successfully.')
+                    return redirect(reverse("orders_view", args=[order.order_id]))
+                else:
+                    return render(
+                        request, template_url,
+                        {
+                            'section': settings.BACKEND_SECTION_ORDERS,
+                            'title': Orders.TITLE,
+                            'name': Orders.NAME,
+                            'operator': operator,
+                            'auth_permissions': auth_permissions,
+                            'form': form,
+                            'model': model,
+                            'order': order,
+                            'index_url': reverse("orders_index"),
+                            'select_single_url': reverse("orders_select_single"),
+                            'attachments': attachments,
+                        }
+                    )
+            else:
+                form = SendEmailForm(
+                    initial={
+                        'email_to': '',
+                        'email_cc': '',
+                        'email_subject': model.email_subject,
+                        'email_message': model.email_message,
+                    }
+                )
+
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'title': Orders.TITLE,
+                    'name': Orders.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'form': form,
+                    'model': model,
+                    'order': order,
+                    'index_url': reverse("orders_index"),
+                    'select_single_url': reverse("orders_select_single"),
+                    'attachments': attachments,
+                }
+            )
+        # except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+        #     return HttpResponseNotFound('Not Found', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
 

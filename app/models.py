@@ -1795,3 +1795,107 @@ class NotificationsTimeline(models.Model):
 
     class Meta:
         managed = False  # disable migration for this mode
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Emails(models.Model):
+    STATUS_PENDING = 'pending'
+    STATUS_SENT = 'sent'
+    STATUS_DELIVERED = 'delivered'
+
+    ARRAY_STATUSES = [
+        (STATUS_PENDING.title()).replace('-', ' '),
+        (STATUS_SENT.title()).replace('-', ' '),
+        (STATUS_DELIVERED.title()).replace('-', ' '),
+    ]
+    DROPDOWN_STATUSES = (
+        ('', '--select--'),
+        (STATUS_PENDING, (STATUS_PENDING.title()).replace('-', ' ')),
+        (STATUS_SENT, (STATUS_SENT.title()).replace('-', ' ')),
+        (STATUS_DELIVERED, (STATUS_DELIVERED.title()).replace('-', ' ')),
+    )
+
+    email_id = models.AutoField('Id', primary_key=True)
+    email_from = models.CharField('From', max_length=255, blank=False)
+    email_from_name = models.CharField('From Name', max_length=255, blank=False)
+    email_to = models.CharField('To', max_length=255, blank=False)
+    email_cc = models.CharField('Cc', max_length=255, blank=False)
+    email_subject = models.CharField('Subject', max_length=255, blank=False)
+    email_message = models.TextField('Message', blank=False)
+
+    email_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    email_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    email_created_by = models.CharField('Created By', max_length=100, blank=True)
+    email_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    email_created_role = models.CharField('Created Role', max_length=255, blank=True)
+    email_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    email_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    email_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    email_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    email_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+    email_sent_at = models.DateTimeField('Sent At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    email_delivered_at = models.DateTimeField('Delivered At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    email_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
+                                    default=STATUS_PENDING)
+
+    def __unicode__(self):
+        return self.email_id
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Attachments(models.Model):
+    UPLOAD_PATH = 'attachments/'
+
+    MODEL_NONE = 'none'
+    MODEL_EMAILS = 'email'
+    MODEL_ORDERS = 'order'
+
+    ARRAY_MODELS = [
+        (MODEL_NONE.title()).replace('-', ' '),
+        (MODEL_EMAILS.title()).replace('-', ' '),
+        (MODEL_ORDERS.title()).replace('-', ' '),
+    ]
+    MODELS = (
+        ('', '--select--'),
+        (MODEL_NONE, (MODEL_NONE.title()).replace('-', ' ')),
+        (MODEL_EMAILS, (MODEL_EMAILS.title()).replace('-', ' ')),
+        (MODEL_ORDERS, (MODEL_ORDERS.title()).replace('-', ' ')),
+    )
+
+    TYPE_NONE = 'none'
+    TYPE_EMAIL = 'email'
+    TYPE_ORDER = 'order'
+
+    ARRAY_TYPES = [
+        (TYPE_NONE.title()).replace('-', ' '),
+        (TYPE_EMAIL.title()).replace('-', ' '),
+        (TYPE_ORDER.title()).replace('-', ' '),
+    ]
+    TYPES = (
+        ('', '--select--'),
+        (TYPE_NONE, (TYPE_NONE.title()).replace('-', ' ')),
+        (TYPE_EMAIL, (TYPE_EMAIL.title()).replace('-', ' ')),
+        (TYPE_ORDER, (TYPE_ORDER.title()).replace('-', ' ')),
+    )
+
+    attachment_id = models.AutoField('Id', primary_key=True)
+    attachment_model = models.CharField('Model', max_length=255, blank=False, choices=MODELS, default=MODEL_NONE)
+    attachment_model_id = models.IntegerField('Id', blank=False, default=0)
+    attachment_type = models.CharField('Type', max_length=255, blank=False, choices=TYPES, default=TYPE_NONE)
+    attachment_type_id = models.IntegerField('Id', blank=False, default=0)
+    attachment_number = models.IntegerField('Number', blank=False, default=0)
+    attachment_file_name = models.CharField('File Name', max_length=255, blank=True)
+    attachment_file_path = models.FileField('File Path', upload_to=UPLOAD_PATH)
+    attachment_file_size = models.CharField('File Size', max_length=255, blank=True)
+    attachment_file_type = models.CharField('File Type', max_length=255, blank=True)
+    attachment_file_uploaded_at = models.DateTimeField('Uploaded At',
+                                                       default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    attachment_file_uploaded_id = models.CharField('Uploaded ID', max_length=100, blank=True)
+    attachment_file_uploaded_by = models.CharField('Uploaded By', max_length=100, blank=True)
+    attachment_file_uploaded_department = models.CharField('Uploaded Department', max_length=255, blank=True)
+    attachment_file_uploaded_role = models.CharField('Uploaded Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.attachment_id

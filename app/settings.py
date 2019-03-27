@@ -301,6 +301,7 @@ APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID = APP_CONSTANT_TECH_SUPPORT_EMAIL_ID
 EMAIL_HOST = 'smtp.zoho.com'
 # 587,465
 EMAIL_PORT = 465
+EMAIL_HOST_NAME = 'Cultivating New Frontiers in Agriculture'
 EMAIL_HOST_USER = 'support@techcible.com'
 EMAIL_HOST_PASSWORD = 'Navin@321'
 EMAIL_USE_TLS = False
