@@ -3,11 +3,13 @@ import os
 
 from django.contrib import messages
 from django.core import serializers
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template import defaultfilters
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -17,7 +19,8 @@ from app.models import Operators, Orders, Order_Items, Order_Approvals, Order_At
     NotificationsTimeline
 from app.utils import Utils
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
-    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm, OrderProposalCreateForm
+    OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm, \
+    OrderProposalCreateForm, OrderProposalViewForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.tables.order_item_tables import OrderItemsTable
 from backend.tables.order_tables import OrdersTable
@@ -677,6 +680,30 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
+            if model.order_proposal_generated_at != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Updated requirements <small>by ' + model.order_proposal_generated_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_generated_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_proposal_requested_at != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Published requirements <small>by ' + model.order_proposal_requested_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_requested_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_supplier_updated_id != '':
+                notification_timeline = NotificationsTimeline()
+                notification_timeline.message = 'Selected Vendor Category <small>by ' + model.order_supplier_updated_role + '</small>'
+                notification_timeline.datetime = Utils.get_convert_datetime(model.order_supplier_updated_at,
+                                                                            settings.TIME_ZONE,
+                                                                            settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                timeline_notifications.append(notification_timeline)
+
             if model.order_supplier_updated_id != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Selected Vendor Category <small>by ' + model.order_supplier_updated_role + '</small>'
@@ -724,6 +751,18 @@ def view(request, pk):
             if model.order_status == Orders.STATUS_SUPPLIER_SELECTED:
                 notification_timeline = NotificationsTimeline()
                 model.order_readable_status = notification_timeline.message = "<b class='text-red'>Email draft to vendors is pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_PROPOSAL_GENERATED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Requesting for proposals to vendors is pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_PROPOSAL_REQUESTED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Evaluating vendors' proposals is pending</b>"
                 notification_timeline.datetime = ''
                 timeline_notifications.append(notification_timeline)
 
@@ -1054,6 +1093,12 @@ def update_email_to_supplier(request, pk):
             try:
                 model = Orders.objects.get(order_id=pk)
 
+                url = "<a title=\"Submit your proposal\" href=\"" + reverse("orders_proposal_create",
+                                                                            kwargs={'pk': str(pk),
+                                                                                    'code': '0'}) + "\" target=\"_blank\" rel=\"noopener\">Submit your proposal</a>"
+                if url not in model.order_email_to_supplier_message:
+                    model.order_email_to_supplier_message = model.order_email_to_supplier_message + "<br><p>Link to submit your proposals:&nbsp;" + url + "</p>"
+
                 attachment_form = OrderUploadAttachmentForm()
                 order_attachments = Order_Attachments.objects.filter(
                     Q(order_attachment_type=Order_Attachments.TYPE_ORDER_EMAIL) &
@@ -1074,9 +1119,25 @@ def update_email_to_supplier(request, pk):
                         model.order_email_to_supplier_updated_by = operator.operator_name
                         model.order_email_to_supplier_updated_department = operator.operator_department
                         model.order_email_to_supplier_updated_role = operator.operator_role
+
+                        # extra unneeded
+                        model.order_proposal_generated_at = Utils.get_current_datetime_utc()
+                        model.order_proposal_generated_id = operator.operator_id
+                        model.order_proposal_generated_by = operator.operator_name
+                        model.order_proposal_generated_department = operator.operator_department
+                        model.order_proposal_generated_role = operator.operator_role
+                        model.order_status = Orders.STATUS_PROPOSAL_GENERATED
                         model.save()
 
-                        messages.success(request, 'Updated successfully.')
+                        model.order_proposal_requested_at = Utils.get_current_datetime_utc()
+                        model.order_proposal_requested_id = operator.operator_id
+                        model.order_proposal_requested_by = operator.operator_name
+                        model.order_proposal_requested_department = operator.operator_department
+                        model.order_proposal_requested_role = operator.operator_role
+                        model.order_status = Orders.STATUS_PROPOSAL_REQUESTED
+                        model.save()
+
+                        messages.success(request, 'Updated and proposal generated successfully.')
                         return redirect(reverse("orders_view", args=[model.order_id]))
                     else:
                         return render(
@@ -1468,6 +1529,42 @@ def order_proposal_create(request, pk, code):
                 # noinspection PyCallByClass,PyTypeChecker
                 model.save()
 
+                # sending email confirmation mail
+                if settings.IS_LOCAL:
+                    domain = settings.BACKEND_DOMAIN_LOCAL
+                    logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                else:
+                    domain = settings.BACKEND_DOMAIN_PROD
+                    logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+
+                # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
+                link_url = '{domain}/{path}'.format(
+                    domain=domain,
+                    path="order-proposals/create/" + str(model.orders_order_id) + "/" + str(
+                        model.order_proposal_code) + "/"
+                )
+                link_name = "View Details"
+                html_content = render_to_string(
+                    'email/email-info-with-link.html',
+                    {
+                        'logo_url': logo_url,
+                        'contact_url': contact_url,
+                        'link_url': link_url,
+                        'link_name': link_name,
+                        'name': model.order_proposal_supplier_title,
+                        'message': 'Thank you for submitting your proposal, we will review your proposal and get back to you soon.',
+                    }
+                )
+                send_mail(
+                    settings.EMAIL_NOTIFICATION_SUBJECT,
+                    settings.EMAIL_NOTIFICATION_MESSAGE,
+                    settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
+                    [model.order_proposal_supplier_contact_email_id],
+                    fail_silently=False,
+                    html_message=html_content,
+                )
+
                 messages.info(request,
                               'Your proposal request has been submitted successfully.')
 
@@ -1497,38 +1594,73 @@ def order_proposal_create(request, pk, code):
                     }
                 )
         else:
-            form = OrderProposalCreateForm(
-                initial={
-                    'company_type': model.order_proposal_supplier_company_type,
-                    'title': model.order_proposal_supplier_title,
-                    'details': model.order_proposal_supplier_details,
-                    'rf_number': model.order_proposal_supplier_rf_number,
-                    'proposal_title': model.order_proposal_supplier_proposal_title,
-                    'legal_representatives': model.order_proposal_supplier_legal_representatives,
-                    'address_plot_no': model.order_proposal_supplier_address_plot_no,
-                    'address_street': model.order_proposal_supplier_address_street,
-                    'address_av_no': model.order_proposal_supplier_address_av_no,
-                    'address_sector': model.order_proposal_supplier_address_sector,
-                    'address_district': model.order_proposal_supplier_address_district,
-                    'address_country': model.order_proposal_supplier_address_country,
-                    'contact_phone_number': model.order_proposal_supplier_contact_phone_number,
-                    'contact_email_id': model.order_proposal_supplier_contact_email_id,
-                    'tin_number': model.order_proposal_supplier_tin_number,
-                    'bank_account_details': model.order_proposal_supplier_bank_account_details,
-                    'previous_reference1_name': model.order_proposal_supplier_previous_reference1_name,
-                    'previous_reference1_contact_person': model.order_proposal_supplier_previous_reference1_contact_person,
-                    'previous_reference1_contact_number': model.order_proposal_supplier_previous_reference1_contact_number,
-                    'previous_reference1_contact_email_id': model.order_proposal_supplier_previous_reference1_contact_email_id,
-                    'previous_reference2_name': model.order_proposal_supplier_previous_reference2_name,
-                    'previous_reference2_contact_person': model.order_proposal_supplier_previous_reference2_contact_person,
-                    'previous_reference2_contact_number': model.order_proposal_supplier_previous_reference2_contact_number,
-                    'previous_reference2_contact_email_id': model.order_proposal_supplier_previous_reference2_contact_email_id,
-                    'previous_reference3_name': model.order_proposal_supplier_previous_reference3_name,
-                    'previous_reference3_contact_person': model.order_proposal_supplier_previous_reference3_contact_person,
-                    'previous_reference3_contact_number': model.order_proposal_supplier_previous_reference3_contact_number,
-                    'previous_reference3_contact_email_id': model.order_proposal_supplier_previous_reference3_contact_email_id,
-                }
-            )
+            if model.order_proposal_status == Order_Proposals.STATUS_PENDING:
+                form = OrderProposalCreateForm(
+                    initial={
+                        'company_type': model.order_proposal_supplier_company_type,
+                        'title': model.order_proposal_supplier_title,
+                        'details': model.order_proposal_supplier_details,
+                        'rf_number': model.order_proposal_supplier_rf_number,
+                        'proposal_title': model.order_proposal_supplier_proposal_title,
+                        'legal_representatives': model.order_proposal_supplier_legal_representatives,
+                        'address_plot_no': model.order_proposal_supplier_address_plot_no,
+                        'address_street': model.order_proposal_supplier_address_street,
+                        'address_av_no': model.order_proposal_supplier_address_av_no,
+                        'address_sector': model.order_proposal_supplier_address_sector,
+                        'address_district': model.order_proposal_supplier_address_district,
+                        'address_country': model.order_proposal_supplier_address_country,
+                        'contact_phone_number': model.order_proposal_supplier_contact_phone_number,
+                        'contact_email_id': model.order_proposal_supplier_contact_email_id,
+                        'tin_number': model.order_proposal_supplier_tin_number,
+                        'bank_account_details': model.order_proposal_supplier_bank_account_details,
+                        'previous_reference1_name': model.order_proposal_supplier_previous_reference1_name,
+                        'previous_reference1_contact_person': model.order_proposal_supplier_previous_reference1_contact_person,
+                        'previous_reference1_contact_number': model.order_proposal_supplier_previous_reference1_contact_number,
+                        'previous_reference1_contact_email_id': model.order_proposal_supplier_previous_reference1_contact_email_id,
+                        'previous_reference2_name': model.order_proposal_supplier_previous_reference2_name,
+                        'previous_reference2_contact_person': model.order_proposal_supplier_previous_reference2_contact_person,
+                        'previous_reference2_contact_number': model.order_proposal_supplier_previous_reference2_contact_number,
+                        'previous_reference2_contact_email_id': model.order_proposal_supplier_previous_reference2_contact_email_id,
+                        'previous_reference3_name': model.order_proposal_supplier_previous_reference3_name,
+                        'previous_reference3_contact_person': model.order_proposal_supplier_previous_reference3_contact_person,
+                        'previous_reference3_contact_number': model.order_proposal_supplier_previous_reference3_contact_number,
+                        'previous_reference3_contact_email_id': model.order_proposal_supplier_previous_reference3_contact_email_id,
+                    }
+                )
+            else:
+                template_url = 'order-proposals/view.html'
+                form = OrderProposalViewForm(
+                    initial={
+                        'company_type': model.order_proposal_supplier_company_type,
+                        'title': model.order_proposal_supplier_title,
+                        'details': model.order_proposal_supplier_details,
+                        'rf_number': model.order_proposal_supplier_rf_number,
+                        'proposal_title': model.order_proposal_supplier_proposal_title,
+                        'legal_representatives': model.order_proposal_supplier_legal_representatives,
+                        'address_plot_no': model.order_proposal_supplier_address_plot_no,
+                        'address_street': model.order_proposal_supplier_address_street,
+                        'address_av_no': model.order_proposal_supplier_address_av_no,
+                        'address_sector': model.order_proposal_supplier_address_sector,
+                        'address_district': model.order_proposal_supplier_address_district,
+                        'address_country': model.order_proposal_supplier_address_country,
+                        'contact_phone_number': model.order_proposal_supplier_contact_phone_number,
+                        'contact_email_id': model.order_proposal_supplier_contact_email_id,
+                        'tin_number': model.order_proposal_supplier_tin_number,
+                        'bank_account_details': model.order_proposal_supplier_bank_account_details,
+                        'previous_reference1_name': model.order_proposal_supplier_previous_reference1_name,
+                        'previous_reference1_contact_person': model.order_proposal_supplier_previous_reference1_contact_person,
+                        'previous_reference1_contact_number': model.order_proposal_supplier_previous_reference1_contact_number,
+                        'previous_reference1_contact_email_id': model.order_proposal_supplier_previous_reference1_contact_email_id,
+                        'previous_reference2_name': model.order_proposal_supplier_previous_reference2_name,
+                        'previous_reference2_contact_person': model.order_proposal_supplier_previous_reference2_contact_person,
+                        'previous_reference2_contact_number': model.order_proposal_supplier_previous_reference2_contact_number,
+                        'previous_reference2_contact_email_id': model.order_proposal_supplier_previous_reference2_contact_email_id,
+                        'previous_reference3_name': model.order_proposal_supplier_previous_reference3_name,
+                        'previous_reference3_contact_person': model.order_proposal_supplier_previous_reference3_contact_person,
+                        'previous_reference3_contact_number': model.order_proposal_supplier_previous_reference3_contact_number,
+                        'previous_reference3_contact_email_id': model.order_proposal_supplier_previous_reference3_contact_email_id,
+                    }
+                )
 
         return render(
             request, template_url,

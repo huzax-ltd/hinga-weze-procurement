@@ -155,8 +155,8 @@
         .btn-primary {
             text-decoration: none;
             color: #FFF;
-            background-color: #8F063D;
-            border: solid #8F063D;
+            background-color: #013F7E;
+            border: solid #013F7E;
             border-width: 10px 20px;
             line-height: 2em;
             /* 2em * 14px = 28px, use px to get airier line-height also in Thunderbird, and Yahoo!, Outlook.com, AOL webmail clients */
@@ -316,9 +316,12 @@
                             <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <div class="aligncenter" style="padding:20px; background-color: #8F063D;">
-                                            <p style="color: #FFFFFF; font-size: 40px; margin-top: 15px">CNFA</p>
-                                            <p style="color: #FFFFFF; font-size: 20px;"></p>
+                                        <div class="aligncenter" style="padding:20px; background-color: #013F7E;">
+                                            {#                                            <p style="color: #FFFFFF; font-size: 40px; margin-top: 15px">CNFA</p>#}
+                                            <img class="img-responsive" src="{{ logo_url }}" width="200"
+                                                 style="margin-top: 15px"/>
+                                            <p style="color: #FFFFFF; font-size: 20px;">Cultivating New Frontiers in
+                                                Agriculture</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -332,6 +335,13 @@
                                         {{ message }}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="content-block aligncenter" itemprop="handler" itemscope
+                                        itemtype="http://schema.org/HttpActionHandler">
+                                        <a href="{{ link_url }}" class="btn btn-primary"
+                                           itemprop="url" style="color: #FFF;">{{ link_name }}</a>
+                                    </td>
+                                </tr>
                             </table>
                         </td>
                     </tr>
@@ -340,8 +350,8 @@
                     <table width="100%">
                         <tr>
                             <td class="aligncenter content-block"><b>
-                                <a href="https://cnfa.org" style="color: #DC143B">CNFA</a> |
-                                <a href="{{ contact_url }}" style="color: #DC143B">Contact Us</a></b></td>
+                                <a href="https://cnfa.org" style="color: #013F7E">CNFA</a> |
+                                <a href="{{ contact_url }}" style="color: #013F7E">Contact Us</a></b></td>
                         </tr>
                     </table>
                 </div>

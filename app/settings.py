@@ -139,8 +139,10 @@ REST_FRAMEWORK = {
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-BACKEND_DOMAIN_LOCAL = 'http://127.0.0.1:8000/hinga-weze-procurement/backend'
+BACKEND_DOMAIN_LOCAL = 'http://127.0.0.1:8000/backend'
 BACKEND_DOMAIN_PROD = 'https://hingaweze.pythonanywhere.com/backend'
+STATIC_LOCAL = 'http://127.0.0.1/hinga-weze-procurement/static/'
+STATIC_PROD = 'https://hingaweze.pythonanywhere.com/static/'
 
 if IS_LOCAL:
     DATABASES = {
