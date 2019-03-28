@@ -335,7 +335,7 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
-    # update select
+    # select proposal
     url(r'^order-proposals/update/select/(?P<pk>.+)/$', order_proposal_views.select_proposal,
         name='order_proposals_update_select'),
     url(r'^order-proposals/update/select/(?P<pk>.+)/service-worker.js',
