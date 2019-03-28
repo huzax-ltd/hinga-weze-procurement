@@ -263,9 +263,12 @@ class Operators(models.Model):
                 if notifications.count() > 5:
                     count = "5+"
                 else:
-                    count = notifications.count()
+                    if notifications.count == 0:
+                        count = 0
+                    else:
+                        count = notifications.count()
                 notifications = notifications[: 5]
-                operator.operator_notifications_count = str(count)
+                operator.operator_notifications_count = count
                 operator.operator_notifications_json = notifications
 
             except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):

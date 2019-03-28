@@ -27,16 +27,76 @@
                 <span>MENU</span>
             </li>
 
-            {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
-                <li class="nav-item">
-                    <a class="nav-link ripple" href="{% url 'orders_create' %}">
+            <li class="nav-item" role="tab" id="heading-new-request">
 
-                        <i class="icon s-4 icon-plus-box"></i>
+                <a class="nav-link ripple with-arrow collapsed fuse-ripple-ready" data-toggle="collapse"
+                   data-target="#collapse-new-request" href="#" aria-expanded="false"
+                   aria-controls="collapse-new-request"
+                   data-parent="#sidenav">
 
-                        <span>New Procurement Request</span>
-                    </a>
-                </li>
-            {% endif %}
+                    <i class="icon s-4 icon-plus-box"></i>
+
+                    <span>New Request</span>
+                </a>
+                <ul id="collapse-new-request" class="collapse " role="tabpanel" aria-labelledby="heading-new-request"
+                    data-children=".nav-item">
+
+                    {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>Procurement Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>Stock Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>Staff Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>Mission Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>Leave Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </li>
 
             {% if ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values %}
                 {% if section == BACKEND_SECTION_DASHBOARD %}
@@ -60,27 +120,367 @@
                 {% endif %}
             {% endif %}
 
-            {% if ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values %}
-                {% if section == BACKEND_SECTION_ORDERS %}
-                    <li class="nav-item">
-                        <a class="nav-link ripple active" href="{% url 'orders_index' %}">
 
-                            <i class="icon s-4 icon-shopping"></i>
+            <li class="nav-item" role="tab" id="heading-procurements">
 
-                            <span>Procurement Requests</span>
-                        </a>
-                    </li>
+                {% if section >= BACKEND_SECTION_PROCUREMENTS and section < BACKEND_SECTION_STOCKS %}
+                    <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse"
+                       data-target="#collapse-procurements" href="#" aria-expanded="false"
+                       aria-controls="collapse-procurements"
+                       data-parent="#sidenav">
+
+                        <i class="icon s-4 icon-trophy-outline"></i>
+
+                        <span>Procurements</span>
+                    </a>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link ripple" href="{% url 'orders_index' %}">
+                    <a class="nav-link ripple with-arrow collapsed fuse-ripple-ready" data-toggle="collapse"
+                       data-target="#collapse-procurements" href="#" aria-expanded="false"
+                       aria-controls="collapse-procurements"
+                       data-parent="#sidenav">
 
-                            <i class="icon s-4 icon-shopping"></i>
+                        <i class="icon s-4 icon-trophy-outline"></i>
 
-                            <span>Procurement Requests</span>
-                        </a>
-                    </li>
+                        <span>Procurements</span>
+                    </a>
                 {% endif %}
+
+                {% if section >= BACKEND_SECTION_PROCUREMENTS and section < BACKEND_SECTION_STOCKS %}
+                    <ul id="collapse-procurements" class="collapse show" role="tabpanel"
+                        aria-labelledby="heading-procurements"
+                        data-children=".nav-item">
+                {% else %}
+                    <ul id="collapse-procurements" class="collapse" role="tabpanel"
+                        aria-labelledby="heading-procurements"
+                        data-children=".nav-item">
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_PROCUREMENT_NEW_REQUEST %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_PROCUREMENT_MY_REQUESTS %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-account-check"></i>
+
+                                <span>My Requests</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-account-check"></i>
+
+                                <span>My Requests</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-check-all"></i>
+
+                                <span>All Requests</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-check-all"></i>
+
+                                <span>All Requests</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if section >= BACKEND_SECTION_PROCUREMENTS and section < BACKEND_SECTION_STOCKS %}
+                    </ul>
+                {% else %}
+                    </ul>
+                {% endif %}
+            </li>
+
+            <li class="nav-item" role="tab" id="heading-stocks">
+
+                {% if section >= BACKEND_SECTION_STOCKS and section < BACKEND_SECTION_MEL_DEPARTMENT %}
+                    <a class="nav-link ripple with-arrow collapsed fuse-ripple-ready" data-toggle="collapse"
+                       data-target="#collapse-stocks" href="#" aria-expanded="false"
+                       aria-controls="collapse-stocks"
+                       data-parent="#sidenav">
+
+                        <i class="icon s-4 icon-stocking"></i>
+
+                        <span>Stocks</span>
+                    </a>
+                {% else %}
+                    <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse"
+                       data-target="#collapse-stocks" href="#" aria-expanded="false"
+                       aria-controls="collapse-stocks"
+                       data-parent="#sidenav">
+
+                        <i class="icon s-4 icon-stocking"></i>
+
+                        <span>Stocks</span>
+                    </a>
+                {% endif %}
+
+                {% if section >= BACKEND_SECTION_STOCKS and section < BACKEND_SECTION_MEL_DEPARTMENT %}
+                    <ul id="collapse-stocks" class="collapse show" role="tabpanel"
+                        aria-labelledby="heading-stocks"
+                        data-children=".nav-item">
+                {% else %}
+                    <ul id="collapse-stocks" class="collapse" role="tabpanel"
+                        aria-labelledby="heading-stocks"
+                        data-children=".nav-item">
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_STOCK_NEW_REQUEST %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_STOCK_MY_REQUESTS %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-account-check"></i>
+
+                                <span>My Requests</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-account-check"></i>
+
+                                <span>My Requests</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_STOCK_ALL_REQUESTS %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-check-all"></i>
+
+                                <span>All Requests</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-check-all"></i>
+
+                                <span>All Requests</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if section >= BACKEND_SECTION_STOCKS and section < BACKEND_SECTION_MEL_DEPARTMENT %}
+                    </ul>
+                {% else %}
+                    </ul>
+                {% endif %}
+            </li>
+
+            {% if section == BACKEND_SECTION_MEL_DEPARTMENT %}
+                <li class="nav-item">
+                    <a class="nav-link ripple active" href="{% url 'operators_index' %}">
+
+                        <i class="icon s-4 icon-radar"></i>
+
+                        <span>MEL Department</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link ripple" href="{% url 'operators_index' %}">
+
+                        <i class="icon s-4 icon-radar"></i>
+
+                        <span>MEL Department</span>
+                    </a>
+                </li>
             {% endif %}
+
+            {% if section == BACKEND_SECTION_GRANT_MANAGEMENT %}
+                <li class="nav-item">
+                    <a class="nav-link ripple active" href="{% url 'operators_index' %}">
+
+                        <i class="icon s-4 icon-cash-multiple"></i>
+
+                        <span>Grant Management</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link ripple" href="{% url 'operators_index' %}">
+
+                        <i class="icon s-4 icon-cash-multiple"></i>
+
+                        <span>Grant Management</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="nav-item" role="tab" id="heading-hrm">
+
+                {% if section >= BACKEND_SECTION_HRM and section < BACKEND_SECTION_OPERATORS %}
+                    <a class="nav-link ripple with-arrow collapsed fuse-ripple-ready" data-toggle="collapse"
+                       data-target="#collapse-hrm" href="#" aria-expanded="false"
+                       aria-controls="collapse-hrm"
+                       data-parent="#sidenav">
+
+                        <i class="icon s-4 icon-human-greeting"></i>
+
+                        <span>HR Management</span>
+                    </a>
+                {% else %}
+                    <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse"
+                       data-target="#collapse-hrm" href="#" aria-expanded="false"
+                       aria-controls="collapse-hrm"
+                       data-parent="#sidenav">
+
+                        <i class="icon s-4 icon-human-greeting"></i>
+
+                        <span>HR Management</span>
+                    </a>
+                {% endif %}
+
+                {% if section >= BACKEND_SECTION_HRM and section < BACKEND_SECTION_OPERATORS %}
+                    <ul id="collapse-hrm" class="collapse show" role="tabpanel"
+                        aria-labelledby="heading-hrm"
+                        data-children=".nav-item">
+                {% else %}
+                    <ul id="collapse-hrm" class="collapse" role="tabpanel"
+                        aria-labelledby="heading-hrm"
+                        data-children=".nav-item">
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_HRM_NEW_REQUEST %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+
+                                <i class="icon s-4 icon-plus-box"></i>
+
+                                <span>New Request</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_HRM_MY_REQUESTS %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-account-check"></i>
+
+                                <span>My Requests</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-account-check"></i>
+
+                                <span>My Requests</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if section == BACKEND_SECTION_HRM_ALL_REQUESTS %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-check-all"></i>
+
+                                <span>All Requests</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+
+                                <i class="icon s-4 icon-check-all"></i>
+
+                                <span>All Requests</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if section >= BACKEND_SECTION_HRM and section < BACKEND_SECTION_OPERATORS %}
+                    </ul>
+                {% else %}
+                    </ul>
+                {% endif %}
+            </li>
 
             {% if ACCESS_PERMISSION_OPERATOR_VIEW in auth_permissions.values %}
                 {% if section == BACKEND_SECTION_OPERATORS %}
@@ -107,19 +507,23 @@
             {% if section == BACKEND_SECTION_NOTIFICATIONS %}
                 <li class="nav-item">
                     <a class="nav-link ripple active" href="{% url 'notifications_index' %}">
-
                         <i class="icon s-4 icon-message-alert"></i>
-
                         <span>Notifications</span>
+                        {% if operator.operator_notifications_count != 0 %}
+                            <p class="badge badge-danger mt-3"
+                               style="width: 30px;">{{ operator.operator_notifications_count }}</p>
+                        {% endif %}
                     </a>
                 </li>
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link ripple" href="{% url 'notifications_index' %}">
-
                         <i class="icon s-4 icon-message-alert"></i>
-
                         <span>Notifications</span>
+                        {% if operator.operator_notifications_count != 0 %}
+                            <p class="badge badge-danger mt-3"
+                               style="width: 30px;">{{ operator.operator_notifications_count }}</p>
+                        {% endif %}
                     </a>
                 </li>
             {% endif %}

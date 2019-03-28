@@ -128,7 +128,7 @@
 
                                 {% endif %}
                             {% endif %}
-                            {% if operator.operator_type == model.TYPE_SUPER_ADMIN or operator.operator_type == model.TYPE_ADMIN %}
+                            {% if operator.operator_type == model.TYPE_ADMIN %}
                                 <a href="{% url 'order_proposals_index' pk=model.order_id %}"
                                    class="btn btn-outline-primary fuse-ripple-ready">Proposals</a>
                                 <a href="{% url 'order_proposals_index' pk=model.order_id %}"

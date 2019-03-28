@@ -50,7 +50,7 @@ def index(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Order_Proposals.TITLE,
                         'name': Order_Proposals.NAME,
                         'operator': operator,
@@ -492,7 +492,7 @@ def create(request, pk, code):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'form': form,
@@ -582,7 +582,7 @@ def create(request, pk, code):
         return render(
             request, template_url,
             {
-                'section': settings.BACKEND_SECTION_ORDERS,
+                'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                 'title': Orders.TITLE,
                 'name': Orders.NAME,
                 'form': form,
@@ -740,7 +740,7 @@ def view_internal(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -937,7 +937,7 @@ def evaluate_proposal(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Order_Proposals.TITLE,
                         'name': Order_Proposals.NAME,
                         'operator': operator,
@@ -1123,7 +1123,7 @@ def select_proposal(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Order_Proposals.TITLE,
                         'name': Order_Proposals.NAME,
                         'operator': operator,

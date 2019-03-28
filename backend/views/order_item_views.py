@@ -101,7 +101,7 @@ def create(request, order_id):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Order_Items.TITLE,
                         'name': Order_Items.NAME,
                         'operator': operator,
@@ -172,7 +172,7 @@ def update(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Order_Items.TITLE,
                         'name': Order_Items.NAME,
                         'operator': operator,

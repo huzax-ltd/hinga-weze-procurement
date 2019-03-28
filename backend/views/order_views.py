@@ -70,7 +70,7 @@ def index(request):
             return render(
                 request, template_url,
                 {
-                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                     'title': Orders.TITLE,
                     'name': Orders.NAME,
                     'operator': operator,
@@ -469,7 +469,7 @@ def create(request):
                     return render(
                         request, template_url,
                         {
-                            'section': settings.BACKEND_SECTION_ORDERS,
+                            'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                             'title': Orders.TITLE,
                             'name': Orders.NAME,
                             'operator': operator,
@@ -484,7 +484,7 @@ def create(request):
             return render(
                 request, template_url,
                 {
-                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                     'title': Orders.TITLE,
                     'name': Orders.NAME,
                     'operator': operator,
@@ -542,7 +542,7 @@ def update(request, pk):
                         return render(
                             request, template_url,
                             {
-                                'section': settings.BACKEND_SECTION_ORDERS,
+                                'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                                 'title': Orders.TITLE,
                                 'name': Orders.NAME,
                                 'operator': operator,
@@ -577,7 +577,7 @@ def update(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -812,7 +812,7 @@ def view(request, pk):
             return render(
                 request, template_url,
                 {
-                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                     'title': Orders.TITLE,
                     'name': Orders.NAME,
                     'operator': operator,
@@ -895,7 +895,7 @@ def update_procurement_method(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -937,7 +937,7 @@ def view_order_items(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -1049,7 +1049,7 @@ def update_order_assignment(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -1108,7 +1108,7 @@ def update_supplier(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -1193,7 +1193,7 @@ def update_email_to_supplier(request, pk):
                         return render(
                             request, template_url,
                             {
-                                'section': settings.BACKEND_SECTION_ORDERS,
+                                'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                                 'title': Orders.TITLE,
                                 'name': Orders.NAME,
                                 'operator': operator,
@@ -1217,7 +1217,7 @@ def update_email_to_supplier(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -1361,7 +1361,7 @@ def send_email_to_supplier(request, pk):
                     return render(
                         request, template_url,
                         {
-                            'section': settings.BACKEND_SECTION_ORDERS,
+                            'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                             'title': Orders.TITLE,
                             'name': Orders.NAME,
                             'operator': operator,
@@ -1387,7 +1387,7 @@ def send_email_to_supplier(request, pk):
             return render(
                 request, template_url,
                 {
-                    'section': settings.BACKEND_SECTION_ORDERS,
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                     'title': Orders.TITLE,
                     'name': Orders.NAME,
                     'operator': operator,
@@ -1795,7 +1795,7 @@ def order_proposal_create(request, pk, code):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'form': form,
@@ -1885,7 +1885,7 @@ def order_proposal_create(request, pk, code):
         return render(
             request, template_url,
             {
-                'section': settings.BACKEND_SECTION_ORDERS,
+                'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                 'title': Orders.TITLE,
                 'name': Orders.NAME,
                 'form': form,
@@ -2117,7 +2117,7 @@ def update_purchase_order(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
@@ -2213,7 +2213,7 @@ def update_invoice_order(request, pk):
                 return render(
                     request, template_url,
                     {
-                        'section': settings.BACKEND_SECTION_ORDERS,
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
                         'title': Orders.TITLE,
                         'name': Orders.NAME,
                         'operator': operator,
