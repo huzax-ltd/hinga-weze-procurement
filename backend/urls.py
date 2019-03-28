@@ -4,8 +4,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from backend.views import operator_views, operator_log_views, order_views, order_item_views, order_proposal_views, \
-    site_views, setting_views, \
-    notification_views
+    product_views, site_views, setting_views, notification_views
 
 urlpatterns = [
 
@@ -379,6 +378,16 @@ urlpatterns = [
         name='operator_logs_select_multiple'),
     url(r'^operator-logs/(?P<pk>\d+)/$', operator_log_views.view, name='operator_logs_view'),
     url(r'^operator-logs/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # products
+    # path('', order_proposal_views.index, name='index'),
+
+    # index
+    url(r'^products/import-excel/$', product_views.import_excel, name='products_import_excel'),
+    url(r'^products/import-excel/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
