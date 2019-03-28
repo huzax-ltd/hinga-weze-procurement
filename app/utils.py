@@ -47,7 +47,6 @@ class Utils(object):
     HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Purchase Generated <b></div>'
     HTML_TAG_ORDER_STATUS_ACKNOWLEDGED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_BLUE + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Proposal Acknowledged <b></div>'
     HTML_TAG_ORDER_STATUS_RECEIVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Received <b></div>'
-    HTML_TAG_ORDER_STATUS_PARTIALLY_PAID = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Partially Paid <b></div>'
     HTML_TAG_ORDER_STATUS_PAID = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Paid <b></div>'
     HTML_TAG_ORDER_STATUS_CLOSED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Closed <b></div>'
     HTML_TAG_ORDER_STATUS_CANCELLED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Cancelled <b></div>'

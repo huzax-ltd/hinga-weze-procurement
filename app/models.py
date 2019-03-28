@@ -511,7 +511,6 @@ class Orders(models.Model):
     STATUS_PURCHASE_GENERATED = 'purchase-generated'
     STATUS_ACKNOWLEDGED = 'acknowledged'
     STATUS_RECEIVED = 'received'
-    STATUS_PARTIALLY_PAID = 'partially-paid'
     STATUS_PAID = 'paid'
     STATUS_CLOSED = 'closed'
     STATUS_CANCELLED = 'cancelled'
@@ -543,7 +542,6 @@ class Orders(models.Model):
         (STATUS_PURCHASE_GENERATED.title()).replace('-', ' '),
         (STATUS_ACKNOWLEDGED.title()).replace('-', ' '),
         (STATUS_RECEIVED.title()).replace('-', ' '),
-        (STATUS_PARTIALLY_PAID.title()).replace('-', ' '),
         (STATUS_PAID.title()).replace('-', ' '),
         (STATUS_CLOSED.title()).replace('-', ' '),
         (STATUS_CANCELLED.title()).replace('-', ' '),
@@ -576,7 +574,6 @@ class Orders(models.Model):
         (STATUS_PURCHASE_GENERATED, (STATUS_PURCHASE_GENERATED.title()).replace('-', ' ')),
         (STATUS_ACKNOWLEDGED, (STATUS_ACKNOWLEDGED.title()).replace('-', ' ')),
         (STATUS_RECEIVED, (STATUS_RECEIVED.title()).replace('-', ' ')),
-        (STATUS_PARTIALLY_PAID, (STATUS_PARTIALLY_PAID.title()).replace('-', ' ')),
         (STATUS_PAID, (STATUS_PAID.title()).replace('-', ' ')),
         (STATUS_CLOSED, (STATUS_CLOSED.title()).replace('-', ' ')),
         (STATUS_CANCELLED, (STATUS_CANCELLED.title()).replace('-', ' ')),
@@ -658,16 +655,6 @@ class Orders(models.Model):
     order_requested_department = models.CharField('Requested Department', max_length=255, blank=True)
     order_requested_role = models.CharField('Requested Role', max_length=255, blank=True)
     order_approval_no_of_levels = models.IntegerField('Approval Levels', blank=False, default=0)
-    # order_level_approved_at = models.DateTimeField('Level Approved At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
-    # order_level_approved_id = models.CharField('Level Approved ID', max_length=100, blank=True)
-    # order_level_approved_by = models.CharField('Level Approved By', max_length=100, blank=True)
-    # order_level_approved_department = models.CharField('Level Approved Department', max_length=255, blank=True)
-    # order_level_approved_role = models.CharField('Level Approved Role', max_length=255, blank=True)
-    # order_level_rejected_at = models.DateTimeField('Level Rejected At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
-    # order_level_rejected_id = models.CharField('Level Rejected ID', max_length=100, blank=True)
-    # order_level_rejected_by = models.CharField('Level Rejected By', max_length=100, blank=True)
-    # order_level_rejected_department = models.CharField('Level Rejected Department', max_length=255, blank=True)
-    # order_level_rejected_role = models.CharField('Level Rejected Role', max_length=255, blank=True)
     order_reviewed_at = models.DateTimeField('Reviewed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_reviewed_id = models.CharField('Reviewed ID', max_length=100, blank=True)
     order_reviewed_by = models.CharField('Reviewed By', max_length=100, blank=True)
@@ -810,8 +797,6 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_ACKNOWLEDGED
         elif record.order_status == Orders.STATUS_RECEIVED:
             value = Utils.HTML_TAG_ORDER_STATUS_RECEIVED
-        elif record.order_status == Orders.STATUS_PARTIALLY_PAID:
-            value = Utils.HTML_TAG_ORDER_STATUS_PARTIALLY_PAID
         elif record.order_status == Orders.STATUS_PAID:
             value = Utils.HTML_TAG_ORDER_STATUS_PAID
         elif record.order_status == Orders.STATUS_CLOSED:
@@ -1596,6 +1581,22 @@ class Order_Items(models.Model):
     SINGULAR_TITLE = settings.MODEL_ORDER_ITEM_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
+    TYPE_GOODS = 'goods'
+    TYPE_ASSET = 'asset'
+    TYPE_SERVICE = 'service'
+
+    ARRAY_TYPES = [
+        TYPE_GOODS,
+        TYPE_ASSET,
+        TYPE_SERVICE,
+    ]
+    DROPDOWN_TYPES = (
+        ('', '--select--'),
+        (TYPE_GOODS, TYPE_GOODS),
+        (TYPE_ASSET, TYPE_ASSET),
+        (TYPE_SERVICE, TYPE_SERVICE),
+    )
+
     CURRENCY_USD = 'USD'
     CURRENCY_RWF = 'RWF'
 
@@ -1624,6 +1625,7 @@ class Order_Items(models.Model):
 
     order_item_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     orders_order_id = models.IntegerField('Order Id', blank=False)
+    order_item_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES, default=TYPE_GOODS)
     order_item_title = models.CharField('Item Details', max_length=255, blank=False)
     order_item_sub_title = models.CharField('Item Details', max_length=255, blank=True)
     order_item_duration = models.IntegerField('Time in Days', blank=False, default=0)
@@ -1954,3 +1956,366 @@ class Attachments(models.Model):
 
     def __unicode__(self):
         return self.attachment_id
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Products(models.Model):
+    TITLE = settings.MODEL_PRODUCTS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_PRODUCTS_ITEM_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    TYPE_GOODS = 'goods'
+    TYPE_ASSET = 'asset'
+    TYPE_SERVICE = 'service'
+
+    ARRAY_TYPES = [
+        TYPE_GOODS,
+        TYPE_ASSET,
+        TYPE_SERVICE,
+    ]
+    DROPDOWN_TYPES = (
+        ('', '--select--'),
+        (TYPE_GOODS, TYPE_GOODS),
+        (TYPE_ASSET, TYPE_ASSET),
+        (TYPE_SERVICE, TYPE_SERVICE),
+    )
+
+    product_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    product_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES, default=TYPE_GOODS)
+    product_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
+    product_tag = models.CharField('Tag', max_length=255, blank=True)
+    product_category = models.CharField('Category', max_length=255, blank=True)
+    product_title = models.CharField('Title', max_length=100, blank=False)
+    product_sub_title = models.CharField('Sub title', max_length=255, blank=True)
+    product_quantity_available = models.DecimalField('Quantity Available', max_digits=10, decimal_places=0,
+                                                     default=Decimal(0))
+    product_quantity_unit = models.CharField('Quantity Unit', max_length=255, blank=True)
+
+    product_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    product_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    product_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    product_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.product_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and Products.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Inventory(models.Model):
+    TITLE = settings.MODEL_INVENTORY_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_INVENTORY_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    inventory_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    inventory_order_purchase_no = models.CharField('Purchase Order No.', max_length=100, blank=False)
+    inventory_order_proposal_id = models.CharField('Proposal Id', max_length=255, blank=True)
+    inventory_order_proposal_supplier_title = models.CharField('Supplier Name', max_length=255, blank=True)
+    inventory_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    inventory_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    inventory_created_by = models.CharField('Created By', max_length=100, blank=True)
+    inventory_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    inventory_created_role = models.CharField('Created Role', max_length=255, blank=True)
+
+    inventory_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    inventory_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    inventory_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    inventory_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    inventory_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.inventory_id
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class InventoryItems(models.Model):
+    TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    TYPE_GOODS = 'goods'
+    TYPE_ASSET = 'asset'
+    TYPE_SERVICE = 'service'
+
+    ARRAY_TYPES = [
+        TYPE_GOODS,
+        TYPE_ASSET,
+        TYPE_SERVICE,
+    ]
+    DROPDOWN_TYPES = (
+        ('', '--select--'),
+        (TYPE_GOODS, TYPE_GOODS),
+        (TYPE_ASSET, TYPE_ASSET),
+        (TYPE_SERVICE, TYPE_SERVICE),
+    )
+
+    CURRENCY_USD = 'USD'
+    CURRENCY_RWF = 'RWF'
+
+    ARRAY_CURRENCIES = [
+        CURRENCY_USD,
+        CURRENCY_RWF,
+    ]
+    DROPDOWN_CURRENCIES = (
+        ('', '--select--'),
+        (CURRENCY_USD, CURRENCY_USD),
+        (CURRENCY_RWF, CURRENCY_RWF),
+    )
+
+    inventory_item_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    inventory_inventory_id = models.IntegerField('Inventory Id', blank=False)
+    products_product_id = models.IntegerField('Product Id', blank=False)
+    inventory_item_product_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES,
+                                                   default=TYPE_GOODS)
+    inventory_item_product_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
+    inventory_item_product_tag = models.CharField('Tag', max_length=255, blank=True)
+    inventory_item_product_category = models.CharField('Category', max_length=255, blank=True)
+    inventory_item_product_title = models.CharField('Title', max_length=100, blank=False)
+    inventory_item_product_sub_title = models.CharField('Sub title', max_length=255, blank=True)
+    inventory_item_product_quantity_initial = models.DecimalField('Initial Quantity', max_digits=10, decimal_places=0,
+                                                                  default=Decimal(0))
+    inventory_item_product_quantity_ordered = models.DecimalField('Quantity Ordered', max_digits=10, decimal_places=0,
+                                                                  default=Decimal(0))
+    inventory_item_product_quantity_balance = models.DecimalField('Balance Quantity', max_digits=10, decimal_places=0,
+                                                                  default=Decimal(0))
+    inventory_item_product_quantity_unit = models.CharField('Quantity Unit', max_length=255, blank=True)
+
+    inventory_item_product_currency = models.CharField('Currency', max_length=255, blank=False,
+                                                       choices=DROPDOWN_CURRENCIES, default=CURRENCY_RWF)
+
+    inventory_item_product_unit_price = models.DecimalField('Quantity Ordered', max_digits=10, decimal_places=0,
+                                                            default=Decimal(0))
+    inventory_item_product_rate_price = models.DecimalField('Quantity Ordered', max_digits=10, decimal_places=0,
+                                                            default=Decimal(0))
+    inventory_item_product_usd_price = models.DecimalField('Quantity Ordered', max_digits=10, decimal_places=0,
+                                                           default=Decimal(0))
+
+    inventory_item_product_usaid_equipment_price = models.DecimalField('Quantity Ordered', max_digits=10,
+                                                                       decimal_places=0, default=Decimal(0))
+    inventory_item_product_small_equipment_price = models.DecimalField('Quantity Ordered', max_digits=10,
+                                                                       decimal_places=0, default=Decimal(0))
+
+    inventory_item_project = models.CharField('Project', max_length=255, blank=True)
+    inventory_item_voucher_reference = models.CharField('Voucher Reference', max_length=255, blank=True)
+    inventory_item_location = models.CharField('Location', max_length=255, blank=True)
+    inventory_item_equipment_holder_status = models.CharField('Equipment Holder Status', max_length=255, blank=True)
+    inventory_item_staff_name = models.CharField('Staff Name', max_length=255, blank=True)
+    inventory_item_room_number = models.CharField('Room Number', max_length=255, blank=True)
+    inventory_item_present_condition = models.CharField('Present Condition', max_length=255, blank=True)
+
+    inventory_item_disposal_date = models.DateField('Disposal Date',
+                                                    default=settings.APP_CONSTANT_DEFAULT_DATE)
+    inventory_item_verified_date = models.DateField('Physically Verified Date',
+                                                    default=settings.APP_CONSTANT_DEFAULT_DATE)
+
+    inventory_item_remark = models.CharField('Remark', max_length=255, blank=True)
+
+    inventory_item_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    inventory_item_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    inventory_item_created_by = models.CharField('Created By', max_length=100, blank=True)
+    inventory_item_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    inventory_item_created_role = models.CharField('Created Role', max_length=255, blank=True)
+
+    inventory_item_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    inventory_item_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    inventory_item_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    inventory_item_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    inventory_item_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.inventory_id
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class ProductRequests(models.Model):
+    TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    STATUS_PENDING = 'pending'
+    STATUS_REQUESTED = 'requested'
+    STATUS_REVIEWED = 'reviewed'
+    STATUS_APPROVED = 'approved'
+    STATUS_REJECTED = 'rejected'
+    STATUS_CLOSED = 'closed'
+    STATUS_CANCELLED = 'cancelled'
+
+    ARRAY_STATUSES = [
+        (STATUS_PENDING.title()).replace('-', ' '),
+        (STATUS_REQUESTED.title()).replace('-', ' '),
+        (STATUS_REVIEWED.title()).replace('-', ' '),
+        (STATUS_APPROVED.title()).replace('-', ' '),
+        (STATUS_REJECTED.title()).replace('-', ' '),
+        (STATUS_CLOSED.title()).replace('-', ' '),
+        (STATUS_CANCELLED.title()).replace('-', ' '),
+    ]
+    DROPDOWN_STATUSES = (
+        ('', '--select--'),
+        (STATUS_PENDING, (STATUS_PENDING.title()).replace('-', ' ')),
+        (STATUS_REQUESTED, (STATUS_REQUESTED.title()).replace('-', ' ')),
+        (STATUS_REVIEWED, (STATUS_REVIEWED.title()).replace('-', ' ')),
+        (STATUS_APPROVED, (STATUS_APPROVED.title()).replace('-', ' ')),
+        (STATUS_REJECTED, (STATUS_REJECTED.title()).replace('-', ' ')),
+        (STATUS_CLOSED, (STATUS_CLOSED.title()).replace('-', ' ')),
+        (STATUS_CANCELLED, (STATUS_CANCELLED.title()).replace('-', ' ')),
+    )
+
+    product_request_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    product_request_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
+    product_request_project = models.CharField('Project', max_length=255, blank=True)
+    product_request_details = models.CharField('Project', max_length=255, blank=True)
+    product_request_no_of_items = models.DecimalField('No. of Items', max_digits=10, decimal_places=0,
+                                                      default=Decimal(0))
+
+    product_request_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    product_request_created_by = models.CharField('Created By', max_length=100, blank=True)
+    product_request_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    product_request_created_role = models.CharField('Created Role', max_length=255, blank=True)
+
+    product_request_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    product_request_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    product_request_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    product_request_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    product_request_requested_at = models.DateTimeField('Requested At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_requested_id = models.CharField('Requested ID', max_length=100, blank=True)
+    product_request_requested_by = models.CharField('Requested By', max_length=100, blank=True)
+    product_request_requested_department = models.CharField('Requested Department', max_length=255, blank=True)
+    product_request_requested_role = models.CharField('Requested Role', max_length=255, blank=True)
+
+    product_request_reviewed_at = models.DateTimeField('Reviewed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_reviewed_id = models.CharField('Reviewed ID', max_length=100, blank=True)
+    product_request_reviewed_by = models.CharField('Reviewed By', max_length=100, blank=True)
+    product_request_reviewed_department = models.CharField('Reviewed Department', max_length=255, blank=True)
+    product_request_reviewed_role = models.CharField('Reviewed Role', max_length=255, blank=True)
+
+    product_request_approved_updated_at = models.DateTimeField('Approved At',
+                                                               default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_approved_updated_id = models.CharField('Approved ID', max_length=100, blank=True)
+    product_request_approved_updated_by = models.CharField('Approved By', max_length=100, blank=True)
+    product_request_approved_updated_department = models.CharField('Approved Department', max_length=255, blank=True)
+    product_request_approved_updated_role = models.CharField('Approved Role', max_length=255, blank=True)
+
+    product_request_closed_at = models.DateTimeField('Closed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_closed_id = models.CharField('Closed ID', max_length=100, blank=True)
+    product_request_closed_by = models.CharField('Closed By', max_length=100, blank=True)
+    product_request_closed_department = models.CharField('Closed Department', max_length=255, blank=True)
+    product_request_closed_role = models.CharField('Closed Role', max_length=255, blank=True)
+
+    product_request_cancelled_at = models.DateTimeField('Cancelled At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_cancelled_id = models.CharField('Cancelled ID', max_length=100, blank=True)
+    product_request_cancelled_by = models.CharField('Cancelled By', max_length=100, blank=True)
+    product_request_cancelled_department = models.CharField('Cancelled Department', max_length=255, blank=True)
+    product_request_cancelled_role = models.CharField('Cancelled Role', max_length=255, blank=True)
+
+    product_request_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
+                                              default=STATUS_PENDING)
+
+    def __unicode__(self):
+        return self.product_request_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and ProductRequests.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class ProductRequestItems(models.Model):
+    TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    TYPE_GOODS = 'goods'
+    TYPE_ASSET = 'asset'
+    TYPE_SERVICE = 'service'
+
+    ARRAY_TYPES = [
+        TYPE_GOODS,
+        TYPE_ASSET,
+        TYPE_SERVICE,
+    ]
+    DROPDOWN_TYPES = (
+        ('', '--select--'),
+        (TYPE_GOODS, TYPE_GOODS),
+        (TYPE_ASSET, TYPE_ASSET),
+        (TYPE_SERVICE, TYPE_SERVICE),
+    )
+
+    STATUS_PENDING = 'pending'
+    STATUS_RECEIVED = 'received'
+
+    ARRAY_STATUSES = [
+        (STATUS_PENDING.title()).replace('-', ' '),
+        (STATUS_RECEIVED.title()).replace('-', ' '),
+    ]
+    DROPDOWN_STATUSES = (
+        ('', '--select--'),
+        (STATUS_PENDING, (STATUS_PENDING.title()).replace('-', ' ')),
+        (STATUS_RECEIVED, (STATUS_RECEIVED.title()).replace('-', ' ')),
+    )
+
+    product_request_item_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    product_requests_product_request_id = models.IntegerField('Request Id', blank=False)
+    products_product_id = models.IntegerField('Product Id', blank=False)
+    product_request_item_product_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES,
+                                                         default=TYPE_GOODS)
+    product_request_item_product_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
+    product_request_item_product_tag = models.CharField('Tag', max_length=255, blank=True)
+    product_request_item_product_category = models.CharField('Category', max_length=255, blank=True)
+    product_request_item_product_title = models.CharField('Title', max_length=100, blank=False)
+    product_request_item_product_sub_title = models.CharField('Sub title', max_length=255, blank=True)
+    product_request_item_product_quantity_initial = models.DecimalField('Initial Quantity', max_digits=10,
+                                                                        decimal_places=0, default=Decimal(0))
+    product_request_item_product_quantity_ordered = models.DecimalField('Quantity Ordered', max_digits=10,
+                                                                        decimal_places=0, default=Decimal(0))
+    product_request_item_product_quantity_balance = models.DecimalField('Balance Quantity', max_digits=10,
+                                                                        decimal_places=0, default=Decimal(0))
+    product_request_item_product_quantity_unit = models.CharField('Quantity Unit', max_length=255, blank=True)
+
+    product_request_item_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_item_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    product_request_item_created_by = models.CharField('Created By', max_length=100, blank=True)
+    product_request_item_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    product_request_item_created_role = models.CharField('Created Role', max_length=255, blank=True)
+
+    product_request_item_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_item_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    product_request_item_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    product_request_item_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    product_request_item_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    product_request_item_received_at = models.DateTimeField('Received At',
+                                                            default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    product_request_item_received_id = models.CharField('Received ID', max_length=100, blank=True)
+    product_request_item_received_by = models.CharField('Received By', max_length=100, blank=True)
+    product_request_item_received_department = models.CharField('Received Department', max_length=255, blank=True)
+    product_request_item_received_role = models.CharField('Received Role', max_length=255, blank=True)
+
+    product_request_item_status = models.CharField('Status', max_length=255, blank=False, choices=DROPDOWN_STATUSES,
+                                                   default=STATUS_PENDING)
+
+    def __unicode__(self):
+        return self.product_request_item_id

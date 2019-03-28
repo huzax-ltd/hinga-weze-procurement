@@ -67,16 +67,16 @@
                             {% endif %}
                             {% if model.order_assigned_to_id != 0|safe %}
                                 {% if operator.operator_id == model.order_assigned_to_id %}
-                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PARTIALLY_PAID and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
+                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
                                         <a href="#" id="btn-update-order-assignment"
                                            class="btn btn-outline-primary fuse-ripple-ready">Update Vendor Category</a>
                                     {% endif %}
-                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PARTIALLY_PAID and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
+                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
                                         <a href="{% url 'orders_update_email_to_supplier' pk=model.order_id %}"
                                            class="btn btn-outline-primary fuse-ripple-ready">Email Draft to
                                             Vendors</a>
                                     {% endif %}
-                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PARTIALLY_PAID and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
+                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
 
                                         <a href="{% url 'orders_send_email_to_supplier' pk=model.order_id %}"
                                            class="btn btn-outline-primary fuse-ripple-ready">Send Email to
@@ -98,16 +98,16 @@
                                 {% endif %}
                             {% else %}
                                 {% if operator.operator_role == model.order_assigned_to_role %}
-                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PARTIALLY_PAID and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
+                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
                                         <a href="#" id="btn-update-order-supplier"
                                            class="btn btn-outline-primary fuse-ripple-ready">Update Vendor Category</a>
                                     {% endif %}
-                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PARTIALLY_PAID and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
+                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
                                         <a href="{% url 'orders_update_email_to_supplier' pk=model.order_id %}"
                                            class="btn btn-outline-primary fuse-ripple-ready">Email Draft to
                                             Vendors</a>
                                     {% endif %}
-                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PARTIALLY_PAID and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
+                                    {% if model.order_status != model.STATUS_PROPOSAL_REQUESTED and model.order_status != model.STATUS_PROPOSAL_SELECTED and model.order_status != model.STATUS_PURCHASE_GENERATED and model.order_status != model.STATUS_ACKNOWLEDGED and model.order_status != model.STATUS_RECEIVED and model.order_status != model.STATUS_PAID and model.order_status != model.STATUS_CLOSED and model.order_status != model.STATUS_CANCELLED %}
                                         <a href="{% url 'orders_send_email_to_supplier' pk=model.order_id %}"
                                            class="btn btn-outline-primary fuse-ripple-ready">Send Email to
                                             Vendors</a>
