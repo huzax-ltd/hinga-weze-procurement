@@ -34,6 +34,21 @@ class OrderItemCreateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
                 'readonly': True,
             }
         ))
+    type = forms.ChoiceField(
+        choices=Order_Items.DROPDOWN_TYPES,
+        initial='',
+        label='Type',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-type',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
+            }
+        ))
     title = forms.CharField(
         label='Item Details',
         min_length=1,
@@ -116,6 +131,10 @@ class OrderItemCreateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
 
     def clean_order_id(self):
         data = self.cleaned_data['order_id']
+        return data
+
+    def clean_type(self):
+        data = self.cleaned_data['type']
         return data
 
     def clean_title(self):
@@ -150,6 +169,7 @@ class OrderItemCreateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
         model = Operators
         fields = (
             'order_id',
+            'type',
             'title',
             'duration',
             'unit_price',
@@ -173,6 +193,21 @@ class OrderItemUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
                 'autocomplete': 'off',
                 'aria-label': 'form-label',
                 'readonly': True,
+            }
+        ))
+    type = forms.ChoiceField(
+        choices=Order_Items.DROPDOWN_TYPES,
+        initial='',
+        label='Type',
+        required=True,
+        validators=[],
+        widget=forms.Select(
+            attrs={
+                'id': 'search-input-select-type',
+                'class': 'form-control',
+                'style': 'width:100%;',
+                'placeholder': '--select--',
+                'aria-label': 'form-label',
             }
         ))
     title = forms.CharField(
@@ -259,6 +294,10 @@ class OrderItemUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
         data = self.cleaned_data['order_id']
         return data
 
+    def clean_type(self):
+        data = self.cleaned_data['type']
+        return data
+
     def clean_title(self):
         data = self.cleaned_data['title']
         return data
@@ -291,6 +330,7 @@ class OrderItemUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
         model = Operators
         fields = (
             'order_id',
+            'type',
             'title',
             'duration',
             'unit_price',

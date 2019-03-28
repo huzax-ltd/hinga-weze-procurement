@@ -80,7 +80,7 @@ class OrdersTable(tables.Table):
         verbose_name='Status',
         attrs={
             'search_filter': 'input-select',
-            'search_data': Orders.ARRAY_ORDER_STATUSES,
+            'search_data': Orders.DISPLAY_ARRAY_ORDER_STATUSES,
             'search_type': 'status',
             'th_style': 'width:100px;',
         }

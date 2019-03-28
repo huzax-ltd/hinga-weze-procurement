@@ -697,7 +697,7 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_proposal_generated_at != '':
+            if model.order_proposal_generated_id != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Updated proposal request <small>by ' + model.order_proposal_generated_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_generated_at,
@@ -705,7 +705,7 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_proposal_requested_at != '':
+            if model.order_proposal_requested_id != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Published proposal request <small>by ' + model.order_proposal_requested_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_requested_at,
@@ -713,7 +713,7 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_proposal_selected_at != '':
+            if model.order_proposal_selected_id != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Selected vendor <small>by ' + model.order_proposal_selected_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_proposal_selected_at,
@@ -721,7 +721,7 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_purchase_generated_at != '':
+            if model.order_purchase_generated_id != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Purchase order generated <small>by ' + model.order_purchase_generated_role + '</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_purchase_generated_at,
@@ -729,7 +729,7 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_acknowledged_at != '':
+            if model.order_acknowledged_id != '':
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Acknowledged order <small>by vendor</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_acknowledged_at,
@@ -738,6 +738,42 @@ def view(request, pk):
                 timeline_notifications.append(notification_timeline)
 
             if model.order_status == Orders.STATUS_REQUESTED:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL1_APPROVED and model.order_approval_no_of_levels > 1:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL2_APPROVED and model.order_approval_no_of_levels > 2:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL3_APPROVED and model.order_approval_no_of_levels > 3:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL4_APPROVED and model.order_approval_no_of_levels > 4:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL5_APPROVED and model.order_approval_no_of_levels > 5:
+                notification_timeline = NotificationsTimeline()
+                model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                notification_timeline.datetime = ''
+                timeline_notifications.append(notification_timeline)
+
+            if model.order_status == Orders.STATUS_LEVEL6_APPROVED and model.order_approval_no_of_levels > 6:
                 notification_timeline = NotificationsTimeline()
                 model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
                 notification_timeline.datetime = ''

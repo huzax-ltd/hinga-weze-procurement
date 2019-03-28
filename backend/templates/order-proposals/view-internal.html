@@ -33,8 +33,8 @@
                 <div class="card body-content-card">
                     <div class="card-body p-5">
                         <div>
-                            {% if order.order_assigned_to_id != 0|safe %}
-                                {% if operator.operator_id == order.order_assigned_to_id %}
+                            {% if order.order_assigned_to_id|safe != 0|safe %}
+                                {% if operator.operator_id|safe == order.order_assigned_to_id|safe %}
                                     {% if model.order_proposal_status == model.STATUS_PENDING %}
                                         <a href="#" id="btn-update-evaluate"
                                            class="btn btn-outline-primary fuse-ripple-ready">Evaluate</a>

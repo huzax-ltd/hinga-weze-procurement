@@ -47,6 +47,8 @@ def create(request, order_id):
                         model = Order_Items()
                         model.orders_order_id = order_id
 
+                        model.order_item_type = form.cleaned_data['type']
+                        model.order_item_type_id = 1
                         model.order_item_title = form.cleaned_data['title']
                         model.order_item_sub_title = ''
                         model.order_item_quantity_ordered = form.cleaned_data['quantity_ordered']
@@ -134,6 +136,8 @@ def update(request, pk):
 
                     # noinspection PyArgumentList
                     if form.is_valid():
+                        model.order_item_type = form.cleaned_data['type']
+                        model.order_item_type_id = 1
                         model.order_item_title = form.cleaned_data['title']
                         model.order_item_sub_title = ''
                         model.order_item_quantity_ordered = form.cleaned_data['quantity_ordered']

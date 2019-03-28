@@ -515,6 +515,9 @@ class Orders(models.Model):
     STATUS_CLOSED = 'closed'
     STATUS_CANCELLED = 'cancelled'
 
+    STATUS_IN_PROGRESS = 'in-progress'
+    STATUS_COMPLETED = 'completed'
+
     ARRAY_ORDER_STATUSES = [
         (STATUS_PENDING.title()).replace('-', ' '),
         (STATUS_REQUESTED.title()).replace('-', ' '),
@@ -544,6 +547,16 @@ class Orders(models.Model):
         (STATUS_RECEIVED.title()).replace('-', ' '),
         (STATUS_PAID.title()).replace('-', ' '),
         (STATUS_CLOSED.title()).replace('-', ' '),
+        (STATUS_CANCELLED.title()).replace('-', ' '),
+    ]
+    DISPLAY_ARRAY_ORDER_STATUSES = [
+        (STATUS_PENDING.title()).replace('-', ' '),
+        (STATUS_REQUESTED.title()).replace('-', ' '),
+        (STATUS_REVIEWED.title()).replace('-', ' '),
+        (STATUS_APPROVED.title()).replace('-', ' '),
+        (STATUS_REJECTED.title()).replace('-', ' '),
+        (STATUS_IN_PROGRESS.title()).replace('-', ' '),
+        (STATUS_COMPLETED.title()).replace('-', ' '),
         (STATUS_CANCELLED.title()).replace('-', ' '),
     ]
     ORDER_STATUSES = (
@@ -750,31 +763,31 @@ class Orders(models.Model):
         elif record.order_status == Orders.STATUS_REQUESTED:
             value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL0_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL0_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL1_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL1_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL2_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL2_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL3_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL3_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL4_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL4_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL5_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL5_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL6_APPROVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL6_APPROVED
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
         elif record.order_status == Orders.STATUS_LEVEL1_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL1_REJECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL2_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL2_REJECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL3_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL3_REJECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL4_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL4_REJECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL5_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL5_REJECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_LEVEL6_REJECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_LEVEL6_REJECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_REVIEWED:
             value = Utils.HTML_TAG_ORDER_STATUS_REVIEWED
         elif record.order_status == Orders.STATUS_APPROVED:
@@ -782,23 +795,23 @@ class Orders(models.Model):
         elif record.order_status == Orders.STATUS_REJECTED:
             value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
         elif record.order_status == Orders.STATUS_ASSIGNED:
-            value = Utils.HTML_TAG_ORDER_STATUS_ASSIGNED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_SUPPLIER_UPDATED:
-            value = Utils.HTML_TAG_ORDER_STATUS_SUPPLIER_UPDATED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_PROPOSAL_GENERATED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_GENERATED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_PROPOSAL_REQUESTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_REQUESTED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_PROPOSAL_SELECTED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PROPOSAL_SELECTED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_PURCHASE_GENERATED:
-            value = Utils.HTML_TAG_ORDER_STATUS_PURCHASE_GENERATED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_ACKNOWLEDGED:
-            value = Utils.HTML_TAG_ORDER_STATUS_ACKNOWLEDGED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_RECEIVED:
-            value = Utils.HTML_TAG_ORDER_STATUS_RECEIVED
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_PAID:
-            value = Utils.HTML_TAG_ORDER_STATUS_PAID
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_CLOSED:
             value = Utils.HTML_TAG_ORDER_STATUS_CLOSED
         elif record.order_status == Orders.STATUS_CANCELLED:
@@ -1221,16 +1234,15 @@ class Orders(models.Model):
 
     @classmethod
     def delete_order(cls, request, model, operator):
-
-        Order_Logs.add(
-            model.order_id,
-            'Deleted ' + Orders.SINGULAR_TITLE,
-            Utils.get_browser_details_from_request(request),
-            Utils.get_ip_address(request),
-            operator.operator_username,
-        )
-
-        model.delete()
+        # Order_Logs.add(
+        #     model.order_id,
+        #     'Deleted ' + Orders.SINGULAR_TITLE,
+        #     Utils.get_browser_details_from_request(request),
+        #     Utils.get_ip_address(request),
+        #     operator.operator_username,
+        # )
+        #
+        # model.delete()
         return True
 
 
@@ -1626,6 +1638,7 @@ class Order_Items(models.Model):
     order_item_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     orders_order_id = models.IntegerField('Order Id', blank=False)
     order_item_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES, default=TYPE_GOODS)
+    order_item_type_id = models.IntegerField('Type Id', blank=False, default=0)
     order_item_title = models.CharField('Item Details', max_length=255, blank=False)
     order_item_sub_title = models.CharField('Item Details', max_length=255, blank=True)
     order_item_duration = models.IntegerField('Time in Days', blank=False, default=0)

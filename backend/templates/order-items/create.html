@@ -16,7 +16,7 @@
                             <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
                                     {{ form.order_id.label }}
-                                    {% if form.v.field.required %}
+                                    {% if form.order_id.field.required %}
                                         <b style="color: red;">*</b>{% endif %}
                                 </label>
                                 {{ form.order_id }}
@@ -24,10 +24,36 @@
                             {{ form.order_id.errors }}
                         </div>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-6">
                         <div class="form">
                             <div class="form-group mb-4 pt-0"
                                  style="border-bottom: 0 !important;">
+                                <label class="custom-label">
+                                    {{ form.type.label }}
+                                    {% if form.type.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.type }}
+                            </div>
+                            {{ form.type.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.duration.label }}
+                                    {% if form.duration.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.duration }}
+                            </div>
+                            {{ form.duration.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
                                     {{ form.title.label }}
                                     {% if form.title.field.required %}
@@ -40,22 +66,7 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form">
-                            <div class="form-group mb-4 pt-0"
-                                 style="border-bottom: 0 !important;">
-                                <label class="custom-label">
-                                    {{ form.duration.label }}
-                                    {% if form.duration.field.required %}
-                                        <b style="color: red;">*</b>{% endif %}
-                                </label>
-                                {{ form.duration }}
-                            </div>
-                            {{ form.duration.errors }}
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form">
-                            <div class="form-group mb-4 pt-0"
-                                 style="border-bottom: 0 !important;">
+                            <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
                                     {{ form.unit_price.label }}
                                     {% if form.unit_price.field.required %}
@@ -82,8 +93,7 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form">
-                            <div class="form-group mb-4 pt-0"
-                                 style="border-bottom: 0 !important;">
+                            <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
                                     {{ form.quantity_ordered.label }}
                                     {% if form.quantity_ordered.field.required %}
@@ -96,8 +106,7 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form">
-                            <div class="form-group mb-4 pt-0"
-                                 style="border-bottom: 0 !important;">
+                            <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
                                     {{ form.quantity_unit.label }}
                                     {% if form.quantity_unit.field.required %}
@@ -124,6 +133,7 @@
 <!--suppress ES6ConvertVarToLetConst -->
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function () {
+        $("#search-input-select-type").select2({placeholder: "--select--", allowClear: false});
         $("#search-input-select-currency").select2({placeholder: "--select--", allowClear: false});
     });
 </script>

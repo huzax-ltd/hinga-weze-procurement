@@ -195,7 +195,7 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
-    # update procurement method
+    # update order assignment
     url(r'^orders/update/assignment/(?P<pk>.+)/$', order_views.update_order_assignment,
         name='orders_update_assignment'),
     url(r'^orders/update/assignment/(?P<pk>.+)/service-worker.js',
@@ -210,8 +210,8 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
-    # update order assignment
-    url(r'^orders/update/procurement-method/(?P<pk>.+)/$', order_views.update_order_assignment,
+    # update procurement method
+    url(r'^orders/update/procurement-method/(?P<pk>.+)/$', order_views.update_procurement_method,
         name='orders_update_procurement_method'),
     url(r'^orders/update/procurement-method/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
