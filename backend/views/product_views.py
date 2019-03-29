@@ -7,7 +7,8 @@ from django.urls import reverse
 from app import settings
 from app.models import Operators, Products
 from app.utils import Utils
-from backend.forms.product_forms import ProductExcelImportForm
+from backend.forms.product_forms import ProductExcelImportForm, ProductSearchIndexForm
+from backend.tables.product_tables import ProductGoodsTable, ProductAssetsTable
 
 
 # noinspection PyUnusedLocal, PyShadowingBuiltins
@@ -134,5 +135,85 @@ def import_excel(request):
                         'form': form,
                     }
                 )
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
+def index_goods(request):
+    template_url = 'products/index-goods.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_PRODUCT_VIEW in auth_permissions.values():
+            search_form = ProductSearchIndexForm(request.POST or None)
+            if request.method == 'POST' and search_form.is_valid():
+                display_search = True
+                objects = Products.objects.filter(product_type=Products.TYPE_GOODS).order_by('product_title').all()
+                table = ProductGoodsTable(objects)
+            else:
+                display_search = False
+                objects = Products.objects.filter(product_type=Products.TYPE_GOODS).order_by('product_title').all()
+                table = ProductGoodsTable(objects)
+
+            table.set_auth_permissions(auth_permissions)
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_STOCK_ALL_GOODS,
+                    'title': Products.TITLE,
+                    'name': Products.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'table': table,
+                    'search_form': search_form,
+                    'display_search': display_search,
+                    'index_url': reverse("products_index_goods"),
+                    'select_multiple_url': '#',
+                }
+            )
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
+def index_assets(request):
+    template_url = 'products/index-assets.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_PRODUCT_VIEW in auth_permissions.values():
+            search_form = ProductSearchIndexForm(request.POST or None)
+            if request.method == 'POST' and search_form.is_valid():
+                display_search = True
+                objects = Products.objects.filter(product_type=Products.TYPE_ASSET).order_by('product_title').all()
+                table = ProductAssetsTable(objects)
+            else:
+                display_search = False
+                objects = Products.objects.filter(product_type=Products.TYPE_ASSET).order_by('product_title').all()
+                table = ProductAssetsTable(objects)
+
+            table.set_auth_permissions(auth_permissions)
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_STOCK_ALL_ASSETS,
+                    'title': Products.TITLE,
+                    'name': Products.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'table': table,
+                    'search_form': search_form,
+                    'display_search': display_search,
+                    'index_url': reverse("products_index_assets"),
+                    'select_multiple_url': '#',
+                }
+            )
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')

@@ -385,9 +385,20 @@ urlpatterns = [
     # products
     # path('', order_proposal_views.index, name='index'),
 
-    # index
+    # import
     url(r'^products/import-excel/$', product_views.import_excel, name='products_import_excel'),
     url(r'^products/import-excel/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # index
+    url(r'^products/goods/$', product_views.index_goods, name='products_index_goods'),
+    url(r'^products/goods/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    url(r'^products/assets/$', product_views.index_assets, name='products_index_assets'),
+    url(r'^products/assets/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

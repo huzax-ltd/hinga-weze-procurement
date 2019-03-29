@@ -331,7 +331,7 @@
                 {% if ACCESS_PERMISSION_PRODUCT_VIEW in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_STOCK_ALL_GOODS %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple active" href="{% url 'products_index_goods' %}">
 
                                 <i class="icon s-4 icon-barley"></i>
 
@@ -340,7 +340,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple" href="{% url 'products_index_goods' %}">
 
                                 <i class="icon s-4 icon-barley"></i>
 
@@ -353,7 +353,7 @@
                 {% if ACCESS_PERMISSION_PRODUCT_VIEW in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_STOCK_ALL_ASSETS %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple active" href="{% url 'products_index_assets' %}">
 
                                 <i class="icon s-4 icon-sofa"></i>
 
@@ -362,7 +362,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple" href="{% url 'products_index_assets' %}">
 
                                 <i class="icon s-4 icon-sofa"></i>
 

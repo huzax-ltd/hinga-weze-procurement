@@ -3,6 +3,18 @@ from django import forms
 from app.models import Products
 
 
+class ProductSearchIndexForm(forms.ModelForm):
+
+    def clean(self):
+        cleaned_data = super(ProductSearchIndexForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Products
+        fields = (
+
+        )
+
 class ProductExcelImportForm(forms.ModelForm):
     excel_file = forms.FileField(
         label='Excel File',
