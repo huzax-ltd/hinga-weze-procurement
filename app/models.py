@@ -338,6 +338,32 @@ class Operators(models.Model):
                                                                        model, operator)
             Operator_Access_Permissions.add_operator_access_permission(request, settings.ACCESS_PERMISSION_ORDER_VIEW,
                                                                        model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_PRODUCT_VIEW, model,
+                                                                       operator)
+
+        if model.operator_type == Operators.TYPE_SUPER_ADMIN or model.operator_type == Operators.TYPE_ADMIN or model.operator_type == Operators.TYPE_MANAGER or model.operator_role == Operators.ROLE_STOCK_ADMIN:
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_PRODUCT_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_PRODUCT_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_PRODUCT_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_INVENTORY_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_INVENTORY_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_INVENTORY_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_INVENTORY_VIEW, model,
+                                                                       operator)
 
         Operator_Logs.add(
             model.operator_id,
