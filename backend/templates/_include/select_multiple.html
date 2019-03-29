@@ -41,6 +41,12 @@
         if (action === 'usaid-approve-no') {
             confirmMessage = "Are you sure you want to update selected items?";
         }
+        if (action === 'order-item-received') {
+            confirmMessage = "Are you sure you want to update selected items?";
+        }
+        if (action === 'order-item-pending') {
+            confirmMessage = "Are you sure you want to update selected items?";
+        }
         if (action !== '') {
             var csrfmiddlewaretoken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
             var tableId = "{{table.attrs.id}}";

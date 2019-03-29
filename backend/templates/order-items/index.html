@@ -60,16 +60,63 @@
                                 Multiple Action
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item"
-                                   href="#"
-                                   onclick="multipleSelect('{{ select_multiple_url }}', 'usaid-approve-yes');">
-                                    Need USAID Approval
-                                </a>
-                                <a class="dropdown-item"
-                                   href="#"
-                                   onclick="multipleSelect('{{ select_multiple_url }}', 'usaid-approve-no');">
-                                    No USAID Approval
-                                </a>
+                                {% if operator.operator_role == operator.ROLE_COP %}
+                                    <a class="dropdown-item"
+                                       href="#"
+                                       onclick="multipleSelect('{{ select_multiple_url }}', 'usaid-approve-yes');">
+                                        Need USAID Approval
+                                    </a>
+                                    <a class="dropdown-item"
+                                       href="#"
+                                       onclick="multipleSelect('{{ select_multiple_url }}', 'usaid-approve-no');">
+                                        No USAID Approval
+                                    </a>
+                                {% endif %}
+                                {% if model.order_assigned_to_id|safe != 0|safe %}
+                                    {% if operator.operator_id|safe == model.order_assigned_to_id|safe %}
+                                        {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
+                                            <a class="dropdown-item"
+                                               href="#"
+                                               onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-received');">
+                                                Items Received
+                                            </a>
+                                            <a class="dropdown-item"
+                                               href="#"
+                                               onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-pending');">
+                                                Items Pending
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if operator.operator_role == model.order_assigned_to_role %}
+                                        {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
+                                            <a class="dropdown-item"
+                                               href="#"
+                                               onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-received');">
+                                                Items Received
+                                            </a>
+                                            <a class="dropdown-item"
+                                               href="#"
+                                               onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-pending');">
+                                                Items Pending
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if operator.operator_role == operator.ROLE_STOCK_ADMIN %}
+                                    {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
+                                        <a class="dropdown-item"
+                                           href="#"
+                                           onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-received');">
+                                            Items Received
+                                        </a>
+                                        <a class="dropdown-item"
+                                           href="#"
+                                           onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-pending');">
+                                            Items Pending
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                         {% include '_include/datatable-buttons.html' %}

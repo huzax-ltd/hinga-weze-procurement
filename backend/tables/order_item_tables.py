@@ -83,10 +83,19 @@ class OrderItemsTable(tables.Table):
             'th_style': 'width:60px;',
         }
     )
-    order_item_total = tables.Column(
+    order_item_total_price = tables.Column(
         verbose_name='Total Amount',
         attrs={
             'search_filter': 'input-text',
+            'th_style': 'width:100px;',
+        }
+    )
+    order_item_status = tables.Column(
+        verbose_name='Status',
+        attrs={
+            'search_filter': 'input-select',
+            'search_data': Order_Items.ARRAY_STATUSES,
+            'search_type': 'status',
             'th_style': 'width:100px;',
         }
     )
@@ -129,12 +138,21 @@ class OrderItemsTable(tables.Table):
 
     @staticmethod
     def render_order_item_quantity_ordered(record):
+        print(str(record.order_item_unit_price))
+        print(str(record.order_item_quantity_ordered))
         return str(record.order_item_quantity_ordered) + " " + str(record.order_item_quantity_unit)
 
     @staticmethod
-    def render_order_item_total(record):
-        total = record.order_item_unit_price * record.order_item_quantity_ordered
+    def render_order_item_total_price(record):
+        print(str(record.order_item_unit_price))
+        print(str(record.order_item_quantity_ordered))
+        total = float(record.order_item_unit_price) * float(record.order_item_quantity_ordered)
+        print(str(total))
         return str(record.order_item_currency) + " " + str(total)
+
+    @staticmethod
+    def render_order_item_status(record):
+        return Order_Items.get_status_html_tag(record)
 
     class Meta:
         model = Order_Items
@@ -154,7 +172,8 @@ class OrderItemsTable(tables.Table):
             'order_item_duration',
             'order_item_unit_price',
             'order_item_quantity_ordered',
-            'order_item_total',
+            'order_item_total_price',
+            'order_item_status',
         )
         fields = (
             'order_item_title',
@@ -162,5 +181,7 @@ class OrderItemsTable(tables.Table):
             'order_item_duration',
             'order_item_unit_price',
             'order_item_quantity_ordered',
+            'order_item_total_price',
+            'order_item_status',
         )
         template_name = '_include/bootstrap-datatable-no-action.html'

@@ -73,15 +73,16 @@ class ProductGoodsTable(tables.Table):
             'th_style': 'width:100px;',
         }
     )
-    actions = tables.Column(
-        verbose_name='',
-        attrs={
-            'search_filter': '',
-            'th_style': 'width:60px;',
-        },
-        orderable=False,
-        empty_values=(),
-    )
+
+    # actions = tables.Column(
+    #     verbose_name='',
+    #     attrs={
+    #         'search_filter': '',
+    #         'th_style': 'width:60px;',
+    #     },
+    #     orderable=False,
+    #     empty_values=(),
+    # )
 
     def __init__(self, *args, **kwargs):
         self.counter = itertools.count(1)
@@ -100,13 +101,9 @@ class ProductGoodsTable(tables.Table):
     def render_row_id(self, record):
         return str(record.pk)
 
-    def render_actions(self, record):
-        action_data = ""
-        return action_data
-
-    @staticmethod
-    def render_order_status(record):
-        return Orders.get_status_html_tag(record)
+    # def render_actions(self, record):
+    #     action_data = ""
+    #     return action_data
 
     class Meta:
         model = Products
@@ -126,7 +123,7 @@ class ProductGoodsTable(tables.Table):
             'product_title',
             'product_category',
             'product_quantity_available',
-            'actions'
+            # 'actions'
         )
         fields = (
             'product_code',
@@ -135,7 +132,7 @@ class ProductGoodsTable(tables.Table):
             'product_category',
             'product_quantity_available',
         )
-        template_name = '_include/bootstrap-datatable.html'
+        template_name = '_include/bootstrap-datatable-no-action.html'
 
 
 class ProductAssetsTable(tables.Table):
@@ -204,15 +201,16 @@ class ProductAssetsTable(tables.Table):
             'th_style': 'width:100px;',
         }
     )
-    actions = tables.Column(
-        verbose_name='',
-        attrs={
-            'search_filter': '',
-            'th_style': 'width:60px;',
-        },
-        orderable=False,
-        empty_values=(),
-    )
+
+    # actions = tables.Column(
+    #     verbose_name='',
+    #     attrs={
+    #         'search_filter': '',
+    #         'th_style': 'width:60px;',
+    #     },
+    #     orderable=False,
+    #     empty_values=(),
+    # )
 
     def __init__(self, *args, **kwargs):
         self.counter = itertools.count(1)
@@ -231,13 +229,9 @@ class ProductAssetsTable(tables.Table):
     def render_row_id(self, record):
         return str(record.pk)
 
-    def render_actions(self, record):
-        action_data = ""
-        return action_data
-
-    @staticmethod
-    def render_order_status(record):
-        return Orders.get_status_html_tag(record)
+    # def render_actions(self, record):
+    #     action_data = ""
+    #     return action_data
 
     class Meta:
         model = Products
@@ -257,7 +251,7 @@ class ProductAssetsTable(tables.Table):
             'product_title',
             'product_category',
             'product_quantity_available',
-            'actions'
+            # 'actions'
         )
         fields = (
             'product_code',
@@ -266,4 +260,4 @@ class ProductAssetsTable(tables.Table):
             'product_category',
             'product_quantity_available',
         )
-        template_name = '_include/bootstrap-datatable.html'
+        template_name = '_include/bootstrap-datatable-no-action.html'

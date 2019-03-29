@@ -30,6 +30,10 @@ class Utils(object):
     HTML_TAG_ORDER_STATUS_CLOSED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Completed <b></div>'
     HTML_TAG_ORDER_STATUS_CANCELLED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_DARK_GREY + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Cancelled <b></div>'
 
+    # Order Items
+    HTML_TAG_ORDER_ITEM_STATUS_PENDING = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_RED + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
+    HTML_TAG_ORDER_ITEM_STATUS_RECEIVED = '<div class=\'center-block\' style=\'background-color:' + settings.COLOR_GREEN + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Received <b></div>'
+
     # Notifications
     HTML_TAG_STATUS_UNREAD_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_BLOCKED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Pending <b></div>'
     HTML_TAG_STATUS_READ_COLOR = '<div class=\'center-block\' style=\'background-color:' + settings.STATUS_UNAPPROVED_COLOR + ';color:#FFFFFF;width:100px;text-align: center;\'><b> Unresolved <b></div>'

@@ -96,6 +96,10 @@
                                                class="btn btn-outline-primary fuse-ripple-ready">Send PO to
                                                 Selected Vendor</a>
                                         {% endif %}
+                                        {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
+                                            <a href="{% url 'order_items_index' pk=model.order_id %}"
+                                               class="btn btn-outline-primary fuse-ripple-ready">Update Items Status</a>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             {% else %}
@@ -128,6 +132,10 @@
                                                class="btn btn-outline-primary fuse-ripple-ready">Send PO to
                                                 Selected Vendor</a>
                                         {% endif %}
+                                        {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
+                                            <a href="{% url 'order_items_index' pk=model.order_id %}"
+                                               class="btn btn-outline-primary fuse-ripple-ready">Update Items Status</a>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
@@ -135,7 +143,13 @@
                                 <a href="{% url 'order_proposals_index' pk=model.order_id %}"
                                    class="btn btn-outline-primary fuse-ripple-ready">Proposals</a>
                                 <a href="{% url 'order_proposals_index' pk=model.order_id %}"
-                                   class="btn btn-outline-primary fuse-ripple-ready">Download Purchase Order</a>
+                                   class="btn btn-outline-primary fuse-ripple-ready">Download PO</a>
+                            {% endif %}
+                            {% if operator.operator_role == operator.ROLE_STOCK_ADMIN %}
+                                {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
+                                    <a href="{% url 'order_items_index' pk=model.order_id %}"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Update Items Status</a>
+                                {% endif %}
                             {% endif %}
                         </div>
 

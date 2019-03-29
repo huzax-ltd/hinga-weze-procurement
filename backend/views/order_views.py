@@ -26,7 +26,7 @@ from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, Ord
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.forms.order_proposal_forms import OrderProposalCreateForm, OrderProposalViewForm
 from backend.tables.order_item_tables import OrderItemsTable
-from backend.tables.order_tables import OrdersTable
+from backend.tables.order_tables import OrdersTable, OrdersStockTable
 
 
 # noinspection PyUnusedLocal
@@ -79,6 +79,49 @@ def index(request):
                     'search_form': search_form,
                     'display_search': display_search,
                     'index_url': reverse("orders_index"),
+                    'select_multiple_url': reverse("orders_select_multiple"),
+                }
+            )
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
+def index_stock(request):
+    template_url = 'orders/index-stock.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
+            search_form = OrderSearchIndexForm(request.POST or None)
+            objects = None
+
+            objects = Orders.objects.all()
+            objects.filter(order_status=Orders.STATUS_ACKNOWLEDGED)
+
+            if request.method == 'POST' and search_form.is_valid():
+                display_search = True
+                table = OrdersStockTable(objects)
+            else:
+                display_search = False
+                table = OrdersStockTable(objects)
+
+            table.set_auth_permissions(auth_permissions)
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_PO_REQUESTS,
+                    'title': Orders.TITLE,
+                    'name': Orders.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'table': table,
+                    'search_form': search_form,
+                    'display_search': display_search,
+                    'index_url': reverse("orders_index_stock"),
                     'select_multiple_url': reverse("orders_select_multiple"),
                 }
             )
@@ -729,7 +772,7 @@ def view(request, pk):
                                                                             settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                 timeline_notifications.append(notification_timeline)
 
-            if model.order_acknowledged_id != '':
+            if str(model.order_acknowledged_at) != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
                 notification_timeline = NotificationsTimeline()
                 notification_timeline.message = 'Acknowledged order <small>by vendor</small>'
                 notification_timeline.datetime = Utils.get_convert_datetime(model.order_acknowledged_at,

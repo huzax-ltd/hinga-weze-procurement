@@ -1661,6 +1661,8 @@ class Order_Items(models.Model):
         (STATUS_RECEIVED, (STATUS_RECEIVED.title()).replace('-', ' ')),
     )
 
+    order_item_total_price = 0
+
     order_item_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     orders_order_id = models.IntegerField('Order Id', blank=False)
     order_item_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES, default=TYPE_GOODS)
@@ -1696,6 +1698,15 @@ class Order_Items(models.Model):
 
     def __unicode__(self):
         return self.order_item_id
+
+    @classmethod
+    def get_status_html_tag(cls, record):
+        value = None
+        if record.order_item_status == Order_Items.STATUS_PENDING:
+            value = Utils.HTML_TAG_ORDER_ITEM_STATUS_PENDING
+        elif record.order_item_status == Order_Items.STATUS_RECEIVED:
+            value = Utils.HTML_TAG_ORDER_ITEM_STATUS_RECEIVED
+        return value
 
     @classmethod
     def delete_order_item(cls, request, model, operator):

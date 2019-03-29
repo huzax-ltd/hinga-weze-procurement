@@ -216,7 +216,7 @@ def select_single(request):
                             Orders.update_grand_total(request, order, operator)
 
                             messages.success(request, 'Item removed successfully.')
-                        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                        except(TypeError, ValueError, OverflowError, Order_Items.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
@@ -252,7 +252,7 @@ def select_multiple(request):
                                 model = Order_Items.objects.get(order_item_id=id)
                                 model.order_item_usaid_approval = True
                                 model.save()
-                            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                            except(TypeError, ValueError, OverflowError, Order_Items.DoesNotExist):
                                 continue
                         messages.success(request, 'Updated successfully.')
                     else:
@@ -264,7 +264,43 @@ def select_multiple(request):
                                 model = Order_Items.objects.get(order_item_id=id)
                                 model.order_item_usaid_approval = False
                                 model.save()
-                            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+                            except(TypeError, ValueError, OverflowError, Order_Items.DoesNotExist):
+                                continue
+                        messages.success(request, 'Updated successfully.')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-item-received':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        for id in ids:
+                            try:
+                                model = Order_Items.objects.get(order_item_id=id)
+                                if model.order_item_type == Order_Items.TYPE_SERVICE:
+                                    model.order_item_received_at = Utils.get_current_datetime_utc()
+                                    model.order_item_received_id = operator.operator_id
+                                    model.order_item_received_by = operator.operator_name
+                                    model.order_item_received_department = operator.operator_department
+                                    model.order_item_received_role = operator.operator_role
+                                    model.order_item_status = Order_Items.STATUS_RECEIVED
+                                    model.save()
+                            except(TypeError, ValueError, OverflowError, Order_Items.DoesNotExist):
+                                continue
+                        messages.success(request, 'Updated successfully.')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-item-pending':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        for id in ids:
+                            try:
+                                model = Order_Items.objects.get(order_item_id=id)
+                                if model.order_item_type == Order_Items.TYPE_SERVICE:
+                                    model.order_item_received_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                                    model.order_item_received_id = ''
+                                    model.order_item_received_by = ''
+                                    model.order_item_received_department = ''
+                                    model.order_item_received_role = ''
+                                    model.order_item_status = Order_Items.STATUS_PENDING
+                                    model.save()
+                            except(TypeError, ValueError, OverflowError, Order_Items.DoesNotExist):
                                 continue
                         messages.success(request, 'Updated successfully.')
                     else:

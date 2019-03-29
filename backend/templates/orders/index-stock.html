@@ -15,7 +15,7 @@
                 <div class="card body-content-card">
                     <nav class="breadcrumb bg-primary-50">
                         <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
-                        <span class="breadcrumb-item active">Assets</span>
+                        <span class="breadcrumb-item active">Orders</span>
                     </nav>
                 </div>
                 {% include '_include/alert.html' %}
@@ -43,7 +43,7 @@
                 <div class="card body-content-card mt-3">
                     <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
                         <div class="col">
-                            <span class="h5 text-white">Assets</span>
+                            <span class="h5 text-white">{{ title }}</span>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
             <div class="page-content p-5 body-content-p-t-5">
                 <div class="card body-content-card">
                     <div class="card-body p-5">
-                        {% if ACCESS_PERMISSION_OPERATOR_VIEW in auth_permissions.values %}
+                        {% if ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values %}
                             <div class="dt-buttons" style="margin-right:3px;">
                                 <a class="btn btn-outline-primary fuse-ripple-ready" href="#"
                                    onclick="displayDivSearch();">

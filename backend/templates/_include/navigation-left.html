@@ -221,6 +221,30 @@
                     {% endif %}
                 {% endif %}
 
+                {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                    {% if ACCESS_PERMISSION_INVENTORY_VIEW in auth_permissions.values %}
+                        {% if section == BACKEND_SECTION_PROCUREMENT_PO_REQUESTS %}
+                            <li class="nav-item">
+                                <a class="nav-link ripple  active" href="{% url 'orders_index_stock' %}">
+
+                                    <i class="icon s-4 icon-google-pages"></i>
+
+                                    <span>PO Requests</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link ripple" href="{% url 'orders_index_stock' %}">
+
+                                    <i class="icon s-4 icon-google-pages"></i>
+
+                                    <span>PO Requests</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
                 {% if section >= BACKEND_SECTION_PROCUREMENTS and section < BACKEND_SECTION_STOCKS %}
                     </ul>
                 {% else %}

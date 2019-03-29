@@ -165,6 +165,11 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+    url(r'^orders/index/stock/$', order_views.index_stock, name='orders_index_stock'),
+    url(r'^orders/index/stock/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
 
     # single or multiple select
     url(r'^orders/select-single/$', order_views.select_single,
