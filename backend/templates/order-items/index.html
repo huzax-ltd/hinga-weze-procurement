@@ -105,11 +105,12 @@
                                 {% endif %}
                                 {% if operator.operator_role == operator.ROLE_STOCK_ADMIN %}
                                     {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
-                                        <a class="dropdown-item"
-                                           href="#"
-                                           onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-received');">
-                                            Items Received
-                                        </a>
+
+                                        <a href="#" id="btn-items-received" class="dropdown-item">Items
+                                            Received</a>
+
+                                        <a href="#" id="btn-items-received-trigger" class="hidden"></a>
+
                                         <a class="dropdown-item"
                                            href="#"
                                            onclick="multipleSelect('{{ select_multiple_url }}', 'order-item-pending');">
@@ -126,6 +127,45 @@
             </div>
         </div>
     </div>
+    <div class="bootbox modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#modal").on("hidden.bs.modal", function () {
+                location.reload();
+            });
+
+            $("#btn-items-received").click(function (e) {
+                    e.preventDefault();
+                    var tableId = "{{table.attrs.id}}";
+                    var table = $("#" + tableId).DataTable();
+                    var data = table.rows({selected: true}).data();
+                    var data_array = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i][2];
+                        data_array.push(id);
+                    }
+                    var ids = data_array.join("-");
+                    console.log(ids);
+
+                    var url = "{% url 'inventory_item_views_create' pk='P1' action='P2' ids='P3' %}";
+                    url = url.replace("P1", "{{ model.order_id }}");
+                    url = url.replace("P2", "order-item-received");
+                    url = url.replace("P3", ids);
+                    console.log(url);
+
+                    $("#btn-items-received-trigger").modalForm({
+                        formURL: url
+                    });
+                    $("#btn-items-received-trigger").click();
+                }
+            );
+        });
+    </script>
     {% include '_include/datatable-js.html' %}
     {#    {% include '_include/select_single.html' %}#}
     {% include '_include/select_multiple.html' %}

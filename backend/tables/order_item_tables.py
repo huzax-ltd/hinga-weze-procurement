@@ -138,16 +138,11 @@ class OrderItemsTable(tables.Table):
 
     @staticmethod
     def render_order_item_quantity_ordered(record):
-        print(str(record.order_item_unit_price))
-        print(str(record.order_item_quantity_ordered))
         return str(record.order_item_quantity_ordered) + " " + str(record.order_item_quantity_unit)
 
     @staticmethod
     def render_order_item_total_price(record):
-        print(str(record.order_item_unit_price))
-        print(str(record.order_item_quantity_ordered))
         total = float(record.order_item_unit_price) * float(record.order_item_quantity_ordered)
-        print(str(total))
         return str(record.order_item_currency) + " " + str(total)
 
     @staticmethod

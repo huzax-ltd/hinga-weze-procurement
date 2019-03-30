@@ -4,7 +4,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from backend.views import operator_views, operator_log_views, order_views, order_item_views, order_proposal_views, \
-    product_views, site_views, setting_views, notification_views
+    product_views, inventory_item_views, site_views, setting_views, notification_views
 
 urlpatterns = [
 
@@ -404,6 +404,15 @@ urlpatterns = [
         name='service-worker.js'),
     url(r'^products/assets/$', product_views.index_assets, name='products_index_assets'),
     url(r'^products/assets/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # inventory items
+    # create
+    url(r'^inventory-items/create/(?P<pk>.+)/(?P<action>.+)/(?P<ids>.+)/$', inventory_item_views.create,
+        name='inventory_item_views_create'),
+    url(r'^inventory-items/create/(?P<pk>.+)/(?P<action>.+)/(?P<ids>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

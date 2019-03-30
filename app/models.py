@@ -2070,7 +2070,7 @@ class Inventory(models.Model):
     NAME = "-".join((TITLE.lower()).split())
 
     inventory_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
-    inventory_order_purchase_no = models.CharField('Purchase Order No.', max_length=100, blank=False)
+    inventory_order_purchase_no = models.CharField('Purchase Order No.', max_length=100, unique=True, blank=False)
     inventory_order_proposal_id = models.CharField('Proposal Id', max_length=255, blank=True)
     inventory_order_proposal_supplier_title = models.CharField('Supplier Name', max_length=255, blank=True)
     inventory_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
@@ -2091,7 +2091,7 @@ class Inventory(models.Model):
 
 # Create your models here.
 # noinspection PyUnresolvedReferences
-class InventoryItems(models.Model):
+class Inventory_Items(models.Model):
     TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
     SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
@@ -2130,7 +2130,7 @@ class InventoryItems(models.Model):
     products_product_id = models.IntegerField('Product Id', blank=False)
     inventory_item_product_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES,
                                                    default=TYPE_GOODS)
-    inventory_item_product_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
+    inventory_item_product_code = models.CharField('Code', max_length=8, blank=False, default=None)
     inventory_item_product_tag = models.CharField('Tag', max_length=255, blank=True)
     inventory_item_product_category = models.CharField('Category', max_length=255, blank=True)
     inventory_item_product_title = models.CharField('Title', max_length=100, blank=False)
@@ -2191,7 +2191,7 @@ class InventoryItems(models.Model):
 
 # Create your models here.
 # noinspection PyUnresolvedReferences
-class ProductRequests(models.Model):
+class Product_Requests(models.Model):
     TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
     SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
@@ -2293,7 +2293,7 @@ class ProductRequests(models.Model):
 
 # Create your models here.
 # noinspection PyUnresolvedReferences
-class ProductRequestItems(models.Model):
+class Product_Request_Items(models.Model):
     TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
     SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
@@ -2332,7 +2332,7 @@ class ProductRequestItems(models.Model):
     products_product_id = models.IntegerField('Product Id', blank=False)
     product_request_item_product_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES,
                                                          default=TYPE_GOODS)
-    product_request_item_product_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
+    product_request_item_product_code = models.CharField('Code', max_length=8, blank=False, default=None)
     product_request_item_product_tag = models.CharField('Tag', max_length=255, blank=True)
     product_request_item_product_category = models.CharField('Category', max_length=255, blank=True)
     product_request_item_product_title = models.CharField('Title', max_length=100, blank=False)

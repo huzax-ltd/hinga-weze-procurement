@@ -1,0 +1,170 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <div class='modal-header bg-primary-700 text-auto'>
+        <h6 class='modal-title'>Inventory Details</h6>
+        <button type="button" class="close btn btn-icon fuse-ripple-ready" data-dismiss="modal"
+                aria-label="Close">
+            <i class="icon icon-close-circle-outline text-white"></i>
+        </button>
+    </div>
+    <div class='modal-body'>
+        <div class='bootbox-body'>
+            <div class="content custom-scrollbar">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_order_purchase_no.label }}
+                                    {% if form.inventory_order_purchase_no.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_order_purchase_no }}
+                            </div>
+                            {{ form.inventory_order_purchase_no.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_order_project_name.label }}
+                                    {% if form.inventory_order_project_name.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_order_project_name }}
+                            </div>
+                            {{ form.inventory_order_project_name.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_voucher_reference.label }}
+                                    {% if form.inventory_item_voucher_reference.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_voucher_reference }}
+                            </div>
+                            {{ form.inventory_item_voucher_reference.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_location.label }}
+                                    {% if form.inventory_item_location.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_location }}
+                            </div>
+                            {{ form.inventory_item_location.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_equipment_holder_status.label }}
+                                    {% if form.inventory_item_equipment_holder_status.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_equipment_holder_status }}
+                            </div>
+                            {{ form.inventory_item_equipment_holder_status.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_staff_name.label }}
+                                    {% if form.inventory_item_staff_name.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_staff_name }}
+                            </div>
+                            {{ form.inventory_item_staff_name.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_room_number.label }}
+                                    {% if form.inventory_item_room_number.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_room_number }}
+                            </div>
+                            {{ form.inventory_item_room_number.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_disposal_date.label }}
+                                    {% if form.inventory_item_disposal_date.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_disposal_date }}
+                            </div>
+                            {{ form.inventory_item_disposal_date.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_verified_date.label }}
+                                    {% if form.inventory_item_verified_date.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_verified_date }}
+                            </div>
+                            {{ form.inventory_item_verified_date.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_present_condition.label }}
+                                    {% if form.inventory_item_present_condition.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_present_condition }}
+                            </div>
+                            {{ form.inventory_item_present_condition.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.inventory_item_remark.label }}
+                                    {% if form.inventory_item_remark.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.inventory_item_remark }}
+                            </div>
+                            {{ form.inventory_item_remark.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-grey-100">
+        <button data-dismiss="modal" type="button"
+                class="btn btn btn-outline-primary fuse-ripple-ready">Cancel
+        </button>
+        <button type="submit" class="btn btn btn-primary fuse-ripple-ready">
+            Submit
+        </button>
+    </div>
+</form>
+{% include '_include/tab_index.html' %}

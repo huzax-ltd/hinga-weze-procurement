@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Orders, Order_Items
+from app.models import Operators, Orders, Order_Items, Inventory, Inventory_Items, Products
 from app.utils import Utils
 from backend.forms.order_item_forms import OrderItemCreateForm, OrderItemUpdateForm
 
@@ -292,14 +292,38 @@ def select_multiple(request):
                         for id in ids:
                             try:
                                 model = Order_Items.objects.get(order_item_id=id)
-                                if model.order_item_type == Order_Items.TYPE_SERVICE:
-                                    model.order_item_received_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
-                                    model.order_item_received_id = ''
-                                    model.order_item_received_by = ''
-                                    model.order_item_received_department = ''
-                                    model.order_item_received_role = ''
-                                    model.order_item_status = Order_Items.STATUS_PENDING
-                                    model.save()
+                                if model.order_item_type != Order_Items.TYPE_SERVICE:
+                                    try:
+                                        order = Orders.objects.get(order_id=model.orders_order_id)
+                                        inventory = Inventory.objects.get(
+                                            inventory_order_purchase_no=order.order_purchase_no)
+                                        inventory_items = Inventory_Items.objects.filter(
+                                            inventory_inventory_id=inventory.inventory_id)
+                                        for inventory_item in inventory_items:
+                                            try:
+                                                product = Products.objects.get(
+                                                    product_id=inventory_item.products_product_id)
+                                                product.product_quantity_available = product.product_quantity_available - inventory_item.inventory_item_product_quantity_ordered
+                                                product.product_updated_at = Utils.get_current_datetime_utc()
+                                                product.product_updated_id = operator.operator_id
+                                                product.product_updated_by = operator.operator_name
+                                                product.product_updated_department = operator.operator_department
+                                                product.product_updated_role = operator.operator_role
+                                                product.save()
+                                                inventory_item.delete()
+                                            except Products.DoesNotExist:
+                                                inventory_item.delete()
+                                                continue
+                                    except (Orders.DoesNotExist, Inventory.DoesNotExist):
+                                        print('Order or inventory does not exist.')
+                                model.order_item_received_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                                model.order_item_received_id = ''
+                                model.order_item_received_by = ''
+                                model.order_item_received_department = ''
+                                model.order_item_received_role = ''
+                                model.order_item_status = Order_Items.STATUS_PENDING
+                                model.save()
+
                             except(TypeError, ValueError, OverflowError, Order_Items.DoesNotExist):
                                 continue
                         messages.success(request, 'Updated successfully.')

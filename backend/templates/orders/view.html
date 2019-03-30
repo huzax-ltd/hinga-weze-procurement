@@ -335,7 +335,7 @@
     <script>
         $(function () {
             $("#modal").on("hidden.bs.modal", function () {
-                // location.reload();
+                location.reload();
             });
             var url = "{% url 'orders_update_procurement_method' pk='P1' %}";
             url = url.replace("P1", "{{ model.order_id }}");
