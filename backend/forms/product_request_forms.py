@@ -24,21 +24,6 @@ class ProductRequestSearchIndexForm(forms.ModelForm):
 
 
 class ProductRequestCreateForm(forms.ModelForm):
-    product_requests_product_request_id = forms.CharField(
-        label='Request Id',
-        min_length=8,
-        max_length=8,
-        required=True,
-        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': '',
-                'autocomplete': 'off',
-                'aria-label': 'form-label',
-                'readonly': True,
-            }
-        ))
     product_request_project = forms.CharField(
         label='Project Name',
         min_length=1,
@@ -68,10 +53,6 @@ class ProductRequestCreateForm(forms.ModelForm):
                 'aria-label': 'form-label',
             }
         ))
-
-    def clean_product_requests_product_request_id(self):
-        data = self.cleaned_data['product_requests_product_request_id']
-        return data
 
     def clean_product_request_project(self):
         data = self.cleaned_data['product_request_project']
@@ -88,28 +69,12 @@ class ProductRequestCreateForm(forms.ModelForm):
     class Meta:
         model = Product_Requests
         fields = (
-            'product_requests_product_request_id',
             'product_request_project',
             'product_request_details',
         )
 
 
 class ProductRequestUpdateForm(forms.ModelForm):
-    product_requests_product_request_id = forms.CharField(
-        label='Request Id',
-        min_length=8,
-        max_length=8,
-        required=True,
-        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': '',
-                'autocomplete': 'off',
-                'aria-label': 'form-label',
-                'readonly': True,
-            }
-        ))
     product_request_project = forms.CharField(
         label='Project Name',
         min_length=1,
@@ -140,10 +105,6 @@ class ProductRequestUpdateForm(forms.ModelForm):
             }
         ))
 
-    def clean_product_requests_product_request_id(self):
-        data = self.cleaned_data['product_requests_product_request_id']
-        return data
-
     def clean_product_request_project(self):
         data = self.cleaned_data['product_request_project']
         return data
@@ -159,7 +120,6 @@ class ProductRequestUpdateForm(forms.ModelForm):
     class Meta:
         model = Product_Requests
         fields = (
-            'product_requests_product_request_id',
             'product_request_project',
             'product_request_details',
         )

@@ -775,7 +775,7 @@ def view(request, pk):
                                                                                 settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                     timeline_notifications.append(notification_timeline)
 
-                if str(model.order_acknowledged_at) != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
+                if str(model.order_acknowledged_at)[0:19] != settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE:
                     notification_timeline = NotificationsTimeline()
                     notification_timeline.message = 'Acknowledged order <small>by vendor</small>'
                     notification_timeline.datetime = Utils.get_convert_datetime(model.order_acknowledged_at,
@@ -1340,7 +1340,7 @@ def send_email_to_supplier(request, pk):
 
             attachments = Attachments.objects.filter(
                 attachment_model=Attachments.MODEL_ORDERS,
-                attachment_model_id=model.order_id,
+                attachment_model_id=order.order_id,
                 attachment_type=Attachments.TYPE_ORDER_EMAIL,
             ).order_by('-attachment_id').all()
 
@@ -1514,7 +1514,7 @@ def upload_attachments(request):
                         model.attachment_model_id = order.order_id
                         model.attachment_type = Attachments.TYPE_ORDER_EMAIL
                         model.attachment_type_id = 0
-                        model.attachment_file_id = 0
+                        model.attachment_number = 0
 
                         if action == 'upload-order-email':
                             model.attachment_type = Attachments.TYPE_ORDER_EMAIL
@@ -1713,7 +1713,7 @@ def order_proposal_create(request, pk, code):
             attachment_model=Attachments.MODEL_ORDERS,
             attachment_model_id=model.order_id,
             attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
-            attachment_file_id=1,
+            attachment_number=1,
         ).order_by('-attachment_id').all()
 
         attachment5 = ''
@@ -1724,7 +1724,7 @@ def order_proposal_create(request, pk, code):
             attachment_model=Attachments.MODEL_ORDERS,
             attachment_model_id=model.order_id,
             attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
-            attachment_file_id=2,
+            attachment_number=2,
         ).order_by('-attachment_id').all()
 
         attachment6 = ''
@@ -1735,7 +1735,7 @@ def order_proposal_create(request, pk, code):
             attachment_model=Attachments.MODEL_ORDERS,
             attachment_model_id=model.order_id,
             attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
-            attachment_file_id=1,
+            attachment_number=1,
         ).order_by('-attachment_id').all()
 
         attachment7 = ''
@@ -1746,7 +1746,7 @@ def order_proposal_create(request, pk, code):
             attachment_model=Attachments.MODEL_ORDERS,
             attachment_model_id=model.order_id,
             attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
-            attachment_file_id=2,
+            attachment_number=2,
         ).order_by('-attachment_id').all()
 
         attachment8 = ''
@@ -1757,7 +1757,7 @@ def order_proposal_create(request, pk, code):
             attachment_model=Attachments.MODEL_ORDERS,
             attachment_model_id=model.order_id,
             attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
-            attachment_file_id=3,
+            attachment_number=3,
         ).order_by('-attachment_id').all()
 
         attachment9 = ''
@@ -2023,25 +2023,33 @@ def upload_attachments_external(request):
                 model.attachment_model_id = order.order_id
 
                 model.attachment_type_id = 0
-                model.attachment_file_id = 0
+                model.attachment_number = 0
+
+                new_filename_prefix = 'order_email_'
 
                 if action == 'upload-order-proposal-business-license':
                     model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE
+                    new_filename_prefix = 'order_proposal_business_license_'
 
                 if action == 'upload-order-proposal-offer-letter':
                     model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER
+                    new_filename_prefix = 'order_proposal_offer_letter_'
 
                 if action == 'upload-order-proposal-quotation':
                     model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_QUOTATION
+                    new_filename_prefix = 'order_proposal_quotation_'
 
                 if action == 'upload-order-proposal-vat-registration':
                     model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION
+                    new_filename_prefix = 'order_proposal_vat_registration_'
 
                 if action == 'upload-order-proposal-other-document':
                     model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT
+                    new_filename_prefix = 'order_proposal_other_document_'
 
                 if action == 'upload-order-proposal-reference-document':
                     model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT
+                    new_filename_prefix = 'order_proposal_reference_document_'
 
                 if action == 'upload-order-proposal-business-license' or \
                         action == 'upload-order-proposal-offer-letter' or \
@@ -2055,7 +2063,7 @@ def upload_attachments_external(request):
                 if action == 'upload-order-proposal-other-document' or \
                         action == 'upload-order-proposal-reference-document':
                     number = request.POST['number']
-                    model.attachment_file_id = number
+                    model.attachment_number = number
 
                 model.attachment_file_uploaded_at = Utils.get_current_datetime_utc()
                 model.attachment_file_uploaded_id = ''
@@ -2072,7 +2080,7 @@ def upload_attachments_external(request):
                         original_filename = form.cleaned_data['attachment_file_path']
 
                         ext = original_filename.split('.')[-1]
-                        new_filename = 'order_email_' + str(order.order_code) + '_' + str(
+                        new_filename = new_filename_prefix + str(order.order_code) + '_' + str(
                             Utils.get_epochtime_ms()) + '.' + str(ext)
                         temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
                         attachment_file_path = settings.MEDIA_ROOT + model.UPLOAD_PATH + str(
@@ -2160,7 +2168,7 @@ def update_purchase_order(request, pk):
                             attachment.attachment_model = Attachments.MODEL_ORDERS
                             attachment.attachment_model_id = model.order_id
                             attachment.attachment_type_id = 0
-                            attachment.attachment_file_id = 0
+                            attachment.attachment_number = 0
                             attachment.attachment_type = Attachments.TYPE_ORDER_PURCHASE
                             attachment.attachment_file_uploaded_at = Utils.get_current_datetime_utc()
                             attachment.attachment_file_uploaded_id = operator.operator_id
@@ -2174,10 +2182,10 @@ def update_purchase_order(request, pk):
                             new_filename = 'order_purchase_' + str(model.order_code) + '_' + str(
                                 Utils.get_epochtime_ms()) + '.' + str(ext)
                             temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
-                            attachment_file_path = settings.MEDIA_ROOT + model.UPLOAD_PATH + str(
+                            attachment_file_path = settings.MEDIA_ROOT + attachment.UPLOAD_PATH + str(
                                 new_filename)
                             os.rename(temp_file_path, attachment_file_path)
-                            url = model.UPLOAD_PATH + new_filename
+                            url = attachment.UPLOAD_PATH + new_filename
                             size = str(os.path.getsize(attachment_file_path))
                             attachment.attachment_file_name = original_filename
                             attachment.attachment_file_path = url
@@ -2267,7 +2275,7 @@ def update_invoice_order(request, pk):
                             attachment.attachment_model = Attachments.MODEL_ORDERS
                             attachment.attachment_model_id = model.order_id
                             attachment.attachment_type_id = 0
-                            attachment.attachment_file_id = 0
+                            attachment.attachment_number = 0
                             attachment.attachment_type = Attachments.TYPE_ORDER_INVOICE
                             attachment.attachment_file_uploaded_at = Utils.get_current_datetime_utc()
                             attachment.attachment_file_uploaded_id = operator.operator_id
@@ -2281,10 +2289,10 @@ def update_invoice_order(request, pk):
                             new_filename = 'order_invoice_' + str(model.order_code) + '_' + str(
                                 Utils.get_epochtime_ms()) + '.' + str(ext)
                             temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
-                            attachment_file_path = settings.MEDIA_ROOT + model.UPLOAD_PATH + str(
+                            attachment_file_path = settings.MEDIA_ROOT + attachment.UPLOAD_PATH + str(
                                 new_filename)
                             os.rename(temp_file_path, attachment_file_path)
-                            url = model.UPLOAD_PATH + new_filename
+                            url = attachment.UPLOAD_PATH + new_filename
                             size = str(os.path.getsize(attachment_file_path))
                             attachment.attachment_file_name = original_filename
                             attachment.attachment_file_path = url

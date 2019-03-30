@@ -51,17 +51,45 @@
                             {{ form.duration.errors }}
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div id="div-title-service" class="col-sm-12">
                         <div class="form">
                             <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
-                                    {{ form.title.label }}
-                                    {% if form.title.field.required %}
+                                    {{ form.title_service.label }}
+                                    {% if form.title_service.field.required %}
                                         <b style="color: red;">*</b>{% endif %}
                                 </label>
-                                {{ form.title }}
+                                {{ form.title_service }}
                             </div>
-                            {{ form.title.errors }}
+                            {{ form.title_service.errors }}
+                        </div>
+                    </div>
+                    <div id="div-title-goods" class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0"
+                                 style="border-bottom: 0 !important;">
+                                <label class="custom-label">
+                                    {{ form.title_good.label }}
+                                    {% if form.title_good.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.title_good }}
+                            </div>
+                            {{ form.title_good.errors }}
+                        </div>
+                    </div>
+                    <div id="div-title-asset" class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0"
+                                 style="border-bottom: 0 !important;">
+                                <label class="custom-label">
+                                    {{ form.title_asset.label }}
+                                    {% if form.title_asset.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.title_asset }}
+                            </div>
+                            {{ form.title_asset.errors }}
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -134,7 +162,51 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function () {
         $("#search-input-select-type").select2({placeholder: "--select--", allowClear: false});
+        $("#search-input-select-order-title-goods").select2({placeholder: "--select--", allowClear: false});
+        $("#search-input-select-order-title-asset").select2({placeholder: "--select--", allowClear: false});
         $("#search-input-select-currency").select2({placeholder: "--select--", allowClear: false});
+
+        var type = document.getElementById("search-input-select-type").value;
+        $("#div-title-service").hide();
+        $("#div-title-goods").hide();
+        $("#div-title-asset").hide();
+        if (type == 'service') {
+            $("#div-title-service").show();
+            $("#div-title-goods").hide();
+            $("#div-title-asset").hide();
+        }
+        if (type == 'goods') {
+            $("#div-title-service").hide();
+            $("#div-title-goods").show();
+            $("#div-title-asset").hide();
+        }
+        if (type == 'asset') {
+            $("#div-title-service").hide();
+            $("#div-title-goods").hide();
+            $("#div-title-asset").show();
+        }
     });
+    var onTypeSelected;
+    onTypeSelected = function onTypeSelected() {
+        var type = document.getElementById("search-input-select-type").value;
+        $("#div-title-service").hide();
+        $("#div-title-goods").hide();
+        $("#div-title-asset").hide();
+        if (type == 'service') {
+            $("#div-title-service").show();
+            $("#div-title-goods").hide();
+            $("#div-title-asset").hide();
+        }
+        if (type == 'goods') {
+            $("#div-title-service").hide();
+            $("#div-title-goods").show();
+            $("#div-title-asset").hide();
+        }
+        if (type == 'asset') {
+            $("#div-title-service").hide();
+            $("#div-title-goods").hide();
+            $("#div-title-asset").show();
+        }
+    };
 </script>
 {% include '_include/tab_index.html' %}

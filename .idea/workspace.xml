@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5a52812-e78d-45d0-9066-6f5b7849675c" name="Default" comment="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed items received, pending for stock admin with inventory and products update">
+    <list default="true" id="b5a52812-e78d-45d0-9066-6f5b7849675c" name="Default" comment="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Reset Database">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/forms/order_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/order_forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/_include/select_single.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/_include/select_single.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/order-proposals/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/order-proposals/create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/order-proposals/view-internal.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/order-proposals/view-internal.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/order-proposals/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/order-proposals/view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/orders/send-email-to-supplier.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/orders/send-email-to-supplier.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/orders/update-email-to-supplier.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/orders/update-email-to-supplier.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/orders/update-invoice.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/orders/update-invoice.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/orders/update-purchase.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/orders/update-purchase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/forms/order_item_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/order_item_forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/forms/product_request_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/product_request_forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/order-items/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/order-items/create.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/order-items/update.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/order-items/update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/views/order_item_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/order_item_views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/views/order_proposal_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/order_proposal_views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/views/order_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/order_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/orders/order_email_48444659_1553787559841.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/orders/order_email_48444659_1553787914807.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/orders/order_email_48444659_1553787924644.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/orders/order_email_48444659_1553787931559.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/orders/order_email_48444659_1553787948173.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/orders/order_purchase_48444659_1553788463661.odt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,21 +35,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>order_status</find>
-      <find>request_or_level_approval_order</find>
-      <find>order_items_index</find>
-      <find>order_code</find>
-      <find>order</find>
-      <find>created_at</find>
-      <find>product_request_requested_by</find>
-      <find>orders_view</find>
-      <find>order_id</find>
-      <find>Order</find>
-      <find>single or multiple select</find>
-      <find>item_select_single_url</find>
-      <find>product_request_items_select_single</find>
-      <find>order_items_select_single</find>
-      <find>Order_Items</find>
       <find>product_request_item_product_quantity_ordered</find>
       <find>order_attachments</find>
       <find>Attachments</find>
@@ -63,12 +48,25 @@
       <find>attachement_id</find>
       <find>Order_Attachments</find>
       <find>attachement</find>
-      <find>UPLOAD_PATH</find>
       <find>Attachments()</find>
+      <find>select--</find>
+      <find>title</find>
+      <find>onTypeSelected</find>
+      <find>goods</find>
+      <find>order-title</find>
+      <find>good</find>
+      <find>-title</find>
+      <find>'-'</find>
+      <find>attachment_model_id = model.order_id</find>
+      <find>attachment_file_id</find>
+      <find>attachment_file</find>
+      <find>model.order_id</find>
+      <find>'order_email_'</find>
+      <find>UPLOAD_PATH</find>
+      <find>PURCHASE</find>
+      <find>model.UPLOAD</find>
     </findStrings>
     <replaceStrings>
-      <replace>2018-01-01 00:00:00</replace>
-      <replace>Door</replace>
       <replace>door</replace>
       <replace>DOOR</replace>
       <replace>var(--primary-color-two)</replace>
@@ -97,6 +95,8 @@
       <replace>model</replace>
       <replace>attachement</replace>
       <replace>attachment</replace>
+      <replace>attachment_number</replace>
+      <replace>-order-title</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/app</dir>
@@ -128,10 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/backend/templates/order-items/create.html" />
-        <option value="$PROJECT_DIR$/static/app/css/app-site.css" />
-        <option value="$PROJECT_DIR$/backend/templates/order-proposals/view-internal.html" />
-        <option value="$PROJECT_DIR$/app/utils.py" />
         <option value="$PROJECT_DIR$/backend/templates/_include/select_multiple.html" />
         <option value="$PROJECT_DIR$/backend/tables/order_tables.py" />
         <option value="$PROJECT_DIR$/app/context_processors.py" />
@@ -146,7 +142,6 @@
         <option value="$PROJECT_DIR$/backend/templates/products/index-assets.html" />
         <option value="$PROJECT_DIR$/backend/templates/products/index-goods.html" />
         <option value="$PROJECT_DIR$/backend/tables/product_tables.py" />
-        <option value="$PROJECT_DIR$/backend/forms/order_item_forms.py" />
         <option value="$PROJECT_DIR$/backend/templates/product-requests/create.html" />
         <option value="$PROJECT_DIR$/backend/templates/orders/index.html" />
         <option value="$PROJECT_DIR$/backend/templates/product-requests/index.html" />
@@ -158,27 +153,32 @@
         <option value="$PROJECT_DIR$/backend/templates/product-requests/update.html" />
         <option value="$PROJECT_DIR$/backend/templates/orders/view-edit.html" />
         <option value="$PROJECT_DIR$/backend/urls.py" />
-        <option value="$PROJECT_DIR$/backend/forms/product_request_forms.py" />
         <option value="$PROJECT_DIR$/backend/templates/product-requests/view-edit.html" />
         <option value="$PROJECT_DIR$/backend/forms/product_request_item_forms.py" />
         <option value="$PROJECT_DIR$/backend/templates/product-request-items/update.html" />
         <option value="$PROJECT_DIR$/backend/templates/orders/view.html" />
         <option value="$PROJECT_DIR$/backend/templates/product-requests/view.html" />
-        <option value="$PROJECT_DIR$/backend/views/order_item_views.py" />
         <option value="$PROJECT_DIR$/backend/views/inventory_item_views.py" />
         <option value="$PROJECT_DIR$/backend/templates/product-request-items/index.html" />
         <option value="$PROJECT_DIR$/backend/views/product_request_item_views.py" />
         <option value="$PROJECT_DIR$/backend/views/product_views.py" />
         <option value="$PROJECT_DIR$/backend/views/product_request_views.py" />
         <option value="$PROJECT_DIR$/app/settings.py" />
-        <option value="$PROJECT_DIR$/app/models.py" />
         <option value="$PROJECT_DIR$/backend/forms/order_forms.py" />
-        <option value="$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_280302019.sql" />
         <option value="$PROJECT_DIR$/backend/templates/_include/select_single.html" />
         <option value="$PROJECT_DIR$/backend/templates/orders/update-email-to-supplier.html" />
-        <option value="$PROJECT_DIR$/backend/views/order_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/order_proposal_views.py" />
         <option value="$PROJECT_DIR$/backend/templates/order-proposals/create.html" />
+        <option value="$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_280302019.sql" />
+        <option value="$PROJECT_DIR$/backups/db_initial_data_after_migration.sql" />
+        <option value="$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_30032019.sql" />
+        <option value="$PROJECT_DIR$/app/models.py" />
+        <option value="$PROJECT_DIR$/backend/templates/order-items/create.html" />
+        <option value="$PROJECT_DIR$/backend/templates/order-items/update.html" />
+        <option value="$PROJECT_DIR$/backend/forms/order_item_forms.py" />
+        <option value="$PROJECT_DIR$/backend/views/order_item_views.py" />
+        <option value="$PROJECT_DIR$/backend/views/order_proposal_views.py" />
+        <option value="$PROJECT_DIR$/backend/views/order_views.py" />
+        <option value="$PROJECT_DIR$/backend/forms/product_request_forms.py" />
       </list>
     </option>
   </component>
@@ -324,21 +324,7 @@
       <workItem from="1553622571324" duration="51198000" />
       <workItem from="1553755833417" duration="5150000" />
       <workItem from="1553764522815" duration="56045000" />
-      <workItem from="1553974245331" duration="4687000" />
-    </task>
-    <task id="LOCAL-00023" summary="Updates (v1.0.0)&#10;1. Fixed Bugs in Fixed Badges">
-      <created>1533637104127</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1533637104127</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Updates (v1.0.0)&#10;1. Updated User Badge view and issue it">
-      <created>1533653118420</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1533653118420</updated>
+      <workItem from="1553974245331" duration="11536000" />
     </task>
     <task id="LOCAL-00025" summary="Updates (v1.0.0)&#10;1. Added Doors and Door Logs Section and all its basic features">
       <created>1533723427694</created>
@@ -669,11 +655,25 @@
       <option name="project" value="LOCAL" />
       <updated>1553940710395</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Removed Order Attachments and included it in Attachments">
+      <created>1553979449264</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1553979449265</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Reset Database">
+      <created>1553980011466</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1553980011466</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="406143000" />
+    <option name="totallyTimeSpent" value="412992000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -687,7 +687,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1910867" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24603175" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -745,8 +745,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Added Footer" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Deployed on test server (pythonanywhere.com)" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Updated order timeline with real values&#10;3. Bug fixes and code optimisation&#10;4. Updated UI" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Bug fixes and code optimisation&#10;3. Updated UI&#10;4. Commented datetime converter" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Bug fixes and code optimisation&#10;3. Updated UI" />
@@ -770,44 +768,14 @@
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added stocks - goods and assets index sections" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added PO requests to stock admin" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed items received, pending for stock admin with inventory and products update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed items received, pending for stock admin with inventory and products update" />
+    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Removed Order Attachments and included it in Attachments" />
+    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Reset Database" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Reset Database" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/backend/templates/inventory-items/index.html" />
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1726">
-          <caret line="163" column="54" lean-forward="true" selection-start-line="163" selection-start-column="54" selection-end-line="163" selection-end-column="54" />
-          <folding>
-            <element signature="e#10707#10743#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/_include/select_multiple.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="51" column="47" lean-forward="true" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/inventory-items/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="147" column="65" selection-start-line="147" selection-start-column="65" selection-end-line="147" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.7/site-packages/bootstrap_modal_forms/static/js/jquery.bootstrap.modal.forms.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="56" column="4" selection-start-line="56" selection-start-column="4" selection-end-line="56" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/forms/inventory_item_forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -821,18 +789,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
           <caret line="88" column="47" lean-forward="true" selection-start-line="88" selection-start-column="47" selection-end-line="88" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/operator_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11">
-          <caret line="406" column="9" lean-forward="true" selection-start-line="378" selection-start-column="3" selection-end-line="406" selection-end-column="9" />
-          <folding>
-            <element signature="e#516#4938#0" />
-            <element signature="e#4988#7782#0" />
-            <element signature="e#7840#9214#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -962,26 +918,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/order_item_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="10" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="35" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/product_request_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="90" column="50" selection-start-line="90" selection-start-column="50" selection-end-line="90" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/templates/product-requests/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="445">
@@ -1030,32 +966,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/product_request_item_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="73" column="45" selection-start-line="73" selection-start-column="45" selection-end-line="73" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/tables/product_request_item_tables.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="446">
           <caret line="119" column="37" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/order_item_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="276" column="89" lean-forward="true" selection-start-line="276" selection-start-column="31" selection-end-line="276" selection-end-column="89" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1138,16 +1054,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/order_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="998" column="14" selection-start-line="998" selection-start-column="14" selection-end-line="998" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/templates/_include/select_single.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -1169,12 +1075,88 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/backups/db_initial_data_after_migration.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19245">
+          <caret line="1283" selection-start-line="1283" selection-end-line="1283" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_30032019.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="848">
+          <caret line="2768" selection-start-line="2768" selection-end-line="2768" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/order_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="621" column="17" lean-forward="true" selection-start-line="621" selection-start-column="17" selection-end-line="621" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/operators/update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="181" column="49" selection-start-line="181" selection-start-column="49" selection-end-line="181" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/order-items/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="199" column="26" selection-start-line="199" selection-start-column="26" selection-end-line="199" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/order-items/update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="582">
+          <caret line="199" column="26" selection-start-line="199" selection-start-column="26" selection-end-line="199" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/operator_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="563" column="84" lean-forward="true" selection-start-line="563" selection-start-column="12" selection-end-line="563" selection-end-column="84" />
+          <folding>
+            <element signature="e#516#4938#0" />
+            <element signature="e#4988#7782#0" />
+            <element signature="e#7840#9214#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/order_item_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="228" column="27" selection-start-line="228" selection-start-column="27" selection-end-line="228" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/order_item_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="202" column="29" selection-start-line="202" selection-start-column="29" selection-end-line="202" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="1963" column="67" selection-start-line="1963" selection-start-column="67" selection-end-line="1963" selection-end-column="67" />
+        <state relative-caret-position="279">
+          <caret line="1961" column="21" selection-start-line="1961" selection-start-column="4" selection-end-line="1961" selection-end-column="21" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
             <element signature="e#1074#22168#0" />
             <element signature="e#22238#23742#0" />
             <element signature="e#23842#75462#0" />
@@ -1186,22 +1168,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/order_proposal_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="803" column="33" selection-start-line="803" selection-start-column="22" selection-end-line="803" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/backend/views/order_views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="2264" column="41" selection-start-line="2264" selection-start-column="41" selection-end-line="2264" selection-end-column="41" />
+        <state relative-caret-position="294">
+          <caret line="1511" column="36" selection-start-line="1511" selection-start-column="24" selection-end-line="1511" selection-end-column="36" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/order_proposal_views.py">
+    <entry file="file://$PROJECT_DIR$/backend/forms/product_request_item_forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="802" column="24" selection-start-line="802" selection-start-column="24" selection-end-line="802" selection-end-column="24" />
+        <state relative-caret-position="360">
+          <caret line="24" column="21" lean-forward="true" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/product_request_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="121" column="18" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
