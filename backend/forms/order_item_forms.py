@@ -2,7 +2,7 @@ from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
-from app.models import Operators, Order_Items
+from app.models import Order_Items
 
 
 class OrderItemSearchIndexForm(forms.ModelForm):
@@ -166,7 +166,7 @@ class OrderItemCreateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
         return cleaned_data
 
     class Meta:
-        model = Operators
+        model = Order_Items
         fields = (
             'order_id',
             'type',
@@ -327,7 +327,7 @@ class OrderItemUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
         return cleaned_data
 
     class Meta:
-        model = Operators
+        model = Order_Items
         fields = (
             'order_id',
             'type',

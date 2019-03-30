@@ -1776,12 +1776,14 @@ class Notifications(models.Model):
     TYPE_ORDER = 'order'
     TYPE_ORDER_PROPOSAL = 'order-proposal'
     TYPE_SUPPLIER = 'supplier'
+    TYPE_PRODUCT_REQUEST = 'product-request'
     TYPE_OPERATOR = 'operator'
     ARRAY_TYPES = [
         (TYPE_SYSTEM.title()).replace('-', ' '),
         (TYPE_ORDER.title()).replace('-', ' '),
         (TYPE_ORDER_PROPOSAL.title()).replace('-', ' '),
         (TYPE_SUPPLIER.title()).replace('-', ' '),
+        (TYPE_PRODUCT_REQUEST.title()).replace('-', ' '),
         (TYPE_OPERATOR.title()).replace('-', ' '),
     ]
     DROPDOWN_TYPES = (
@@ -1790,6 +1792,7 @@ class Notifications(models.Model):
         (TYPE_ORDER, (TYPE_ORDER.title()).replace('-', ' ')),
         (TYPE_ORDER_PROPOSAL, (TYPE_ORDER_PROPOSAL.title()).replace('-', ' ')),
         (TYPE_SUPPLIER, (TYPE_SUPPLIER.title()).replace('-', ' ')),
+        (TYPE_PRODUCT_REQUEST, (TYPE_PRODUCT_REQUEST.title()).replace('-', ' ')),
         (TYPE_OPERATOR, (TYPE_OPERATOR.title()).replace('-', ' ')),
     )
 
@@ -2031,6 +2034,13 @@ class Products(models.Model):
         (TYPE_SERVICE, TYPE_SERVICE),
     )
 
+    product_inventory_search_start_date = ''
+    product_inventory_search_end_date = ''
+    product_quantity_initial = 0
+    product_quantity_in = 0
+    product_quantity_out = 0
+    product_quantity_final = 0
+
     product_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     product_type = models.CharField('Type', max_length=255, blank=False, choices=DROPDOWN_TYPES, default=TYPE_GOODS)
     product_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
@@ -2192,8 +2202,8 @@ class Inventory_Items(models.Model):
 # Create your models here.
 # noinspection PyUnresolvedReferences
 class Product_Requests(models.Model):
-    TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
-    SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
+    TITLE = settings.MODEL_PRODUCT_REQUESTS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_PRODUCT_REQUEST_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
     STATUS_PENDING = 'pending'
@@ -2223,6 +2233,8 @@ class Product_Requests(models.Model):
         (STATUS_CLOSED, (STATUS_CLOSED.title()).replace('-', ' ')),
         (STATUS_CANCELLED, (STATUS_CANCELLED.title()).replace('-', ' ')),
     )
+
+    product_request_readable_status = ''
 
     product_request_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     product_request_code = models.CharField('Code', max_length=8, unique=True, blank=False, default=None)
@@ -2286,16 +2298,220 @@ class Product_Requests(models.Model):
         unique_token_found = False
         while not unique_token_found:
             token = get_random_string(length, allowed_chars='0123456789')
-            if (not token.startswith('0')) and ProductRequests.objects.filter(**{attribute: token}).count() is 0:
+            if (not token.startswith('0')) and Product_Requests.objects.filter(**{attribute: token}).count() is 0:
                 unique_token_found = True
         return token
+
+    @classmethod
+    def update_grand_total(cls, request, model, operator):
+        product_request_items = Product_Request_Items.objects.filter(
+            product_requests_product_request_id=model.product_request_id).all()
+        model.product_request_no_of_items = product_request_items.count()
+        model.save()
+        return True
+
+    @classmethod
+    def get_filtered_product_requests(cls, operator):
+        if operator.operator_type == Operators.TYPE_SUPER_ADMIN or operator.operator_type == Operators.TYPE_ADMIN or operator.operator_type == Operators.TYPE_MANAGER or operator.operator_role == Operators.ROLE_STOCK_ADMIN:
+            objects = Product_Requests.objects.all()
+        else:
+            objects = Product_Requests.objects.all()
+            if operator.operator_department == Operators.DEPARTMENT_NONE:
+                objects = objects.filter(product_request_item_created_id=operator.operator_id)
+
+            if operator.operator_department == Operators.DEPARTMENT_DCOP:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DCOP) &
+                        Q(operator_role=Operators.ROLE_REGIONAL_MANAGER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                                 (Q(product_request_item_created_id__in=child_operators)))
+
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_REGIONAL_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_DISTRICT_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_FIELD_OFFICER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DCOP) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_BFM:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_BFM) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_BFM) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.order_created_department:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_BFM) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_NUTRITION:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_DAF:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_OPM:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_PROCUREMENT_OFFICER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(product_request_item_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_HR_MANAGER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(product_request_item_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_STOCK_ADMIN))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(product_request_item_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(product_request_item_created_id__in=child_operators)))
+
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_HR_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_STOCK_ADMIN:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_MAV:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+
+            if operator.operator_department == Operators.DEPARTMENT_GRANT_MANAGER:
+                if operator.operator_role == Operators.ROLE_NONE:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_DIRECTOR:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_ADVISER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+
+        return objects
+
+    @classmethod
+    def get_status_html_tag(cls, record):
+        value = None
+        if record.product_request_status == Product_Requests.STATUS_PENDING:
+            value = Utils.HTML_TAG_ORDER_STATUS_PENDING
+        elif record.product_request_status == Product_Requests.STATUS_REQUESTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_REQUESTED
+        elif record.product_request_status == Product_Requests.STATUS_REVIEWED:
+            value = Utils.HTML_TAG_ORDER_STATUS_REVIEWED
+        elif record.product_request_status == Product_Requests.STATUS_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_APPROVED
+        elif record.product_request_status == Product_Requests.STATUS_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_REJECTED
+        elif record.product_request_status == Product_Requests.STATUS_CLOSED:
+            value = Utils.HTML_TAG_ORDER_STATUS_CLOSED
+        elif record.product_request_status == Product_Requests.STATUS_CANCELLED:
+            value = Utils.HTML_TAG_ORDER_STATUS_CANCELLED
+        return value
 
 
 # Create your models here.
 # noinspection PyUnresolvedReferences
 class Product_Request_Items(models.Model):
-    TITLE = settings.MODEL_INVENTORY_ITEMS_PLURAL_TITLE
-    SINGULAR_TITLE = settings.MODEL_INVENTORY_ITEMS_SINGULAR_TITLE
+    TITLE = settings.MODEL_PRODUCT_REQUESTS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_PRODUCT_REQUEST_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
     TYPE_GOODS = 'goods'
@@ -2369,3 +2585,17 @@ class Product_Request_Items(models.Model):
 
     def __unicode__(self):
         return self.product_request_item_id
+
+    @classmethod
+    def get_status_html_tag(cls, record):
+        value = None
+        if record.product_request_item_status == Product_Request_Items.STATUS_PENDING:
+            value = Utils.HTML_TAG_ORDER_ITEM_STATUS_PENDING
+        elif record.product_request_item_status == Product_Request_Items.STATUS_RECEIVED:
+            value = Utils.HTML_TAG_ORDER_ITEM_STATUS_RECEIVED
+        return value
+
+    @classmethod
+    def delete_product_request_item(cls, request, model, operator):
+        model.delete()
+        return True

@@ -1,0 +1,74 @@
+{% extends '_include/base-form.html' %}{% block head %}{% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+{% block body %}{% load static %}
+    {% load static %}{% csrf_token %}
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <a class="breadcrumb-item" href="{{ index_url }}">{{ title }}</a>
+                        <a class="breadcrumb-item"
+                           href="{% url 'product_requests_view' pk=model.product_request_id %}">{{ model.product_request_code }}</a>
+                        <span class="breadcrumb-item active">Edit</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
+                {% endif %}
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Update</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0">
+                                            <label class="custom-label">
+                                                {{ form.product_request_project.label }}
+                                                {% if form.product_request_project.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.product_request_project }}
+                                        </div>
+                                        {{ form.product_request_project.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form">
+                                        <div class="form-group mb-4 pt-0" style="border-bottom: 0 !important;">
+                                            <label class="custom-label">
+                                                {{ form.product_request_details.label }}
+                                                {% if form.product_request_details.field.required %}
+                                                    <b style="color: red;">*</b>{% endif %}
+                                            </label>
+                                            {{ form.product_request_details }}
+                                        </div>
+                                        {{ form.product_request_details.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-secondary btn-block fuse-ripple-ready"
+                                    aria-label="aria-label">
+                                SUBMIT
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include '_include/tab_index.html' %}
+{% endblock %}

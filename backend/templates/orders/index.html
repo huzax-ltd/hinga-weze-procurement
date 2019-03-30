@@ -59,7 +59,7 @@
                             </button>
                             <div class="dropdown-menu">
 
-                                {% if ACCESS_PERMISSION_ORDER in auth_permissions.values %}
+                                {% if ACCESS_PERMISSION_ORDER_DELETE in auth_permissions.values %}
                                     <a class="dropdown-item" \
                                        href="#" onclick="multipleSelect('{{ select_multiple_url }}', 'delete');">
                                         Delete Selected

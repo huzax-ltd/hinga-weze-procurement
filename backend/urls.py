@@ -4,7 +4,8 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from backend.views import operator_views, operator_log_views, order_views, order_item_views, order_proposal_views, \
-    product_views, inventory_item_views, site_views, setting_views, notification_views
+    product_views, inventory_item_views, product_request_views, product_request_item_views, site_views, setting_views, \
+    notification_views
 
 urlpatterns = [
 
@@ -408,6 +409,18 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # index inventory
+    url(r'^products/goods/inventory/$', product_views.index_inventory_goods, name='products_index_inventory_goods'),
+    url(r'^products/goods/inventory/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    url(r'^products/assets/inventory/$', product_views.index_inventory_assets, name='products_index_inventory_assets'),
+    url(r'^products/assets/inventory/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
     # inventory items
     # create
     url(r'^inventory-items/create/(?P<pk>.+)/(?P<action>.+)/(?P<ids>.+)/$', inventory_item_views.create,
@@ -416,5 +429,73 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+
+    # product requests
+    path('', product_request_views.index, name='index'),
+
+    # index
+    url(r'^product-requests/index/$', product_request_views.index, name='product_requests_index'),
+    url(r'^product-requests/index/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # single or multiple select
+    url(r'^product-requests/select-single/$', product_request_views.select_single,
+        name='product_requests_select_single'),
+    url(r'^product-requests/select-multiple/$', product_request_views.select_multiple,
+        name='product_requests_select_multiple'),
+
+    # create
+    url(r'^product-requests/create/$', product_request_views.create, name='product_requests_create'),
+    url(r'^product-requests/create/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update
+    url(r'^product-requests/update/(?P<pk>\d+)/$', product_request_views.update, name='product_requests_update'),
+    url(r'^product-requests/update/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # view
+    url(r'^product-requests/view/(?P<pk>\d+)/$', product_request_views.view, name='product_requests_view'),
+    url(r'^product-requests/view/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # view product requests items
+    url(r'^product-requests/view/items/(?P<pk>\d+)/$', product_request_views.view_product_request_items,
+        name='product_request_items_index'),
+    url(r'^product-requests/view/items/(?P<pk>\d+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # product requests items
+    # create
+    url(r'^product-request-items/create/(?P<id>.+)/$', product_request_item_views.create,
+        name='product_request_items_create'),
+    url(r'^product-request-items/create/(?P<id>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # update
+    url(r'^product-request-items/update/(?P<pk>.+)/$', product_request_item_views.update,
+        name='product_request_items_update'),
+    url(r'^product-request-items/update/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # single or multiple select
+    url(r'^product-request-items/select-single/$', product_request_item_views.select_single,
+        name='product_request_items_select_single'),
+    url(r'^product-request-items/select-multiple/$', product_request_item_views.select_multiple,
+        name='product_request_items_select_multiple'),
 
 ]
