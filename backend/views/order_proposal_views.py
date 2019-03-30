@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from app import settings
-from app.models import Operators, Orders, Order_Attachments, Order_Proposals, Notifications
+from app.models import Operators, Orders, Attachments, Order_Proposals, Notifications
 from app.utils import Utils
 from backend.forms.order_forms import OrderUploadAttachmentForm
 from backend.forms.order_proposal_forms import OrderProposalSearchIndexForm, OrderProposalCreateForm, \
@@ -257,91 +257,100 @@ def create(request, pk, code):
         else:
             model = Order_Proposals.objects.get(order_proposal_code=code)
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE) &
-            Q(order_attachment_type_id=model.order_proposal_code)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE,
+        ).order_by('-attachment_id').all()
 
-        order_attachment1 = ''
-        if order_attachments.count() != 0:
-            order_attachment1 = order_attachments[0]
+        attachment1 = ''
+        if attachments.count() != 0:
+            attachment1 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER) &
-            Q(order_attachment_type_id=model.order_proposal_code)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER,
+        ).order_by('-attachment_id').all()
 
-        order_attachment2 = ''
-        if order_attachments.count() != 0:
-            order_attachment2 = order_attachments[0]
+        attachment2 = ''
+        if attachments.count() != 0:
+            attachment2 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_QUOTATION) &
-            Q(order_attachment_type_id=model.order_proposal_code)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_QUOTATION,
+        ).order_by('-attachment_id').all()
 
-        order_attachment3 = ''
-        if order_attachments.count() != 0:
-            order_attachment3 = order_attachments[0]
+        attachment3 = ''
+        if attachments.count() != 0:
+            attachment3 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION) &
-            Q(order_attachment_type_id=model.order_proposal_code)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION,
+        ).order_by('-attachment_id').all()
 
-        order_attachment4 = ''
-        if order_attachments.count() != 0:
-            order_attachment4 = order_attachments[0]
+        attachment4 = ''
+        if attachments.count() != 0:
+            attachment4 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT) &
-            Q(order_attachment_type_id=model.order_proposal_code) &
-            Q(order_attachment_file_id=1)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+            attachment_file_id=1,
+        ).order_by('-attachment_id').all()
 
-        order_attachment5 = ''
-        if order_attachments.count() != 0:
-            order_attachment5 = order_attachments[0]
+        attachment5 = ''
+        if attachments.count() != 0:
+            attachment5 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT) &
-            Q(order_attachment_type_id=model.order_proposal_code) &
-            Q(order_attachment_file_id=2)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+            attachment_file_id=2,
+        ).order_by('-attachment_id').all()
 
-        order_attachment6 = ''
-        if order_attachments.count() != 0:
-            order_attachment6 = order_attachments[0]
+        attachment6 = ''
+        if attachments.count() != 0:
+            attachment6 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT) &
-            Q(order_attachment_type_id=model.order_proposal_code) &
-            Q(order_attachment_file_id=1)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+            attachment_file_id=1,
+        ).order_by('-attachment_id').all()
 
-        order_attachment7 = ''
-        if order_attachments.count() != 0:
-            order_attachment7 = order_attachments[0]
+        attachment7 = ''
+        if attachments.count() != 0:
+            attachment7 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT) &
-            Q(order_attachment_type_id=model.order_proposal_code) &
-            Q(order_attachment_file_id=2)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+            attachment_file_id=2,
+        ).order_by('-attachment_id').all()
 
-        order_attachment8 = ''
-        if order_attachments.count() != 0:
-            order_attachment8 = order_attachments[0]
+        attachment8 = ''
+        if attachments.count() != 0:
+            attachment8 = attachments[0]
 
-        order_attachments = Order_Attachments.objects.filter(
-            Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT) &
-            Q(order_attachment_type_id=model.order_proposal_code) &
-            Q(order_attachment_file_id=3)
-        ).order_by('-order_attachment_id').all()
+        attachments = Attachments.objects.filter(
+            attachment_model=Attachments.MODEL_ORDERS,
+            attachment_model_id=model.order_id,
+            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+            attachment_file_id=3,
+        ).order_by('-attachment_id').all()
 
-        order_attachment9 = ''
-        if order_attachments.count() != 0:
-            order_attachment9 = order_attachments[0]
+        attachment9 = ''
+        if attachments.count() != 0:
+            attachment9 = attachments[0]
 
         if request.method == 'POST':
 
@@ -499,15 +508,15 @@ def create(request, pk, code):
                         'model': model,
                         'order': order,
                         'select_single_url': reverse("orders_select_single_external"),
-                        'order_attachment1': order_attachment1,
-                        'order_attachment2': order_attachment2,
-                        'order_attachment3': order_attachment3,
-                        'order_attachment4': order_attachment4,
-                        'order_attachment5': order_attachment5,
-                        'order_attachment6': order_attachment6,
-                        'order_attachment7': order_attachment7,
-                        'order_attachment8': order_attachment8,
-                        'order_attachment9': order_attachment9,
+                        'attachment1': attachment1,
+                        'attachment2': attachment2,
+                        'attachment3': attachment3,
+                        'attachment4': attachment4,
+                        'attachment5': attachment5,
+                        'attachment6': attachment6,
+                        'attachment7': attachment7,
+                        'attachment8': attachment8,
+                        'attachment9': attachment9,
                     }
                 )
         else:
@@ -589,15 +598,15 @@ def create(request, pk, code):
                 'model': model,
                 'order': order,
                 'select_single_url': reverse("orders_select_single_external"),
-                'order_attachment1': order_attachment1,
-                'order_attachment2': order_attachment2,
-                'order_attachment3': order_attachment3,
-                'order_attachment4': order_attachment4,
-                'order_attachment5': order_attachment5,
-                'order_attachment6': order_attachment6,
-                'order_attachment7': order_attachment7,
-                'order_attachment8': order_attachment8,
-                'order_attachment9': order_attachment9,
+                'attachment1': attachment1,
+                'attachment2': attachment2,
+                'attachment3': attachment3,
+                'attachment4': attachment4,
+                'attachment5': attachment5,
+                'attachment6': attachment6,
+                'attachment7': attachment7,
+                'attachment8': attachment8,
+                'attachment9': attachment9,
             }
         )
     except(TypeError, ValueError, OverflowError, Orders.DoesNotExist, Order_Proposals.DoesNotExist):
@@ -618,91 +627,100 @@ def view_internal(request, pk):
                 model = Order_Proposals.objects.get(order_proposal_id=pk)
                 order = Orders.objects.get(order_id=model.orders_order_id)
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE) &
-                    Q(order_attachment_type_id=model.order_proposal_code)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE,
+                ).order_by('-attachment_id').all()
 
-                order_attachment1 = ''
-                if order_attachments.count() != 0:
-                    order_attachment1 = order_attachments[0]
+                attachment1 = ''
+                if attachments.count() != 0:
+                    attachment1 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER) &
-                    Q(order_attachment_type_id=model.order_proposal_code)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER,
+                ).order_by('-attachment_id').all()
 
-                order_attachment2 = ''
-                if order_attachments.count() != 0:
-                    order_attachment2 = order_attachments[0]
+                attachment2 = ''
+                if attachments.count() != 0:
+                    attachment2 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_QUOTATION) &
-                    Q(order_attachment_type_id=model.order_proposal_code)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_QUOTATION,
+                ).order_by('-attachment_id').all()
 
-                order_attachment3 = ''
-                if order_attachments.count() != 0:
-                    order_attachment3 = order_attachments[0]
+                attachment3 = ''
+                if attachments.count() != 0:
+                    attachment3 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION) &
-                    Q(order_attachment_type_id=model.order_proposal_code)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION,
+                ).order_by('-attachment_id').all()
 
-                order_attachment4 = ''
-                if order_attachments.count() != 0:
-                    order_attachment4 = order_attachments[0]
+                attachment4 = ''
+                if attachments.count() != 0:
+                    attachment4 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT) &
-                    Q(order_attachment_type_id=model.order_proposal_code) &
-                    Q(order_attachment_file_id=1)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+                    attachment_file_id=1,
+                ).order_by('-attachment_id').all()
 
-                order_attachment5 = ''
-                if order_attachments.count() != 0:
-                    order_attachment5 = order_attachments[0]
+                attachment5 = ''
+                if attachments.count() != 0:
+                    attachment5 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT) &
-                    Q(order_attachment_type_id=model.order_proposal_code) &
-                    Q(order_attachment_file_id=2)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+                    attachment_file_id=2,
+                ).order_by('-attachment_id').all()
 
-                order_attachment6 = ''
-                if order_attachments.count() != 0:
-                    order_attachment6 = order_attachments[0]
+                attachment6 = ''
+                if attachments.count() != 0:
+                    attachment6 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT) &
-                    Q(order_attachment_type_id=model.order_proposal_code) &
-                    Q(order_attachment_file_id=1)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                    attachment_file_id=1,
+                ).order_by('-attachment_id').all()
 
-                order_attachment7 = ''
-                if order_attachments.count() != 0:
-                    order_attachment7 = order_attachments[0]
+                attachment7 = ''
+                if attachments.count() != 0:
+                    attachment7 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT) &
-                    Q(order_attachment_type_id=model.order_proposal_code) &
-                    Q(order_attachment_file_id=2)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                    attachment_file_id=2,
+                ).order_by('-attachment_id').all()
 
-                order_attachment8 = ''
-                if order_attachments.count() != 0:
-                    order_attachment8 = order_attachments[0]
+                attachment8 = ''
+                if attachments.count() != 0:
+                    attachment8 = attachments[0]
 
-                order_attachments = Order_Attachments.objects.filter(
-                    Q(order_attachment_type=Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT) &
-                    Q(order_attachment_type_id=model.order_proposal_code) &
-                    Q(order_attachment_file_id=3)
-                ).order_by('-order_attachment_id').all()
+                attachments = Attachments.objects.filter(
+                    attachment_model=Attachments.MODEL_ORDERS,
+                    attachment_model_id=model.order_id,
+                    attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                    attachment_file_id=3,
+                ).order_by('-attachment_id').all()
 
-                order_attachment9 = ''
-                if order_attachments.count() != 0:
-                    order_attachment9 = order_attachments[0]
+                attachment9 = ''
+                if attachments.count() != 0:
+                    attachment9 = attachments[0]
 
                 form = OrderProposalViewForm(
                     initial={
@@ -750,15 +768,15 @@ def view_internal(request, pk):
                         'order': order,
                         'index_url': reverse("order_proposals_index", kwargs={'pk': order.order_id}),
                         'select_single_url': reverse("order_proposals_select_single"),
-                        'order_attachment1': order_attachment1,
-                        'order_attachment2': order_attachment2,
-                        'order_attachment3': order_attachment3,
-                        'order_attachment4': order_attachment4,
-                        'order_attachment5': order_attachment5,
-                        'order_attachment6': order_attachment6,
-                        'order_attachment7': order_attachment7,
-                        'order_attachment8': order_attachment8,
-                        'order_attachment9': order_attachment9,
+                        'attachment1': attachment1,
+                        'attachment2': attachment2,
+                        'attachment3': attachment3,
+                        'attachment4': attachment4,
+                        'attachment5': attachment5,
+                        'attachment6': attachment6,
+                        'attachment7': attachment7,
+                        'attachment8': attachment8,
+                        'attachment9': attachment9,
                     }
                 )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist, Order_Proposals.DoesNotExist):
@@ -782,29 +800,31 @@ def upload_attachments_external(request):
             order = Orders.objects.get(order_id=id)
             if order is not None:
 
-                model = Order_Attachments()
-                model.orders_order_id = order.order_id
+                model = Attachments()
+                model.UPLOAD_PATH = model.ORDERS_UPLOAD_PATH
+                model.attachment_model = Attachments.MODEL_ORDERS
+                model.attachment_model_id = order.order_id
 
-                model.order_attachment_type_id = 0
-                model.order_attachment_file_id = 0
+                model.attachment_type_id = 0
+                model.attachment_file_id = 0
 
                 if action == 'upload-order-proposal-business-license':
-                    model.order_attachment_type = Order_Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE
+                    model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE
 
                 if action == 'upload-order-proposal-offer-letter':
-                    model.order_attachment_type = Order_Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER
+                    model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER
 
                 if action == 'upload-order-proposal-quotation':
-                    model.order_attachment_type = Order_Attachments.TYPE_ORDER_PROPOSAL_QUOTATION
+                    model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_QUOTATION
 
                 if action == 'upload-order-proposal-vat-registration':
-                    model.order_attachment_type = Order_Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION
+                    model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION
 
                 if action == 'upload-order-proposal-other-document':
-                    model.order_attachment_type = Order_Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT
+                    model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT
 
                 if action == 'upload-order-proposal-reference-document':
-                    model.order_attachment_type = Order_Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT
+                    model.attachment_type = Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT
 
                 if action == 'upload-order-proposal-business-license' or \
                         action == 'upload-order-proposal-offer-letter' or \
@@ -813,40 +833,40 @@ def upload_attachments_external(request):
                         action == 'upload-order-proposal-other-document' or \
                         action == 'upload-order-proposal-reference-document':
                     code = request.POST['code']
-                    model.order_attachment_type_id = code
+                    model.attachment_type_id = code
 
                 if action == 'upload-order-proposal-other-document' or \
                         action == 'upload-order-proposal-reference-document':
                     number = request.POST['number']
-                    model.order_attachment_file_id = number
+                    model.attachment_file_id = number
 
-                model.order_attachment_file_uploaded_at = Utils.get_current_datetime_utc()
-                model.order_attachment_file_uploaded_id = ''
-                model.order_attachment_file_uploaded_by = ''
-                model.order_attachment_file_uploaded_department = ''
-                model.order_attachment_file_uploaded_role = ''
+                model.attachment_file_uploaded_at = Utils.get_current_datetime_utc()
+                model.attachment_file_uploaded_id = ''
+                model.attachment_file_uploaded_by = ''
+                model.attachment_file_uploaded_department = ''
+                model.attachment_file_uploaded_role = ''
 
                 import magic
                 mime = magic.Magic(mime=True)
-                # for file in request.FILES.getlist('order_attachment_file_path'):
+                # for file in request.FILES.getlist('attachment_file_path'):
                 form = OrderUploadAttachmentForm(request.POST, request.FILES)
                 if form.is_valid():
                     try:
-                        original_filename = form.cleaned_data['order_attachment_file_path']
+                        original_filename = form.cleaned_data['attachment_file_path']
 
                         ext = original_filename.split('.')[-1]
                         new_filename = 'order_email_' + str(order.order_code) + '_' + str(
                             Utils.get_epochtime_ms()) + '.' + str(ext)
                         temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
-                        order_attachment_file_path = settings.MEDIA_ROOT + Order_Attachments.UPLOAD_PATH + str(
+                        attachment_file_path = settings.MEDIA_ROOT + model.UPLOAD_PATH + str(
                             new_filename)
-                        os.rename(temp_file_path, order_attachment_file_path)
-                        url = Order_Attachments.UPLOAD_PATH + new_filename
-                        size = str(os.path.getsize(order_attachment_file_path))
-                        model.order_attachment_file_name = original_filename
-                        model.order_attachment_file_path = url
-                        model.order_attachment_file_type = str(mime.from_file(order_attachment_file_path))
-                        model.order_attachment_file_size = size
+                        os.rename(temp_file_path, attachment_file_path)
+                        url = model.UPLOAD_PATH + new_filename
+                        size = str(os.path.getsize(attachment_file_path))
+                        model.attachment_file_name = original_filename
+                        model.attachment_file_path = url
+                        model.attachment_file_type = str(mime.from_file(attachment_file_path))
+                        model.attachment_file_size = size
                         model.save()
 
                         # return HttpResponse('success', content_type='text/plain')
@@ -854,9 +874,9 @@ def upload_attachments_external(request):
                             'error': False,
                             'message': 'success',
                             'name': original_filename,
-                            'url': model.order_attachment_file_path.url,
+                            'url': model.attachment_file_path.url,
                             'size': defaultfilters.filesizeformat(size),
-                            'id': model.order_attachment_id,
+                            'id': model.attachment_id,
                         })
                         return HttpResponse(str(response), content_type='text/plain')
 

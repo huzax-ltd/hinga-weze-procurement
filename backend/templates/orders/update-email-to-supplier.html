@@ -59,8 +59,8 @@
                                     <span class="icon icon-delete text-danger"
                                           style="font-size: 16px; vertical-align: top !important;"></span> Delete all
                                     </button>
-                                    <input id="id_order_attachment_file_path" type="file"
-                                           name="order_attachment_file_path"
+                                    <input id="id_attachment_file_path" type="file"
+                                           name="attachment_file_path"
                                            multiple
                                            style="display: none;"
                                            data-url="{% url 'orders_upload_attachments' %}"
@@ -73,24 +73,24 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for order_attachment in order_attachments %}
+                                        {% for attachment in attachments %}
                                             <tr>
                                                 <td width="30px;"><i class="icon icon-file"></i></td>
                                                 <td>
-                                                    <a href="{{ order_attachment.order_attachment_file_path.url }}"
-                                                       target="_blank">{{ order_attachment.order_attachment_file_name }}</a>
+                                                    <a href="{{ attachment.attachment_file_path.url }}"
+                                                       target="_blank">{{ attachment.attachment_file_name }}</a>
                                                 </td>
-                                                <td width="80px;">{{ order_attachment.order_attachment_file_size|filesizeformat }}</td>
+                                                <td width="80px;">{{ attachment.attachment_file_size|filesizeformat }}</td>
                                                 <td width="30px;">
                                                     <a download
-                                                       href="{{ order_attachment.order_attachment_file_path.url }}"
+                                                       href="{{ attachment.attachment_file_path.url }}"
                                                        style="text-decoration: none;">
                                                         <i class="icon icon-download text-success"></i>
                                                     </a>
                                                 </td>
                                                 <td width="30px;">
                                                     <a href="#"
-                                                       onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete', '{{ order_attachment.order_attachment_id }}', '{{ item_index_url }}');"
+                                                       onclick="singleSelect('{{ select_single_url }}', 'attachment-delete', '{{ attachment.attachment_id }}', '{{ item_index_url }}');"
                                                        style="text-decoration: none;">
                                                         <i class="icon icon-delete text-danger"></i>
                                                     </a>
@@ -130,10 +130,10 @@
         $(function () {
             var progressDialog = null;
             $("#btn-upload-files").click(function () {
-                $("#id_order_attachment_file_path").click();
+                $("#id_attachment_file_path").click();
             });
 
-            $("#id_order_attachment_file_path").fileupload({
+            $("#id_attachment_file_path").fileupload({
                 sequentialUploads: true,
                 start: function (e) {
                     console.log('start');
@@ -182,7 +182,7 @@
                             "</td>\n" +
                             "<td width=\"30px;\">\n" +
                             "<a href=\"#\"\n" +
-                            "onclick=\"singleSelect('{{ select_single_url }}', 'order-attachment-delete', '" + response.id + "', '{{ item_index_url }}');\"\n" +
+                            "onclick=\"singleSelect('{{ select_single_url }}', 'attachment-delete', '" + response.id + "', '{{ item_index_url }}');\"\n" +
                             "style=\"text-decoration: none;\">\n" +
                             "<i class=\"icon icon-delete text-danger\"></i>\n" +
                             "</a>\n" +

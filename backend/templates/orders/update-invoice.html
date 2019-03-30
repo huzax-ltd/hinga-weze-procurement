@@ -41,13 +41,13 @@
                         <div class="form">
                             <div class="form-group mb-4 pt-0">
                                 <label class="custom-label">
-                                    {{ form.order_attachment_file_path.label }}
-                                    {% if form.order_attachment_file_path.field.required %}
+                                    {{ form.attachment_file_path.label }}
+                                    {% if form.attachment_file_path.field.required %}
                                         <b style="color: red;">*</b>{% endif %}
                                 </label>
-                                {{ form.order_attachment_file_path }}
+                                {{ form.attachment_file_path }}
                             </div>
-                            {{ form.order_attachment_file_path.errors }}
+                            {{ form.attachment_file_path.errors }}
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from tinymce.widgets import TinyMCE
 
-from app.models import Orders, Order_Attachments, Operators
+from app.models import Orders, Attachments, Operators
 
 
 class TinyMCEWidget(TinyMCE):
@@ -817,7 +817,7 @@ class OrderEmailToSupplierForm(forms.ModelForm):
 
 
 class OrderUploadAttachmentForm(forms.ModelForm):
-    order_attachment_file_path = forms.FileField(
+    attachment_file_path = forms.FileField(
         label='File',
         required=True,
         validators=[],
@@ -830,8 +830,8 @@ class OrderUploadAttachmentForm(forms.ModelForm):
             }
         ))
 
-    def clean_order_attachment_file_path(self):
-        file = self.cleaned_data['order_attachment_file_path']
+    def clean_attachment_file_path(self):
+        file = self.cleaned_data['attachment_file_path']
 
         if not file:
             raise forms.ValidationError('File type - none')
@@ -860,9 +860,9 @@ class OrderUploadAttachmentForm(forms.ModelForm):
         return cleaned_data
 
     class Meta:
-        model = Order_Attachments
+        model = Attachments
         fields = (
-            'order_attachment_file_path',
+            'attachment_file_path',
         )
 
 
@@ -896,7 +896,7 @@ class OrderPurchaseUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Mode
                 'aria-label': 'form-label',
             }
         ))
-    order_attachment_file_path = forms.FileField(
+    attachment_file_path = forms.FileField(
         label='File',
         required=True,
         validators=[],
@@ -912,8 +912,8 @@ class OrderPurchaseUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Mode
         data = self.cleaned_data['order_purchase_no']
         return data
 
-    def clean_order_attachment_file_path(self):
-        file = self.cleaned_data['order_attachment_file_path']
+    def clean_attachment_file_path(self):
+        file = self.cleaned_data['attachment_file_path']
 
         if not file:
             raise forms.ValidationError('File type - none')
@@ -946,7 +946,7 @@ class OrderPurchaseUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Mode
         fields = (
             'order_id',
             'order_purchase_no',
-            'order_attachment_file_path',
+            'attachment_file_path',
         )
 
 
@@ -980,7 +980,7 @@ class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Model
                 'aria-label': 'form-label',
             }
         ))
-    order_attachment_file_path = forms.FileField(
+    attachment_file_path = forms.FileField(
         label='File',
         required=True,
         validators=[],
@@ -996,8 +996,8 @@ class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Model
         data = self.cleaned_data['order_purchase_no']
         return data
 
-    def clean_order_attachment_file_path(self):
-        file = self.cleaned_data['order_attachment_file_path']
+    def clean_attachment_file_path(self):
+        file = self.cleaned_data['attachment_file_path']
 
         if not file:
             raise forms.ValidationError('File type - none')
@@ -1030,5 +1030,5 @@ class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Model
         fields = (
             'order_id',
             'order_invoice_no',
-            'order_attachment_file_path',
+            'attachment_file_path',
         )

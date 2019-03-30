@@ -96,13 +96,13 @@
                                             <tr>
                                                 <td width="30px;"><i class="icon icon-file"></i></td>
                                                 <td>
-                                                    <a href="{{ attachment.order_attachment_file_path.url }}"
-                                                       target="_blank">{{ attachment.order_attachment_file_name }}</a>
+                                                    <a href="{{ attachment.attachment_file_path.url }}"
+                                                       target="_blank">{{ attachment.attachment_file_name }}</a>
                                                 </td>
-                                                <td width="80px;">{{ attachment.order_attachment_file_size|filesizeformat }}</td>
+                                                <td width="80px;">{{ attachment.attachment_file_size|filesizeformat }}</td>
                                                 <td width="30px;">
                                                     <a download
-                                                       href="{{ attachment.order_attachment_file_path.url }}"
+                                                       href="{{ attachment.attachment_file_path.url }}"
                                                        style="text-decoration: none;">
                                                         <i class="icon icon-download text-success"></i>
                                                     </a>

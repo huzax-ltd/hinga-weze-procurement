@@ -217,9 +217,9 @@
                                                 Business Reg. License / ID for Individual
                                                 <b style="color: red;">*</b>
                                             </label>
-                                            <input id="id_order_attachment_proposal_business_license_file_path"
+                                            <input id="id_attachment_proposal_business_license_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-business-license", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
@@ -229,21 +229,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment1 == '' %}
+                                                        {% if attachment1 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment1.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment1.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment1.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment1.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment1 == '' %}
+                                                        {% if attachment1 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment1.order_attachment_file_path.url }}"
+                                                               href="{{ attachment1.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -262,9 +262,9 @@
                                                 Submission Letter
                                                 <b style="color: red;">*</b>
                                             </label>
-                                            <input id="id_order_attachment_proposal_offer_letter_file_path"
+                                            <input id="id_attachment_proposal_offer_letter_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-offer-letter", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
@@ -274,21 +274,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment2 == '' %}
+                                                        {% if attachment2 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment2.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment2.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment2.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment2.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment2 == '' %}
+                                                        {% if attachment2 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment2.order_attachment_file_path.url }}"
+                                                               href="{{ attachment2.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -307,9 +307,9 @@
                                                 Proposal Quotation
                                                 <b style="color: red;">*</b>
                                             </label>
-                                            <input id="id_order_attachment_proposal_quotation_file_path"
+                                            <input id="id_attachment_proposal_quotation_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-quotation", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
@@ -319,21 +319,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment3 == '' %}
+                                                        {% if attachment3 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment3.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment3.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment3.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment3.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment3 == '' %}
+                                                        {% if attachment3 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment3.order_attachment_file_path.url }}"
+                                                               href="{{ attachment3.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -367,9 +367,9 @@
                                             <label class="custom-label">
                                                 TIN/VAT Reg. Document
                                             </label>
-                                            <input id="id_order_attachment_proposal_vat_registration_file_path"
+                                            <input id="id_attachment_proposal_vat_registration_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-vat-registration", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}"}'>
@@ -379,21 +379,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment4 == '' %}
+                                                        {% if attachment4 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment4.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment4.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment4.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment4.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment4 == '' %}
+                                                        {% if attachment4 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment4.order_attachment_file_path.url }}"
+                                                               href="{{ attachment4.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -411,9 +411,9 @@
                                             <label class="custom-label">
                                                 Other Document
                                             </label>
-                                            <input id="id_order_attachment_proposal_other_document1_file_path"
+                                            <input id="id_attachment_proposal_other_document1_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-other-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "1"}'>
@@ -423,21 +423,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment5 == '' %}
+                                                        {% if attachment5 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment5.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment5.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment5.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment5.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment5 == '' %}
+                                                        {% if attachment5 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment5.order_attachment_file_path.url }}"
+                                                               href="{{ attachment5.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -455,9 +455,9 @@
                                             <label class="custom-label">
                                                 Other Document
                                             </label>
-                                            <input id="id_order_attachment_proposal_other_document2_file_path"
+                                            <input id="id_attachment_proposal_other_document2_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-other-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "1"}'>
@@ -467,21 +467,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment6 == '' %}
+                                                        {% if attachment6 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment6.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment6.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment6.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment6.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment6 == '' %}
+                                                        {% if attachment6 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment6.order_attachment_file_path.url }}"
+                                                               href="{{ attachment6.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -559,9 +559,9 @@
                                             <label class="custom-label">
                                                 Reference Document
                                             </label>
-                                            <input id="id_order_attachment_proposal_reference1_document_file_path"
+                                            <input id="id_attachment_proposal_reference1_document_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-reference-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "1"}'>
@@ -571,21 +571,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment7 == '' %}
+                                                        {% if attachment7 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment7.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment7.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment7.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment7.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment7 == '' %}
+                                                        {% if attachment7 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment7.order_attachment_file_path.url }}"
+                                                               href="{{ attachment7.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -647,9 +647,9 @@
                                             <label class="custom-label">
                                                 Reference Document
                                             </label>
-                                            <input id="id_order_attachment_proposal_reference2_document_file_path"
+                                            <input id="id_attachment_proposal_reference2_document_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-reference-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "2"'>
@@ -659,21 +659,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment8 == '' %}
+                                                        {% if attachment8 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment8.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment8.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment8.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment8.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment8 == '' %}
+                                                        {% if attachment8 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment8.order_attachment_file_path.url }}"
+                                                               href="{{ attachment8.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
@@ -735,9 +735,9 @@
                                             <label class="custom-label">
                                                 Reference Document
                                             </label>
-                                            <input id="id_order_attachment_proposal_reference3_document_file_path"
+                                            <input id="id_attachment_proposal_reference3_document_file_path"
                                                    type="file"
-                                                   name="order_attachment_file_path"
+                                                   name="attachment_file_path"
                                                    style="display: none;"
                                                    data-url="{% url 'orders_upload_attachments_external' %}"
                                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "action": "upload-order-proposal-reference-document", "id": "{{ model.orders_order_id }}", "code": "{{ model.order_proposal_code }}", "number": "3"'>
@@ -747,21 +747,21 @@
                                                     <td width="30px;"><i class="icon icon-file"></i>
                                                     </td>
                                                     <td>
-                                                        {% if order_attachment9 == '' %}
+                                                        {% if attachment9 == '' %}
                                                             <a href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ order_attachment9.order_attachment_file_path.url }}"
-                                                               target="_blank">{{ order_attachment9.order_attachment_file_name }}</a>
+                                                            <a href="{{ attachment9.attachment_file_path.url }}"
+                                                               target="_blank">{{ attachment9.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
                                                     <td width="30px;">
-                                                        {% if order_attachment9 == '' %}
+                                                        {% if attachment9 == '' %}
                                                             <a download href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
-                                                               href="{{ order_attachment9.order_attachment_file_path.url }}"
+                                                               href="{{ attachment9.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>

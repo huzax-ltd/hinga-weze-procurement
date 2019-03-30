@@ -1341,71 +1341,6 @@ class Order_Approvals(models.Model):
 
 # Create your models here.
 # noinspection PyUnresolvedReferences
-class Order_Attachments(models.Model):
-    TITLE = settings.MODEL_ORDER_APPROVALS_PLURAL_TITLE
-    SINGULAR_TITLE = settings.MODEL_ORDER_APPROVALS_SINGULAR_TITLE
-    NAME = "-".join((TITLE.lower()).split())
-
-    UPLOAD_PATH = 'orders/'
-
-    TYPE_NONE = 'none'
-    TYPE_ORDER_EMAIL = 'order-email'
-    TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE = 'order-proposal-business-license'
-    TYPE_ORDER_PROPOSAL_OFFER_LETTER = 'order-proposal-offer-letter'
-    TYPE_ORDER_PROPOSAL_QUOTATION = 'order-proposal-quotation'
-    TYPE_ORDER_PROPOSAL_VAT_REGISTRATION = 'order-proposal-vat-registration'
-    TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT = 'order-proposal-other-document'
-    TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT = 'order-proposal-reference-document'
-    TYPE_ORDER_PURCHASE = 'order-purchase'
-    TYPE_ORDER_INVOICE = 'order-invoice'
-
-    ARRAY_TYPES = [
-        (TYPE_NONE.title()).replace('-', ' '),
-        (TYPE_ORDER_EMAIL.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL_OFFER_LETTER.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL_QUOTATION.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT.title()).replace('-', ' '),
-        (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' '),
-        (TYPE_ORDER_PURCHASE.title()).replace('-', ' '),
-        (TYPE_ORDER_INVOICE.title()).replace('-', ' '),
-    ]
-    TYPES = (
-        ('', '--select--'),
-        (TYPE_ORDER_EMAIL, (TYPE_ORDER_EMAIL.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE, (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL_OFFER_LETTER, (TYPE_ORDER_PROPOSAL_OFFER_LETTER.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL_QUOTATION, (TYPE_ORDER_PROPOSAL_QUOTATION.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION, (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT, (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT.title()).replace('-', ' ')),
-        (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT, (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' ')),
-        (TYPE_ORDER_PURCHASE, (TYPE_ORDER_PURCHASE.title()).replace('-', ' ')),
-        (TYPE_ORDER_INVOICE, (TYPE_ORDER_INVOICE.title()).replace('-', ' ')),
-    )
-
-    order_attachment_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
-    orders_order_id = models.IntegerField('Order Id', blank=False)
-    order_attachment_type = models.CharField('Type', max_length=255, blank=False, choices=TYPES, default=TYPE_NONE)
-    order_attachment_type_id = models.IntegerField('Type Id', blank=False, default=0)
-    order_attachment_file_id = models.IntegerField('File Id', blank=False, default=0)
-    order_attachment_file_name = models.CharField('File Name', max_length=255, blank=True)
-    order_attachment_file_path = models.FileField('File Path', upload_to=UPLOAD_PATH)
-    order_attachment_file_size = models.CharField('File Size', max_length=255, blank=True)
-    order_attachment_file_type = models.CharField('File Type', max_length=255, blank=True)
-    order_attachment_file_uploaded_at = models.DateTimeField('Uploaded At',
-                                                             default=settings.APP_CONSTANT_DEFAULT_DATETIME)
-    order_attachment_file_uploaded_id = models.CharField('Uploaded ID', max_length=100, blank=True)
-    order_attachment_file_uploaded_by = models.CharField('Uploaded By', max_length=100, blank=True)
-    order_attachment_file_uploaded_department = models.CharField('Uploaded Department', max_length=255, blank=True)
-    order_attachment_file_uploaded_role = models.CharField('Uploaded Role', max_length=255, blank=True)
-
-    def __unicode__(self):
-        return self.order_attachment_id
-
-
-# Create your models here.
-# noinspection PyUnresolvedReferences
 class Order_Payments(models.Model):
     TITLE = settings.MODEL_ORDER_PAYMENTS_PLURAL_TITLE
     SINGULAR_TITLE = settings.MODEL_ORDER_PAYMENTS_SINGULAR_TITLE
@@ -1956,11 +1891,13 @@ class Emails(models.Model):
 # Create your models here.
 # noinspection PyUnresolvedReferences
 class Attachments(models.Model):
-    UPLOAD_PATH = 'attachments/'
+    UPLOAD_PATH = 'unknown/'
+    EMAILS_UPLOAD_PATH = 'emails/'
+    ORDERS_UPLOAD_PATH = 'orders/'
 
     MODEL_NONE = 'none'
-    MODEL_EMAILS = 'email'
-    MODEL_ORDERS = 'order'
+    MODEL_EMAILS = 'emails'
+    MODEL_ORDERS = 'orders'
 
     ARRAY_MODELS = [
         (MODEL_NONE.title()).replace('-', ' '),
@@ -1977,17 +1914,44 @@ class Attachments(models.Model):
     TYPE_NONE = 'none'
     TYPE_EMAIL = 'email'
     TYPE_ORDER = 'order'
+    TYPE_ORDER_EMAIL = 'order-email'
+    TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE = 'order-proposal-business-license'
+    TYPE_ORDER_PROPOSAL_OFFER_LETTER = 'order-proposal-offer-letter'
+    TYPE_ORDER_PROPOSAL_QUOTATION = 'order-proposal-quotation'
+    TYPE_ORDER_PROPOSAL_VAT_REGISTRATION = 'order-proposal-vat-registration'
+    TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT = 'order-proposal-other-document'
+    TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT = 'order-proposal-reference-document'
+    TYPE_ORDER_PURCHASE = 'order-purchase'
+    TYPE_ORDER_INVOICE = 'order-invoice'
 
     ARRAY_TYPES = [
         (TYPE_NONE.title()).replace('-', ' '),
         (TYPE_EMAIL.title()).replace('-', ' '),
         (TYPE_ORDER.title()).replace('-', ' '),
+        (TYPE_ORDER_EMAIL.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_OFFER_LETTER.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_QUOTATION.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT.title()).replace('-', ' '),
+        (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' '),
+        (TYPE_ORDER_PURCHASE.title()).replace('-', ' '),
+        (TYPE_ORDER_INVOICE.title()).replace('-', ' '),
     ]
     TYPES = (
         ('', '--select--'),
         (TYPE_NONE, (TYPE_NONE.title()).replace('-', ' ')),
         (TYPE_EMAIL, (TYPE_EMAIL.title()).replace('-', ' ')),
         (TYPE_ORDER, (TYPE_ORDER.title()).replace('-', ' ')),
+        (TYPE_ORDER_EMAIL, (TYPE_ORDER_EMAIL.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE, (TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_OFFER_LETTER, (TYPE_ORDER_PROPOSAL_OFFER_LETTER.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_QUOTATION, (TYPE_ORDER_PROPOSAL_QUOTATION.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION, (TYPE_ORDER_PROPOSAL_VAT_REGISTRATION.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT, (TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT.title()).replace('-', ' ')),
+        (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT, (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' ')),
+        (TYPE_ORDER_PURCHASE, (TYPE_ORDER_PURCHASE.title()).replace('-', ' ')),
+        (TYPE_ORDER_INVOICE, (TYPE_ORDER_INVOICE.title()).replace('-', ' ')),
     )
 
     attachment_id = models.AutoField('Id', primary_key=True)
