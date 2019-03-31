@@ -492,7 +492,7 @@
 
             {% if section == BACKEND_SECTION_MEL_DEPARTMENT %}
                 <li class="nav-item">
-                    <a class="nav-link ripple active" href="{% url 'operators_index' %}">
+                    <a class="nav-link ripple active" href="#">
 
                         <i class="icon s-4 icon-radar"></i>
 
@@ -501,7 +501,7 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link ripple" href="{% url 'operators_index' %}">
+                    <a class="nav-link ripple" href="#">
 
                         <i class="icon s-4 icon-radar"></i>
 
@@ -512,7 +512,7 @@
 
             {% if section == BACKEND_SECTION_GRANT_MANAGEMENT %}
                 <li class="nav-item">
-                    <a class="nav-link ripple active" href="{% url 'operators_index' %}">
+                    <a class="nav-link ripple active" href="#">
 
                         <i class="icon s-4 icon-cash-multiple"></i>
 
@@ -521,7 +521,7 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link ripple" href="{% url 'operators_index' %}">
+                    <a class="nav-link ripple" href="#">
 
                         <i class="icon s-4 icon-cash-multiple"></i>
 
@@ -567,7 +567,7 @@
                 {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_HRM_NEW_REQUEST %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'orders_create' %}">
+                            <a class="nav-link ripple  active" href="#">
 
                                 <i class="icon s-4 icon-plus-box"></i>
 
@@ -576,7 +576,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+                            <a class="nav-link ripple" href="#">
 
                                 <i class="icon s-4 icon-plus-box"></i>
 
@@ -589,7 +589,7 @@
                 {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_HRM_MY_REQUESTS %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple  active" href="#">
 
                                 <i class="icon s-4 icon-account-check"></i>
 
@@ -598,7 +598,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple" href="#">
 
                                 <i class="icon s-4 icon-account-check"></i>
 
@@ -611,7 +611,7 @@
                 {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_HRM_ALL_REQUESTS %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple  active" href="#">
 
                                 <i class="icon s-4 icon-check-all"></i>
 
@@ -620,7 +620,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple" href="#">
 
                                 <i class="icon s-4 icon-check-all"></i>
 

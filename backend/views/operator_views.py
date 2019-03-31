@@ -242,10 +242,18 @@ def signin(request):
                                                 failed_login_status=False).update(failed_login_status=True)
 
                     redirect_field_name = Operators.get_redirect_field_name(request)
+                    auth_permissions = Operators.get_auth_permissions(model)
                     if redirect_field_name is None:
-                        return redirect(reverse("operators_dashboard"))
+                        if settings.ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values():
+                            return redirect(reverse("operators_dashboard"))
+                        else:
+                            return redirect(reverse("operators_view", args=[model.operator_id]))
                     else:
-                        return redirect(redirect_field_name)
+                        # return redirect(redirect_field_name)
+                        if settings.ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values():
+                            return redirect(reverse("operators_dashboard"))
+                        else:
+                            return redirect(reverse("operators_view", args=[model.operator_id]))
 
                 else:
                     Failed_Login.add(form.cleaned_data['email'], form.cleaned_data['password'],
