@@ -28,7 +28,7 @@ SECRET_KEY = 'usv1c&3$zu#6y0$s@*3c(c-+hc3afa2c#cn!o9qvzf(+0#!jcx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-IS_LOCAL = True
+IS_LOCAL = False
 
 if IS_LOCAL:
     ALLOWED_HOSTS = ['*']
@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # Bootstrap Modals
     'bootstrap_modal_forms',
-    # rest apis
+    # rest apis - djangorestframework
     'rest_framework',
     'rest_framework.authtoken',
     # attachments
