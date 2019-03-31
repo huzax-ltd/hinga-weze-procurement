@@ -480,11 +480,59 @@ def create(request):
                     model.order_proposal_requested_department = ''
                     model.order_proposal_requested_role = ''
 
+                    model.order_proposal_selected_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_proposal_selected_id = ''
+                    model.order_proposal_selected_by = ''
+                    model.order_proposal_selected_department = ''
+                    model.order_proposal_selected_role = ''
+
                     model.order_purchase_generated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_purchase_generated_id = ''
                     model.order_purchase_generated_by = ''
                     model.order_purchase_generated_department = ''
                     model.order_purchase_generated_role = ''
+
+                    model.order_acknowledged_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_acknowledged_id = ''
+                    model.order_acknowledged_by = ''
+                    model.order_acknowledged_department = ''
+                    model.order_acknowledged_role = ''
+
+                    model.order_invoice_uploaded_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_invoice_uploaded_id = ''
+                    model.order_invoice_uploaded_by = ''
+                    model.order_invoice_uploaded_department = ''
+                    model.order_invoice_uploaded_role = ''
+
+                    model.order_invoice_reviewed_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_invoice_reviewed_id = ''
+                    model.order_invoice_reviewed_by = ''
+                    model.order_invoice_reviewed_department = ''
+                    model.order_invoice_reviewed_role = ''
+
+                    model.order_invoice_payment_voucher_uploaded_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_invoice_payment_voucher_uploaded_id = ''
+                    model.order_invoice_payment_voucher_uploaded_by = ''
+                    model.order_invoice_payment_voucher_uploaded_department = ''
+                    model.order_invoice_payment_voucher_uploaded_role = ''
+
+                    model.order_invoice_approval_updated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_invoice_approval_updated_id = ''
+                    model.order_invoice_approval_updated_by = ''
+                    model.order_invoice_approval_updated_department = ''
+                    model.order_invoice_approval_updated_role = ''
+
+                    model.order_invoice_daf_approval_updated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_invoice_daf_approval_updated_id = ''
+                    model.order_invoice_daf_approval_updated_by = ''
+                    model.order_invoice_daf_approval_updated_department = ''
+                    model.order_invoice_daf_approval_updated_role = ''
+
+                    model.order_invoice_cop_approval_updated_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
+                    model.order_invoice_cop_approval_updated_id = ''
+                    model.order_invoice_cop_approval_updated_by = ''
+                    model.order_invoice_cop_approval_updated_department = ''
+                    model.order_invoice_cop_approval_updated_role = ''
 
                     model.order_paid_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                     model.order_paid_id = ''

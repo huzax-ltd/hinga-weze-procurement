@@ -537,10 +537,18 @@ class Orders(models.Model):
     STATUS_PURCHASE_GENERATED = 'purchase-generated'
     STATUS_ACKNOWLEDGED = 'acknowledged'
     STATUS_RECEIVED = 'received'
+    STATUS_INVOICE_UPLOADED = 'invoice-uploaded'
+    STATUS_INVOICE_REVIEWED = 'invoice-reviewed'
+    STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED = 'invoice-payment-voucher-generated'
+    STATUS_INVOICE_APPROVED = 'invoice-approved'
+    STATUS_INVOICE_REJECTED = 'invoice-rejected'
+    STATUS_INVOICE_DAF_APPROVED = 'invoice-daf-approved'
+    STATUS_INVOICE_DAF_REJECTED = 'invoice-daf-rejected'
+    STATUS_INVOICE_COP_APPROVED = 'invoice-cop-approved'
+    STATUS_INVOICE_COP_REJECTED = 'invoice-cop-rejected'
     STATUS_PAID = 'paid'
     STATUS_CLOSED = 'closed'
     STATUS_CANCELLED = 'cancelled'
-
     STATUS_IN_PROGRESS = 'in-progress'
     STATUS_COMPLETED = 'completed'
 
@@ -571,6 +579,15 @@ class Orders(models.Model):
         (STATUS_PURCHASE_GENERATED.title()).replace('-', ' '),
         (STATUS_ACKNOWLEDGED.title()).replace('-', ' '),
         (STATUS_RECEIVED.title()).replace('-', ' '),
+        (STATUS_INVOICE_UPLOADED.title()).replace('-', ' '),
+        (STATUS_INVOICE_REVIEWED.title()).replace('-', ' '),
+        (STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED.title()).replace('-', ' '),
+        (STATUS_INVOICE_APPROVED.title()).replace('-', ' '),
+        (STATUS_INVOICE_REJECTED.title()).replace('-', ' '),
+        (STATUS_INVOICE_DAF_APPROVED.title()).replace('-', ' '),
+        (STATUS_INVOICE_DAF_REJECTED.title()).replace('-', ' '),
+        (STATUS_INVOICE_COP_APPROVED.title()).replace('-', ' '),
+        (STATUS_INVOICE_COP_REJECTED.title()).replace('-', ' '),
         (STATUS_PAID.title()).replace('-', ' '),
         (STATUS_CLOSED.title()).replace('-', ' '),
         (STATUS_CANCELLED.title()).replace('-', ' '),
@@ -613,6 +630,16 @@ class Orders(models.Model):
         (STATUS_PURCHASE_GENERATED, (STATUS_PURCHASE_GENERATED.title()).replace('-', ' ')),
         (STATUS_ACKNOWLEDGED, (STATUS_ACKNOWLEDGED.title()).replace('-', ' ')),
         (STATUS_RECEIVED, (STATUS_RECEIVED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_UPLOADED, (STATUS_INVOICE_UPLOADED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_REVIEWED, (STATUS_INVOICE_REVIEWED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED,
+         (STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_APPROVED, (STATUS_INVOICE_APPROVED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_REJECTED, (STATUS_INVOICE_REJECTED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_DAF_APPROVED, (STATUS_INVOICE_DAF_APPROVED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_DAF_REJECTED, (STATUS_INVOICE_DAF_REJECTED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_COP_APPROVED, (STATUS_INVOICE_COP_APPROVED.title()).replace('-', ' ')),
+        (STATUS_INVOICE_COP_REJECTED, (STATUS_INVOICE_COP_REJECTED.title()).replace('-', ' ')),
         (STATUS_PAID, (STATUS_PAID.title()).replace('-', ' ')),
         (STATUS_CLOSED, (STATUS_CLOSED.title()).replace('-', ' ')),
         (STATUS_CANCELLED, (STATUS_CANCELLED.title()).replace('-', ' ')),
@@ -750,6 +777,48 @@ class Orders(models.Model):
     order_acknowledged_department = models.CharField('Order Acknowledged Department', max_length=255,
                                                      blank=True)
     order_acknowledged_role = models.CharField('Order Acknowledged Role', max_length=255, blank=True)
+
+    order_invoice_uploaded_at = models.DateTimeField('Uploaded At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_invoice_uploaded_id = models.CharField('Uploaded ID', max_length=100, blank=True)
+    order_invoice_uploaded_by = models.CharField('Uploaded By', max_length=100, blank=True)
+    order_invoice_uploaded_department = models.CharField('Uploaded Department', max_length=255, blank=True)
+    order_invoice_uploaded_role = models.CharField('Uploaded Role', max_length=255, blank=True)
+
+    order_invoice_reviewed_at = models.DateTimeField('Reviewed At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_invoice_reviewed_id = models.CharField('Reviewed ID', max_length=100, blank=True)
+    order_invoice_reviewed_by = models.CharField('Reviewed By', max_length=100, blank=True)
+    order_invoice_reviewed_department = models.CharField('Reviewed Department', max_length=255, blank=True)
+    order_invoice_reviewed_role = models.CharField('Reviewed Role', max_length=255, blank=True)
+
+    order_invoice_payment_voucher_uploaded_at = models.DateTimeField('Uploaded At',
+                                                                     default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_invoice_payment_voucher_uploaded_id = models.CharField('Uploaded ID', max_length=100, blank=True)
+    order_invoice_payment_voucher_uploaded_by = models.CharField('Uploaded By', max_length=100, blank=True)
+    order_invoice_payment_voucher_uploaded_department = models.CharField('Uploaded Department', max_length=255,
+                                                                         blank=True)
+    order_invoice_payment_voucher_uploaded_role = models.CharField('Uploaded Role', max_length=255, blank=True)
+
+    order_invoice_approval_updated_at = models.DateTimeField('Approved At',
+                                                             default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_invoice_approval_updated_id = models.CharField('Approved ID', max_length=100, blank=True)
+    order_invoice_approval_updated_by = models.CharField('Approved By', max_length=100, blank=True)
+    order_invoice_approval_updated_department = models.CharField('Approved Department', max_length=255, blank=True)
+    order_invoice_approval_updated_role = models.CharField('Approved Role', max_length=255, blank=True)
+
+    order_invoice_daf_approval_updated_at = models.DateTimeField('Approved At',
+                                                                 default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_invoice_daf_approval_updated_id = models.CharField('Approved ID', max_length=100, blank=True)
+    order_invoice_daf_approval_updated_by = models.CharField('Approved By', max_length=100, blank=True)
+    order_invoice_daf_approval_updated_department = models.CharField('Approved Department', max_length=255, blank=True)
+    order_invoice_daf_approval_updated_role = models.CharField('Approved Role', max_length=255, blank=True)
+
+    order_invoice_cop_approval_updated_at = models.DateTimeField('Approved At',
+                                                                 default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    order_invoice_cop_approval_updated_id = models.CharField('Approved ID', max_length=100, blank=True)
+    order_invoice_cop_approval_updated_by = models.CharField('Approved By', max_length=100, blank=True)
+    order_invoice_cop_approval_updated_department = models.CharField('Approved Department', max_length=255, blank=True)
+    order_invoice_cop_approval_updated_role = models.CharField('Approved Role', max_length=255, blank=True)
+
     order_paid_at = models.DateTimeField('Paid At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_paid_id = models.CharField('Paid ID', max_length=100, blank=True)
     order_paid_by = models.CharField('Paid By', max_length=100, blank=True)
