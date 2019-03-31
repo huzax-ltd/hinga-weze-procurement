@@ -669,6 +669,7 @@ class OrderAssignmentForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFor
             ('', '--select--'),
             (Operators.ROLE_PROCUREMENT_OFFICER, Operators.ROLE_PROCUREMENT_OFFICER),
             (Operators.ROLE_HR_MANAGER, Operators.ROLE_HR_MANAGER),
+            (Operators.ROLE_RECEPTIONIST, Operators.ROLE_RECEPTIONIST),
             (Operators.ROLE_STOCK_ADMIN, Operators.ROLE_STOCK_ADMIN),
             (Operators.ROLE_ACCOUNTANT_MANAGER, Operators.ROLE_ACCOUNTANT_MANAGER),
             (Operators.ROLE_ACCOUNTANT_OFFICER, Operators.ROLE_ACCOUNTANT_OFFICER),

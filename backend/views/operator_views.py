@@ -77,7 +77,8 @@ def signup(request):
                 domain = settings.BACKEND_DOMAIN_LOCAL
             else:
                 domain = settings.BACKEND_DOMAIN_PROD
-            contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+            # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+            contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
             confirm_url = '{domain}/{path}'.format(
                 domain=domain,
                 path='operators/signup/confirm/' + model.operator_auth_key
@@ -564,6 +565,7 @@ def api_dropdown_roles(request, department):
                 roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
                 roles += "<option value='" + Operators.ROLE_PROCUREMENT_OFFICER + "'>" + Operators.ROLE_PROCUREMENT_OFFICER + "</option>"
                 roles += "<option value='" + Operators.ROLE_HR_MANAGER + "'>" + Operators.ROLE_HR_MANAGER + "</option>"
+                roles += "<option value='" + Operators.ROLE_RECEPTIONIST + "'>" + Operators.ROLE_RECEPTIONIST + "</option>"
                 roles += "<option value='" + Operators.ROLE_STOCK_ADMIN + "'>" + Operators.ROLE_STOCK_ADMIN + "</option>"
                 roles += "<option value='" + Operators.ROLE_ACCOUNTANT_MANAGER + "'>" + Operators.ROLE_ACCOUNTANT_MANAGER + "</option>"
                 roles += "<option value='" + Operators.ROLE_ACCOUNTANT_OFFICER + "'>" + Operators.ROLE_ACCOUNTANT_OFFICER + "</option>"
@@ -625,6 +627,8 @@ def api_dropdown_parent_operators(request, role):
             if role == Operators.ROLE_PROCUREMENT_OFFICER:
                 parent_operators += "<option value=''>--select--</option>"
             if role == Operators.ROLE_HR_MANAGER:
+                parent_operators += "<option value=''>--select--</option>"
+            if role == Operators.ROLE_RECEPTIONIST:
                 parent_operators += "<option value=''>--select--</option>"
             if role == Operators.ROLE_STOCK_ADMIN:
                 parent_operators += "<option value=''>--select--</option>"

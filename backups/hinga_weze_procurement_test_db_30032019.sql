@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2019 at 09:05 PM
+-- Generation Time: Mar 31, 2019 at 12:30 AM
 -- Server version: 5.6.37
 -- PHP Version: 7.1.8
 
@@ -81,7 +81,20 @@ CREATE TABLE IF NOT EXISTS `app_attachments` (
   `attachment_file_uploaded_by` varchar(100) NOT NULL,
   `attachment_file_uploaded_department` varchar(255) NOT NULL,
   `attachment_file_uploaded_role` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_attachments`
+--
+
+INSERT INTO `app_attachments` (`attachment_id`, `attachment_model`, `attachment_model_id`, `attachment_type`, `attachment_type_id`, `attachment_number`, `attachment_file_name`, `attachment_file_path`, `attachment_file_size`, `attachment_file_type`, `attachment_file_uploaded_at`, `attachment_file_uploaded_id`, `attachment_file_uploaded_by`, `attachment_file_uploaded_department`, `attachment_file_uploaded_role`) VALUES
+(1, 'orders', 1, 'order-email', 0, 0, 'Hinga_Weze_Process_Diagram.pdf', 'orders/order_email_69550384_1553984565798.pdf', '307873', 'application/pdf', '2019-03-30 22:22:45.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer'),
+(2, 'emails', 1, 'emails', 1, 1, 'Hinga_Weze_Process_Diagram.pdf', 'orders/order_email_69550384_1553984565798.pdf', '307873', 'application/pdf', '2019-03-30 22:27:23.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer'),
+(7, 'orders', 1, 'order-proposal-business-license', 14456092, 0, 'logo.png', 'orders/order_proposal_business_license_69550384_1553985902867.png', '8389', 'image/png', '2019-03-30 22:45:02.000000', '', '', '', ''),
+(8, 'orders', 1, 'order-proposal-offer-letter', 14456092, 0, 'logo.png', 'orders/order_proposal_offer_letter_69550384_1553985909842.png', '8389', 'image/png', '2019-03-30 22:45:09.000000', '', '', '', ''),
+(9, 'orders', 1, 'order-proposal-quotation', 14456092, 0, 'logo.png', 'orders/order_proposal_quotation_69550384_1553985915538.png', '8389', 'image/png', '2019-03-30 22:45:15.000000', '', '', '', ''),
+(10, 'orders', 1, 'order-proposal-reference-document', 14456092, 1, 'logo.png', 'orders/order_proposal_reference_document_69550384_1553985922276.png', '8389', 'image/png', '2019-03-30 22:45:22.000000', '', '', '', ''),
+(11, 'orders', 1, 'order-purchase', 0, 0, 'logo.png', 'orders/order_purchase_69550384_1553986494419.png', '8389', 'image/png', '2019-03-30 22:54:54.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer');
 
 -- --------------------------------------------------------
 
@@ -110,7 +123,14 @@ CREATE TABLE IF NOT EXISTS `app_emails` (
   `email_sent_at` datetime(6) NOT NULL,
   `email_delivered_at` datetime(6) NOT NULL,
   `email_status` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_emails`
+--
+
+INSERT INTO `app_emails` (`email_id`, `email_from`, `email_from_name`, `email_to`, `email_cc`, `email_subject`, `email_message`, `email_created_at`, `email_created_id`, `email_created_by`, `email_created_department`, `email_created_role`, `email_updated_at`, `email_updated_id`, `email_updated_by`, `email_updated_department`, `email_updated_role`, `email_sent_at`, `email_delivered_at`, `email_status`) VALUES
+(1, 'support@techcible.com', 'Cultivating New Frontiers in Agriculture', 'nyalapellinavin@gmail.com', '', 'Request for proposal', '<p>Dear vendors,</p>\r\n<p>Please submit your proposals within one week.</p>\r\n<p>Link to submit your proposals:&nbsp;<a title="Submit your proposal" href="../../../../order-proposals/create/1/0/" target="_blank" rel="noopener">Submit your proposal</a></p>\r\n<p>&nbsp;</p>\r\n<p>Thank you.</p>\r\n<p>Cultivating New Frontiers in Agriculture (CNFA)</p>', '2019-03-30 22:27:23.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer', '2019-03-30 22:27:23.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer', '2019-03-30 22:27:35.000000', '2019-03-30 22:27:35.000000', 'delivered');
 
 -- --------------------------------------------------------
 
@@ -126,7 +146,14 @@ CREATE TABLE IF NOT EXISTS `app_failed_login` (
   `failed_login_ip_address` varchar(100) NOT NULL,
   `failed_login_attempted_at` datetime(6) NOT NULL,
   `failed_login_status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_failed_login`
+--
+
+INSERT INTO `app_failed_login` (`failed_login_id`, `failed_login_username`, `failed_login_password`, `failed_login_from`, `failed_login_ip_address`, `failed_login_attempted_at`, `failed_login_status`) VALUES
+(1, 'opm@cnfa.com', 'Kigali2123', 'backend', '127.0.0.1', '2019-03-30 22:21:15.000000', 1);
 
 -- --------------------------------------------------------
 
@@ -149,7 +176,14 @@ CREATE TABLE IF NOT EXISTS `app_inventory` (
   `inventory_updated_by` varchar(100) NOT NULL,
   `inventory_updated_department` varchar(255) NOT NULL,
   `inventory_updated_role` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_inventory`
+--
+
+INSERT INTO `app_inventory` (`inventory_id`, `inventory_order_purchase_no`, `inventory_order_proposal_id`, `inventory_order_proposal_supplier_title`, `inventory_created_at`, `inventory_created_id`, `inventory_created_by`, `inventory_created_department`, `inventory_created_role`, `inventory_updated_at`, `inventory_updated_id`, `inventory_updated_by`, `inventory_updated_department`, `inventory_updated_role`) VALUES
+(1, 'PO - 123456', '1', 'Navin Nyalapelli', '2019-03-30 22:57:42.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 22:57:42.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin');
 
 -- --------------------------------------------------------
 
@@ -197,7 +231,15 @@ CREATE TABLE IF NOT EXISTS `app_inventory_items` (
   `inventory_item_updated_by` varchar(100) NOT NULL,
   `inventory_item_updated_department` varchar(255) NOT NULL,
   `inventory_item_updated_role` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_inventory_items`
+--
+
+INSERT INTO `app_inventory_items` (`inventory_item_id`, `inventory_inventory_id`, `products_product_id`, `inventory_item_product_type`, `inventory_item_product_code`, `inventory_item_product_tag`, `inventory_item_product_category`, `inventory_item_product_title`, `inventory_item_product_sub_title`, `inventory_item_product_quantity_initial`, `inventory_item_product_quantity_ordered`, `inventory_item_product_quantity_balance`, `inventory_item_product_quantity_unit`, `inventory_item_product_currency`, `inventory_item_product_unit_price`, `inventory_item_product_rate_price`, `inventory_item_product_usd_price`, `inventory_item_product_usaid_equipment_price`, `inventory_item_product_small_equipment_price`, `inventory_item_project`, `inventory_item_voucher_reference`, `inventory_item_location`, `inventory_item_equipment_holder_status`, `inventory_item_staff_name`, `inventory_item_room_number`, `inventory_item_present_condition`, `inventory_item_disposal_date`, `inventory_item_verified_date`, `inventory_item_remark`, `inventory_item_created_at`, `inventory_item_created_id`, `inventory_item_created_by`, `inventory_item_created_department`, `inventory_item_created_role`, `inventory_item_updated_at`, `inventory_item_updated_id`, `inventory_item_updated_by`, `inventory_item_updated_department`, `inventory_item_updated_role`) VALUES
+(1, 1, 1, 'asset', '50162978', 'HW001', 'Furniture', '3 Door filling cabinet', '', 0, 20, 20, '', 'RWF', 3000, 0, 0, 0, 0, 'Feed the Future Rwanda Hinga Weze', '', '', '', 'Navin Nyalapelli', '', 'good', '0001-01-01', '2019-04-01', 'good', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', ''),
+(2, 1, 2, 'asset', '59173245', 'HW002', 'Furniture', 'Round meeting table 150 cmx75cm/Glass Top', '', 0, 20, 20, '', 'RWF', 2000, 0, 0, 0, 0, 'Feed the Future Rwanda Hinga Weze', '', '', '', 'Navin Nyalapelli', '', 'good', '0001-01-01', '2019-04-01', 'good', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -219,7 +261,39 @@ CREATE TABLE IF NOT EXISTS `app_notifications` (
   `notification_read_at` datetime(6) NOT NULL,
   `notification_fixed_at` datetime(6) NOT NULL,
   `notification_status` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_notifications`
+--
+
+INSERT INTO `app_notifications` (`notification_id`, `notification_model_id`, `notification_model_type`, `notification_from_type`, `notification_from_id`, `notification_to_type`, `notification_to_id`, `notification_message`, `notification_url`, `notification_created_at`, `notification_read_at`, `notification_fixed_at`, `notification_status`) VALUES
+(1, 1, 'order', 'operator', 19, 'operator', 18, 'Created a purchase request to review.', '/backend/orders/view/1/', '2019-03-30 22:11:52.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(2, 1, 'order', 'operator', 18, 'operator', 19, 'Approved your purchase request at level 1.', '/backend/orders/view/1/', '2019-03-30 22:12:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(3, 1, 'order', 'operator', 18, 'operator', 17, 'Created a purchase request to review.', '/backend/orders/view/1/', '2019-03-30 22:12:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(4, 1, 'order', 'operator', 18, 'operator', 19, 'Approved your purchase request at level 2.', '/backend/orders/view/1/', '2019-03-30 22:12:52.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(5, 1, 'order', 'operator', 17, 'operator', 18, 'Approved your purchase request at level 2.', '/backend/orders/view/1/', '2019-03-30 22:12:52.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(6, 1, 'order', 'operator', 17, 'operator', 7, 'Created a purchase request to review.', '/backend/orders/view/1/', '2019-03-30 22:12:52.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(7, 1, 'order', 'operator', 18, 'operator', 19, 'Approved your purchase request at level 3.', '/backend/orders/view/1/', '2019-03-30 22:13:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(8, 1, 'order', 'operator', 17, 'operator', 18, 'Approved your purchase request at level 3.', '/backend/orders/view/1/', '2019-03-30 22:13:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(9, 1, 'order', 'operator', 7, 'operator', 17, 'Approved your purchase request at level 3.', '/backend/orders/view/1/', '2019-03-30 22:13:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(10, 1, 'order', 'operator', 7, 'operator', 20, 'Created a purchase request to review.', '/backend/orders/view/1/', '2019-03-30 22:13:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(11, 1, 'order', 'operator', 20, 'operator', 10, 'Created a purchase request to review.', '/backend/orders/view/1/', '2019-03-30 22:19:28.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(12, 1, 'order', 'operator', 10, 'operator', 3, 'A purchase request has been sent for approval.', '/backend/orders/view/1/', '2019-03-30 22:20:12.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(13, 1, 'order', 'operator', 3, 'operator', 19, 'Your purchase order request has been approved by COP.', '/backend/orders/view/1/', '2019-03-30 22:20:51.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(14, 1, 'order', 'operator', 3, 'operator', 18, 'Your purchase order request has been approved by COP.', '/backend/orders/view/1/', '2019-03-30 22:20:51.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(15, 1, 'order', 'operator', 3, 'operator', 17, 'Your purchase order request has been approved by COP.', '/backend/orders/view/1/', '2019-03-30 22:20:51.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(16, 1, 'order', 'operator', 3, 'operator', 7, 'Your purchase order request has been approved by COP.', '/backend/orders/view/1/', '2019-03-30 22:20:51.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(17, 1, 'order', 'operator', 3, 'operator', 20, 'A purchase request has been sent by COP to process ahead.', '/backend/orders/view/1/', '2019-03-30 22:20:51.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(18, 1, 'order', 'operator', 20, 'operator', 21, 'Assigned a purchase request to process ahead.', '/backend/orders/view/1/', '2019-03-30 22:21:32.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(19, 1, 'order-proposal', 'supplier', 1, 'operator', 21, 'Submitted a proposal to evaluate.', '/backend/order-proposals/view/internal/1/', '2019-03-30 22:47:22.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(20, 1, 'order-proposal', 'operator', 21, 'operator', 3, 'Some vendors are selected to review.', '/backend/order-proposals/index/1/', '2019-03-30 22:48:42.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(21, 1, 'order-proposal', 'operator', 21, 'operator', 20, 'Some vendors are selected to review.', '/backend/order-proposals/index/1/', '2019-03-30 22:48:42.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(22, 1, 'order-proposal', 'supplier', 1, 'operator', 21, 'Acknowledged proposal to generate purchase order.', '/backend/order-proposals/view/internal/1/', '2019-03-30 22:49:39.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(23, 1, 'order', 'supplier', 1, 'operator', 21, 'Acknowledged purchase order.', '/backend/orders/view/1/', '2019-03-30 22:56:02.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(24, 1, 'product-request', 'operator', 24, 'operator', 24, 'A stock request has been sent for approval.', '/backend/product-requests/view/1/', '2019-03-30 23:02:29.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(25, 1, 'product-request', 'operator', 24, 'operator', 24, 'Your stock request has been reviewed.', '/backend/product-requests/view/1/', '2019-03-30 23:02:35.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread'),
+(26, 1, 'product-request', 'operator', 24, 'operator', 24, 'Your stock request has been approved.', '/backend/product-requests/view/1/', '2019-03-30 23:02:41.000000', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000', 'unread');
 
 -- --------------------------------------------------------
 
@@ -247,38 +321,39 @@ CREATE TABLE IF NOT EXISTS `app_operators` (
   `operator_updated_at` datetime(6) NOT NULL,
   `operator_updated_by` varchar(255) NOT NULL,
   `operator_status` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `app_operators`
 --
 
 INSERT INTO `app_operators` (`operator_id`, `operator_type`, `operator_department`, `operator_role`, `operator_parent_id`, `operator_username`, `operator_auth_key`, `operator_password_hash`, `operator_password_reset_token`, `operator_name`, `operator_gender`, `operator_contact_phone_number`, `operator_contact_email_id`, `operator_profile_photo_file_path`, `operator_created_at`, `operator_created_by`, `operator_updated_at`, `operator_updated_by`, `operator_status`) VALUES
-(1, 'super-admin', 'NONE', 'NONE', 0, 'support@huzax.com', 'xc48ITBOTVBu87185KUSK2TlKxKiLJiw', 'pbkdf2_sha256$120000$slxVGFEthWuq$AqS7ZymOOeSEof9mPJ2ITXXQvwkIdHIv5Ko2DvKN+Hw=', '', 'Tech Support', 'male', '250726875122', 'support@techcible.com', '', '2018-01-01 00:00:00.000000', 'support@techcible.com', '2019-03-30 21:02:11.000000', 'support@huzax.com', 'active'),
+(1, 'super-admin', 'NONE', 'NONE', 0, 'support@huzax.com', 'xc48ITBOTVBu87185KUSK2TlKxKiLJiw', 'pbkdf2_sha256$120000$slxVGFEthWuq$AqS7ZymOOeSEof9mPJ2ITXXQvwkIdHIv5Ko2DvKN+Hw=', '', 'Tech Support', 'male', '250726875122', 'support@techcible.com', '', '2018-01-01 00:00:00.000000', 'support@techcible.com', '2019-03-31 00:24:31.000000', 'support@huzax.com', 'active'),
 (2, 'admin', 'NONE', 'NONE', 0, 'admin@huzax.com', 'xc48ITBOTVBu87185KUSK2TlKxKiLJij', 'pbkdf2_sha256$120000$0AZewnnKGdCy$jqU6YkCayb2sJIL48xCDb5lf9bl8uvGEmskIPALXX0c=', '', 'Admin Support', 'male', '250726875122', 'support@techcible.com', '', '2018-01-01 00:00:00.000000', 'support@techcible.com', '2019-03-30 20:59:24.000000', 'support@huzax.com', 'inactive'),
-(3, 'admin', 'NONE', 'COP', 0, 'cop@cnfa.com', 'zfBKwMdmxoZAcJOIfXDcJF7v5jA0Bd1N', 'pbkdf2_sha256$120000$Eymsl3uiJOdI$mj0tiVMeqYQAaap3jMz3qCLXDae0I4SQ1DPQDMOHriU=', '', 'COP', 'male', '250726875122', 'cop@cnfa.com', '', '2019-03-16 07:57:21.000000', 'support@techcible.com', '2019-03-30 21:00:15.000000', 'support@huzax.com', 'inactive'),
+(3, 'admin', 'NONE', 'COP', 0, 'cop@cnfa.com', 'zfBKwMdmxoZAcJOIfXDcJF7v5jA0Bd1N', 'pbkdf2_sha256$120000$Eymsl3uiJOdI$mj0tiVMeqYQAaap3jMz3qCLXDae0I4SQ1DPQDMOHriU=', '', 'COP', 'male', '250726875122', 'cop@cnfa.com', '', '2019-03-16 07:57:21.000000', 'support@techcible.com', '2019-03-30 22:50:03.000000', 'cop@cnfa.com', 'inactive'),
 (5, 'other', 'DCOP', 'Adviser', 0, 'adviser1@cnfa.com', 'm2FBIi9jFgsotH4jL8gojAMj8FVD49mR', 'pbkdf2_sha256$120000$hiBmCt5ioxTd$oJwNv3s/4xPw6NDvFlrKa7NOSdz92d+ygw4cLWJt9k4=', '', 'Adviser', '', '', 'adviser1@cnfa.com', '', '2019-03-16 08:04:08.000000', 'support@techcible.com', '2019-03-30 20:59:32.000000', 'support@huzax.com', 'inactive'),
 (6, 'other', 'BFM', 'Adviser', 0, 'adviser2@cnfa.com', 'KBxQW7R5NQb2qHiTvLqMRYiLGHmu1Qfm', 'pbkdf2_sha256$120000$5sOWMyo0bcw2$7PAh4Jbis2l8sDwmOtj8HVx5/y3BICiK23XOkfL4h3s=', '', 'Adviser', '', '', 'adviser2@cnfa.com', '', '2019-03-16 08:05:00.000000', 'support@techcible.com', '2019-03-30 20:59:39.000000', 'support@huzax.com', 'inactive'),
-(7, 'other', 'DCOP', 'Director', 0, 'director1@cnfa.com', 'yXs4Zu4k1Vejuq6Ir9Qirk6GPt0fhy9H', 'pbkdf2_sha256$120000$zKG9xhAHvVuF$U8RTkaT07AkCbwn//KB0JqjN1i9r7wLjIygdWSMGr1s=', '', 'Director', '', '', 'director1@cnfa.com', '', '2019-03-16 08:05:58.000000', 'support@techcible.com', '2019-03-30 21:00:23.000000', 'support@huzax.com', 'inactive'),
+(7, 'other', 'DCOP', 'Director', 0, 'director1@cnfa.com', 'yXs4Zu4k1Vejuq6Ir9Qirk6GPt0fhy9H', 'pbkdf2_sha256$120000$zKG9xhAHvVuF$U8RTkaT07AkCbwn//KB0JqjN1i9r7wLjIygdWSMGr1s=', '', 'Director', '', '', 'director1@cnfa.com', '', '2019-03-16 08:05:58.000000', 'support@techcible.com', '2019-03-30 22:13:33.000000', 'director1@cnfa.com', 'inactive'),
 (8, 'other', 'BFM', 'Director', 0, 'director2@cnfa.com', '9TWyuEGtw5j7ncV4mKjuq6Qu8UF4dSHW', 'pbkdf2_sha256$120000$jGmwRUev0HMU$ou194WQR7+9urs9AlbS0rfHYRgKaMbRfysNs0ZI2oP8=', '', 'Director', '', '', 'director2@cnfa.com', '', '2019-03-16 08:06:39.000000', 'support@techcible.com', '2019-03-30 21:00:30.000000', 'support@huzax.com', 'inactive'),
 (9, 'other', 'NUTRITION', 'Director', 0, 'director3@cnfa.com', 'NQGsWXCzOwPfrCgKL72viC5WOl5P6zPR', 'pbkdf2_sha256$120000$N9cHTVgnGVob$OSCAR1jpAy7ZIK3vdFFhT/Xjv6po80DIsP4GgNTRBOs=', '', 'Director', '', '', 'director3@cnfa.com', '', '2019-03-16 08:07:19.000000', 'support@techcible.com', '2019-03-30 21:00:38.000000', 'support@huzax.com', 'inactive'),
-(10, 'other', 'DAF', 'Director', 0, 'director4@cnfa.com', 'IFw1OhUnpK4vC0oNZ1eLIJl90Sf7XTq5', 'pbkdf2_sha256$120000$bNioT9HzoclL$mHjy+C3GGtZIDIiXpy2O1Rhxkw0e7YVmrtsR/lD/olQ=', '', 'Director', '', '', 'director4@cnfa.com', '', '2019-03-16 08:12:24.000000', 'support@techcible.com', '2019-03-30 21:00:47.000000', 'support@huzax.com', 'inactive'),
+(10, 'other', 'DAF', 'Director', 0, 'director4@cnfa.com', 'IFw1OhUnpK4vC0oNZ1eLIJl90Sf7XTq5', 'pbkdf2_sha256$120000$bNioT9HzoclL$mHjy+C3GGtZIDIiXpy2O1Rhxkw0e7YVmrtsR/lD/olQ=', '', 'Director', '', '', 'director4@cnfa.com', '', '2019-03-16 08:12:24.000000', 'support@techcible.com', '2019-03-30 22:20:17.000000', 'director4@cnfa.com', 'inactive'),
 (11, 'other', 'MAE', 'Director', 0, 'director5@cnfa.com', 'YhzflTHiofZKw8h0KL8K1vaDW1y9bM0t', 'pbkdf2_sha256$120000$tnJXqsha0u4i$9Txi1Zv7f3JWTu/+jAFhpzuf6IFEQqtt6/AODJ2sJ50=', '', 'Director', '', '', 'director5@cnfa.com', '', '2019-03-16 08:13:44.000000', 'support@techcible.com', '2019-03-30 21:00:54.000000', 'support@huzax.com', 'inactive'),
 (12, 'other', 'GRANT-MANAGER', 'Director', 0, 'director6@cnfa.com', 'WGyenjMVldyjtY6IuduKgMic6Sv8uLHd', 'pbkdf2_sha256$120000$dDwenlddMmm3$8yjIaf4fEZcBSGMJxxl+UbN7h9eOBSIrrVuC4XY6q2g=', '', 'Director', '', '', 'director6@cnfa.com', '', '2019-03-16 08:14:51.000000', 'support@techcible.com', '2019-03-30 21:01:01.000000', 'support@huzax.com', 'inactive'),
 (13, 'other', 'NUTRITION', 'Adviser', 0, 'adviser3@cnfa.com', 'crqq8IEyuDmHPD3oVwTuGo3T65ceM4pg', 'pbkdf2_sha256$120000$Jbp41wC6dyn3$t/2qpFees4Q48zWPeCQV6QI/7YTJ0ibHPVexhNvjCL8=', '', 'Adviser', '', '', 'adviser3@cnfa.com', '', '2019-03-16 08:15:40.000000', 'support@techcible.com', '2019-03-30 20:59:47.000000', 'support@huzax.com', 'inactive'),
 (14, 'other', 'DAF', 'Adviser', 0, 'adviser4@cnfa.com', 'hUSqCUUgjNGyBBIDaP0o6A1l6mrN37Ip', 'pbkdf2_sha256$120000$J2NH4VXhJo4S$qgGPOMm2RILElmt3Xu5wmS60VjR3f5fsFS54/GHkKh4=', '', 'Adviser', '', '', 'adviser4@cnfa.com', '', '2019-03-16 08:16:26.000000', 'support@techcible.com', '2019-03-30 20:59:54.000000', 'support@huzax.com', 'inactive'),
 (15, 'other', 'MAE', 'Adviser', 0, 'adviser5@cnfa.com', '9tJk7cacK1akmXqhOEz4JTHAR45zfDVz', 'pbkdf2_sha256$120000$3TicMHgC7qhK$cm+d3HIdjlyfIRcrqvNiWosGxuBxKdT/SIWB0I26x7M=', '', 'Adviser', '', '', 'adviser5@cnfa.com', '', '2019-03-16 08:17:09.000000', 'support@techcible.com', '2019-03-30 21:00:01.000000', 'support@huzax.com', 'inactive'),
 (16, 'other', 'GRANT-MANAGER', 'Adviser', 0, 'adviser6@cnfa.com', 'i1NZqNTjmBOk7bQKGIBf6SEhaIT3Nh2p', 'pbkdf2_sha256$120000$XPY2v6TZ3Klp$gulavsu3OJwW1g/NnbMcsvWX/7ONtrtf6rDI1/bLfi4=', '', 'Adviser', '', '', 'adviser6@cnfa.com', '', '2019-03-16 08:17:59.000000', 'support@techcible.com', '2019-03-30 21:00:08.000000', 'support@huzax.com', 'inactive'),
-(17, 'other', 'DCOP', 'Regional Manager', 7, 'regionalmanager1@cnfa.com', 'fl84IgzQrCCgLZkbH8roEEKCGbTPVdrd', 'pbkdf2_sha256$120000$s5mFzxFEDDgf$CDmsswwmruURZ2+iv542Ka3O3sXR/90711Q1ZMzxNWA=', '', 'Regional Manager', '', '', 'regionalmanager1@cnfa.com', '', '2019-03-16 08:19:40.000000', 'support@techcible.com', '2019-03-30 21:01:49.000000', 'support@huzax.com', 'inactive'),
-(18, 'other', 'DCOP', 'District Manager', 17, 'districtmanager1@cnfa.com', 'WZMXduZfBvG5ESN5b7OTuqK1pRL0PW4Y', 'pbkdf2_sha256$120000$b3SROpuoCkRL$23rXmqtmwX+goy2XNf3tjIMZMhXiD3mKAiClunuZriE=', '', 'District Manager', '', '', 'districtmanager1@cnfa.com', '', '2019-03-16 08:32:00.000000', 'support@techcible.com', '2019-03-30 21:01:08.000000', 'support@huzax.com', 'inactive'),
-(19, 'other', 'DCOP', 'Field Officer', 18, 'fieldofficer1@cnfa.com', 'PUS4HCyX8xWAa7TECQCmpl1wgm5xNslI', 'pbkdf2_sha256$120000$iuJFIb6vPXZT$zGaoYk5X+P7Xp3hss6S5jG5XQXXlBlhgR22mctGgwNI=', '', 'Field Officer', '', '', 'fieldofficer1@cnfa.com', '', '2019-03-16 08:33:35.000000', 'support@techcible.com', '2019-03-30 21:01:16.000000', 'support@huzax.com', 'inactive'),
-(20, 'other', 'DAF', 'OPM', 0, 'opm@cnfa.com', '3DrkUbJ1eBynRQRT1mNEBxzXaMEgKDw5', 'pbkdf2_sha256$120000$TOAT1aTMLU4h$CTTi/TbdiAr7x/NfRYVdk0Ujeg2F/UskTgwn2bLBSFE=', '', 'OPM', '', '', 'opm@cnfa.com', '', '2019-03-16 08:36:57.000000', 'support@techcible.com', '2019-03-30 21:01:31.000000', 'support@huzax.com', 'inactive'),
-(21, 'other', 'DAF', 'Procurement Officer', 0, 'procurementofficer1@cnfa.com', 'GfQdxXaUMDorx5Wo27v8c75LYlWx11zr', 'pbkdf2_sha256$120000$pD0uidNxvO1u$4s4wmz0lye1rL71erk7xb92XJuoIWUuS7mZ+vq90sAY=', '', 'Procurement Officer', '', '', 'procurementofficer1@cnfa.com', '', '2019-03-16 08:37:59.000000', 'support@techcible.com', '2019-03-30 21:01:39.000000', 'support@huzax.com', 'inactive'),
+(17, 'other', 'DCOP', 'Regional Manager', 7, 'regionalmanager1@cnfa.com', 'fl84IgzQrCCgLZkbH8roEEKCGbTPVdrd', 'pbkdf2_sha256$120000$s5mFzxFEDDgf$CDmsswwmruURZ2+iv542Ka3O3sXR/90711Q1ZMzxNWA=', '', 'Regional Manager', '', '', 'regionalmanager1@cnfa.com', '', '2019-03-16 08:19:40.000000', 'support@techcible.com', '2019-03-30 22:12:58.000000', 'regionalmanager1@cnfa.com', 'inactive'),
+(18, 'other', 'DCOP', 'District Manager', 17, 'districtmanager1@cnfa.com', 'WZMXduZfBvG5ESN5b7OTuqK1pRL0PW4Y', 'pbkdf2_sha256$120000$b3SROpuoCkRL$23rXmqtmwX+goy2XNf3tjIMZMhXiD3mKAiClunuZriE=', '', 'District Manager', '', '', 'districtmanager1@cnfa.com', '', '2019-03-16 08:32:00.000000', 'support@techcible.com', '2019-03-30 22:12:32.000000', 'districtmanager1@cnfa.com', 'inactive'),
+(19, 'other', 'DCOP', 'Field Officer', 18, 'fieldofficer1@cnfa.com', 'PUS4HCyX8xWAa7TECQCmpl1wgm5xNslI', 'pbkdf2_sha256$120000$iuJFIb6vPXZT$zGaoYk5X+P7Xp3hss6S5jG5XQXXlBlhgR22mctGgwNI=', '', 'Field Officer', '', '', 'fieldofficer1@cnfa.com', '', '2019-03-16 08:33:35.000000', 'support@techcible.com', '2019-03-30 22:11:57.000000', 'fieldofficer1@cnfa.com', 'inactive'),
+(20, 'other', 'DAF', 'OPM', 0, 'opm@cnfa.com', '3DrkUbJ1eBynRQRT1mNEBxzXaMEgKDw5', 'pbkdf2_sha256$120000$TOAT1aTMLU4h$CTTi/TbdiAr7x/NfRYVdk0Ujeg2F/UskTgwn2bLBSFE=', '', 'OPM', '', '', 'opm@cnfa.com', '', '2019-03-16 08:36:57.000000', 'support@techcible.com', '2019-03-30 22:21:35.000000', 'opm@cnfa.com', 'inactive'),
+(21, 'other', 'DAF', 'Procurement Officer', 0, 'procurementofficer1@cnfa.com', 'GfQdxXaUMDorx5Wo27v8c75LYlWx11zr', 'pbkdf2_sha256$120000$pD0uidNxvO1u$4s4wmz0lye1rL71erk7xb92XJuoIWUuS7mZ+vq90sAY=', '', 'Procurement Officer', '', '', 'procurementofficer1@cnfa.com', '', '2019-03-16 08:37:59.000000', 'support@techcible.com', '2019-03-30 22:56:39.000000', 'procurementofficer1@cnfa.com', 'inactive'),
 (23, 'other', 'DAF', 'HR Manager', 0, 'hrmanager1@cnfa.com', 'dBMR8fCY6yug3I1rkz5ZpktOc48pz6RR', 'pbkdf2_sha256$120000$TMLiQbkkz5LN$2qcxT1idd+asvL2uujrnVsTOSoU3xEYxepdD9amOgdE=', '', 'HR Manager', '', '', 'hrmanager1@cnfa.com', '', '2019-03-16 08:39:32.000000', 'support@techcible.com', '2019-03-30 21:01:23.000000', 'support@huzax.com', 'inactive'),
-(24, 'other', 'DAF', 'Stock Admin', 0, 'stockadmin1@cnfa.com', 'ncwJxatJBg54mKl18sL0kgf7EsdubiHR', 'pbkdf2_sha256$120000$zkQcmUHnElCn$JCIOcawtp4zAk2YRVkGF0hfqlmKchPTvS3Jr8i7uSeE=', '', 'Stock Admin', '', '', 'stockadmin1@cnfa.com', '', '2019-03-16 08:40:30.000000', 'support@techcible.com', '2019-03-30 21:02:04.000000', 'support@huzax.com', 'active'),
+(24, 'other', 'DAF', 'Stock Admin', 0, 'stockadmin1@cnfa.com', 'ncwJxatJBg54mKl18sL0kgf7EsdubiHR', 'pbkdf2_sha256$120000$zkQcmUHnElCn$JCIOcawtp4zAk2YRVkGF0hfqlmKchPTvS3Jr8i7uSeE=', '', 'Stock Admin', '', '', 'stockadmin1@cnfa.com', '', '2019-03-16 08:40:30.000000', 'support@techcible.com', '2019-03-30 22:56:55.000000', 'stockadmin1@cnfa.com', 'active'),
 (25, 'other', 'DAF', 'Accountant Manager', 0, 'accountmanager1@cnfa.com', 'O1QK8kXYngR3RZlESI0IDet9sl6LzCYx', 'pbkdf2_sha256$120000$px6RvRkRb2wg$5NJKiiWIYEU4qCuZeOoStvQ/n639jN+W4oNCDwo1z44=', '', 'Account Manager', '', '', 'accountmanager1@cnfa.com', '', '2019-03-16 08:41:12.000000', 'support@techcible.com', '2019-03-30 20:58:57.000000', 'support@huzax.com', 'inactive'),
 (26, 'other', 'DAF', 'Accountant Officer', 25, 'accountofficer1@cnfa.com', 'CcgpIa40PPdlkLqZrzjxFcNAlClRqeuF', 'pbkdf2_sha256$120000$FW7zTpkCPKZF$DgWpE9Bx6NZEL8uLa03ec3o7AnA+84EI7z5r4OwttcY=', '', 'Account Officer', '', '', 'accountofficer1@cnfa.com', '', '2019-03-16 08:42:05.000000', 'support@techcible.com', '2019-03-30 20:59:04.000000', 'support@huzax.com', 'inactive'),
-(27, 'other', 'DAF', 'Accountant Officer', 25, 'accountofficer2@cnfa.com', '8TyWRDz6jRkEI4ig86twAMBEzOxx5ulh', 'pbkdf2_sha256$120000$teGe2geOciiR$w5U1LWqZQKwjGuRhs+s+JK9jeaEacRXzulnOcRpim7c=', '', 'Account Officer', '', '', 'accountofficer2@cnfa.com', '', '2019-03-16 08:45:28.000000', 'support@techcible.com', '2019-03-30 20:59:12.000000', 'support@huzax.com', 'inactive');
+(27, 'other', 'DAF', 'Accountant Officer', 25, 'accountofficer2@cnfa.com', '8TyWRDz6jRkEI4ig86twAMBEzOxx5ulh', 'pbkdf2_sha256$120000$teGe2geOciiR$w5U1LWqZQKwjGuRhs+s+JK9jeaEacRXzulnOcRpim7c=', '', 'Account Officer', '', '', 'accountofficer2@cnfa.com', '', '2019-03-16 08:45:28.000000', 'support@techcible.com', '2019-03-30 20:59:12.000000', 'support@huzax.com', 'inactive'),
+(28, 'other', 'DAF', 'Receptionist', 0, 'receptionist1@cnfa.com', 'q0wQd0IE85vOqvYYsjkogVnExcyfVhYp', 'pbkdf2_sha256$120000$rFHfw9Tf3CLW$WZVLYXXng7r8dDUmiSiidybySglt3twtJ9pGmLtz1FE=', '', 'Receptionist', '', '', 'receptionist1@cnfa.com', '', '2019-03-31 00:26:11.000000', 'support@huzax.com', '2019-03-31 00:28:06.000000', 'support@huzax.com', 'inactive');
 
 -- --------------------------------------------------------
 
@@ -292,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `app_operator_access_permissions` (
   `operator_access_permission_updated_by` varchar(255) NOT NULL,
   `access_permissions_access_permission_name_id` varchar(100) NOT NULL,
   `operators_operator_id_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=387 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `app_operator_access_permissions`
@@ -475,7 +550,12 @@ INSERT INTO `app_operator_access_permissions` (`operator_access_permission_id`, 
 (383, '2019-03-30 21:02:11.000000', 'support@huzax.com', 'inventory-create', 1),
 (384, '2019-03-30 21:02:11.000000', 'support@huzax.com', 'inventory-update', 1),
 (385, '2019-03-30 21:02:11.000000', 'support@huzax.com', 'inventory-view', 1),
-(386, '2019-03-30 21:02:11.000000', 'support@huzax.com', 'inventory-delete', 1);
+(386, '2019-03-30 21:02:11.000000', 'support@huzax.com', 'inventory-delete', 1),
+(387, '2019-03-31 00:26:11.000000', 'support@huzax.com', 'order-create', 28),
+(388, '2019-03-31 00:26:11.000000', 'support@huzax.com', 'order-update', 28),
+(389, '2019-03-31 00:26:11.000000', 'support@huzax.com', 'order-view', 28),
+(390, '2019-03-31 00:26:11.000000', 'support@huzax.com', 'order-delete', 28),
+(391, '2019-03-31 00:26:11.000000', 'support@huzax.com', 'product-delete', 28);
 
 -- --------------------------------------------------------
 
@@ -623,8 +703,45 @@ CREATE TABLE IF NOT EXISTS `app_orders` (
   `order_acknowledged_by` varchar(100) NOT NULL,
   `order_acknowledged_department` varchar(255) NOT NULL,
   `order_acknowledged_id` varchar(100) NOT NULL,
-  `order_acknowledged_role` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `order_acknowledged_role` varchar(255) NOT NULL,
+  `order_invoice_approval_updated_at` datetime(6) NOT NULL,
+  `order_invoice_approval_updated_by` varchar(100) NOT NULL,
+  `order_invoice_approval_updated_department` varchar(255) NOT NULL,
+  `order_invoice_approval_updated_id` varchar(100) NOT NULL,
+  `order_invoice_approval_updated_role` varchar(255) NOT NULL,
+  `order_invoice_cop_approval_updated_at` datetime(6) NOT NULL,
+  `order_invoice_cop_approval_updated_by` varchar(100) NOT NULL,
+  `order_invoice_cop_approval_updated_department` varchar(255) NOT NULL,
+  `order_invoice_cop_approval_updated_id` varchar(100) NOT NULL,
+  `order_invoice_cop_approval_updated_role` varchar(255) NOT NULL,
+  `order_invoice_daf_approval_updated_at` datetime(6) NOT NULL,
+  `order_invoice_daf_approval_updated_by` varchar(100) NOT NULL,
+  `order_invoice_daf_approval_updated_department` varchar(255) NOT NULL,
+  `order_invoice_daf_approval_updated_id` varchar(100) NOT NULL,
+  `order_invoice_daf_approval_updated_role` varchar(255) NOT NULL,
+  `order_invoice_payment_voucher_uploaded_at` datetime(6) NOT NULL,
+  `order_invoice_payment_voucher_uploaded_by` varchar(100) NOT NULL,
+  `order_invoice_payment_voucher_uploaded_department` varchar(255) NOT NULL,
+  `order_invoice_payment_voucher_uploaded_id` varchar(100) NOT NULL,
+  `order_invoice_payment_voucher_uploaded_role` varchar(255) NOT NULL,
+  `order_invoice_reviewed_at` datetime(6) NOT NULL,
+  `order_invoice_reviewed_by` varchar(100) NOT NULL,
+  `order_invoice_reviewed_department` varchar(255) NOT NULL,
+  `order_invoice_reviewed_id` varchar(100) NOT NULL,
+  `order_invoice_reviewed_role` varchar(255) NOT NULL,
+  `order_invoice_uploaded_at` datetime(6) NOT NULL,
+  `order_invoice_uploaded_by` varchar(100) NOT NULL,
+  `order_invoice_uploaded_department` varchar(255) NOT NULL,
+  `order_invoice_uploaded_id` varchar(100) NOT NULL,
+  `order_invoice_uploaded_role` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_orders`
+--
+
+INSERT INTO `app_orders` (`order_id`, `order_code`, `order_requester_name`, `order_project_name`, `order_project_code`, `order_project_geo_code`, `order_charge_code`, `order_award_number`, `order_requisition_number`, `order_donor`, `order_description`, `order_anticipated_award_mechanism`, `order_anticipated_start_date`, `order_anticipated_end_date`, `order_special_considerations`, `order_procurement_method`, `order_procurement_method_updated_at`, `order_procurement_method_updated_id`, `order_procurement_method_updated_by`, `order_procurement_method_updated_department`, `order_procurement_method_updated_role`, `order_no_of_items`, `order_total_price`, `order_equipment_price`, `order_tax_price`, `order_grand_total_price`, `order_currency`, `order_supplier_category`, `order_proposal_id`, `order_proposal_due_date`, `order_purchase_no`, `order_invoice_no`, `order_created_at`, `order_created_id`, `order_created_by`, `order_created_department`, `order_created_role`, `order_updated_at`, `order_updated_id`, `order_updated_by`, `order_updated_department`, `order_updated_role`, `order_requested_at`, `order_requested_id`, `order_requested_by`, `order_requested_department`, `order_requested_role`, `order_approval_no_of_levels`, `order_reviewed_at`, `order_reviewed_id`, `order_reviewed_by`, `order_reviewed_department`, `order_reviewed_role`, `order_approved_at`, `order_approved_id`, `order_approved_by`, `order_approved_role`, `order_approved_department`, `order_assigned_at`, `order_assigned_id`, `order_assigned_by`, `order_assigned_department`, `order_assigned_role`, `order_assigned_to_at`, `order_assigned_to_by`, `order_assigned_to_id`, `order_assigned_to_department`, `order_assigned_to_role`, `order_proposal_generated_at`, `order_proposal_generated_id`, `order_proposal_generated_by`, `order_proposal_generated_department`, `order_proposal_generated_role`, `order_proposal_requested_at`, `order_proposal_requested_id`, `order_proposal_requested_by`, `order_proposal_requested_department`, `order_proposal_requested_role`, `order_purchase_generated_at`, `order_purchase_generated_id`, `order_purchase_generated_by`, `order_purchase_generated_department`, `order_purchase_generated_role`, `order_paid_at`, `order_paid_id`, `order_paid_by`, `order_paid_department`, `order_paid_role`, `order_closed_at`, `order_closed_id`, `order_closed_by`, `order_closed_department`, `order_closed_role`, `order_status`, `order_supplier_updated_at`, `order_supplier_updated_by`, `order_supplier_updated_department`, `order_supplier_updated_id`, `order_supplier_updated_role`, `order_email_to_supplier_message`, `order_email_to_supplier_subject`, `order_email_to_supplier_proposal_submission_url`, `order_email_to_supplier_updated_at`, `order_email_to_supplier_updated_by`, `order_email_to_supplier_updated_department`, `order_email_to_supplier_updated_id`, `order_email_to_supplier_updated_role`, `order_proposal_selected_at`, `order_proposal_selected_by`, `order_proposal_selected_department`, `order_proposal_selected_id`, `order_proposal_selected_role`, `order_cancelled_at`, `order_cancelled_by`, `order_cancelled_department`, `order_cancelled_id`, `order_cancelled_role`, `order_acknowledged_at`, `order_acknowledged_by`, `order_acknowledged_department`, `order_acknowledged_id`, `order_acknowledged_role`, `order_invoice_approval_updated_at`, `order_invoice_approval_updated_by`, `order_invoice_approval_updated_department`, `order_invoice_approval_updated_id`, `order_invoice_approval_updated_role`, `order_invoice_cop_approval_updated_at`, `order_invoice_cop_approval_updated_by`, `order_invoice_cop_approval_updated_department`, `order_invoice_cop_approval_updated_id`, `order_invoice_cop_approval_updated_role`, `order_invoice_daf_approval_updated_at`, `order_invoice_daf_approval_updated_by`, `order_invoice_daf_approval_updated_department`, `order_invoice_daf_approval_updated_id`, `order_invoice_daf_approval_updated_role`, `order_invoice_payment_voucher_uploaded_at`, `order_invoice_payment_voucher_uploaded_by`, `order_invoice_payment_voucher_uploaded_department`, `order_invoice_payment_voucher_uploaded_id`, `order_invoice_payment_voucher_uploaded_role`, `order_invoice_reviewed_at`, `order_invoice_reviewed_by`, `order_invoice_reviewed_department`, `order_invoice_reviewed_id`, `order_invoice_reviewed_role`, `order_invoice_uploaded_at`, `order_invoice_uploaded_by`, `order_invoice_uploaded_department`, `order_invoice_uploaded_id`, `order_invoice_uploaded_role`) VALUES
+(1, '69550384', 'Aaron Gatabazi', 'Feed the Future Rwanda Hinga Weze', 'TBD', '935', 'TBD', 'AID-696-C-17-00001', 'HW/2019-02-0047', 'USAID', 'Request for Fiber optic internet connectivity at HW Head office', 'Service agreement', '2019-04-01', '2019-04-30', 'N/A', 'Single Sourcing', '2019-03-30 22:19:28.000000', '20', 'OPM', 'DAF', 'OPM', 2, 100000, 0, 0, 100000, 'RWF', 'Category 1', 1, '0001-01-01', 'PO - 123456', '0', '2019-03-30 21:11:25.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 21:11:25.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 22:11:52.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', 4, '2019-03-30 22:20:12.000000', '10', 'Director', 'DAF', 'Director', '2019-03-30 22:20:51.000000', '3', 'COP', 'COP', 'NONE', '2019-03-30 22:21:32.000000', '20', 'OPM', 'DAF', 'OPM', '2019-03-30 22:21:32.000000', 'Procurement Officer', '21', 'DAF', 'Procurement Officer', '2019-03-30 22:24:44.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer', '2019-03-30 22:24:44.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer', '2019-03-30 22:54:54.000000', '21', 'Procurement Officer', 'DAF', 'Procurement Officer', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', 'acknowledged', '2019-03-30 22:22:01.000000', 'Procurement Officer', 'DAF', '21', 'Procurement Officer', '<p>Dear vendors,</p>\r\n<p>Please submit your proposals within one week.</p>\r\n<p>Link to submit your proposals:&nbsp;<a title="Submit your proposal" href="../../../../order-proposals/create/1/0/" target="_blank" rel="noopener">Submit your proposal</a></p>\r\n<p>&nbsp;</p>\r\n<p>Thank you.</p>\r\n<p>Cultivating New Frontiers in Agriculture (CNFA)</p>', 'Request for proposal', '', '0001-01-01 00:00:00.000000', 'Procurement Officer', 'DAF', '21', 'Procurement Officer', '2019-03-30 22:49:22.000000', 'COP', 'NONE', '3', 'COP', '0001-01-01 00:00:00.000000', '', '', '', '', '2019-03-30 22:56:02.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -647,7 +764,17 @@ CREATE TABLE IF NOT EXISTS `app_order_approvals` (
   `order_approval_updated_department` varchar(255) NOT NULL,
   `order_approval_updated_role` varchar(255) NOT NULL,
   `order_approval_status` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_order_approvals`
+--
+
+INSERT INTO `app_order_approvals` (`order_approval_id`, `orders_order_id`, `order_approval_level`, `order_approval_created_at`, `order_approval_created_id`, `order_approval_created_by`, `order_approval_created_department`, `order_approval_created_role`, `order_approval_updated_at`, `order_approval_updated_id`, `order_approval_updated_by`, `order_approval_updated_department`, `order_approval_updated_role`, `order_approval_status`) VALUES
+(1, 1, 1, '2019-03-30 22:11:52.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 22:12:28.000000', '18', 'District Manager', 'DCOP', 'District Manager', 'approved'),
+(2, 1, 2, '2019-03-30 22:12:28.000000', '18', 'District Manager', 'DCOP', 'District Manager', '2019-03-30 22:12:52.000000', '17', 'Regional Manager', 'DCOP', 'Regional Manager', 'approved'),
+(3, 1, 3, '2019-03-30 22:12:52.000000', '17', 'Regional Manager', 'DCOP', 'Regional Manager', '2019-03-30 22:13:28.000000', '7', 'Director', 'DCOP', 'Director', 'approved'),
+(4, 1, 4, '2019-03-30 22:13:28.000000', '7', 'Director', 'DCOP', 'Director', '2019-03-30 22:13:28.000000', '20', 'OPM', 'DAF', 'OPM', 'pending');
 
 -- --------------------------------------------------------
 
@@ -685,7 +812,15 @@ CREATE TABLE IF NOT EXISTS `app_order_items` (
   `order_item_status` varchar(255) NOT NULL,
   `order_item_type` varchar(255) NOT NULL,
   `order_item_type_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_order_items`
+--
+
+INSERT INTO `app_order_items` (`order_item_id`, `orders_order_id`, `order_item_title`, `order_item_sub_title`, `order_item_quantity_ordered`, `order_item_quantity_unit`, `order_item_unit_price`, `order_item_total_price`, `order_item_currency`, `order_item_duration`, `order_item_usaid_approval`, `order_item_created_at`, `order_item_created_id`, `order_item_created_by`, `order_item_created_department`, `order_item_created_role`, `order_item_updated_at`, `order_item_updated_id`, `order_item_updated_by`, `order_item_updated_department`, `order_item_updated_role`, `order_item_received_at`, `order_item_received_id`, `order_item_received_by`, `order_item_received_department`, `order_item_received_role`, `order_item_status`, `order_item_type`, `order_item_type_id`) VALUES
+(1, 1, '3 Door filling cabinet', '', 20, '', 3000, 60000, 'RWF', 0, 1, '2019-03-30 22:05:39.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 22:11:07.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 22:57:42.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', 'received', 'asset', 1),
+(2, 1, 'Round meeting table 150 cmx75cm/Glass Top', '', 20, '', 2000, 40000, 'RWF', 0, 1, '2019-03-30 22:11:36.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 22:11:36.000000', '19', 'Field Officer', 'DCOP', 'Field Officer', '2019-03-30 22:57:42.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', 'received', 'asset', 2);
 
 -- --------------------------------------------------------
 
@@ -803,7 +938,7 @@ CREATE TABLE IF NOT EXISTS `app_order_proposals` (
 --
 
 INSERT INTO `app_order_proposals` (`order_proposal_id`, `orders_order_id`, `order_proposal_code`, `order_proposal_supplier_category`, `order_proposal_supplier_title`, `order_proposal_supplier_details`, `order_proposal_supplier_contact_phone_number`, `order_proposal_supplier_contact_email_id`, `order_proposal_cost`, `order_proposal_evaluated_score`, `order_proposal_evaluation_details`, `order_proposal_created_at`, `order_proposal_created_id`, `order_proposal_created_by`, `order_proposal_created_role`, `order_proposal_updated_at`, `order_proposal_updated_id`, `order_proposal_updated_by`, `order_proposal_updated_role`, `order_proposal_evaluated_at`, `order_proposal_evaluated_id`, `order_proposal_evaluated_by`, `order_proposal_evaluated_role`, `order_proposal_approval_updated_at`, `order_proposal_approval_updated_id`, `order_proposal_approval_updated_by`, `order_proposal_approval_updated_role`, `order_proposal_acknowledged_at`, `order_proposal_acknowledged_id`, `order_proposal_acknowledged_by`, `order_proposal_acknowledged_role`, `order_proposal_status`, `order_proposal_acknowledged_department`, `order_proposal_approval_updated_department`, `order_proposal_created_department`, `order_proposal_evaluated_department`, `order_proposal_updated_department`, `order_proposal_supplier_address_av_no`, `order_proposal_supplier_address_country`, `order_proposal_supplier_address_district`, `order_proposal_supplier_address_plot_no`, `order_proposal_supplier_address_sector`, `order_proposal_supplier_address_street`, `order_proposal_supplier_bank_account_details`, `order_proposal_supplier_company_type`, `order_proposal_supplier_legal_representatives`, `order_proposal_supplier_previous_reference1_contact_email_id`, `order_proposal_supplier_previous_reference1_contact_number`, `order_proposal_supplier_previous_reference1_contact_person`, `order_proposal_supplier_previous_reference1_name`, `order_proposal_supplier_previous_reference2_contact_email_id`, `order_proposal_supplier_previous_reference2_contact_number`, `order_proposal_supplier_previous_reference2_contact_person`, `order_proposal_supplier_previous_reference2_name`, `order_proposal_supplier_previous_reference3_contact_email_id`, `order_proposal_supplier_previous_reference3_contact_number`, `order_proposal_supplier_previous_reference3_contact_person`, `order_proposal_supplier_previous_reference3_name`, `order_proposal_supplier_proposal_title`, `order_proposal_supplier_rf_number`, `order_proposal_supplier_tin_number`, `order_proposal_cost_currency`, `order_proposal_selected_at`, `order_proposal_selected_by`, `order_proposal_selected_department`, `order_proposal_selected_id`, `order_proposal_selected_role`) VALUES
-(1, 1, '30306569', 'Category 1', 'Navin Nyalapelli', '', '250726875122', 'nyalapellinavin@gmail.com', 130000, 98, 'very good', '0001-01-01 00:00:00.000000', '0', '', '', '0001-01-01 00:00:00.000000', '0', '', '', '2019-03-28 15:49:39.000000', '21', 'Procurement Officer', 'Procurement Officer', '2019-03-28 15:50:02.000000', '21', 'Procurement Officer', 'Procurement Officer', '2019-03-28 15:52:19.000000', '', '', '', 'acknowledged', '', 'DAF', '', 'DAF', '', '14', 'Rwanda', 'Kigali', 'KG 369', 'Gacuriro', 'Opposite to Great Seasons Hotel', '', 'individual', 'Navin Nyalapelli', 'nyalapellinavin@gmail.com', '250726875122', 'Navin Nyalapelli', 'Navin Nyalapelli', '', '', '', '', '', '', '', '', 'Agriculture', 'RFQ - 1234', 'TIN - 1234', 'RWF', '2019-03-28 15:51:56.000000', 'COP', 'NONE', '3', 'COP');
+(1, 1, '14456092', 'Category 1', 'Navin Nyalapelli', '', '250726875122', 'nyalapellinavin@gmail.com', 100000, 98, 'good', '0001-01-01 00:00:00.000000', '0', '', '', '0001-01-01 00:00:00.000000', '0', '', '', '2019-03-30 22:48:34.000000', '21', 'Procurement Officer', 'Procurement Officer', '2019-03-30 22:48:42.000000', '21', 'Procurement Officer', 'Procurement Officer', '2019-03-30 22:49:39.000000', '', '', '', 'acknowledged', '', 'DAF', '', 'DAF', '', '14', 'Rwanda', 'Kigali', 'KG 369', 'Gacuriro', 'Great Seasons Hotel', '', 'individual', 'Navin Nyalapelli', 'nyalapellinavin@gmail.com', '250726875122', 'Navin Nyalapelli', 'Navin Nyalapelli', '', '', '', '', '', '', '', '', 'Agriculture', 'RFQ - 1234', 'TIN - 123456', 'RWF', '2019-03-30 22:49:22.000000', 'COP', 'NONE', '3', 'COP');
 
 -- --------------------------------------------------------
 
@@ -833,8 +968,8 @@ CREATE TABLE IF NOT EXISTS `app_products` (
 --
 
 INSERT INTO `app_products` (`product_id`, `product_type`, `product_code`, `product_tag`, `product_category`, `product_title`, `product_sub_title`, `product_quantity_available`, `product_quantity_unit`, `product_updated_at`, `product_updated_id`, `product_updated_by`, `product_updated_department`, `product_updated_role`) VALUES
-(1, 'asset', '50162978', 'HW001', 'Furniture', '3 Door filling cabinet', '', 47, '', '2019-03-30 18:53:34.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin'),
-(2, 'asset', '59173245', 'HW002', 'Furniture', 'Round meeting table 150 cmx75cm/Glass Top', '', 0, '', '2019-03-28 14:09:16.000000', '1', 'Tech Support', 'NONE', 'NONE'),
+(1, 'asset', '50162978', 'HW001', 'Furniture', '3 Door filling cabinet', '', 10, '', '2019-03-30 23:02:51.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin'),
+(2, 'asset', '59173245', 'HW002', 'Furniture', 'Round meeting table 150 cmx75cm/Glass Top', '', 15, '', '2019-03-30 23:02:51.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin'),
 (3, 'asset', '72269092', 'HW003', 'Furniture', 'Executive office desk', '', 0, '', '2019-03-28 14:09:16.000000', '1', 'Tech Support', 'NONE', 'NONE'),
 (4, 'asset', '25092813', 'HW004', 'Furniture', 'Metallic three seat chair (Airport chair) for visitors', '', 0, '', '2019-03-28 14:09:16.000000', '1', 'Tech Support', 'NONE', 'NONE'),
 (5, 'asset', '11096453', 'HW005', 'IT Equipment', 'HP Printer desketjet pro 2130', '', 0, '', '2019-03-28 14:09:16.000000', '1', 'Tech Support', 'NONE', 'NONE'),
@@ -1887,7 +2022,14 @@ CREATE TABLE IF NOT EXISTS `app_product_requests` (
   `product_request_cancelled_department` varchar(255) NOT NULL,
   `product_request_cancelled_role` varchar(255) NOT NULL,
   `product_request_status` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_product_requests`
+--
+
+INSERT INTO `app_product_requests` (`product_request_id`, `product_request_code`, `product_request_project`, `product_request_details`, `product_request_no_of_items`, `product_request_created_at`, `product_request_created_id`, `product_request_created_by`, `product_request_created_department`, `product_request_created_role`, `product_request_updated_at`, `product_request_updated_id`, `product_request_updated_by`, `product_request_updated_department`, `product_request_updated_role`, `product_request_requested_at`, `product_request_requested_id`, `product_request_requested_by`, `product_request_requested_department`, `product_request_requested_role`, `product_request_reviewed_at`, `product_request_reviewed_id`, `product_request_reviewed_by`, `product_request_reviewed_department`, `product_request_reviewed_role`, `product_request_approved_updated_at`, `product_request_approved_updated_id`, `product_request_approved_updated_by`, `product_request_approved_updated_department`, `product_request_approved_updated_role`, `product_request_closed_at`, `product_request_closed_id`, `product_request_closed_by`, `product_request_closed_department`, `product_request_closed_role`, `product_request_cancelled_at`, `product_request_cancelled_id`, `product_request_cancelled_by`, `product_request_cancelled_department`, `product_request_cancelled_role`, `product_request_status`) VALUES
+(1, '37687620', 'Agriculture', 'testing stock request', 2, '2019-03-30 23:01:35.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:01:35.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:02:29.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:02:35.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:02:41.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '0001-01-01 00:00:00.000000', '', '', '', '', '0001-01-01 00:00:00.000000', '', '', '', '', 'approved');
 
 -- --------------------------------------------------------
 
@@ -1925,7 +2067,15 @@ CREATE TABLE IF NOT EXISTS `app_product_request_items` (
   `product_request_item_received_department` varchar(255) NOT NULL,
   `product_request_item_received_role` varchar(255) NOT NULL,
   `product_request_item_status` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `app_product_request_items`
+--
+
+INSERT INTO `app_product_request_items` (`product_request_item_id`, `product_requests_product_request_id`, `products_product_id`, `product_request_item_product_type`, `product_request_item_product_code`, `product_request_item_product_tag`, `product_request_item_product_category`, `product_request_item_product_title`, `product_request_item_product_sub_title`, `product_request_item_product_quantity_initial`, `product_request_item_product_quantity_ordered`, `product_request_item_product_quantity_balance`, `product_request_item_product_quantity_unit`, `product_request_item_created_at`, `product_request_item_created_id`, `product_request_item_created_by`, `product_request_item_created_department`, `product_request_item_created_role`, `product_request_item_updated_at`, `product_request_item_updated_id`, `product_request_item_updated_by`, `product_request_item_updated_department`, `product_request_item_updated_role`, `product_request_item_received_at`, `product_request_item_received_id`, `product_request_item_received_by`, `product_request_item_received_department`, `product_request_item_received_role`, `product_request_item_status`) VALUES
+(1, 1, 1, 'asset', '50162978', 'HW001', 'Furniture', '3 Door filling cabinet', '', 20, 10, 10, '', '2019-03-30 23:01:51.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:01:51.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:02:51.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', 'received'),
+(2, 1, 2, 'asset', '59173245', 'HW002', 'Furniture', 'Round meeting table 150 cmx75cm/Glass Top', '', 20, 5, 15, '', '2019-03-30 23:02:22.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:02:22.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', '2019-03-30 23:02:51.000000', '24', 'Stock Admin', 'DAF', 'Stock Admin', 'received');
 
 -- --------------------------------------------------------
 
@@ -2239,7 +2389,7 @@ CREATE TABLE IF NOT EXISTS `django_migrations` (
   `app` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `django_migrations`
@@ -2301,7 +2451,8 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (55, 'app', '0034_auto_20190330_0952', '2019-03-30 09:52:27.777731'),
 (56, 'app', '0035_auto_20190330_1011', '2019-03-30 10:12:02.891225'),
 (57, 'app', '0036_auto_20190330_1901', '2019-03-30 19:01:18.526835'),
-(58, 'app', '0037_auto_20190330_2054', '2019-03-30 20:54:19.930837');
+(58, 'app', '0037_auto_20190330_2054', '2019-03-30 20:54:19.930837'),
+(59, 'app', '0038_auto_20190331_0006', '2019-03-31 00:06:39.452125');
 
 -- --------------------------------------------------------
 
@@ -2314,27 +2465,6 @@ CREATE TABLE IF NOT EXISTS `django_session` (
   `session_data` longtext NOT NULL,
   `expire_date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `django_session`
---
-
-INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('4q8ze9jwtjq1pay3vj9vmbx50qalrhqn', 'OTZlMWNiYmM4ZDMwOGYxNGFmY2IwYzAyNTE2NDY5ZjRlOTIyMzg5MDp7Il9vcGVyYXRvcnNfaWQiOiIyMSIsIl9vcGVyYXRvcnNfYmFja2VuZCI6bnVsbCwiX29wZXJhdG9yc19oYXNoIjoiMGM4NTAwMzUzZjg0NTYxN2U4ZjdhMTNlMTRmMzk2ZWIwNDFiZjRiYyIsIl9zZXNzaW9uX2V4cGlyeSI6MzYwMH0=', '2019-03-28 16:53:38.763317'),
-('4qjdy1qms3zeg0ay0lqmymn7ua4aww82', 'YzdhNGYyMGM4OGQxOWM4MWE4NTViYzZlZDA5YmJhZWEzMTE2MWYyNTp7Im5leHQiOiIvYmFja2VuZC9vcmRlcnMvaW5kZXgvIiwiX29wZXJhdG9yc19pZCI6IjEiLCJfb3BlcmF0b3JzX2JhY2tlbmQiOm51bGwsIl9vcGVyYXRvcnNfaGFzaCI6ImZhYzM3NzVmMzUwMjBmZWM0YzZiZGUzMjczNjdhMjdhYTdiYjUxMzMiLCJfc2Vzc2lvbl9leHBpcnkiOjM2MDB9', '2019-03-29 08:43:29.057647'),
-('4udpufqnttbbyr2mzlwv70h52n5jz3tb', 'Mzk5YTRhNWI1OTkyZDk1YjQ1ZmNmY2NjZmE3NWVhNjQyYWU2NDQwMzp7Im5leHQiOiIvYmFja2VuZC9vcmRlcnMvdmlldy9vcmRlci1pdGVtcy8xLyIsIl9vcGVyYXRvcnNfaWQiOiIyNCIsIl9vcGVyYXRvcnNfYmFja2VuZCI6bnVsbCwiX29wZXJhdG9yc19oYXNoIjoiYmI3ZmNjZDdjYjNlZDRiMTU5MGRmNDBhMDBjY2ZiZDM2N2M2ZWNlZSIsIl9zZXNzaW9uX2V4cGlyeSI6MzYwMH0=', '2019-03-30 14:23:47.669133'),
-('6ul33pwz28nq4l35ca9jpd9a6wctd0py', 'ZDM2N2RiOGI1MWU4OTBlZDQ0NjhmMTFiZTAzOGU5ODg0MmE5ZGMwNzp7Il9vcGVyYXRvcnNfaWQiOiIyNCIsIl9vcGVyYXRvcnNfYmFja2VuZCI6bnVsbCwiX29wZXJhdG9yc19oYXNoIjoiYmI3ZmNjZDdjYjNlZDRiMTU5MGRmNDBhMDBjY2ZiZDM2N2M2ZWNlZSIsIl9zZXNzaW9uX2V4cGlyeSI6MzYwMH0=', '2019-03-29 15:37:39.462136'),
-('7lghz70lbnw9ygjmh22vphxnt1yklr63', 'ZmZjZTNiMWNhMTk5NDc5ZWNhZTBjYzExOGJmNjliNmM3ZDU3MDM1Mjp7Im5leHQiOiIvYmFja2VuZC9vcGVyYXRvcnMvaW5kZXgvIiwiX29wZXJhdG9yc19pZCI6IjEiLCJfb3BlcmF0b3JzX2JhY2tlbmQiOm51bGwsIl9vcGVyYXRvcnNfaGFzaCI6ImZhYzM3NzVmMzUwMjBmZWM0YzZiZGUzMjczNjdhMjdhYTdiYjUxMzMiLCJfc2Vzc2lvbl9leHBpcnkiOjM2MDB9', '2019-03-29 14:37:51.340912'),
-('ai98eh957e9ha34n0280dso23vfqpufm', 'OWRjZjk1ZDRiMzk3MDJhZGMyMDY3YWZjM2FjNTg3ZGY2MzYwMWM2Zjp7Im5leHQiOiIvYmFja2VuZC9wcm9kdWN0LXJlcXVlc3RzL3ZpZXcvMS8iLCJfb3BlcmF0b3JzX2lkIjoiMjQiLCJfb3BlcmF0b3JzX2JhY2tlbmQiOm51bGwsIl9vcGVyYXRvcnNfaGFzaCI6ImJiN2ZjY2Q3Y2IzZWQ0YjE1OTBkZjQwYTAwY2NmYmQzNjdjNmVjZWUiLCJfc2Vzc2lvbl9leHBpcnkiOjM2MDB9', '2019-03-30 17:42:05.272953'),
-('dodgzrei9sikoh4lgub9jrt0bpsj89rr', 'YTMzNWYwZjM0NzllYTQ4MGNjOGUyN2E5NzZhNzE2MWQ0MjI1NTBmZDp7Im5leHQiOiIvYmFja2VuZC9wcm9kdWN0LXJlcXVlc3RzL2luZGV4LyIsIl9vcGVyYXRvcnNfaWQiOiIyNCIsIl9vcGVyYXRvcnNfYmFja2VuZCI6bnVsbCwiX29wZXJhdG9yc19oYXNoIjoiYmI3ZmNjZDdjYjNlZDRiMTU5MGRmNDBhMDBjY2ZiZDM2N2M2ZWNlZSIsIl9zZXNzaW9uX2V4cGlyeSI6MzYwMH0=', '2019-03-30 16:41:09.515745'),
-('dqe05ewtab59f0y3c4l28l54vtb530j8', 'YzdhNGYyMGM4OGQxOWM4MWE4NTViYzZlZDA5YmJhZWEzMTE2MWYyNTp7Im5leHQiOiIvYmFja2VuZC9vcmRlcnMvaW5kZXgvIiwiX29wZXJhdG9yc19pZCI6IjEiLCJfb3BlcmF0b3JzX2JhY2tlbmQiOm51bGwsIl9vcGVyYXRvcnNfaGFzaCI6ImZhYzM3NzVmMzUwMjBmZWM0YzZiZGUzMjczNjdhMjdhYTdiYjUxMzMiLCJfc2Vzc2lvbl9leHBpcnkiOjM2MDB9', '2019-03-29 07:43:17.369039'),
-('dzwixbnolit7gn4q6rzhupsg55z6c027', 'ZmZjZTNiMWNhMTk5NDc5ZWNhZTBjYzExOGJmNjliNmM3ZDU3MDM1Mjp7Im5leHQiOiIvYmFja2VuZC9vcGVyYXRvcnMvaW5kZXgvIiwiX29wZXJhdG9yc19pZCI6IjEiLCJfb3BlcmF0b3JzX2JhY2tlbmQiOm51bGwsIl9vcGVyYXRvcnNfaGFzaCI6ImZhYzM3NzVmMzUwMjBmZWM0YzZiZGUzMjczNjdhMjdhYTdiYjUxMzMiLCJfc2Vzc2lvbl9leHBpcnkiOjM2MDB9', '2019-03-30 21:58:43.420675'),
-('o3ic6vowpea3cud6gme69wqs8g32q580', 'ZDM2N2RiOGI1MWU4OTBlZDQ0NjhmMTFiZTAzOGU5ODg0MmE5ZGMwNzp7Il9vcGVyYXRvcnNfaWQiOiIyNCIsIl9vcGVyYXRvcnNfYmFja2VuZCI6bnVsbCwiX29wZXJhdG9yc19oYXNoIjoiYmI3ZmNjZDdjYjNlZDRiMTU5MGRmNDBhMDBjY2ZiZDM2N2M2ZWNlZSIsIl9zZXNzaW9uX2V4cGlyeSI6MzYwMH0=', '2019-03-30 10:30:32.131465'),
-('rx1igryun2x6zu8fl7ek814mud8lmhh1', 'YzdhNGYyMGM4OGQxOWM4MWE4NTViYzZlZDA5YmJhZWEzMTE2MWYyNTp7Im5leHQiOiIvYmFja2VuZC9vcmRlcnMvaW5kZXgvIiwiX29wZXJhdG9yc19pZCI6IjEiLCJfb3BlcmF0b3JzX2JhY2tlbmQiOm51bGwsIl9vcGVyYXRvcnNfaGFzaCI6ImZhYzM3NzVmMzUwMjBmZWM0YzZiZGUzMjczNjdhMjdhYTdiYjUxMzMiLCJfc2Vzc2lvbl9leHBpcnkiOjM2MDB9', '2019-03-30 17:43:04.666690'),
-('tbltolay3lbfl7teq7rjcvtrh81tupf1', 'YTMzNWYwZjM0NzllYTQ4MGNjOGUyN2E5NzZhNzE2MWQ0MjI1NTBmZDp7Im5leHQiOiIvYmFja2VuZC9wcm9kdWN0LXJlcXVlc3RzL2luZGV4LyIsIl9vcGVyYXRvcnNfaWQiOiIyNCIsIl9vcGVyYXRvcnNfYmFja2VuZCI6bnVsbCwiX29wZXJhdG9yc19oYXNoIjoiYmI3ZmNjZDdjYjNlZDRiMTU5MGRmNDBhMDBjY2ZiZDM2N2M2ZWNlZSIsIl9zZXNzaW9uX2V4cGlyeSI6MzYwMH0=', '2019-03-30 19:13:56.924603'),
-('vbqvbx7lr42zz7c8w5k0alyvrhy1t4oz', 'ZGE4YmM3NTQ3MzFmOWM1ZjJlOTdkZmEzZjg4NDU4MjgxNTk0ZTc4ODp7Im5leHQiOiIvYmFja2VuZC9vcmRlcnMvdmlldy8xLyIsIl9vcGVyYXRvcnNfaWQiOiIxIiwiX29wZXJhdG9yc19iYWNrZW5kIjpudWxsLCJfb3BlcmF0b3JzX2hhc2giOiJmYWMzNzc1ZjM1MDIwZmVjNGM2YmRlMzI3MzY3YTI3YWE3YmI1MTMzIiwiX3Nlc3Npb25fZXhwaXJ5IjozNjAwfQ==', '2019-03-28 16:29:26.648295'),
-('vwup7vdk8tcc22fjoqev7qe37h6r0r49', 'YTcyZDQ5NjZjODdjNTZhZDU1Yzc1OGY1OWM4ZjMwODMzMjY2MWQ1ZTp7Im5leHQiOiIvYmFja2VuZC9wcm9kdWN0cy9hc3NldHMvIiwiX29wZXJhdG9yc19pZCI6IjI0IiwiX29wZXJhdG9yc19iYWNrZW5kIjpudWxsLCJfb3BlcmF0b3JzX2hhc2giOiJiYjdmY2NkN2NiM2VkNGIxNTkwZGY0MGEwMGNjZmJkMzY3YzZlY2VlIiwiX3Nlc3Npb25fZXhwaXJ5IjozNjAwfQ==', '2019-03-30 12:54:13.068180'),
-('xs0my8193z447pyr30x1qv8egjkfemri', 'MTc1MjE2YjM0Y2NlNTRiZmQ4M2Y0M2NhNWM5ODVlOGRkMWQxMjdhMzp7Il9vcGVyYXRvcnNfaWQiOiIxIiwiX29wZXJhdG9yc19iYWNrZW5kIjpudWxsLCJfb3BlcmF0b3JzX2hhc2giOiJmYWMzNzc1ZjM1MDIwZmVjNGM2YmRlMzI3MzY3YTI3YWE3YmI1MTMzIiwiX3Nlc3Npb25fZXhwaXJ5IjozNjAwfQ==', '2019-03-28 15:25:13.603837');
 
 -- --------------------------------------------------------
 
@@ -2576,42 +2706,42 @@ ALTER TABLE `django_site`
 -- AUTO_INCREMENT for table `app_attachments`
 --
 ALTER TABLE `app_attachments`
-  MODIFY `attachment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `attachment_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `app_emails`
 --
 ALTER TABLE `app_emails`
-  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `app_failed_login`
 --
 ALTER TABLE `app_failed_login`
-  MODIFY `failed_login_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `failed_login_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `app_inventory`
 --
 ALTER TABLE `app_inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `app_inventory_items`
 --
 ALTER TABLE `app_inventory_items`
-  MODIFY `inventory_item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `inventory_item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `app_notifications`
 --
 ALTER TABLE `app_notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `app_operators`
 --
 ALTER TABLE `app_operators`
-  MODIFY `operator_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+  MODIFY `operator_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT for table `app_operator_access_permissions`
 --
 ALTER TABLE `app_operator_access_permissions`
-  MODIFY `operator_access_permission_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=387;
+  MODIFY `operator_access_permission_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=392;
 --
 -- AUTO_INCREMENT for table `app_operator_logs`
 --
@@ -2621,17 +2751,17 @@ ALTER TABLE `app_operator_logs`
 -- AUTO_INCREMENT for table `app_orders`
 --
 ALTER TABLE `app_orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `app_order_approvals`
 --
 ALTER TABLE `app_order_approvals`
-  MODIFY `order_approval_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_approval_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `app_order_items`
 --
 ALTER TABLE `app_order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `app_order_logs`
 --
@@ -2656,12 +2786,12 @@ ALTER TABLE `app_products`
 -- AUTO_INCREMENT for table `app_product_requests`
 --
 ALTER TABLE `app_product_requests`
-  MODIFY `product_request_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_request_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `app_product_request_items`
 --
 ALTER TABLE `app_product_request_items`
-  MODIFY `product_request_item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_request_item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `auth_group`
 --
@@ -2706,7 +2836,7 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT for table `django_site`
 --

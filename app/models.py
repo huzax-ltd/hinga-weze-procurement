@@ -103,6 +103,7 @@ class Operators(models.Model):
     # only for DAF Department
     ROLE_PROCUREMENT_OFFICER = 'Procurement Officer'  # Procurement Officer
     ROLE_HR_MANAGER = 'HR Manager'  # HR Manager
+    ROLE_RECEPTIONIST = 'Receptionist'  # Receptionist
     ROLE_STOCK_ADMIN = 'Stock Admin'  # Stock Admin
     ROLE_ACCOUNTANT_MANAGER = 'Accountant Manager'  # Accountant Head
     ROLE_ACCOUNTANT_OFFICER = 'Accountant Officer'  # Accountant Officer
@@ -118,6 +119,7 @@ class Operators(models.Model):
         ROLE_FIELD_OFFICER,
         ROLE_PROCUREMENT_OFFICER,
         ROLE_HR_MANAGER,
+        ROLE_RECEPTIONIST,
         ROLE_STOCK_ADMIN,
         ROLE_ACCOUNTANT_MANAGER,
         ROLE_ACCOUNTANT_OFFICER,
@@ -134,6 +136,7 @@ class Operators(models.Model):
         (ROLE_FIELD_OFFICER, ROLE_FIELD_OFFICER),
         (ROLE_PROCUREMENT_OFFICER, ROLE_PROCUREMENT_OFFICER),
         (ROLE_HR_MANAGER, ROLE_HR_MANAGER),
+        (ROLE_RECEPTIONIST, ROLE_RECEPTIONIST),
         (ROLE_STOCK_ADMIN, ROLE_STOCK_ADMIN),
         (ROLE_ACCOUNTANT_MANAGER, ROLE_ACCOUNTANT_MANAGER),
         (ROLE_ACCOUNTANT_OFFICER, ROLE_ACCOUNTANT_OFFICER),
@@ -905,6 +908,24 @@ class Orders(models.Model):
             value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_RECEIVED:
             value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_UPLOADED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_REVIEWED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_DAF_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_DAF_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_COP_APPROVED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
+        elif record.order_status == Orders.STATUS_INVOICE_COP_REJECTED:
+            value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_PAID:
             value = Utils.HTML_TAG_ORDER_STATUS_IN_PROGRESS
         elif record.order_status == Orders.STATUS_CLOSED:
@@ -1017,6 +1038,16 @@ class Orders(models.Model):
 
                     child_operators = Operators.objects.filter(
                         Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_RECEPTIONIST))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(order_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
                         Q(operator_role=Operators.ROLE_STOCK_ADMIN))
 
                     for child_operator in child_operators:
@@ -1044,6 +1075,11 @@ class Orders(models.Model):
                     objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_HR_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(order_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_RECEPTIONIST:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
                     objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
@@ -1279,9 +1315,9 @@ class Orders(models.Model):
                         operators = Operators.objects.all().filter(
                             operator_role=Operators.ROLE_OPM)
 
-                    if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER or operator.operator_role == Operators.ROLE_HR_MANAGER or operator.operator_role == Operators.ROLE_STOCK_ADMIN or operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER or operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
+                    if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER or operator.operator_role == Operators.ROLE_HR_MANAGER or operator.operator_role == Operators.ROLE_RECEPTIONIST or operator.operator_role == Operators.ROLE_STOCK_ADMIN or operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER or operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
                         operators = Operators.objects.all().filter(
-                            (Q(operator_department=Operators.DEPARTMENT_DCOP) &
+                            (Q(operator_department=Operators.DEPARTMENT_DAF) &
                              Q(operator_role=ROLE_DIRECTOR)))
 
                 if operator.operator_department == Operators.DEPARTMENT_MAV:
@@ -2447,6 +2483,16 @@ class Product_Requests(models.Model):
 
                     child_operators = Operators.objects.filter(
                         Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_role=Operators.ROLE_RECEPTIONIST))
+
+                    for child_operator in child_operators:
+                        child_operators = Operators.get_child_operators(
+                            Operators.objects.get(operator_id=child_operator.operator_id))
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                                 (Q(product_request_item_created_id__in=child_operators)))
+
+                    child_operators = Operators.objects.filter(
+                        Q(operator_department=Operators.DEPARTMENT_DAF) &
                         Q(operator_role=Operators.ROLE_STOCK_ADMIN))
 
                     for child_operator in child_operators:
@@ -2474,6 +2520,11 @@ class Product_Requests(models.Model):
                     objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_HR_MANAGER:
+                    child_operators = Operators.get_child_operators(
+                        Operators.objects.get(operator_id=operator.operator_id))
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                                             (Q(product_request_item_created_id__in=child_operators)))
+                if operator.operator_role == Operators.ROLE_RECEPTIONIST:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
                     objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
