@@ -952,12 +952,12 @@ class OrderPurchaseUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Mode
 
 
 class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
-    order_id = forms.CharField(
-        label='Request Id',
-        min_length=8,
-        max_length=8,
+    order_purchase_no = forms.CharField(
+        label='Purchase Order No.',
+        min_length=1,
+        max_length=100,
         required=True,
-        validators=[MinLengthValidator(8), MaxLengthValidator(100)],
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -993,8 +993,8 @@ class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Model
             }
         ))
 
-    def clean_order_purchase_no(self):
-        data = self.cleaned_data['order_purchase_no']
+    def clean_order_invoice_no(self):
+        data = self.cleaned_data['order_invoice_no']
         return data
 
     def clean_attachment_file_path(self):
@@ -1029,7 +1029,91 @@ class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Model
     class Meta:
         model = Orders
         fields = (
-            'order_id',
+            'order_purchase_no',
             'order_invoice_no',
+            'attachment_file_path',
+        )
+
+
+class OrderPaymentVoucherUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    order_invoice_no = forms.CharField(
+        label='Order Invoice No.',
+        min_length=1,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+                'readonly': True,
+            }
+        ))
+    order_payment_voucher_no = forms.CharField(
+        label='Payment Voucher No.',
+        min_length=1,
+        max_length=100,
+        required=True,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '',
+                'autocomplete': 'off',
+                'aria-label': 'form-label',
+            }
+        ))
+    attachment_file_path = forms.FileField(
+        label='File',
+        required=True,
+        validators=[],
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+                'aria-label': 'form-label',
+                'accept': '*/*',
+            }
+        ))
+
+    def clean_order_payment_voucher_no(self):
+        data = self.cleaned_data['order_payment_voucher_no']
+        return data
+
+    def clean_attachment_file_path(self):
+        file = self.cleaned_data['attachment_file_path']
+
+        if not file:
+            raise forms.ValidationError('File type - none')
+
+        try:
+            assert isinstance(file,
+                              InMemoryUploadedFile), "File rewrite has been only tested on in-memory upload backend"
+
+            # Make sure the image is not too big, so that PIL trashes the server
+            if file:
+                if file.size > settings.MAX_FILE_UPLOAD_SIZE:
+                    raise forms.ValidationError("File too large - the limit is 10 megabytes")
+
+            filename = file.name
+            temp_file_path = settings.MEDIA_ROOT + '/temp/' + filename
+            default_storage.save(temp_file_path, ContentFile(file.read()))
+
+            return filename
+
+        except Exception as e:
+            print('Exception: ' + str(e))
+            raise forms.ValidationError('Exception: ' + str(e))
+
+    def clean(self):
+        cleaned_data = super(OrderPaymentVoucherUpdateForm, self).clean()
+        return cleaned_data
+
+    class Meta:
+        model = Orders
+        fields = (
+            'order_invoice_no',
+            'order_payment_voucher_no',
             'attachment_file_path',
         )

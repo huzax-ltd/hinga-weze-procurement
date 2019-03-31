@@ -89,8 +89,6 @@
                                                class="btn btn-outline-primary fuse-ripple-ready">Update PO</a>
                                         {% endif %}
                                         {% if model.order_status == model.STATUS_PURCHASE_GENERATED %}
-                                            <a href="#" id="btn-update-purchase-order"
-                                               class="btn btn-outline-primary fuse-ripple-ready">Download PO</a>
                                             <a href="{% url 'orders_send_purchase' pk=model.order_id %}"
                                                class="btn btn-outline-primary fuse-ripple-ready">Send PO to
                                                 Selected Vendor</a>
@@ -125,8 +123,6 @@
                                                class="btn btn-outline-primary fuse-ripple-ready">Update PO</a>
                                         {% endif %}
                                         {% if model.order_status == model.STATUS_PURCHASE_GENERATED %}
-                                            <a href="#" id="btn-update-purchase-order"
-                                               class="btn btn-outline-primary fuse-ripple-ready">Download PO</a>
                                             <a href="{% url 'orders_send_purchase' pk=model.order_id %}"
                                                class="btn btn-outline-primary fuse-ripple-ready">Send PO to
                                                 Selected Vendor</a>
@@ -141,8 +137,6 @@
                             {% if operator.operator_type == model.TYPE_ADMIN %}
                                 <a href="{% url 'order_proposals_index' pk=model.order_id %}"
                                    class="btn btn-outline-primary fuse-ripple-ready">Proposals</a>
-                                <a href="{% url 'order_proposals_index' pk=model.order_id %}"
-                                   class="btn btn-outline-primary fuse-ripple-ready">Download PO</a>
                             {% endif %}
                             {% if operator.operator_role == operator.ROLE_STOCK_ADMIN %}
                                 {% if model.order_status == model.STATUS_ACKNOWLEDGED %}
@@ -150,6 +144,91 @@
                                        class="btn btn-outline-primary fuse-ripple-ready">Update Items Status</a>
                                 {% endif %}
                             {% endif %}
+
+                            {% if attachment_order_purchase_no != '' %}
+                                <a download href="{{ attachment_order_purchase_no.attachment_file_path.url }}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Download Purchase Order</a>
+                            {% endif %}
+
+                            {% if operator.operator_role == operator.ROLE_RECEPTIONIST %}
+                                {% if model.order_status == model.STATUS_ACKNOWLEDGED or model.order_status == model.STATUS_RECEIVED or model.order_status == model.STATUS_INVOICE_UPLOADED or model.order_status == model.STATUS_INVOICE_REVIEWED %}
+                                    <a href="#" id="btn-update-invoice-order"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Upload Invoice</a>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if attachment_order_invoice_no != '' %}
+                                <a download href="{{ attachment_order_invoice_no.attachment_file_path.url }}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Download Invoice</a>
+                            {% endif %}
+
+                            {% if operator.operator_department == operator.DEPARTMENT_DAF and operator.operator_role == operator.ROLE_OPM and model.order_status == model.STATUS_INVOICE_UPLOADED %}
+                                <a href="#"
+                                   onclick="singleSelect('{{ select_single_url }}', 'order-invoice-review', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Review Invoice</a>
+                            {% endif %}
+
+                            {% if operator.operator_role == operator.ROLE_ACCOUNTANT_MANAGER or operator.operator_role == operator.ROLE_ACCOUNTANT_OFFICER %}
+                                {% if model.order_status == model.STATUS_INVOICE_REVIEWED %}
+                                    <a href="#" id="btn-update-payment-voucher-order"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Upload Payment Voucher</a>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if attachment_order_payment_voucher != '' %}
+                                <a download href="{{ attachment_order_payment_voucher.attachment_file_path.url }}"
+                                   class="btn btn-outline-primary fuse-ripple-ready">Download Payment Voucher</a>
+                            {% endif %}
+
+                            {% if operator.operator_role == operator.ROLE_ACCOUNTANT_MANAGER %}
+                                {% if model.order_status == model.STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED %}
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-invoice-approve', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Approve Invoice</a>
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-invoice-reject', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Reject Invoice</a>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if operator.operator_department == operator.DEPARTMENT_DAF and operator.operator_role == operator.ROLE_DIRECTOR %}
+                                {% if model.order_status == model.STATUS_INVOICE_APPROVED %}
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-invoice-approve-daf', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Approve Invoice</a>
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-invoice-reject-daf', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Reject Invoice</a>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if operator.operator_role == operator.ROLE_COP %}
+                                {% if model.order_status == model.STATUS_INVOICE_DAF_APPROVED %}
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-invoice-approve-cop', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Approve Invoice</a>
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-invoice-reject-cop', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Reject Invoice</a>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if operator.operator_role == operator.ROLE_ACCOUNTANT_MANAGER %}
+                                {% if model.order_status == model.STATUS_INVOICE_COP_APPROVED %}
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-paid', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Update Payment</a>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if operator.operator_role == operator.ROLE_ACCOUNTANT_MANAGER %}
+                                {% if model.order_status == model.STATUS_PAID %}
+                                    <a href="#"
+                                       onclick="singleSelect('{{ select_single_url }}', 'order-close', '{{ model.order_id }}', '{{ item_index_url }}');"
+                                       class="btn btn-outline-primary fuse-ripple-ready">Close Request</a>
+                                {% endif %}
+                            {% endif %}
+
                         </div>
 
                         <br>
@@ -354,6 +433,16 @@
             url = "{% url 'orders_update_purchase' pk='P1' %}";
             url = url.replace("P1", "{{ model.order_id }}");
             $("#btn-update-purchase-order").modalForm({
+                formURL: url
+            });
+            url = "{% url 'orders_update_invoice' pk='P1' %}";
+            url = url.replace("P1", "{{ model.order_id }}");
+            $("#btn-update-invoice-order").modalForm({
+                formURL: url
+            });
+            url = "{% url 'orders_update_payment_voucher' pk='P1' %}";
+            url = url.replace("P1", "{{ model.order_id }}");
+            $("#btn-update-payment-voucher-order").modalForm({
                 formURL: url
             });
 

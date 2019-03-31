@@ -708,6 +708,7 @@ class Orders(models.Model):
     order_proposal_due_date = models.DateField('Proposal Due Date', default=settings.APP_CONSTANT_DEFAULT_DATE)
     order_purchase_no = models.CharField('Purchase Order No.', max_length=100, blank=True)
     order_invoice_no = models.CharField('Invoice No.', max_length=100, blank=True)
+    order_payment_voucher_no = models.CharField('Voucher No.', max_length=100, blank=True)
     order_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     order_created_id = models.CharField('Created ID', max_length=100, blank=True)
     order_created_by = models.CharField('Created By', max_length=100, blank=True)
@@ -2028,6 +2029,7 @@ class Attachments(models.Model):
     TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT = 'order-proposal-reference-document'
     TYPE_ORDER_PURCHASE = 'order-purchase'
     TYPE_ORDER_INVOICE = 'order-invoice'
+    TYPE_ORDER_PAYMENT_VOUCHER = 'order-payment-voucher'
 
     ARRAY_TYPES = [
         (TYPE_NONE.title()).replace('-', ' '),
@@ -2042,6 +2044,7 @@ class Attachments(models.Model):
         (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' '),
         (TYPE_ORDER_PURCHASE.title()).replace('-', ' '),
         (TYPE_ORDER_INVOICE.title()).replace('-', ' '),
+        (TYPE_ORDER_PAYMENT_VOUCHER.title()).replace('-', ' '),
     ]
     TYPES = (
         ('', '--select--'),
@@ -2057,6 +2060,7 @@ class Attachments(models.Model):
         (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT, (TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT.title()).replace('-', ' ')),
         (TYPE_ORDER_PURCHASE, (TYPE_ORDER_PURCHASE.title()).replace('-', ' ')),
         (TYPE_ORDER_INVOICE, (TYPE_ORDER_INVOICE.title()).replace('-', ' ')),
+        (TYPE_ORDER_PAYMENT_VOUCHER, (TYPE_ORDER_PAYMENT_VOUCHER.title()).replace('-', ' ')),
     )
 
     attachment_id = models.AutoField('Id', primary_key=True)

@@ -22,7 +22,7 @@ from app.utils import Utils
 from backend.forms.general_forms import SendEmailForm
 from backend.forms.order_forms import OrderSearchIndexForm, OrderCreateForm, OrderUpdateForm, OrderProcurementForm, \
     OrderAssignmentForm, OrderSupplierForm, OrderEmailToSupplierForm, OrderUploadAttachmentForm, \
-    OrderPurchaseUpdateForm, OrderInvoiceUpdateForm
+    OrderPurchaseUpdateForm, OrderInvoiceUpdateForm, OrderPaymentVoucherUpdateForm
 from backend.forms.order_item_forms import OrderItemSearchIndexForm
 from backend.forms.order_proposal_forms import OrderProposalCreateForm, OrderProposalViewForm
 from backend.tables.order_item_tables import OrderItemsTable
@@ -315,6 +315,291 @@ def select_single(request):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
                         return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-review':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_reviewed_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_reviewed_id = operator.operator_id
+                            model.order_invoice_reviewed_by = operator.operator_name
+                            model.order_invoice_reviewed_department = operator.operator_department
+                            model.order_invoice_reviewed_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_REVIEWED
+                            model.save()
+
+                            # sending notification to Accountant
+                            operators = Operators.objects.filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                (Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "An invoice has been reviewed and sent for generating payment voucher.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Invoice reviewed successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-approve':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_approval_updated_id = operator.operator_id
+                            model.order_invoice_approval_updated_by = operator.operator_name
+                            model.order_invoice_approval_updated_department = operator.operator_department
+                            model.order_invoice_approval_updated_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_APPROVED
+                            model.save()
+
+                            # sending notification to DAF
+                            operators = Operators.objects.filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                (Q(operator_role=Operators.ROLE_DIRECTOR))
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "An invoice has been sent for approval.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-reject':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_approval_updated_id = operator.operator_id
+                            model.order_invoice_approval_updated_by = operator.operator_name
+                            model.order_invoice_approval_updated_department = operator.operator_department
+                            model.order_invoice_approval_updated_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_REJECTED
+                            model.save()
+
+                            # sending notification to Accountants
+                            operators = Operators.objects.filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                (Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Your invoice has been rejected.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-approve-daf':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_daf_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_daf_approval_updated_id = operator.operator_id
+                            model.order_invoice_daf_approval_updated_by = operator.operator_name
+                            model.order_invoice_daf_approval_updated_department = operator.operator_department
+                            model.order_invoice_daf_approval_updated_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_DAF_APPROVED
+                            model.save()
+
+                            # sending notification to COP
+                            operators = Operators.objects.filter(operator_role=Operators.ROLE_COP)
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "An invoice has been sent for approval.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-reject-daf':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_daf_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_daf_approval_updated_id = operator.operator_id
+                            model.order_invoice_daf_approval_updated_by = operator.operator_name
+                            model.order_invoice_daf_approval_updated_department = operator.operator_department
+                            model.order_invoice_daf_approval_updated_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_DAF_REJECTED
+                            model.save()
+
+                            # sending notification to Accountants
+                            operators = Operators.objects.filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                (Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Your invoice has been rejected.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-approve-cop':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_cop_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_cop_approval_updated_id = operator.operator_id
+                            model.order_invoice_cop_approval_updated_by = operator.operator_name
+                            model.order_invoice_cop_approval_updated_department = operator.operator_department
+                            model.order_invoice_cop_approval_updated_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_COP_APPROVED
+                            model.save()
+
+                            # sending notification to DAF
+                            operators = Operators.objects.filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                (Q(operator_role=Operators.ROLE_DIRECTOR) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Your invoice has been approved.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-invoice-reject-cop':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_invoice_cop_approval_updated_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_cop_approval_updated_id = operator.operator_id
+                            model.order_invoice_cop_approval_updated_by = operator.operator_name
+                            model.order_invoice_cop_approval_updated_department = operator.operator_department
+                            model.order_invoice_cop_approval_updated_role = operator.operator_role
+                            model.order_status = Orders.STATUS_INVOICE_COP_REJECTED
+                            model.save()
+
+                            # sending notification to Accountants
+                            operators = Operators.objects.filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                (Q(operator_role=Operators.ROLE_DIRECTOR) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
+                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
+                            )
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_OPERATOR,
+                                    operator.operator_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Your invoice has been rejected.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-paid':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_paid_at = Utils.get_current_datetime_utc()
+                            model.order_paid_id = operator.operator_id
+                            model.order_paid_by = operator.operator_name
+                            model.order_paid_department = operator.operator_department
+                            model.order_paid_role = operator.operator_role
+                            model.order_status = Orders.STATUS_PAID
+                            model.save()
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
+                if action == 'order-close':
+                    if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+                        try:
+                            model = Orders.objects.get(order_id=id)
+
+                            model.order_closed_at = Utils.get_current_datetime_utc()
+                            model.order_closed_id = operator.operator_id
+                            model.order_closed_by = operator.operator_name
+                            model.order_closed_department = operator.operator_department
+                            model.order_closed_role = operator.operator_role
+                            model.order_status = Orders.STATUS_CLOSED
+                            model.save()
+
+                            messages.success(request, 'Updated successfully.')
+                        except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                            return HttpResponseBadRequest('Bad Request', content_type='text/plain')
+                    else:
+                        return HttpResponseForbidden('Forbidden', content_type='text/plain')
                 return HttpResponse('success', content_type='text/plain')
             else:
                 return HttpResponseBadRequest('Bad Request', content_type='text/plain')
@@ -423,6 +708,7 @@ def create(request):
                     model.order_proposal_due_date = settings.APP_CONSTANT_DEFAULT_DATE_VALUE
                     model.order_purchase_no = 0
                     model.order_invoice_no = 0
+                    model.order_payment_voucher_no = 0
 
                     model.order_created_at = Utils.get_current_datetime_utc()
                     model.order_created_id = operator.operator_id
@@ -770,6 +1056,8 @@ def view(request, pk):
                 if model.order_approved_id != '':
                     notification_timeline = NotificationsTimeline()
                     notification_timeline.message = 'Approved <small>by ' + model.order_approved_role + '</small>'
+                    if model.order_status == Orders.STATUS_REJECTED:
+                        notification_timeline.message = 'Rejected <small>by ' + model.order_approved_role + '</small>'
                     notification_timeline.datetime = Utils.get_convert_datetime(model.order_approved_at,
                                                                                 settings.TIME_ZONE,
                                                                                 settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
@@ -831,6 +1119,86 @@ def view(request, pk):
                                                                                 settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
                     timeline_notifications.append(notification_timeline)
 
+                if model.order_invoice_uploaded_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Invoice uploaded <small>by ' + model.order_invoice_uploaded_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_invoice_uploaded_at,
+                                                                                settings.TIME_ZONE,
+                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_invoice_reviewed_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Invoice reviewed <small>by ' + model.order_invoice_reviewed_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_invoice_reviewed_at,
+                                                                                settings.TIME_ZONE,
+                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_invoice_payment_voucher_uploaded_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Invoice payment voucher uploaded <small>by ' + model.order_invoice_payment_voucher_uploaded_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(
+                        model.order_invoice_payment_voucher_uploaded_at,
+                        settings.TIME_ZONE,
+                        settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_invoice_approval_updated_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Invoice approved <small>by ' + model.order_invoice_approval_updated_role + '</small>'
+                    if model.order_status == Orders.STATUS_INVOICE_REJECTED:
+                        notification_timeline.message = 'Invoice rejected <small>by ' + model.order_invoice_approval_updated_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_invoice_approval_updated_at,
+                                                                                settings.TIME_ZONE,
+                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_invoice_daf_approval_updated_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Invoice approved <small>by ' + model.order_invoice_daf_approval_updated_role + '</small>'
+                    if model.order_status == Orders.STATUS_INVOICE_DAF_REJECTED:
+                        notification_timeline.message = 'Invoice rejected <small>by ' + model.order_invoice_daf_approval_updated_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(
+                        model.order_invoice_daf_approval_updated_at,
+                        settings.TIME_ZONE,
+                        settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_invoice_cop_approval_updated_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Invoice approved <small>by ' + model.order_invoice_cop_approval_updated_role + '</small>'
+                    if model.order_status == Orders.STATUS_INVOICE_COP_REJECTED:
+                        notification_timeline.message = 'Invoice rejected <small>by ' + model.order_invoice_cop_approval_updated_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(
+                        model.order_invoice_cop_approval_updated_at,
+                        settings.TIME_ZONE,
+                        settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_paid_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Paid <small>by ' + model.order_paid_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_paid_at, settings.TIME_ZONE,
+                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_closed_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Closed <small>by ' + model.order_closed_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_closed_at,
+                                                                                settings.TIME_ZONE,
+                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_cancelled_id != '':
+                    notification_timeline = NotificationsTimeline()
+                    notification_timeline.message = 'Closed <small>by ' + model.order_cancelled_role + '</small>'
+                    notification_timeline.datetime = Utils.get_convert_datetime(model.order_cancelled_at,
+                                                                                settings.TIME_ZONE,
+                                                                                settings.APP_CONSTANT_DISPLAY_TIME_ZONE) + ' ' + settings.APP_CONSTANT_DISPLAY_TIME_ZONE_INFO
+                    timeline_notifications.append(notification_timeline)
+
                 if model.order_status == Orders.STATUS_REQUESTED:
                     notification_timeline = NotificationsTimeline()
                     model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
@@ -843,9 +1211,21 @@ def view(request, pk):
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
+                if model.order_status == Orders.STATUS_LEVEL1_REJECTED and model.order_approval_no_of_levels >= 1:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected at level 1</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
                 if model.order_status == Orders.STATUS_LEVEL2_APPROVED and model.order_approval_no_of_levels > 2:
                     notification_timeline = NotificationsTimeline()
                     model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_LEVEL2_REJECTED and model.order_approval_no_of_levels >= 2:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected at level 2</b>"
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
@@ -855,9 +1235,21 @@ def view(request, pk):
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
+                if model.order_status == Orders.STATUS_LEVEL3_REJECTED and model.order_approval_no_of_levels >= 3:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected at level 3</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
                 if model.order_status == Orders.STATUS_LEVEL4_APPROVED and model.order_approval_no_of_levels > 4:
                     notification_timeline = NotificationsTimeline()
                     model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_LEVEL4_REJECTED and model.order_approval_no_of_levels >= 4:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected at level 4</b>"
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
@@ -867,9 +1259,21 @@ def view(request, pk):
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
+                if model.order_status == Orders.STATUS_LEVEL5_REJECTED and model.order_approval_no_of_levels >= 5:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected at level 5</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
                 if model.order_status == Orders.STATUS_LEVEL6_APPROVED and model.order_approval_no_of_levels > 6:
                     notification_timeline = NotificationsTimeline()
                     model.order_readable_status = notification_timeline.message = "<b class='text-red'>Level approval pending</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_LEVEL6_REJECTED and model.order_approval_no_of_levels >= 6:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected at level 6</b>"
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
@@ -894,6 +1298,12 @@ def view(request, pk):
                 if model.order_status == Orders.STATUS_APPROVED:
                     notification_timeline = NotificationsTimeline()
                     model.order_readable_status = notification_timeline.message = "<b class='text-red'>Assign pending from OPM</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_REJECTED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Rejected from COP</b>"
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
@@ -939,6 +1349,105 @@ def view(request, pk):
                     notification_timeline.datetime = ''
                     timeline_notifications.append(notification_timeline)
 
+                if model.order_status == Orders.STATUS_INVOICE_UPLOADED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Invoice review is pending</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_REVIEWED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Generate payment voucher is pending</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Approval pending from Sr. Accountant</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_APPROVED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Approval pending from DAF</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_REJECTED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Invoice rejected by Sr. Accountant</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_DAF_APPROVED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Approval pending from COP</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_DAF_REJECTED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Invoice rejected by DAF</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_COP_APPROVED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Payment pending</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_INVOICE_COP_REJECTED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Invoice rejected by COP</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_PAID:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Payment Done</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_CLOSED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-success'>Completed</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                if model.order_status == Orders.STATUS_CANCELLED:
+                    notification_timeline = NotificationsTimeline()
+                    model.order_readable_status = notification_timeline.message = "<b class='text-red'>Cancelled</b>"
+                    notification_timeline.datetime = ''
+                    timeline_notifications.append(notification_timeline)
+
+                try:
+                    attachment_order_purchase_no = Attachments.objects.get(
+                        attachment_model=Attachments.MODEL_ORDERS,
+                        attachment_model_id=model.order_id,
+                        attachment_type=Attachments.TYPE_ORDER_PURCHASE,
+                    )
+                except Attachments.DoesNotExist:
+                    attachment_order_purchase_no = ''
+
+                try:
+                    attachment_order_invoice_no = Attachments.objects.get(
+                        attachment_model=Attachments.MODEL_ORDERS,
+                        attachment_model_id=model.order_id,
+                        attachment_type=Attachments.TYPE_ORDER_INVOICE,
+                    )
+                except Attachments.DoesNotExist:
+                    attachment_order_invoice_no = ''
+
+                try:
+                    attachment_order_payment_voucher = Attachments.objects.get(
+                        attachment_model=Attachments.MODEL_ORDERS,
+                        attachment_model_id=model.order_id,
+                        attachment_type=Attachments.TYPE_ORDER_PAYMENT_VOUCHER,
+                    )
+                except Attachments.DoesNotExist:
+                    attachment_order_payment_voucher = ''
+
                 return render(
                     request, template_url,
                     {
@@ -957,6 +1466,9 @@ def view(request, pk):
                         'status_html_tag': Orders.get_status_html_tag(model),
                         'display_level_approval': display_level_approval,
                         'timeline_notifications': timeline_notifications,
+                        'attachment_order_purchase_no': attachment_order_purchase_no,
+                        'attachment_order_invoice_no': attachment_order_invoice_no,
+                        'attachment_order_payment_voucher': attachment_order_payment_voucher,
                     }
                 )
             except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
@@ -2192,9 +2704,6 @@ def update_purchase_order(request, pk):
                 model = Orders.objects.get(order_id=pk)
                 if request.method == 'POST':
 
-                    print(request.POST)
-                    print(request.FILES)
-
                     form = OrderPurchaseUpdateForm(request.POST, request.FILES)
 
                     import magic
@@ -2209,6 +2718,8 @@ def update_purchase_order(request, pk):
                             ).all()
 
                             for attachment in attachments:
+                                if attachment.attachment_file_path:
+                                    Utils.delete_file(attachment.attachment_file_path.path)
                                 attachment.delete()
 
                             attachment = Attachments()
@@ -2316,6 +2827,8 @@ def update_invoice_order(request, pk):
                             ).all()
 
                             for attachment in attachments:
+                                if attachment.attachment_file_path:
+                                    Utils.delete_file(attachment.attachment_file_path.path)
                                 attachment.delete()
 
                             attachment = Attachments()
@@ -2349,7 +2862,33 @@ def update_invoice_order(request, pk):
                             attachment.save()
 
                             model.order_invoice_no = form.cleaned_data['order_invoice_no']
+
+                            model.order_invoice_uploaded_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_uploaded_id = operator.operator_id
+                            model.order_invoice_uploaded_by = operator.operator_name
+                            model.order_invoice_uploaded_department = operator.operator_department
+                            model.order_invoice_uploaded_role = operator.operator_role
+
+                            model.order_status = Orders.STATUS_INVOICE_UPLOADED
                             model.save()
+
+                            # sending notification to OPM
+                            operators = Operators.objects.all().filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_role=Operators.ROLE_OPM)
+                            )
+
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_SUPPLIER,
+                                    model.order_proposal_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Invoice uploaded to review.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
 
                             messages.success(request, 'Updated successfully.')
                             return redirect(reverse("orders_view", args=[model.order_id]))
@@ -2364,8 +2903,135 @@ def update_invoice_order(request, pk):
                 else:
                     form = OrderInvoiceUpdateForm(
                         initial={
-                            'order_id': model.order_code,
+                            'order_purchase_no': model.order_purchase_no,
                             'order_invoice_no': model.order_invoice_no,
+                        }
+                    )
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
+                        'title': Orders.TITLE,
+                        'name': Orders.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                    }
+                )
+            except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update_payment_voucher_order(request, pk):
+    template_url = 'orders/update-payment-voucher.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_UPDATE in auth_permissions.values():
+            try:
+                model = Orders.objects.get(order_id=pk)
+                if request.method == 'POST':
+
+                    form = OrderPaymentVoucherUpdateForm(request.POST, request.FILES)
+
+                    import magic
+                    mime = magic.Magic(mime=True)
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        try:
+                            attachments = Attachments.objects.filter(
+                                attachment_model=Attachments.MODEL_ORDERS,
+                                attachment_model_id=model.order_id,
+                                attachment_type=Attachments.TYPE_ORDER_PAYMENT_VOUCHER,
+                            ).all()
+
+                            for attachment in attachments:
+                                if attachment.attachment_file_path:
+                                    Utils.delete_file(attachment.attachment_file_path.path)
+                                attachment.delete()
+
+                            attachment = Attachments()
+                            attachment.UPLOAD_PATH = Attachments.ORDERS_UPLOAD_PATH
+                            attachment.attachment_model = Attachments.MODEL_ORDERS
+                            attachment.attachment_model_id = model.order_id
+                            attachment.attachment_type_id = 0
+                            attachment.attachment_number = 0
+                            attachment.attachment_type = Attachments.TYPE_ORDER_PAYMENT_VOUCHER
+                            attachment.attachment_file_uploaded_at = Utils.get_current_datetime_utc()
+                            attachment.attachment_file_uploaded_id = operator.operator_id
+                            attachment.attachment_file_uploaded_by = operator.operator_name
+                            attachment.attachment_file_uploaded_department = operator.operator_department
+                            attachment.attachment_file_uploaded_role = operator.operator_role
+
+                            original_filename = form.cleaned_data['attachment_file_path']
+
+                            ext = original_filename.split('.')[-1]
+                            new_filename = 'order_payment_voucher_' + str(model.order_code) + '_' + str(
+                                Utils.get_epochtime_ms()) + '.' + str(ext)
+                            temp_file_path = settings.MEDIA_ROOT + 'temp/' + str(original_filename)
+                            attachment_file_path = settings.MEDIA_ROOT + attachment.UPLOAD_PATH + str(
+                                new_filename)
+                            os.rename(temp_file_path, attachment_file_path)
+                            url = attachment.UPLOAD_PATH + new_filename
+                            size = str(os.path.getsize(attachment_file_path))
+                            attachment.attachment_file_name = original_filename
+                            attachment.attachment_file_path = url
+                            attachment.attachment_file_type = str(mime.from_file(attachment_file_path))
+                            attachment.attachment_file_size = size
+                            attachment.save()
+
+                            model.order_payment_voucher_no = form.cleaned_data['order_payment_voucher_no']
+
+                            model.order_invoice_payment_voucher_uploaded_at = Utils.get_current_datetime_utc()
+                            model.order_invoice_payment_voucher_uploaded_id = operator.operator_id
+                            model.order_invoice_payment_voucher_uploaded_by = operator.operator_name
+                            model.order_invoice_payment_voucher_uploaded_department = operator.operator_department
+                            model.order_invoice_payment_voucher_uploaded_role = operator.operator_role
+
+                            model.order_status = Orders.STATUS_INVOICE_PAYMENT_VOUCHER_GENERATED
+                            model.save()
+
+                            # sending notification to OPM
+                            operators = Operators.objects.all().filter(
+                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER)
+                            )
+
+                            for item in operators:
+                                Notifications.add_notification(
+                                    Notifications.TYPE_SUPPLIER,
+                                    model.order_proposal_id,
+                                    Notifications.TYPE_OPERATOR,
+                                    item.operator_id,
+                                    Notifications.TYPE_ORDER,
+                                    model.order_id,
+                                    "Invoice payment voucher uploaded for approval.",
+                                    "/backend/orders/view/" + str(model.order_id) + "/"
+                                )
+
+                            messages.success(request, 'Updated successfully.')
+                            return redirect(reverse("orders_view", args=[model.order_id]))
+                        except Exception as e:
+                            print('Exception: ' + str(e))
+                            messages.error(request, '' + str(e))
+                            return redirect(reverse("orders_view", args=[model.order_id]))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("orders_view", args=[model.order_id]))
+                else:
+                    form = OrderPaymentVoucherUpdateForm(
+                        initial={
+                            'order_invoice_no': model.order_invoice_no,
+                            'order_payment_voucher_no': model.order_payment_voucher_no,
                         }
                     )
 

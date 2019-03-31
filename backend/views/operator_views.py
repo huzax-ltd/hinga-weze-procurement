@@ -247,7 +247,7 @@ def signin(request):
                         if settings.ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values():
                             return redirect(reverse("operators_dashboard"))
                         else:
-                            return redirect(reverse("operators_view", args=[model.operator_id]))
+                            return redirect(reverse("operators_profile_view"))
                     else:
                         # return redirect(redirect_field_name)
                         if settings.ACCESS_PERMISSION_DASHBOARD_VIEW in auth_permissions.values():
@@ -1429,74 +1429,71 @@ def profile_update(request):
         return redirect(reverse("operators_signin"))
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
-        if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values():
-            try:
-                model = operator
-                if request.method == 'POST':
+        try:
+            model = operator
+            if request.method == 'POST':
 
-                    form = OperatorUpdateProfileForm(request.POST)
+                form = OperatorUpdateProfileForm(request.POST)
 
-                    # noinspection PyArgumentList
-                    if form.is_valid():
-                        model.operator_name = form.cleaned_data['name']
-                        model.operator_gender = form.cleaned_data['gender']
-                        model.operator_contact_phone_number = form.cleaned_data['phone_number']
+                # noinspection PyArgumentList
+                if form.is_valid():
+                    model.operator_name = form.cleaned_data['name']
+                    model.operator_gender = form.cleaned_data['gender']
+                    model.operator_contact_phone_number = form.cleaned_data['phone_number']
 
-                        model.operator_updated_at = Utils.get_current_datetime_utc()
-                        model.operator_updated_by = operator.operator_username
-                        model.save()
+                    model.operator_updated_at = Utils.get_current_datetime_utc()
+                    model.operator_updated_by = operator.operator_username
+                    model.save()
 
-                        Operator_Logs.add(
-                            model.operator_id,
-                            model.operator_username,
-                            model.operator_name,
-                            'Updated ' + Operators.SINGULAR_TITLE,
-                            Utils.get_browser_details_from_request(request),
-                            Utils.get_ip_address(request),
-                            operator.operator_username,
-                        )
-
-                        messages.success(request, 'Updated successfully.')
-                        return redirect(reverse("operators_profile_view"))
-                    else:
-                        return render(
-                            request, template_url,
-                            {
-                                'section': settings.BACKEND_SECTION_PROFILE,
-                                'title': Operators.TITLE,
-                                'name': Operators.NAME,
-                                'operator': operator,
-                                'auth_permissions': auth_permissions,
-                                'form': form,
-                            }
-                        )
-                else:
-                    form = OperatorUpdateProfileForm(
-                        initial={
-                            'email': model.operator_username,
-                            'name': model.operator_name,
-                            'department': model.operator_department,
-                            'role': model.operator_role,
-                            'gender': model.operator_gender,
-                            'phone_number': model.operator_contact_phone_number,
-                        }
+                    Operator_Logs.add(
+                        model.operator_id,
+                        model.operator_username,
+                        model.operator_name,
+                        'Updated ' + Operators.SINGULAR_TITLE,
+                        Utils.get_browser_details_from_request(request),
+                        Utils.get_ip_address(request),
+                        operator.operator_username,
                     )
 
-                return render(
-                    request, template_url,
-                    {
-                        'section': settings.BACKEND_SECTION_PROFILE,
-                        'title': Operators.TITLE,
-                        'name': Operators.NAME,
-                        'operator': operator,
-                        'auth_permissions': auth_permissions,
-                        'form': form,
+                    messages.success(request, 'Updated successfully.')
+                    return redirect(reverse("operators_profile_view"))
+                else:
+                    return render(
+                        request, template_url,
+                        {
+                            'section': settings.BACKEND_SECTION_PROFILE,
+                            'title': Operators.TITLE,
+                            'name': Operators.NAME,
+                            'operator': operator,
+                            'auth_permissions': auth_permissions,
+                            'form': form,
+                        }
+                    )
+            else:
+                form = OperatorUpdateProfileForm(
+                    initial={
+                        'email': model.operator_username,
+                        'name': model.operator_name,
+                        'department': model.operator_department,
+                        'role': model.operator_role,
+                        'gender': model.operator_gender,
+                        'phone_number': model.operator_contact_phone_number,
                     }
                 )
-            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
-                return HttpResponseNotFound('Not Found', content_type='text/plain')
-        else:
-            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_PROFILE,
+                    'title': Operators.TITLE,
+                    'name': Operators.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'form': form,
+                }
+            )
+        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+            return HttpResponseNotFound('Not Found', content_type='text/plain')
 
 
 # noinspection PyUnusedLocal, PyShadowingBuiltins
@@ -1508,89 +1505,86 @@ def profile_change_password(request):
         return redirect(reverse("operators_signin"))
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
-        if settings.ACCESS_PERMISSION_OPERATOR_UPDATE in auth_permissions.values():
-            try:
-                model = operator
+        try:
+            model = operator
 
-                if request.method == 'POST':
-                    form = OperatorChangePasswordForm(request.POST)
-                    form.fields["email"].initial = model.operator_username
+            if request.method == 'POST':
+                form = OperatorChangePasswordForm(request.POST)
+                form.fields["email"].initial = model.operator_username
 
-                    # noinspection PyArgumentList
-                    if form.is_valid():
+                # noinspection PyArgumentList
+                if form.is_valid():
 
-                        model.operator_password_hash = make_password(form.cleaned_data['new_password'])
-                        model.operator_password_reset_token = ''
+                    model.operator_password_hash = make_password(form.cleaned_data['new_password'])
+                    model.operator_password_reset_token = ''
 
-                        model.operator_updated_at = Utils.get_current_datetime_utc()
-                        model.operator_updated_by = operator.operator_username
-                        model.save()
+                    model.operator_updated_at = Utils.get_current_datetime_utc()
+                    model.operator_updated_by = operator.operator_username
+                    model.save()
 
-                        Operator_Logs.add(
-                            model.operator_id,
-                            model.operator_username,
-                            model.operator_name,
-                            Operators.SINGULAR_TITLE + ' Changed Password',
-                            Utils.get_browser_details_from_request(request),
-                            Utils.get_ip_address(request),
-                            operator.operator_username,
-                        )
+                    Operator_Logs.add(
+                        model.operator_id,
+                        model.operator_username,
+                        model.operator_name,
+                        Operators.SINGULAR_TITLE + ' Changed Password',
+                        Utils.get_browser_details_from_request(request),
+                        Utils.get_ip_address(request),
+                        operator.operator_username,
+                    )
 
-                        # sending password reset message mail
-                        if settings.IS_LOCAL:
-                            domain = settings.BACKEND_DOMAIN_LOCAL
-                        else:
-                            domain = settings.BACKEND_DOMAIN_PROD
-                        contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
-                        html_content = render_to_string(
-                            'email/email-info.html',
-                            {
-                                'name': model.operator_name,
-                                'message': 'Your password has been changed successfully.',
-                                'contact_url': contact_url,
-                            }
-                        )
-                        send_mail(
-                            settings.EMAIL_NOTIFICATION_SUBJECT,
-                            settings.EMAIL_NOTIFICATION_MESSAGE,
-                            settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
-                            [model.operator_username],
-                            fail_silently=False,
-                            html_message=html_content,
-                        )
-
-                        messages.info(request, 'Your password has been changed successfully.')
-                        return redirect(reverse("operators_profile_view"))
-
+                    # sending password reset message mail
+                    if settings.IS_LOCAL:
+                        domain = settings.BACKEND_DOMAIN_LOCAL
                     else:
-                        return render(
-                            request, template_url,
-                            {
-                                'section': settings.BACKEND_SECTION_PROFILE,
-                                'title': Operators.TITLE,
-                                'name': Operators.NAME,
-                                'operator': operator,
-                                'auth_permissions': auth_permissions,
-                                'form': form,
-                            }
-                        )
+                        domain = settings.BACKEND_DOMAIN_PROD
+                    contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    html_content = render_to_string(
+                        'email/email-info.html',
+                        {
+                            'name': model.operator_name,
+                            'message': 'Your password has been changed successfully.',
+                            'contact_url': contact_url,
+                        }
+                    )
+                    send_mail(
+                        settings.EMAIL_NOTIFICATION_SUBJECT,
+                        settings.EMAIL_NOTIFICATION_MESSAGE,
+                        settings.APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID,
+                        [model.operator_username],
+                        fail_silently=False,
+                        html_message=html_content,
+                    )
+
+                    messages.info(request, 'Your password has been changed successfully.')
+                    return redirect(reverse("operators_profile_view"))
+
                 else:
-                    form = OperatorChangePasswordForm()
-                    form.fields["email"].initial = model.operator_username
+                    return render(
+                        request, template_url,
+                        {
+                            'section': settings.BACKEND_SECTION_PROFILE,
+                            'title': Operators.TITLE,
+                            'name': Operators.NAME,
+                            'operator': operator,
+                            'auth_permissions': auth_permissions,
+                            'form': form,
+                        }
+                    )
+            else:
+                form = OperatorChangePasswordForm()
+                form.fields["email"].initial = model.operator_username
 
-                return render(
-                    request, template_url,
-                    {
-                        'section': settings.BACKEND_SECTION_PROFILE,
-                        'title': Operators.TITLE,
-                        'name': Operators.NAME,
-                        'operator': operator,
-                        'auth_permissions': auth_permissions,
-                        'form': form,
-                    }
-                )
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_PROFILE,
+                    'title': Operators.TITLE,
+                    'name': Operators.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'form': form,
+                }
+            )
 
-            except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
-                return HttpResponseNotFound('Not Found', content_type='text/plain')
-        else:
-            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+        except(TypeError, ValueError, OverflowError, Operators.DoesNotExist):
+            return HttpResponseNotFound('Not Found', content_type='text/plain')

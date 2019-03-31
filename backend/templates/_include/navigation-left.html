@@ -222,7 +222,7 @@
                 {% endif %}
 
                 {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
-                    {% if ACCESS_PERMISSION_INVENTORY_VIEW in auth_permissions.values %}
+                    {% if ACCESS_PERMISSION_INVENTORY_VIEW in auth_permissions.values or operator.operator_role == operator.ROLE_RECEPTIONIST %}
                         {% if section == BACKEND_SECTION_PROCUREMENT_PO_REQUESTS %}
                             <li class="nav-item">
                                 <a class="nav-link ripple  active" href="{% url 'orders_index_stock' %}">

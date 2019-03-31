@@ -285,6 +285,14 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # update payment voucher
+    url(r'^orders/update/payment-voucher/(?P<pk>.+)/$', order_views.update_payment_voucher_order,
+        name='orders_update_payment_voucher'),
+    url(r'^orders/update/payment-voucher/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
     # order items
     # create
     url(r'^order-items/create/(?P<order_id>.+)/$', order_item_views.create, name='order_items_create'),
