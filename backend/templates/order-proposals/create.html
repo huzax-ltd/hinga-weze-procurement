@@ -1,5 +1,14 @@
 {% extends '_include/base-page.html' %}{% block head %}{% load static %}
-    <title>{{ APP_CONSTANT_APP_NAME }} : Vendor Proposal Request</title>{% endblock %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : Vendor Proposal Request</title>
+    <style>
+        td {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
 {% block body %}{% load static %}
     {% load static %}{% csrf_token %}
     <div class="container">
@@ -230,9 +239,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment1 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file1-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment1.attachment_file_path.url }}"
+                                                            <a id="file1-link1"
+                                                               href="{{ attachment1.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment1.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -244,11 +254,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment1 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file1-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file1-link2"
                                                                href="{{ attachment1.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -257,11 +269,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment1 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file1-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file1-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment1.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -294,9 +306,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment2 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file2-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment2.attachment_file_path.url }}"
+                                                            <a id="file2-link1"
+                                                               href="{{ attachment2.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment2.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -308,11 +321,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment2 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file2-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file2-link2"
                                                                href="{{ attachment2.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -321,11 +336,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment2 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file2-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file2-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment2.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -358,9 +373,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment3 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file3-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment3.attachment_file_path.url }}"
+                                                            <a id="file3-link1"
+                                                               href="{{ attachment3.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment3.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -372,11 +388,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment3 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file3-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file3-link2"
                                                                href="{{ attachment3.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -385,11 +403,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment3 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file3-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file3-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment3.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -437,9 +455,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment4 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file4-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment4.attachment_file_path.url }}"
+                                                            <a id="file4-link1"
+                                                               href="{{ attachment4.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment4.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -451,11 +470,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment4 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file4-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file4-link2"
                                                                href="{{ attachment4.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -464,11 +485,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment4 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file4-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file4-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment4.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -500,9 +521,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment5 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file5-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment5.attachment_file_path.url }}"
+                                                            <a id="file5-link1"
+                                                               href="{{ attachment5.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment5.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -514,11 +536,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment5 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file5-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file5-link2"
                                                                href="{{ attachment5.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -527,11 +551,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment5 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file5-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file5-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment5.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -563,9 +587,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment6 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file6-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment6.attachment_file_path.url }}"
+                                                            <a id="file6-link1"
+                                                               href="{{ attachment6.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment6.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -577,11 +602,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment6 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file6-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file6-link2"
                                                                href="{{ attachment6.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -590,11 +617,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment6 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file6-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file6-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment6.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -686,9 +713,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment7 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file7-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment7.attachment_file_path.url }}"
+                                                            <a id="file7-link1"
+                                                               href="{{ attachment7.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment7.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -700,11 +728,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment7 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file7-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file7-link2"
                                                                href="{{ attachment7.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -713,11 +743,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment7 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file7-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file7-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment7.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -793,9 +823,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment8 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file8-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment8.attachment_file_path.url }}"
+                                                            <a id="file8-link1"
+                                                               href="{{ attachment8.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment8.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -807,11 +838,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment8 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file8-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file8-link2"
                                                                href="{{ attachment8.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -820,11 +853,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment8 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file8-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file8-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment8.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -900,9 +933,10 @@
                                                     </td>
                                                     <td>
                                                         {% if attachment9 == '' %}
-                                                            <a href="#" target="_blank"></a>
+                                                            <a id="file9-link1" href="#" target="_blank"></a>
                                                         {% else %}
-                                                            <a href="{{ attachment9.attachment_file_path.url }}"
+                                                            <a id="file9-link1"
+                                                               href="{{ attachment9.attachment_file_path.url }}"
                                                                target="_blank">{{ attachment9.attachment_file_name }}</a>
                                                         {% endif %}
                                                     </td>
@@ -914,11 +948,13 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment9 == '' %}
-                                                            <a download href="#" style="text-decoration: none;">
+                                                            <a download id="file9-link2" href="#"
+                                                               style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
                                                             </a>
                                                         {% else %}
                                                             <a download
+                                                               id="file9-link2"
                                                                href="{{ attachment9.attachment_file_path.url }}"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-download text-success"></i>
@@ -927,11 +963,11 @@
                                                     </td>
                                                     <td width="30px;">
                                                         {% if attachment9 == '' %}
-                                                            <a href="#" style="text-decoration: none;">
+                                                            <a id="file9-link3" href="#" style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
                                                             </a>
                                                         {% else %}
-                                                            <a href="#"
+                                                            <a id="file9-link3" href="#"
                                                                onclick="singleSelect('{{ select_single_url }}', 'order-attachment-delete-external', '{{ attachment9.attachment_id }}', '{{ item_index_url }}');"
                                                                style="text-decoration: none;">
                                                                 <i class="icon icon-delete text-danger"></i>
@@ -1017,10 +1053,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1036,6 +1072,15 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+
+                    if (response.error == false) {
+                        $("#file1-link1").attr("href", response.url);
+                        $("#file1-link1").text(response.name);
+                        $("#file1-link2").attr("href", response.url);
+                        $("#file1-link3").removeAttr("onclick");
+                        $("#file1-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
+
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1070,10 +1115,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1089,6 +1134,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file2-link1").attr("href", response.url);
+                        $("#file2-link1").text(response.name);
+                        $("#file2-link2").attr("href", response.url);
+                        $("#file2-link3").removeAttr("onclick");
+                        $("#file2-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1123,10 +1175,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1142,6 +1194,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file3-link1").attr("href", response.url);
+                        $("#file3-link1").text(response.name);
+                        $("#file3-link2").attr("href", response.url);
+                        $("#file3-link3").removeAttr("onclick");
+                        $("#file3-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1176,10 +1235,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1195,6 +1254,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file4-link1").attr("href", response.url);
+                        $("#file4-link1").text(response.name);
+                        $("#file4-link2").attr("href", response.url);
+                        $("#file4-link3").removeAttr("onclick");
+                        $("#file4-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1229,10 +1295,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1248,6 +1314,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file5-link1").attr("href", response.url);
+                        $("#file5-link1").text(response.name);
+                        $("#file5-link2").attr("href", response.url);
+                        $("#file5-link3").removeAttr("onclick");
+                        $("#file5-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1282,10 +1355,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1301,6 +1374,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file6-link1").attr("href", response.url);
+                        $("#file6-link1").text(response.name);
+                        $("#file6-link2").attr("href", response.url);
+                        $("#file6-link3").removeAttr("onclick");
+                        $("#file6-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1335,10 +1415,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1354,6 +1434,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file7-link1").attr("href", response.url);
+                        $("#file7-link1").text(response.name);
+                        $("#file7-link2").attr("href", response.url);
+                        $("#file7-link3").removeAttr("onclick");
+                        $("#file7-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1388,10 +1475,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1407,6 +1494,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file8-link1").attr("href", response.url);
+                        $("#file8-link1").text(response.name);
+                        $("#file8-link2").attr("href", response.url);
+                        $("#file8-link3").removeAttr("onclick");
+                        $("#file8-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();
@@ -1441,10 +1535,10 @@
                     $('.modal-backdrop').hide();
                     $("body").removeClass("modal-open");
                     console.log('stop');
-                    var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";
-                    url = url.replace("P1", "{{ model.orders_order_id }}");
-                    url = url.replace("P2", "{{ model.order_proposal_code }}");
-                    location.href = url;
+                    {#var url = "{% url 'order_proposals_create' pk='P1' code='P2' %}";#}
+                    {#url = url.replace("P1", "{{ model.orders_order_id }}");#}
+                    {#url = url.replace("P2", "{{ model.order_proposal_code }}");#}
+                    {#location.href = url;#}
                 },
                 progressall: function (e, data) {
                     console.log('progress-all');
@@ -1460,6 +1554,13 @@
                     var response = jQuery.parseJSON(data.result);
                     console.log(response.error);
                     console.log(response.message);
+                    if (response.error == false) {
+                        $("#file9-link1").attr("href", response.url);
+                        $("#file9-link1").text(response.name);
+                        $("#file9-link2").attr("href", response.url);
+                        $("#file9-link3").removeAttr("onclick");
+                        $("#file9-link3").attr("onclick", "singleSelect(\'{{ select_single_url }}\', \'order-attachment-delete-external\', \'" + response.id + "\', \'{{ item_index_url }}\');");
+                    }
                 },
                 error: function (data) {
                     bootbox.hideAll();

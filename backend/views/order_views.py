@@ -96,7 +96,7 @@ def index_operator(request):
             return render(
                 request, template_url,
                 {
-                    'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_MY_REQUESTS,
                     'title': Orders.TITLE,
                     'name': Orders.NAME,
                     'operator': operator,
@@ -175,7 +175,7 @@ def select_single(request):
                             model = Orders.objects.get(order_id=id)
                             if model.order_created_id == str(operator.operator_id):
                                 Orders.request_or_level_approval_order(request, 'request', model, operator)
-                                messages.success(request, 'Order requested successfully.')
+                                messages.success(request, 'Requested successfully.')
                             else:
                                 messages.success(request, 'Forbidden')
                         except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
@@ -187,7 +187,7 @@ def select_single(request):
                         try:
                             model = Orders.objects.get(order_id=id)
                             Orders.request_or_level_approval_order(request, 'approve', model, operator)
-                            messages.success(request, 'Order approved successfully.')
+                            messages.success(request, 'Approved successfully.')
                         except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -197,7 +197,7 @@ def select_single(request):
                         try:
                             model = Orders.objects.get(order_id=id)
                             Orders.request_or_level_approval_order(request, 'reject', model, operator)
-                            messages.success(request, 'Order rejected successfully.')
+                            messages.success(request, 'Rejected successfully.')
                         except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -229,7 +229,7 @@ def select_single(request):
                                     "/backend/orders/view/" + str(model.order_id) + "/"
                                 )
 
-                            messages.success(request, 'Order reviewed successfully.')
+                            messages.success(request, 'Reviewed successfully.')
                         except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -275,7 +275,7 @@ def select_single(request):
                                     "/backend/orders/view/" + str(model.order_id) + "/"
                                 )
 
-                            messages.success(request, 'Order approved successfully.')
+                            messages.success(request, 'Approved successfully.')
                         except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -307,7 +307,7 @@ def select_single(request):
                                     "/backend/orders/view/" + str(model.order_id) + "/"
                                 )
 
-                            messages.success(request, 'Order rejected successfully.')
+                            messages.success(request, 'Rejected successfully.')
                         except(TypeError, ValueError, OverflowError, Orders.DoesNotExist):
                             return HttpResponseBadRequest('Bad Request', content_type='text/plain')
                     else:
@@ -1958,10 +1958,10 @@ def send_email_to_supplier(request, pk):
                     # sending email
                     if settings.IS_LOCAL:
                         domain = settings.BACKEND_DOMAIN_LOCAL
-                        logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                        logo_url = settings.LOGO_URL_LOCAL
                     else:
                         domain = settings.BACKEND_DOMAIN_PROD
-                        logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+                        logo_url = settings.LOGO_URL_PROD
 
                     # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
                     contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
@@ -2433,10 +2433,10 @@ def order_proposal_create(request, pk, code):
                 # sending email confirmation mail
                 if settings.IS_LOCAL:
                     domain = settings.BACKEND_DOMAIN_LOCAL
-                    logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                    logo_url = settings.LOGO_URL_LOCAL
                 else:
                     domain = settings.BACKEND_DOMAIN_PROD
-                    logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+                    logo_url = settings.LOGO_URL_PROD
 
                 # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
                 contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
@@ -3102,10 +3102,10 @@ def send_purchase_order(request, pk):
                 # sending email confirmation mail
                 if settings.IS_LOCAL:
                     domain = settings.BACKEND_DOMAIN_LOCAL
-                    logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                    logo_url = settings.LOGO_URL_LOCAL
                 else:
                     domain = settings.BACKEND_DOMAIN_PROD
-                    logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+                    logo_url = settings.LOGO_URL_PROD
 
                 contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                 link_url = '{domain}/{path}'.format(

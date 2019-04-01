@@ -139,6 +139,8 @@ REST_FRAMEWORK = {
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
+LOGO_URL_LOCAL = 'http://127.0.0.1:8000/app/logo/'
+LOGO_URL_PROD = 'https://hingaweze.pythonanywhere.com/app/logo/'
 BACKEND_DOMAIN_LOCAL = 'http://127.0.0.1:8000/backend'
 BACKEND_DOMAIN_PROD = 'https://hingaweze.pythonanywhere.com/backend'
 STATIC_LOCAL = 'http://127.0.0.1/hinga-weze-procurement/static/'
@@ -262,9 +264,9 @@ else:
     # Python Anywhere
     # default static files settings for PythonAnywhere.
     # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-    MEDIA_ROOT = u'/home/HingaWeze/hinga_weze_procurement/uploads'
+    MEDIA_ROOT = u'/home/HingaWeze/hinga_weze_procurement/uploads/'
     MEDIA_URL = '/uploads/'
-    STATIC_ROOT = u'/home/HingaWeze/hinga_weze_procurement/static'
+    STATIC_ROOT = u'/home/HingaWeze/hinga_weze_procurement/static/'
     STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = (
@@ -294,16 +296,16 @@ APP_CONSTANT_APP_VERSION_CODE = "v1.0.0"
 APP_CONSTANT_APP_VERSION_NAME = "v1.0.0"
 APP_CONSTANT_COMPANY_NAME = "CNFA"
 APP_CONSTANT_COMPANY_WEBSITE = "https://www.cnfa.org"
-APP_CONSTANT_TECH_SUPPORT_EMAIL_ID = "support@techcible.com"
+APP_CONSTANT_TECH_SUPPORT_EMAIL_ID = "huzaxdeveloper@gmail.com"
 APP_CONSTANT_ADMIN_SUPPORT_EMAIL_ID = APP_CONSTANT_TECH_SUPPORT_EMAIL_ID
 
 # Email Settings
-EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST = 'smtp.gmail.com'
 # 587,465
 EMAIL_PORT = 465
-EMAIL_HOST_NAME = 'Cultivating New Frontiers in Agriculture'
-EMAIL_HOST_USER = 'support@techcible.com'
-EMAIL_HOST_PASSWORD = 'Navin@321'
+EMAIL_HOST_NAME = 'Cultivating New Frontiers in Agriculture (CNFA)'
+EMAIL_HOST_USER = 'huzaxdeveloper@gmail.com'
+EMAIL_HOST_PASSWORD = '$@mur@!2019'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
@@ -460,12 +462,12 @@ MODEL_ORDERS_PLURAL_TITLE = 'Procurement Requests'
 MODEL_ORDERS_SINGULAR_TITLE = 'Procurement Request'
 MODEL_ORDER_PAYMENTS_PLURAL_TITLE = 'Payment History'
 MODEL_ORDER_PAYMENTS_SINGULAR_TITLE = 'Payment History'
-MODEL_ORDER_APPROVALS_PLURAL_TITLE = 'Order Approvals'
-MODEL_ORDER_APPROVALS_SINGULAR_TITLE = 'Order Approval'
+MODEL_ORDER_APPROVALS_PLURAL_TITLE = 'Request Approvals'
+MODEL_ORDER_APPROVALS_SINGULAR_TITLE = 'Request Approval'
 MODEL_ORDER_PROPOSALS_PLURAL_TITLE = 'Proposals'
 MODEL_ORDER_PROPOSALS_SINGULAR_TITLE = 'Proposal'
-MODEL_ORDER_ITEMS_PLURAL_TITLE = 'Order Items'
-MODEL_ORDER_ITEM_SINGULAR_TITLE = 'Order Item'
+MODEL_ORDER_ITEMS_PLURAL_TITLE = 'Request Items'
+MODEL_ORDER_ITEM_SINGULAR_TITLE = 'Request Item'
 MODEL_PRODUCTS_PLURAL_TITLE = 'Products'
 MODEL_PRODUCTS_ITEM_SINGULAR_TITLE = 'Product'
 MODEL_INVENTORY_PLURAL_TITLE = 'Inventory'

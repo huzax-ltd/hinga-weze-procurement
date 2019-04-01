@@ -84,7 +84,7 @@ def index_operator(request):
             return render(
                 request, template_url,
                 {
-                    'section': settings.BACKEND_SECTION_STOCK_ALL_REQUESTS,
+                    'section': settings.BACKEND_SECTION_STOCK_MY_REQUESTS,
                     'title': Product_Requests.TITLE,
                     'name': Product_Requests.NAME,
                     'operator': operator,

@@ -254,103 +254,123 @@ def create(request, pk, code):
             model.order_proposal_status = Order_Proposals.STATUS_PENDING
             # noinspection PyCallByClass,PyTypeChecker
             model.save('Created')
+
+            attachment1 = ''
+            attachment2 = ''
+            attachment3 = ''
+            attachment4 = ''
+            attachment5 = ''
+            attachment6 = ''
+            attachment7 = ''
+            attachment8 = ''
+            attachment9 = ''
+
         else:
             model = Order_Proposals.objects.get(order_proposal_code=code)
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE,
+                attachment_type_id=model.order_proposal_code,
+            ).order_by('-attachment_id').all()
 
-        attachment1 = ''
-        if attachments.count() != 0:
-            attachment1 = attachments[0]
+            attachment1 = ''
+            if attachments.count() != 0:
+                attachment1 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER,
+                attachment_type_id=model.order_proposal_code,
+            ).order_by('-attachment_id').all()
 
-        attachment2 = ''
-        if attachments.count() != 0:
-            attachment2 = attachments[0]
+            attachment2 = ''
+            if attachments.count() != 0:
+                attachment2 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_QUOTATION,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_QUOTATION,
+                attachment_type_id=model.order_proposal_code,
+            ).order_by('-attachment_id').all()
 
-        attachment3 = ''
-        if attachments.count() != 0:
-            attachment3 = attachments[0]
+            attachment3 = ''
+            if attachments.count() != 0:
+                attachment3 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION,
+                attachment_type_id=model.order_proposal_code,
+            ).order_by('-attachment_id').all()
 
-        attachment4 = ''
-        if attachments.count() != 0:
-            attachment4 = attachments[0]
+            attachment4 = ''
+            if attachments.count() != 0:
+                attachment4 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
-            attachment_number=1,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+                attachment_type_id=model.order_proposal_code,
+                attachment_number=1,
+            ).order_by('-attachment_id').all()
 
-        attachment5 = ''
-        if attachments.count() != 0:
-            attachment5 = attachments[0]
+            attachment5 = ''
+            if attachments.count() != 0:
+                attachment5 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
-            attachment_number=2,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+                attachment_type_id=model.order_proposal_code,
+                attachment_number=2,
+            ).order_by('-attachment_id').all()
 
-        attachment6 = ''
-        if attachments.count() != 0:
-            attachment6 = attachments[0]
+            attachment6 = ''
+            if attachments.count() != 0:
+                attachment6 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
-            attachment_number=1,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                attachment_type_id=model.order_proposal_code,
+                attachment_number=1,
+            ).order_by('-attachment_id').all()
 
-        attachment7 = ''
-        if attachments.count() != 0:
-            attachment7 = attachments[0]
+            attachment7 = ''
+            if attachments.count() != 0:
+                attachment7 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
-            attachment_number=2,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                attachment_type_id=model.order_proposal_code,
+                attachment_number=2,
+            ).order_by('-attachment_id').all()
 
-        attachment8 = ''
-        if attachments.count() != 0:
-            attachment8 = attachments[0]
+            attachment8 = ''
+            if attachments.count() != 0:
+                attachment8 = attachments[0]
 
-        attachments = Attachments.objects.filter(
-            attachment_model=Attachments.MODEL_ORDERS,
-            attachment_model_id=order.order_id,
-            attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
-            attachment_number=3,
-        ).order_by('-attachment_id').all()
+            attachments = Attachments.objects.filter(
+                attachment_model=Attachments.MODEL_ORDERS,
+                attachment_model_id=order.order_id,
+                attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                attachment_type_id=model.order_proposal_code,
+                attachment_number=3,
+            ).order_by('-attachment_id').all()
 
-        attachment9 = ''
-        if attachments.count() != 0:
-            attachment9 = attachments[0]
+            attachment9 = ''
+            if attachments.count() != 0:
+                attachment9 = attachments[0]
 
         if request.method == 'POST':
 
@@ -476,10 +496,10 @@ def create(request, pk, code):
                 # sending email confirmation mail
                 if settings.IS_LOCAL:
                     domain = settings.BACKEND_DOMAIN_LOCAL
-                    logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                    logo_url = settings.LOGO_URL_LOCAL
                 else:
                     domain = settings.BACKEND_DOMAIN_PROD
-                    logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+                    logo_url = settings.LOGO_URL_PROD
 
                 # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
                 contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
@@ -649,6 +669,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_BUSINESS_LICENSE,
+                    attachment_type_id=model.order_proposal_code,
                 ).order_by('-attachment_id').all()
 
                 attachment1 = ''
@@ -659,6 +680,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OFFER_LETTER,
+                    attachment_type_id=model.order_proposal_code,
                 ).order_by('-attachment_id').all()
 
                 attachment2 = ''
@@ -669,6 +691,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_QUOTATION,
+                    attachment_type_id=model.order_proposal_code,
                 ).order_by('-attachment_id').all()
 
                 attachment3 = ''
@@ -679,6 +702,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_VAT_REGISTRATION,
+                    attachment_type_id=model.order_proposal_code,
                 ).order_by('-attachment_id').all()
 
                 attachment4 = ''
@@ -689,6 +713,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+                    attachment_type_id=model.order_proposal_code,
                     attachment_number=1,
                 ).order_by('-attachment_id').all()
 
@@ -700,6 +725,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_OTHER_DOCUMENT,
+                    attachment_type_id=model.order_proposal_code,
                     attachment_number=2,
                 ).order_by('-attachment_id').all()
 
@@ -711,6 +737,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                    attachment_type_id=model.order_proposal_code,
                     attachment_number=1,
                 ).order_by('-attachment_id').all()
 
@@ -722,6 +749,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                    attachment_type_id=model.order_proposal_code,
                     attachment_number=2,
                 ).order_by('-attachment_id').all()
 
@@ -733,6 +761,7 @@ def view_internal(request, pk):
                     attachment_model=Attachments.MODEL_ORDERS,
                     attachment_model_id=order.order_id,
                     attachment_type=Attachments.TYPE_ORDER_PROPOSAL_REFERENCE_DOCUMENT,
+                    attachment_type_id=model.order_proposal_code,
                     attachment_number=3,
                 ).order_by('-attachment_id').all()
 
@@ -1075,10 +1104,10 @@ def select_proposal(request, pk):
                         # sending email confirmation mail
                         if settings.IS_LOCAL:
                             domain = settings.BACKEND_DOMAIN_LOCAL
-                            logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                            logo_url = settings.LOGO_URL_LOCAL
                         else:
                             domain = settings.BACKEND_DOMAIN_PROD
-                            logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+                            logo_url = settings.LOGO_URL_PROD
 
                         contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                         link_url = '{domain}/{path}'.format(
@@ -1119,10 +1148,10 @@ def select_proposal(request, pk):
                             # sending email confirmation mail
                             if settings.IS_LOCAL:
                                 domain = settings.BACKEND_DOMAIN_LOCAL
-                                logo_url = settings.STATIC_LOCAL + "app/logo-transparent-white.png"
+                                logo_url = settings.LOGO_URL_LOCAL
                             else:
                                 domain = settings.BACKEND_DOMAIN_PROD
-                                logo_url = settings.STATIC_PROD + "app/logo-transparent-white.png"
+                                logo_url = settings.LOGO_URL_PROD
 
                             contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                             link_url = '{domain}/{path}'.format(

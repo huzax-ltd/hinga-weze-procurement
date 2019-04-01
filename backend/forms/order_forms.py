@@ -1037,7 +1037,7 @@ class OrderInvoiceUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Model
 
 class OrderPaymentVoucherUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     order_invoice_no = forms.CharField(
-        label='Order Invoice No.',
+        label='Invoice No.',
         min_length=1,
         max_length=100,
         required=True,

@@ -358,7 +358,7 @@ def select_multiple(request):
                                                     inventory_item.delete()
                                                     continue
                                         except (Orders.DoesNotExist, Inventory.DoesNotExist):
-                                            print('Order or inventory does not exist.')
+                                            print('Model does not exist.')
                                     model.order_item_received_at = settings.APP_CONSTANT_DEFAULT_DATETIME_VALUE
                                     model.order_item_received_id = ''
                                     model.order_item_received_by = ''

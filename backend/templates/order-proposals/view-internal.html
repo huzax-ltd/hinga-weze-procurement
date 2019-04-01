@@ -1,5 +1,14 @@
 {% extends '_include/base-form.html' %}{% block head %}{% load static %}
-    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>{% endblock %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
+    <style>
+        td {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
 {% block body %}{% load static %}
     {% load static %}{% csrf_token %}
     <div class="content custom-scrollbar">

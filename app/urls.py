@@ -22,7 +22,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from api.views import api_operator_views
-from backend.views import operator_views
+from backend.views import operator_views, site_views
 
 urlpatterns = [
     # url(r'', include('shrink.urls')),
@@ -36,10 +36,14 @@ urlpatterns = [
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
+    # site
+    url(r'^app/logo/$', site_views.logo, name='app_logo'),
+
     # external api routes
     # operators
     url(r'^apis/operators/login/$', api_operator_views.operator_login, name='api_operators_login'),
     url(r'^apis/operators/$', api_operator_views.operators, name='api_operators'),
+
 ]
 
 if settings.DEBUG:

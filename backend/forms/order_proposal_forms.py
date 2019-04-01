@@ -1425,7 +1425,7 @@ class OrderProposalEvaluateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Mo
 
 class OrderProposalSelectForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     order_id = forms.CharField(
-        label='Order Id',
+        label='Request Id',
         min_length=8,
         max_length=8,
         required=False,
