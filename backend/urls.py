@@ -160,7 +160,6 @@ urlpatterns = [
     path('', order_views.index, name='index'),
 
     # index
-    url(r'^orders/json/$', order_views.json_orders, name='json_orders'),
     url(r'^orders/index/$', order_views.index, name='orders_index'),
     url(r'^orders/index/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
@@ -168,6 +167,11 @@ urlpatterns = [
         name='service-worker.js'),
     url(r'^orders/index/stock/$', order_views.index_stock, name='orders_index_stock'),
     url(r'^orders/index/stock/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    url(r'^orders/index/my/$', order_views.index_operator, name='orders_index_operator'),
+    url(r'^orders/index/my/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
@@ -371,7 +375,6 @@ urlpatterns = [
     path('', notification_views.index, name='index'),
 
     # index
-    url(r'^notifications/json/$', notification_views.json_notifications, name='json_notifications'),
     url(r'^notifications/index/$', notification_views.index, name='notifications_index'),
     url(r'^notifications/index/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
@@ -380,7 +383,6 @@ urlpatterns = [
 
     # operator_logs
     path('', operator_log_views.index, name='index'),
-    url(r'^operator-logs/json/$', operator_log_views.json_operator_logs, name='json_operator_logs'),
     url(r'^operator-logs/index/$', operator_log_views.index, name='operator_logs_index'),
     url(r'^operator-logs/index/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
@@ -444,6 +446,11 @@ urlpatterns = [
     # index
     url(r'^product-requests/index/$', product_request_views.index, name='product_requests_index'),
     url(r'^product-requests/index/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    url(r'^product-requests/index/my/$', product_request_views.index_operator, name='product_requests_index_operator'),
+    url(r'^product-requests/index/my/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

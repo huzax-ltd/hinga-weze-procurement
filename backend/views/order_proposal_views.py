@@ -432,6 +432,24 @@ def create(request, pk, code):
                 # noinspection PyCallByClass,PyTypeChecker
                 model.save()
 
+                # sending notification to OPM
+                operators = Operators.objects.all().filter(
+                    Q(operator_department=Operators.DEPARTMENT_DAF) &
+                    Q(operator_role=Operators.ROLE_OPM)
+                )
+
+                for item in operators:
+                    Notifications.add_notification(
+                        Notifications.TYPE_SUPPLIER,
+                        model.order_proposal_id,
+                        Notifications.TYPE_OPERATOR,
+                        item.operator_id,
+                        Notifications.TYPE_ORDER_PROPOSAL,
+                        model.order_proposal_id,
+                        "Submitted a proposal to evaluate.",
+                        "/backend/order-proposals/view/internal/" + str(model.order_proposal_id) + "/"
+                    )
+
                 # sending notification to Officer
                 if order.order_assigned_to_id != str(0):
                     operators = Operators.objects.all().filter(

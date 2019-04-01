@@ -1,0 +1,98 @@
+{% extends '_include/base-table.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block head %}
+    {% load static %}
+    <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
+    <style>
+    </style>
+{% endblock %}
+{% block body %}{% load static %}
+    {% load static %}{% csrf_token %}
+    <div class="content custom-scrollbar">
+        <div class="page-layout simple full-width">
+            <div class="page-header bg-primary p-5 body-content-p-b-5">
+                <div class="card body-content-card">
+                    <nav class="breadcrumb bg-primary-50">
+                        <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
+                        <span class="breadcrumb-item active">Orders</span>
+                    </nav>
+                </div>
+                {% include '_include/alert.html' %}
+                {% if form.errors %}
+                    {% include '_include/alert-form-errors.html' %}
+                {% endif %}
+
+                <div class="card body-content-card mt-3" id="div-search">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">Advanced Search</span>
+                        </div>
+                        <a class="btn btn-icon fuse-ripple-ready" href="javascript:displayDivSearch();">
+                            <i class="icon icon-close-circle-outline text-white"></i>
+                        </a>
+                    </div>
+                    <div class="card-body p-5">
+                        <form method="post" action="">{% csrf_token %}
+                            <button type="submit" class="btn btn-primary fuse-ripple-ready"> Submit</button>
+                            <a class="btn btn-outline-primary fuse-ripple-ready" href="{{ index_url }}">Reset</a>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card body-content-card mt-3">
+                    <div class="card-header pl-4 pr-4 row no-gutters align-items-center justify-content-between bg-primary-700">
+                        <div class="col">
+                            <span class="h5 text-white">My Requests</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content p-5 body-content-p-t-5">
+                <div class="card body-content-card">
+                    <div class="card-body p-5">
+                        <div class="dt-buttons" style="margin-right:3px;">
+                            <button role="button" type="button"
+                                    class="btn btn-outline-primary fuse-ripple-ready dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Multiple Action
+                            </button>
+                            <div class="dropdown-menu">
+
+                                {% if ACCESS_PERMISSION_ORDER_DELETE in auth_permissions.values %}
+                                    <a class="dropdown-item" \
+                                       href="#" onclick="multipleSelect('{{ select_multiple_url }}', 'delete');">
+                                        Delete Selected
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
+                            <div class="dt-buttons" style="margin-right:3px;">
+                                <a class="btn btn-outline-primary fuse-ripple-ready"
+                                   href="{% url 'orders_create' %}">
+                                    <i class="icon icon-plus"
+                                       style="font-size: 16px; vertical-align: top !important;"></i> ADD
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values %}
+                            <div class="dt-buttons" style="margin-right:3px;">
+                                <a class="btn btn-outline-primary fuse-ripple-ready" href="#"
+                                   onclick="displayDivSearch();">
+                                    <i class="icon icon-magnify"
+                                       style="font-size: 16px; vertical-align: top !important;"></i> SEARCH
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% include '_include/datatable-buttons.html' %}
+                        {% render_table table %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include '_include/datatable-js.html' %}
+    {% include '_include/select_single.html' %}
+    {% include '_include/select_multiple.html' %}
+{% endblock %}

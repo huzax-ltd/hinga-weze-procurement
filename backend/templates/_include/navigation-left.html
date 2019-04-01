@@ -54,7 +54,7 @@
 
                     {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+                            <a class="nav-link ripple" href="{% url 'product_requests_create' %}">
 
                                 <i class="icon s-4 icon-plus-box"></i>
 
@@ -65,7 +65,7 @@
 
                     {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+                            <a class="nav-link ripple" href="#">
 
                                 <i class="icon s-4 icon-plus-box"></i>
 
@@ -76,7 +76,7 @@
 
                     {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+                            <a class="nav-link ripple" href="#">
 
                                 <i class="icon s-4 icon-plus-box"></i>
 
@@ -87,7 +87,7 @@
 
                     {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_create' %}">
+                            <a class="nav-link ripple" href="#">
 
                                 <i class="icon s-4 icon-plus-box"></i>
 
@@ -180,7 +180,7 @@
                 {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_PROCUREMENT_MY_REQUESTS %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple  active" href="{% url 'orders_index_operator' %}">
 
                                 <i class="icon s-4 icon-account-check"></i>
 
@@ -189,7 +189,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'orders_index' %}">
+                            <a class="nav-link ripple" href="{% url 'orders_index_operator' %}">
 
                                 <i class="icon s-4 icon-account-check"></i>
 
@@ -311,7 +311,7 @@
                 {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
                     {% if section == BACKEND_SECTION_STOCK_MY_REQUESTS %}
                         <li class="nav-item">
-                            <a class="nav-link ripple  active" href="{% url 'product_requests_index' %}">
+                            <a class="nav-link ripple  active" href="{% url 'product_requests_index_operator' %}">
 
                                 <i class="icon s-4 icon-account-check"></i>
 
@@ -320,7 +320,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link ripple" href="{% url 'product_requests_index' %}">
+                            <a class="nav-link ripple" href="{% url 'product_requests_index_operator' %}">
 
                                 <i class="icon s-4 icon-account-check"></i>
 

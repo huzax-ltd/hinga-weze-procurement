@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.core import serializers
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -10,21 +9,6 @@ from app import settings
 from app.models import Operators, Operator_Logs
 from app.utils import Utils
 from backend.tables.operator_log_tables import OperatorLogsTable
-
-
-# noinspection PyUnusedLocal
-def json_operator_logs(request):
-    operator = Operators.login_required(request)
-    if operator is None:
-        Operators.set_redirect_field_name(request, request.path)
-        return redirect(reverse("operators_signin"))
-    else:
-        auth_permissions = Operators.get_auth_permissions(operator)
-        if settings.ACCESS_PERMISSION_LOG_VIEW in auth_permissions.values():
-            return HttpResponse(serializers.serialize("json", Operator_Logs.objects.all()),
-                                content_type="application/json")
-        else:
-            return HttpResponseForbidden('Forbidden', content_type='text/plain')
 
 
 # noinspection PyUnusedLocal

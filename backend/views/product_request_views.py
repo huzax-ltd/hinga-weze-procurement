@@ -58,6 +58,48 @@ def index(request):
             return HttpResponseForbidden('Forbidden', content_type='text/plain')
 
 
+# noinspection PyUnusedLocal
+def index_operator(request):
+    template_url = 'product-requests/index-operator.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
+            search_form = ProductRequestSearchIndexForm(request.POST or None)
+            objects = None
+
+            objects = Product_Requests.objects.filter(product_request_created_id=operator.operator_id)
+
+            if request.method == 'POST' and search_form.is_valid():
+                display_search = True
+                table = ProductRequestsTable(objects)
+            else:
+                display_search = False
+                table = ProductRequestsTable(objects)
+
+            table.set_auth_permissions(auth_permissions)
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_STOCK_ALL_REQUESTS,
+                    'title': Product_Requests.TITLE,
+                    'name': Product_Requests.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'table': table,
+                    'search_form': search_form,
+                    'display_search': display_search,
+                    'index_url': reverse("product_requests_index"),
+                    'select_multiple_url': reverse("product_requests_select_multiple"),
+                }
+            )
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
 @csrf_exempt
 # noinspection PyUnusedLocal
 def select_single(request):

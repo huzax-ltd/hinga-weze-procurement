@@ -2,7 +2,6 @@ import json
 import os
 
 from django.contrib import messages
-from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.db.models import Q
@@ -30,21 +29,6 @@ from backend.tables.order_tables import OrdersTable, OrdersStockTable
 
 
 # noinspection PyUnusedLocal
-def json_orders(request):
-    operator = Operators.login_required(request)
-    if operator is None:
-        Operators.set_redirect_field_name(request, request.path)
-        return redirect(reverse("operators_signin"))
-    else:
-        auth_permissions = Operators.get_auth_permissions(operator)
-        if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
-            return HttpResponse(serializers.serialize("json", Orders.objects.all()),
-                                content_type="application/json")
-        else:
-            return HttpResponseForbidden('Forbidden', content_type='text/plain')
-
-
-# noinspection PyUnusedLocal
 def index(request):
     template_url = 'orders/index.html'
     operator = Operators.login_required(request)
@@ -58,6 +42,48 @@ def index(request):
             objects = None
 
             objects = Orders.get_filtered_orders(operator)
+
+            if request.method == 'POST' and search_form.is_valid():
+                display_search = True
+                table = OrdersTable(objects)
+            else:
+                display_search = False
+                table = OrdersTable(objects)
+
+            table.set_auth_permissions(auth_permissions)
+            return render(
+                request, template_url,
+                {
+                    'section': settings.BACKEND_SECTION_PROCUREMENT_ALL_REQUESTS,
+                    'title': Orders.TITLE,
+                    'name': Orders.NAME,
+                    'operator': operator,
+                    'auth_permissions': auth_permissions,
+                    'table': table,
+                    'search_form': search_form,
+                    'display_search': display_search,
+                    'index_url': reverse("orders_index"),
+                    'select_multiple_url': reverse("orders_select_multiple"),
+                }
+            )
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal
+def index_operator(request):
+    template_url = 'orders/index-operator.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values():
+            search_form = OrderSearchIndexForm(request.POST or None)
+            objects = None
+
+            objects = Orders.objects.filter(order_created_id=operator.operator_id)
 
             if request.method == 'POST' and search_form.is_valid():
                 display_search = True

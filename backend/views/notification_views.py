@@ -1,5 +1,3 @@
-from django.core import serializers
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,19 +6,6 @@ from app import settings
 from app.models import Operators, Notifications
 from backend.forms.notification_forms import NotificationSearchIndexForm
 from backend.tables.notification_tables import NotificationsTable
-
-
-# noinspection PyUnusedLocal
-def json_notifications(request):
-    operator = Operators.login_required(request)
-    if operator is None:
-        Operators.set_redirect_field_name(request, request.path)
-        return redirect(reverse("operators_signin"))
-    else:
-        auth_permissions = Operators.get_auth_permissions(operator)
-        objects = Notifications.objects.filter(notification_to_id=operator.operator_id)
-        return HttpResponse(serializers.serialize("json", objects),
-                            content_type="application/json")
 
 
 # noinspection PyUnusedLocal

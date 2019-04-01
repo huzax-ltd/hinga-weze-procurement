@@ -262,8 +262,8 @@ else:
     # Python Anywhere
     # default static files settings for PythonAnywhere.
     # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-    MEDIA_ROOT = u'/home/HingaWeze/hinga_weze_procurement/media'
-    MEDIA_URL = '/media/'
+    MEDIA_ROOT = u'/home/HingaWeze/hinga_weze_procurement/uploads'
+    MEDIA_URL = '/uploads/'
     STATIC_ROOT = u'/home/HingaWeze/hinga_weze_procurement/static'
     STATIC_URL = '/static/'
 
