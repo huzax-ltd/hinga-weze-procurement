@@ -566,7 +566,7 @@ def api_dropdown_roles(request, department):
                 roles += "<option value=''>--select--</option>"
                 roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
                 roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
-            if department == Operators.DEPARTMENT_DAF:
+            if department == Operators.DEPARTMENT_DFA:
                 roles += "<option value=''>--select--</option>"
                 roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
                 roles += "<option value='" + Operators.ROLE_OPM + "'>" + Operators.ROLE_OPM + "</option>"
@@ -577,7 +577,7 @@ def api_dropdown_roles(request, department):
                 roles += "<option value='" + Operators.ROLE_STOCK_ADMIN + "'>" + Operators.ROLE_STOCK_ADMIN + "</option>"
                 roles += "<option value='" + Operators.ROLE_ACCOUNTANT_MANAGER + "'>" + Operators.ROLE_ACCOUNTANT_MANAGER + "</option>"
                 roles += "<option value='" + Operators.ROLE_ACCOUNTANT_OFFICER + "'>" + Operators.ROLE_ACCOUNTANT_OFFICER + "</option>"
-            if department == Operators.DEPARTMENT_MAV:
+            if department == Operators.DEPARTMENT_MEL:
                 roles += "<option value=''>--select--</option>"
                 roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
                 roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"

@@ -356,7 +356,7 @@ def select_single(request):
 
                             # sending notification to Accountant
                             operators = Operators.objects.filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 (Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
                             )
@@ -392,7 +392,7 @@ def select_single(request):
 
                             # sending notification to DAF
                             operators = Operators.objects.filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 (Q(operator_role=Operators.ROLE_DIRECTOR))
                             )
                             for item in operators:
@@ -427,7 +427,7 @@ def select_single(request):
 
                             # sending notification to Accountants
                             operators = Operators.objects.filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 (Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
                             )
@@ -495,7 +495,7 @@ def select_single(request):
 
                             # sending notification to Accountants
                             operators = Operators.objects.filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 (Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
                             )
@@ -531,7 +531,7 @@ def select_single(request):
 
                             # sending notification to DAF
                             operators = Operators.objects.filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 (Q(operator_role=Operators.ROLE_DIRECTOR) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
@@ -568,7 +568,7 @@ def select_single(request):
 
                             # sending notification to Accountants
                             operators = Operators.objects.filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 (Q(operator_role=Operators.ROLE_DIRECTOR) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER) |
                                  Q(operator_role=Operators.ROLE_ACCOUNTANT_OFFICER))
@@ -1531,7 +1531,7 @@ def update_procurement_method(request, pk):
 
                         # sending notification to Director of DFA
                         operators = Operators.objects.all().filter(
-                            Q(operator_department=Operators.DEPARTMENT_DAF) &
+                            Q(operator_department=Operators.DEPARTMENT_DFA) &
                             Q(operator_role=Operators.ROLE_DIRECTOR)
                         )
                         for item in operators:
@@ -1666,7 +1666,7 @@ def update_order_assignment(request, pk):
                         else:
                             model.order_assigned_to_id = item_operator.operator_id
                             model.order_assigned_to_by = item_operator.operator_name
-                        model.order_assigned_to_department = Operators.DEPARTMENT_DAF
+                        model.order_assigned_to_department = Operators.DEPARTMENT_DFA
                         model.order_assigned_to_role = form.cleaned_data['order_assigned_role']
                         model.order_status = Orders.STATUS_ASSIGNED
                         model.save()
@@ -2900,7 +2900,7 @@ def update_invoice_order(request, pk):
 
                             # sending notification to OPM
                             operators = Operators.objects.all().filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 Q(operator_role=Operators.ROLE_OPM)
                             )
 
@@ -3027,7 +3027,7 @@ def update_payment_voucher_order(request, pk):
 
                             # sending notification to OPM
                             operators = Operators.objects.all().filter(
-                                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                                Q(operator_department=Operators.DEPARTMENT_DFA) &
                                 Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER)
                             )
 
@@ -3180,7 +3180,7 @@ def acknowledge_proposal_external(request, pk):
             )
         else:
             operators = Operators.objects.all().filter(
-                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                Q(operator_department=Operators.DEPARTMENT_DFA) &
                 Q(operator_role=model.order_assigned_to_role)
             )
 

@@ -255,15 +255,8 @@ def create(request, pk, code):
             # noinspection PyCallByClass,PyTypeChecker
             model.save('Created')
 
-            attachment1 = ''
-            attachment2 = ''
-            attachment3 = ''
-            attachment4 = ''
-            attachment5 = ''
-            attachment6 = ''
-            attachment7 = ''
-            attachment8 = ''
-            attachment9 = ''
+            return redirect(
+                reverse("order_proposals_create", args=[model.orders_order_id, model.order_proposal_code]))
 
         else:
             model = Order_Proposals.objects.get(order_proposal_code=code)
@@ -454,7 +447,7 @@ def create(request, pk, code):
 
                 # sending notification to OPM
                 operators = Operators.objects.all().filter(
-                    Q(operator_department=Operators.DEPARTMENT_DAF) &
+                    Q(operator_department=Operators.DEPARTMENT_DFA) &
                     Q(operator_role=Operators.ROLE_OPM)
                 )
 
@@ -477,7 +470,7 @@ def create(request, pk, code):
                     )
                 else:
                     operators = Operators.objects.all().filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=order.order_assigned_to_role)
                     )
 
@@ -1234,7 +1227,7 @@ def acknowledge_proposal_external(request, pk):
             )
         else:
             operators = Operators.objects.all().filter(
-                Q(operator_department=Operators.DEPARTMENT_DAF) &
+                Q(operator_department=Operators.DEPARTMENT_DFA) &
                 Q(operator_role=order.order_assigned_to_role)
             )
 

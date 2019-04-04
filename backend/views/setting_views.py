@@ -4,6 +4,7 @@ import time
 from django.contrib import messages
 from django.core.files import File
 from django.core.management import call_command
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -52,6 +53,33 @@ def get_qr_code_image(request, size, text):
     response = HttpResponse()
     qr.save(response, "PNG")
     return response
+
+
+# noinspection PyUnusedLocal
+def update_database(request):
+    template_url = 'settings/index.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if operator.operator_type == Operators.TYPE_SUPER_ADMIN:
+            operators = Operators.objects.filter(
+                Q(operator_department='MAE') |
+                Q(operator_department='DAF')
+            )
+            for item in operators:
+                if item.operator_department == 'MAE':
+                    item.operator_department = Operators.DEPARTMENT_MEL
+                if item.operator_department == 'DAF':
+                    item.operator_department = Operators.DEPARTMENT_DFA
+                item.save()
+
+            return HttpResponseForbidden('Success', content_type='text/plain')
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
 
 # noinspection PyUnusedLocal
 def index(request):

@@ -45,7 +45,7 @@
                                 <a href="#" id="btn-update-procurement-method-order"
                                    class="btn btn-outline-primary fuse-ripple-ready">Select Procurement Method</a>
                             {% endif %}
-                            {% if operator.operator_department == operator.DEPARTMENT_DAF and operator.operator_role == operator.ROLE_DIRECTOR and model.order_procurement_method != '' and model.order_status == model.STATUS_LEVEL0_APPROVED %}
+                            {% if operator.operator_department == operator.DEPARTMENT_DFA and operator.operator_role == operator.ROLE_DIRECTOR and model.order_procurement_method != '' and model.order_status == model.STATUS_LEVEL0_APPROVED %}
                                 <a href="#"
                                    onclick="singleSelect('{{ select_single_url }}', 'order-review', '{{ model.order_id }}', '{{ item_index_url }}');"
                                    class="btn btn-outline-primary fuse-ripple-ready">Review</a>
@@ -162,7 +162,7 @@
                                    class="btn btn-outline-primary fuse-ripple-ready">Download Invoice</a>
                             {% endif %}
 
-                            {% if operator.operator_department == operator.DEPARTMENT_DAF and operator.operator_role == operator.ROLE_OPM and model.order_status == model.STATUS_INVOICE_UPLOADED %}
+                            {% if operator.operator_department == operator.DEPARTMENT_DFA and operator.operator_role == operator.ROLE_OPM and model.order_status == model.STATUS_INVOICE_UPLOADED %}
                                 <a href="#"
                                    onclick="singleSelect('{{ select_single_url }}', 'order-invoice-review', '{{ model.order_id }}', '{{ item_index_url }}');"
                                    class="btn btn-outline-primary fuse-ripple-ready">Review Invoice</a>
@@ -191,7 +191,7 @@
                                 {% endif %}
                             {% endif %}
 
-                            {% if operator.operator_department == operator.DEPARTMENT_DAF and operator.operator_role == operator.ROLE_DIRECTOR %}
+                            {% if operator.operator_department == operator.DEPARTMENT_DFA and operator.operator_role == operator.ROLE_DIRECTOR %}
                                 {% if model.order_status == model.STATUS_INVOICE_APPROVED %}
                                     <a href="#"
                                        onclick="singleSelect('{{ select_single_url }}', 'order-invoice-approve-daf', '{{ model.order_id }}', '{{ item_index_url }}');"

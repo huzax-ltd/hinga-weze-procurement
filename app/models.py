@@ -67,8 +67,8 @@ class Operators(models.Model):
     DEPARTMENT_DCOP = 'DCOP'  # Deputy Chief of Procurement
     DEPARTMENT_BFM = 'BFM'  # Business, Finance and Marketing
     DEPARTMENT_NUTRITION = 'NUTRITION'  # Nutrition
-    DEPARTMENT_DAF = 'DAF'  # Department of Administrative and Finance
-    DEPARTMENT_MAV = 'MAE'  # Monitoring and Evaluation
+    DEPARTMENT_DFA = 'DFA'  # Department of Finance and Administration
+    DEPARTMENT_MEL = 'MEL'  # Monitoring, Evaluation and Learning
     DEPARTMENT_GRANT_MANAGER = 'GRANT-MANAGER'  # Grant Managers
     ARRAY_OPERATOR_DEPARTMENTS = [
         DEPARTMENT_NONE,
@@ -85,8 +85,8 @@ class Operators(models.Model):
         (DEPARTMENT_DCOP, 'Deputy COP'),
         (DEPARTMENT_BFM, 'Business, Finance & Marketing'),
         (DEPARTMENT_NUTRITION, 'Nutrition'),
-        (DEPARTMENT_DAF, 'Administrative and Finance'),
-        (DEPARTMENT_MAV, 'Monitoring and Evaluation'),
+        (DEPARTMENT_DFA, 'Administrative and Finance'),
+        (DEPARTMENT_MEL, 'Monitoring, Evaluation and Learning'),
         (DEPARTMENT_GRANT_MANAGER, 'Grant Manager'),
     )
 
@@ -107,6 +107,9 @@ class Operators(models.Model):
     ROLE_STOCK_ADMIN = 'Stock Admin'  # Stock Admin
     ROLE_ACCOUNTANT_MANAGER = 'Accountant Manager'  # Accountant Head
     ROLE_ACCOUNTANT_OFFICER = 'Accountant Officer'  # Accountant Officer
+    # only for MEL Department
+    ROLE_MEL_MANAGER = 'MEL Manager'  # MEL Manager
+    ROLE_COMPONENT_LEAD = 'Component Lead'  # Component Lead
 
     ARRAY_OPERATOR_ROLES = [
         ROLE_NONE,
@@ -123,6 +126,8 @@ class Operators(models.Model):
         ROLE_STOCK_ADMIN,
         ROLE_ACCOUNTANT_MANAGER,
         ROLE_ACCOUNTANT_OFFICER,
+        ROLE_MEL_MANAGER,
+        ROLE_COMPONENT_LEAD,
     ]
     OPERATOR_ROLES = (
         ('', '--select--'),
@@ -140,6 +145,8 @@ class Operators(models.Model):
         (ROLE_STOCK_ADMIN, ROLE_STOCK_ADMIN),
         (ROLE_ACCOUNTANT_MANAGER, ROLE_ACCOUNTANT_MANAGER),
         (ROLE_ACCOUNTANT_OFFICER, ROLE_ACCOUNTANT_OFFICER),
+        (ROLE_MEL_MANAGER, ROLE_MEL_MANAGER),
+        (ROLE_COMPONENT_LEAD, ROLE_COMPONENT_LEAD),
     )
 
     STATUS_ACTIVE = 'active'
@@ -1007,99 +1014,99 @@ class Orders(models.Model):
                     objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
                                              Q(order_created_id=operator.operator_id))
 
-            if operator.operator_department == Operators.DEPARTMENT_DAF:
+            if operator.operator_department == Operators.DEPARTMENT_DFA:
                 if operator.operator_role == Operators.ROLE_NONE:
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              Q(order_created_id=operator.operator_id))
                 if operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_OPM:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(order_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_PROCUREMENT_OFFICER))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(order_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_HR_MANAGER))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(order_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_RECEPTIONIST))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(order_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_STOCK_ADMIN))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(order_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(order_created_id__in=child_operators)))
 
                 if operator.operator_role == Operators.ROLE_ADVISER:
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              Q(order_created_id=operator.operator_id))
                 if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_HR_MANAGER:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_RECEPTIONIST:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_STOCK_ADMIN:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_DFA) &
                                              Q(order_created_id=operator.operator_id))
 
-            if operator.operator_department == Operators.DEPARTMENT_MAV:
+            if operator.operator_department == Operators.DEPARTMENT_MEL:
                 if operator.operator_role == Operators.ROLE_NONE:
                     objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
                                              Q(order_created_id=operator.operator_id))
@@ -1309,7 +1316,7 @@ class Orders(models.Model):
                         operators = Operators.objects.all().filter(
                             operator_role=Operators.ROLE_OPM)
 
-                if operator.operator_department == Operators.DEPARTMENT_DAF:
+                if operator.operator_department == Operators.DEPARTMENT_DFA:
                     if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER or operator.operator_role == Operators.ROLE_OPM:
                         model.order_status = Orders.STATUS_LEVEL0_APPROVED
                         model.save()
@@ -1318,10 +1325,10 @@ class Orders(models.Model):
 
                     if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER or operator.operator_role == Operators.ROLE_HR_MANAGER or operator.operator_role == Operators.ROLE_RECEPTIONIST or operator.operator_role == Operators.ROLE_STOCK_ADMIN or operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER or operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
                         operators = Operators.objects.all().filter(
-                            (Q(operator_department=Operators.DEPARTMENT_DAF) &
+                            (Q(operator_department=Operators.DEPARTMENT_DFA) &
                              Q(operator_role=ROLE_DIRECTOR)))
 
-                if operator.operator_department == Operators.DEPARTMENT_MAV:
+                if operator.operator_department == Operators.DEPARTMENT_MEL:
                     if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
                         model.order_status = Orders.STATUS_LEVEL0_APPROVED
                         model.save()
@@ -2455,99 +2462,99 @@ class Product_Requests(models.Model):
                     objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
                                              Q(product_request_item_created_id=operator.operator_id))
 
-            if operator.operator_department == Operators.DEPARTMENT_DAF:
+            if operator.operator_department == Operators.DEPARTMENT_DFA:
                 if operator.operator_role == Operators.ROLE_NONE:
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              Q(product_request_item_created_id=operator.operator_id))
                 if operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_OPM:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(product_request_item_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_PROCUREMENT_OFFICER))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(product_request_item_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_HR_MANAGER))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(product_request_item_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_RECEPTIONIST))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(product_request_item_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_STOCK_ADMIN))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(product_request_item_created_id__in=child_operators)))
 
                     child_operators = Operators.objects.filter(
-                        Q(operator_department=Operators.DEPARTMENT_DAF) &
+                        Q(operator_department=Operators.DEPARTMENT_DFA) &
                         Q(operator_role=Operators.ROLE_ACCOUNTANT_MANAGER))
 
                     for child_operator in child_operators:
                         child_operators = Operators.get_child_operators(
                             Operators.objects.get(operator_id=child_operator.operator_id))
-                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                        objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                                  (Q(product_request_item_created_id__in=child_operators)))
 
                 if operator.operator_role == Operators.ROLE_ADVISER:
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              Q(product_request_item_created_id=operator.operator_id))
                 if operator.operator_role == Operators.ROLE_PROCUREMENT_OFFICER:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_HR_MANAGER:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_RECEPTIONIST:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_STOCK_ADMIN:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_ACCOUNTANT_MANAGER:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_ACCOUNTANT_OFFICER:
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DAF) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_DFA) &
                                              Q(product_request_item_created_id=operator.operator_id))
 
-            if operator.operator_department == Operators.DEPARTMENT_MAV:
+            if operator.operator_department == Operators.DEPARTMENT_MEL:
                 if operator.operator_role == Operators.ROLE_NONE:
                     objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
                                              Q(product_request_item_created_id=operator.operator_id))

@@ -28,7 +28,7 @@ SECRET_KEY = 'usv1c&3$zu#6y0$s@*3c(c-+hc3afa2c#cn!o9qvzf(+0#!jcx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-IS_LOCAL = False
+IS_LOCAL = True
 
 if IS_LOCAL:
     ALLOWED_HOSTS = ['*']

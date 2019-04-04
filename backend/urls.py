@@ -18,6 +18,8 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+    # database update
+    url(r'^settings/update-database/$', setting_views.update_database, name='settings_update_database'),
     # file upload
     url(r'^settings/upload/$', setting_views.temp_upload, name='temp_upload'),
     # qr code
