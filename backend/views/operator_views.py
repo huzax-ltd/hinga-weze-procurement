@@ -185,7 +185,8 @@ def signin(request):
                         domain = settings.BACKEND_DOMAIN_LOCAL
                     else:
                         domain = settings.BACKEND_DOMAIN_PROD
-                    contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                     confirm_url = '{domain}/{path}'.format(
                         domain=domain,
                         path='operators/signup/confirm/' + model.operator_auth_key
@@ -312,7 +313,8 @@ def forgot_password(request):
                         domain = settings.BACKEND_DOMAIN_LOCAL
                     else:
                         domain = settings.BACKEND_DOMAIN_PROD
-                    contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                     confirm_url = '{domain}/{path}'.format(
                         domain=domain,
                         path='operators/signup/confirm/' + model.operator_auth_key
@@ -365,7 +367,8 @@ def forgot_password(request):
                         domain = settings.BACKEND_DOMAIN_LOCAL
                     else:
                         domain = settings.BACKEND_DOMAIN_PROD
-                    contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                     reset_url = '{domain}/{path}'.format(
                         domain=domain,
                         path='operators/reset-password/' + model.operator_password_reset_token
@@ -436,7 +439,8 @@ def reset_password(request, token):
                     domain = settings.BACKEND_DOMAIN_LOCAL
                 else:
                     domain = settings.BACKEND_DOMAIN_PROD
-                contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                 html_content = render_to_string(
                     'email/email-info.html',
                     {
@@ -581,6 +585,8 @@ def api_dropdown_roles(request, department):
                 roles += "<option value=''>--select--</option>"
                 roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
                 roles += "<option value='" + Operators.ROLE_ADVISER + "'>" + Operators.ROLE_ADVISER + "</option>"
+                roles += "<option value='" + Operators.ROLE_MEL_MANAGER + "'>" + Operators.ROLE_MEL_MANAGER + "</option>"
+                roles += "<option value='" + Operators.ROLE_COMPONENT_LEAD + "'>" + Operators.ROLE_COMPONENT_LEAD + "</option>"
             if department == Operators.DEPARTMENT_GRANT_MANAGER:
                 roles += "<option value=''>--select--</option>"
                 roles += "<option value='" + Operators.ROLE_DIRECTOR + "'>" + Operators.ROLE_DIRECTOR + "</option>"
@@ -1045,7 +1051,8 @@ def create(request):
                         domain = settings.BACKEND_DOMAIN_LOCAL
                     else:
                         domain = settings.BACKEND_DOMAIN_PROD
-                    contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                     confirm_url = '{domain}/{path}'.format(
                         domain=domain,
                         path='operators/signup/confirm/' + model.operator_auth_key
@@ -1256,7 +1263,8 @@ def update_reset_password(request, pk):
                             domain = settings.BACKEND_DOMAIN_LOCAL
                         else:
                             domain = settings.BACKEND_DOMAIN_PROD
-                        contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                        # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                        contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                         html_content = render_to_string(
                             'email/email-info.html',
                             {
@@ -1537,7 +1545,8 @@ def profile_change_password(request):
                         domain = settings.BACKEND_DOMAIN_LOCAL
                     else:
                         domain = settings.BACKEND_DOMAIN_PROD
-                    contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    # contact_url = '{domain}/{path}'.format(domain=domain, path=settings.CONTACT_URL)
+                    contact_url = settings.APP_CONSTANT_COMPANY_WEBSITE
                     html_content = render_to_string(
                         'email/email-info.html',
                         {

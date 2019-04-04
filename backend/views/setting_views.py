@@ -4,7 +4,6 @@ import time
 from django.contrib import messages
 from django.core.files import File
 from django.core.management import call_command
-from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -65,17 +64,9 @@ def update_database(request):
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
         if operator.operator_type == Operators.TYPE_SUPER_ADMIN:
-            operators = Operators.objects.filter(
-                Q(operator_department='MAE') |
-                Q(operator_department='DAF')
-            )
-            for item in operators:
-                if item.operator_department == 'MAE':
-                    item.operator_department = Operators.DEPARTMENT_MEL
-                if item.operator_department == 'DAF':
-                    item.operator_department = Operators.DEPARTMENT_DFA
-                item.save()
-
+            operators = Operators.objects.all()
+            for model in operators:
+                Operators.update_operator_access_permissions(request, model, operator)
             return HttpResponseForbidden('Success', content_type='text/plain')
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')

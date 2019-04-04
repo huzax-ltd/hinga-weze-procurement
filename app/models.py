@@ -375,6 +375,54 @@ class Operators(models.Model):
                                                                        settings.ACCESS_PERMISSION_INVENTORY_VIEW, model,
                                                                        operator)
 
+        if model.operator_type == Operators.TYPE_SUPER_ADMIN or model.operator_type == Operators.TYPE_ADMIN or model.operator_role == Operators.ROLE_MEL_MANAGER or model.operator_role == Operators.ROLE_COMPONENT_LEAD:
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_INDICATORS_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_INDICATORS_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_INDICATORS_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_INDICATORS_VIEW,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_RESULTS_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_RESULTS_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_RESULTS_VIEW,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_RESULTS_DELETE,
+                                                                       model, operator)
+
+        if model.operator_role == Operators.ROLE_COMPONENT_LEAD:
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_INDICATORS_VIEW,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_RESULTS_VIEW,
+                                                                       model, operator)
+
+        if model.operator_type == Operators.TYPE_SUPER_ADMIN or model.operator_type == Operators.TYPE_ADMIN or model.operator_role == Operators.ROLE_MEL_MANAGER or model.operator_role == Operators.ROLE_COMPONENT_LEAD:
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_ACTIVITIES_CREATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_ACTIVITIES_UPDATE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_ACTIVITIES_DELETE,
+                                                                       model, operator)
+            Operator_Access_Permissions.add_operator_access_permission(request,
+                                                                       settings.ACCESS_PERMISSION_MEL_ACTIVITIES_VIEW,
+                                                                       model, operator)
+
         Operator_Logs.add(
             model.operator_id,
             model.operator_username,
@@ -1108,15 +1156,21 @@ class Orders(models.Model):
 
             if operator.operator_department == Operators.DEPARTMENT_MEL:
                 if operator.operator_role == Operators.ROLE_NONE:
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_MEL) &
                                              Q(order_created_id=operator.operator_id))
                 if operator.operator_role == Operators.ROLE_DIRECTOR:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_MEL) &
                                              (Q(order_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_ADVISER:
-                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_NUTRITION) &
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_MEL) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_MEL_MANAGER:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_MEL) &
+                                             Q(order_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_COMPONENT_LEAD:
+                    objects = objects.filter(Q(order_created_department=Operators.DEPARTMENT_MEL) &
                                              Q(order_created_id=operator.operator_id))
 
             if operator.operator_department == Operators.DEPARTMENT_GRANT_MANAGER:
@@ -1329,11 +1383,10 @@ class Orders(models.Model):
                              Q(operator_role=ROLE_DIRECTOR)))
 
                 if operator.operator_department == Operators.DEPARTMENT_MEL:
-                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
+                    if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER or operator.operator_role == Operators.ROLE_MEL_MANAGER or operator.operator_role == Operators.ROLE_COMPONENT_LEAD:
                         model.order_status = Orders.STATUS_LEVEL0_APPROVED
                         model.save()
-                        operators = Operators.objects.all().filter(
-                            operator_role=Operators.ROLE_OPM)
+                        operators = Operators.objects.all().filter(operator_role=Operators.ROLE_OPM)
 
                 if operator.operator_department == Operators.DEPARTMENT_GRANT_MANAGER:
                     if operator.operator_role == Operators.ROLE_NONE or operator.operator_role == Operators.ROLE_DIRECTOR or operator.operator_role == Operators.ROLE_ADVISER:
@@ -2556,15 +2609,21 @@ class Product_Requests(models.Model):
 
             if operator.operator_department == Operators.DEPARTMENT_MEL:
                 if operator.operator_role == Operators.ROLE_NONE:
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_MEL) &
                                              Q(product_request_item_created_id=operator.operator_id))
                 if operator.operator_role == Operators.ROLE_DIRECTOR:
                     child_operators = Operators.get_child_operators(
                         Operators.objects.get(operator_id=operator.operator_id))
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_MEL) &
                                              (Q(product_request_item_created_id__in=child_operators)))
                 if operator.operator_role == Operators.ROLE_ADVISER:
-                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_NUTRITION) &
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_MEL) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_MEL_MANAGER:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_MEL) &
+                                             Q(product_request_item_created_id=operator.operator_id))
+                if operator.operator_role == Operators.ROLE_COMPONENT_LEAD:
+                    objects = objects.filter(Q(product_request_item_created_department=Operators.DEPARTMENT_MEL) &
                                              Q(product_request_item_created_id=operator.operator_id))
 
             if operator.operator_department == Operators.DEPARTMENT_GRANT_MANAGER:
@@ -2694,3 +2753,152 @@ class Product_Request_Items(models.Model):
     def delete_product_request_item(cls, request, model, operator):
         model.delete()
         return True
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Mel_Indicators(models.Model):
+    TITLE = settings.MODEL_MEL_INDICATORS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_MEL_INDICATORS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    mel_indicator_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    mel_indicator_tag = models.CharField('Tag', max_length=8, blank=False)
+    mel_indicator_number = models.IntegerField('Number', blank=False, default=0)
+    mel_indicator_name = models.CharField('Name', max_length=100, blank=False)
+    mel_indicator_details = models.CharField('Details', max_length=255, blank=False)
+    mel_indicator_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_indicator_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    mel_indicator_created_by = models.CharField('Created By', max_length=100, blank=True)
+    mel_indicator_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    mel_indicator_created_role = models.CharField('Created Role', max_length=255, blank=True)
+    mel_indicator_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_indicator_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    mel_indicator_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    mel_indicator_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    mel_indicator_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.mel_indicator_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Mel_Results(models.Model):
+    TITLE = settings.MODEL_MEL_RESULTS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_MEL_RESULTS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    mel_result_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    mel_result_details = models.CharField('Details', max_length=255, blank=False)
+    mel_indicator_ids = models.CharField('Indicators', max_length=255, blank=True)
+    mel_result_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_result_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    mel_result_created_by = models.CharField('Created By', max_length=100, blank=True)
+    mel_result_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    mel_result_created_role = models.CharField('Created Role', max_length=255, blank=True)
+    mel_result_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_result_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    mel_result_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    mel_result_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    mel_result_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.mel_results_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Mel_Sub_Results(models.Model):
+    TITLE = settings.MODEL_MEL_SUB_RESULTS_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_MEL_SUB_RESULTS_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    mel_sub_result_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    mel_results_mel_result_id = models.IntegerField('Id', blank=False)
+    mel_sub_result_details = models.CharField('Details', max_length=255, blank=False)
+    mel_sub_result_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_sub_result_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    mel_sub_result_created_by = models.CharField('Created By', max_length=100, blank=True)
+    mel_sub_result_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    mel_sub_result_created_role = models.CharField('Created Role', max_length=255, blank=True)
+    mel_sub_result_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_sub_result_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    mel_sub_result_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    mel_sub_result_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    mel_sub_result_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.mel_results_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token
+
+
+# Create your models here.
+# noinspection PyUnresolvedReferences
+class Mel_Activities(models.Model):
+    TITLE = settings.MODEL_MEL_ACTIVITIES_PLURAL_TITLE
+    SINGULAR_TITLE = settings.MODEL_MEL_ACTIVITIES_SINGULAR_TITLE
+    NAME = "-".join((TITLE.lower()).split())
+
+    mel_activity_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    mel_results_mel_result_id = models.IntegerField('Id', blank=False)
+    mel_activity_details = models.CharField('Details', max_length=255, blank=False)
+    mel_activity_target_estimated = models.CharField('Target', max_length=255, blank=False)
+    mel_activity_target_achieved = models.CharField('Achieved', max_length=255, blank=False)
+    mel_activity_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_activity_created_id = models.CharField('Created ID', max_length=100, blank=True)
+    mel_activity_created_by = models.CharField('Created By', max_length=100, blank=True)
+    mel_activity_created_department = models.CharField('Created Department', max_length=255, blank=True)
+    mel_activity_created_role = models.CharField('Created Role', max_length=255, blank=True)
+    mel_activity_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_activity_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
+    mel_activity_updated_by = models.CharField('Updated By', max_length=100, blank=True)
+    mel_activity_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
+    mel_activity_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
+    mel_activity_assigned_to_at = models.DateTimeField('Assigned At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
+    mel_activity_assigned_to_id = models.CharField('Assigned ID', max_length=100, blank=True)
+    mel_activity_assigned_to_by = models.CharField('Assigned By', max_length=100, blank=True)
+    mel_activity_assigned_to_department = models.CharField('Assigned Department', max_length=255, blank=True)
+    mel_activity_assigned_to_role = models.CharField('Assigned Role', max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.mel_results_id
+
+    @classmethod
+    def generate_random_number(cls, attribute, length):
+        token = ''
+        unique_token_found = False
+        while not unique_token_found:
+            token = get_random_string(length, allowed_chars='0123456789')
+            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+                unique_token_found = True
+        return token

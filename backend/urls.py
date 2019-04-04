@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 from backend.views import operator_views, operator_log_views, order_views, order_item_views, order_proposal_views, \
     product_views, inventory_item_views, product_request_views, product_request_item_views, site_views, setting_views, \
-    notification_views
+    notification_views, mel_indicator_views, mel_result_views, mel_activity_views
 
 urlpatterns = [
 
@@ -514,5 +514,26 @@ urlpatterns = [
         name='product_request_items_select_single'),
     url(r'^product-request-items/select-multiple/$', product_request_item_views.select_multiple,
         name='product_request_items_select_multiple'),
+
+    # mel indicators
+    url(r'^mel/indicators/$', mel_indicator_views.index, name='mel_indicators_index'),
+    url(r'^mel/indicators/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # mel results
+    url(r'^mel/results/$', mel_result_views.index, name='mel_results_index'),
+    url(r'^mel/results//service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+
+    # mel activities
+    url(r'^mel/activities/$', mel_activity_views.index, name='mel_activities_index'),
+    url(r'^mel/activities//service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
 
 ]
