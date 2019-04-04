@@ -516,22 +516,41 @@ urlpatterns = [
         name='product_request_items_select_multiple'),
 
     # mel indicators
-    url(r'^mel/indicators/$', mel_indicator_views.index, name='mel_indicators_index'),
-    url(r'^mel/indicators/service-worker.js',
+    url(r'^mel-indicators/(?P<id>.+)/$', mel_indicator_views.index, name='mel_indicators_index'),
+    url(r'^mel-indicators/(?P<id>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # create
+    url(r'^mel/indicators/create/$', mel_indicator_views.create, name='mel_indicators_create'),
+    url(r'^mel/indicators/create/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # update
+    url(r'^mel/indicators/update/(?P<pk>.+)/$', mel_indicator_views.update, name='mel_indicators_update'),
+    url(r'^mel/indicators/update/(?P<pk>.+)/service-worker.js',
+        (TemplateView.as_view(template_name="service-worker/service-worker.js",
+                              content_type='application/javascript', )),
+        name='service-worker.js'),
+    # update item
+    url(r'^mel/indicators/item/update/(?P<id>.+)/(?P<pk>.+)/$', mel_indicator_views.update_item,
+        name='mel_indicators_update_item'),
+    url(r'^mel/indicators/item/update/(?P<id>.+)/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
     # mel results
-    url(r'^mel/results/$', mel_result_views.index, name='mel_results_index'),
-    url(r'^mel/results//service-worker.js',
+    url(r'^mel-results/(?P<id>.+)/$', mel_result_views.index, name='mel_results_index'),
+    url(r'^mel-results/(?P<id>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
 
     # mel activities
-    url(r'^mel/activities/$', mel_activity_views.index, name='mel_activities_index'),
-    url(r'^mel/activities//service-worker.js',
+    url(r'^mel-activities/$', mel_activity_views.index, name='mel_activities_index'),
+    url(r'^mel-activities//service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

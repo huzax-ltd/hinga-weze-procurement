@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('mel_indicator_id',
                  models.AutoField(primary_key=True, serialize=False, verbose_name='MEL Indicator Id')),
-                ('mel_indicator_tag', models.CharField(max_length=8, verbose_name='Tag')),
+                ('mel_indicator_code', models.CharField(max_length=8, verbose_name='Tag')),
                 ('mel_indicator_number', models.IntegerField(default=0, verbose_name='Number')),
                 ('mel_indicator_name', models.CharField(max_length=100, verbose_name='Name')),
                 ('mel_indicator_details', models.CharField(max_length=255, verbose_name='Details')),

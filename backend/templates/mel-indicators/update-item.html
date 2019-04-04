@@ -1,0 +1,74 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <div class='modal-header bg-primary-700 text-auto'>
+        <h6 class='modal-title'>Indicator Details</h6>
+        <button type="button" class="close btn btn-icon fuse-ripple-ready" data-dismiss="modal"
+                aria-label="Close">
+            <i class="icon icon-close-circle-outline text-white"></i>
+        </button>
+    </div>
+    <div class='modal-body'>
+        <div class='bootbox-body'>
+            <div class="content custom-scrollbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.mel_indicator_id.label }}
+                                    {% if form.mel_indicator_id.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.mel_indicator_id }}
+                            </div>
+                            {{ form.mel_indicator_id.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.mel_indicator_number.label }}
+                                    {% if form.mel_indicator_number.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.mel_indicator_number }}
+                            </div>
+                            {{ form.mel_indicator_number.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form">
+                            <div class="form-group mb-4 pt-0">
+                                <label class="custom-label">
+                                    {{ form.mel_indicator_details.label }}
+                                    {% if form.mel_indicator_details.field.required %}
+                                        <b style="color: red;">*</b>{% endif %}
+                                </label>
+                                {{ form.mel_indicator_details }}
+                            </div>
+                            {{ form.mel_indicator_details.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-grey-100">
+        <button data-dismiss="modal" type="button"
+                class="btn btn btn-outline-primary fuse-ripple-ready">Cancel
+        </button>
+        <button type="submit" class="btn btn btn-primary fuse-ripple-ready">
+            Submit
+        </button>
+    </div>
+</form>
+<!--suppress ES6ConvertVarToLetConst -->
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $("#search-input-select-item-id").select2({placeholder: "--select--", allowClear: false});
+        $("#search-input-select-item-id").attr("readonly", "readonly");
+        $('#search-input-select-item-id').trigger('change');
+    });
+</script>
+{% include '_include/tab_index.html' %}

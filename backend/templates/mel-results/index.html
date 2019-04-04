@@ -15,7 +15,7 @@
                 <div class="card body-content-card">
                     <nav class="breadcrumb bg-primary-50">
                         <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
-                        <span class="breadcrumb-item active">Results</span>
+                        <span class="breadcrumb-item active">{{ title }}</span>
                     </nav>
                 </div>
                 {% include '_include/alert.html' %}
@@ -51,40 +51,126 @@
             <div class="page-content p-5 body-content-p-t-5">
                 <div class="card body-content-card">
                     <div class="card-body p-5">
-                        <div class="dt-buttons" style="margin-right:3px;">
-                            <button role="button" type="button"
-                                    class="btn btn-outline-primary fuse-ripple-ready dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Multiple Action
-                            </button>
-                            <div class="dropdown-menu">
+                        <div class="row">
+                            <div class="dt-buttons">
+                                {% if ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values %}
+                                    <a class="btn btn-link"
+                                       href="#">
+                                        SELECT PROJECT :
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="dt-buttons" style="margin-right:5px; min-width: 200px;">
+                                {% if ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values %}
+                                    <form method="post" action="">
+                                        {% csrf_token %}
+                                        <div class="form">
+                                            <div class="form-group mb-4 pt-0">
+                                                {{ search_form.mel_indicator_id }}
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            <div class="dt-buttons" style="margin-right:5px;">
+                                {% if ACCESS_PERMISSION_MEL_RESULTS_CREATE in auth_permissions.values %}
+                                    <a href="#" id="btn-create-result"
+                                       class="btn btn-outline-primary btn-block fuse-ripple-ready">
+                                        <i class="icon icon-plus"
+                                           style="font-size: 16px; vertical-align: top !important;"></i> ADD NEW RESULT
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
-                        {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
-                            <div class="dt-buttons" style="margin-right:3px;">
-                                <a class="btn btn-outline-primary fuse-ripple-ready"
-                                   href="{% url 'orders_create' %}">
-                                    <i class="icon icon-plus"
-                                       style="font-size: 16px; vertical-align: top !important;"></i> ADD
-                                </a>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <td colspan="1" style="font-weight: bold;" width="100">Name</td>
+                                        <td colspan="9">{{ model.mel_indicator_name|safe }}</td>
+                                        <td colspan="1" style="font-weight: bold;" width="100">Code</td>
+                                        <td colspan="1" width="100">{{ model.mel_indicator_code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1" style="font-weight: bold;">No</td>
+                                        <td colspan="8" style="font-weight: bold;">Intermediate Results</td>
+                                        <td colspan="1" style="font-weight: bold;" width="100">Sub results</td>
+                                        <td colspan="1" style="font-weight: bold;">Indicators</td>
+                                        <td colspan="1" style="font-weight: bold;">Action</td>
+                                    </tr>
+                                    {% for result in results %}
+                                        <tr>
+                                            <td colspan="1">{{ forloop.counter }}</td>
+                                            <td colspan="8">{{ result.mel_result_details }}</td>
+                                            <td colspan="1">{{ result.no_of_sub_results }}</td>
+                                            <td colspan="1">{{ result.no_of_indicators }}</td>
+                                            <td colspan="1">
+                                                {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
+                                                    {% if model.mel_indicator_id|safe != 0|safe %}
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-icon ml-1"
+                                                                    id="btn-edit-result-{{ result.mel_result_id }}">
+                                                                <i class="icon icon-eye"></i>
+                                                            </button>
+                                                            <button class="btn btn-icon ml-1"
+                                                                    id="btn-edit-result-{{ result.mel_result_id }}">
+                                                                <i class="icon icon-account-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-icon ml-1"
+                                                                    id="btn-edit-result-{{ result.mel_result_id }}">
+                                                                <i class="icon icon-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </thead>
+                                </table>
                             </div>
-                        {% endif %}
-                        {% if ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values %}
-                            <div class="dt-buttons" style="margin-right:3px;">
-                                <a class="btn btn-outline-primary fuse-ripple-ready" href="#"
-                                   onclick="displayDivSearch();">
-                                    <i class="icon icon-magnify"
-                                       style="font-size: 16px; vertical-align: top !important;"></i> SEARCH
-                                </a>
-                            </div>
-                        {% endif %}
-                        {% include '_include/datatable-buttons.html' %}
-                        {% render_table table %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="bootbox modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#search-input-select-id").select2({placeholder: "--select--", allowClear: false});
+            $("#search-input-select-id").on("change", function () {
+                var url = "{% url 'mel_results_index' id='P1' %}";
+                url = url.replace("P1", $("#search-input-select-id").val());
+                location.href = url;
+            });
+            $("#modal").on("hidden.bs.modal", function () {
+                location.reload();
+            });
+            var url = "{% url 'mel_indicators_create'%}";
+            $("#btn-create-result").modalForm({
+                formURL: url
+            });
+            {% for result in results %}
+                {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
+                    {% if model.mel_indicator_id|safe != 0|safe %}
+                        url = "{% url 'mel_indicators_update_item' id='P1' pk='P2' %}";
+                        url = url.replace("P1", "{{ model.mel_indicator_id }}");
+                        url = url.replace("P2", "{{ result.mel_result_id }}");
+                        $("#btn-edit-result-{{ result.mel_result_id }}").modalForm({
+                            formURL: url
+                        });
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
     {% include '_include/datatable-js.html' %}
     {% include '_include/select_single.html' %}
     {% include '_include/select_multiple.html' %}

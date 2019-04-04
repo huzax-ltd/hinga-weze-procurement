@@ -2763,7 +2763,7 @@ class Mel_Indicators(models.Model):
     NAME = "-".join((TITLE.lower()).split())
 
     mel_indicator_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
-    mel_indicator_tag = models.CharField('Tag', max_length=8, blank=False)
+    mel_indicator_code = models.CharField('Code', max_length=8, blank=False)
     mel_indicator_number = models.IntegerField('Number', blank=False, default=0)
     mel_indicator_name = models.CharField('Name', max_length=100, blank=False)
     mel_indicator_details = models.CharField('Details', max_length=255, blank=False)
@@ -2787,7 +2787,7 @@ class Mel_Indicators(models.Model):
         unique_token_found = False
         while not unique_token_found:
             token = get_random_string(length, allowed_chars='0123456789')
-            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+            if (not token.startswith('0')) and Mel_Indicators.objects.filter(**{attribute: token}).count() is 0:
                 unique_token_found = True
         return token
 
@@ -2799,7 +2799,11 @@ class Mel_Results(models.Model):
     SINGULAR_TITLE = settings.MODEL_MEL_RESULTS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
+    no_of_sub_results = 0
+    no_of_indicators = 0
+
     mel_result_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
+    mel_indicators_mel_indicator_code = models.CharField('Code', max_length=8, blank=False, default='')
     mel_result_details = models.CharField('Details', max_length=255, blank=False)
     mel_indicator_ids = models.CharField('Indicators', max_length=255, blank=True)
     mel_result_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
@@ -2814,7 +2818,7 @@ class Mel_Results(models.Model):
     mel_result_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.mel_results_id
+        return self.mel_result_id
 
     @classmethod
     def generate_random_number(cls, attribute, length):
@@ -2822,7 +2826,7 @@ class Mel_Results(models.Model):
         unique_token_found = False
         while not unique_token_found:
             token = get_random_string(length, allowed_chars='0123456789')
-            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+            if (not token.startswith('0')) and Mel_Results.objects.filter(**{attribute: token}).count() is 0:
                 unique_token_found = True
         return token
 
@@ -2849,17 +2853,7 @@ class Mel_Sub_Results(models.Model):
     mel_sub_result_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.mel_results_id
-
-    @classmethod
-    def generate_random_number(cls, attribute, length):
-        token = ''
-        unique_token_found = False
-        while not unique_token_found:
-            token = get_random_string(length, allowed_chars='0123456789')
-            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
-                unique_token_found = True
-        return token
+        return self.mel_sub_result_id
 
 
 # Create your models here.
@@ -2891,7 +2885,7 @@ class Mel_Activities(models.Model):
     mel_activity_assigned_to_role = models.CharField('Assigned Role', max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.mel_results_id
+        return self.mel_activity_id
 
     @classmethod
     def generate_random_number(cls, attribute, length):
@@ -2899,6 +2893,6 @@ class Mel_Activities(models.Model):
         unique_token_found = False
         while not unique_token_found:
             token = get_random_string(length, allowed_chars='0123456789')
-            if (not token.startswith('0')) and Orders.objects.filter(**{attribute: token}).count() is 0:
+            if (not token.startswith('0')) and Mel_Activities.objects.filter(**{attribute: token}).count() is 0:
                 unique_token_found = True
         return token

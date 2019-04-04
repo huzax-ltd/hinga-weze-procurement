@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5a52812-e78d-45d0-9066-6f5b7849675c" name="Default" comment="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added MEL Roles">
-      <change afterPath="$PROJECT_DIR$/backend/forms/mel_activity_forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/forms/mel_indicator_forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/forms/mel_result_forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/tables/mel_activity_tables.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/tables/mel_indicator_tables.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/tables/mel_result_tables.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-activities/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-indicators/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-results/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/views/mel_activity_views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/views/mel_indicator_views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/views/mel_result_views.py" afterDir="false" />
+    <list default="true" id="b5a52812-e78d-45d0-9066-6f5b7849675c" name="Default" comment="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Completed setup of mel indicators, results and activities tables.">
+      <change afterPath="$PROJECT_DIR$/backend/templates/mel-indicators/create.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/templates/mel-indicators/update-item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/templates/mel-indicators/update.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/context_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/context_processors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0042_auto_20190404_0830.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/migrations/0042_auto_20190404_0830.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/forms/mel_indicator_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/mel_indicator_forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/forms/mel_result_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/mel_result_forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/mel-indicators/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/mel-indicators/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/mel-results/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/mel-results/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/views/operator_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/operator_views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/views/setting_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/setting_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/views/mel_indicator_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/mel_indicator_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/views/mel_result_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/mel_result_views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,66 +31,10 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/views/mel_result_views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="37" column="78" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="78" />
-              <folding>
-                <element signature="e#0#45#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/templates/_include/navigation-left.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="587">
-              <caret line="572" column="82" selection-start-line="572" selection-start-column="41" selection-end-line="572" selection-end-column="82" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/context_processors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="46" column="58" lean-forward="true" selection-start-line="46" selection-start-column="58" selection-end-line="46" selection-end-column="58" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/settings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="506" column="43" selection-start-line="506" selection-start-column="43" selection-end-line="506" selection-end-column="43" />
-              <folding>
-                <element signature="e#323#338#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>MY</find>
-      <find>Level</find>
-      <find>level</find>
-      <find>upload</find>
-      <find>techcible</find>
-      <find>email</find>
-      <find>logo</find>
-      <find>domain</find>
-      <find>logo_url</find>
-      <find>smtp</find>
-      <find>attachment-delete-external</find>
-      <find>attachment_type_id</find>
-      <find>responsive</find>
       <find>id_attachment_proposal_business_license_file_path</find>
       <find>action</find>
       <find>btn-upload-business-license</find>
@@ -114,10 +52,21 @@
       <find>BACKEND_SECTION_MEL_DEPARTMENT_INDICATORS</find>
       <find>MelResultsTable</find>
       <find>BACKEND_SECTION_MEL_DEPARTMENT_ACTIVITIES</find>
+      <find>--select--</find>
+      <find>create</find>
+      <find>mel_indicators_index</find>
+      <find>mel_indicators_create</find>
+      <find>order</find>
+      <find>indicators/create</find>
+      <find>mel_indicator_id</find>
+      <find>mel_indicator_tag</find>
+      <find>Indicator</find>
+      <find>mel_indicator_code</find>
+      <find>tag</find>
+      <find>code</find>
+      <find>indicator</find>
     </findStrings>
     <replaceStrings>
-      <replace>door</replace>
-      <replace>DOOR</replace>
       <replace>var(--primary-color-two)</replace>
       <replace>var(--primary-color-eight)</replace>
       <replace>var(--primary-color)</replace>
@@ -146,6 +95,8 @@
       <replace>attachment</replace>
       <replace>attachment_number</replace>
       <replace>-order-title</replace>
+      <replace>mel_indicator_code</replace>
+      <replace>Result</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/app</dir>
@@ -177,9 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/backend/views/product_request_item_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/product_views.py" />
-        <option value="$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_280302019.sql" />
         <option value="$PROJECT_DIR$/backend/templates/order-items/create.html" />
         <option value="$PROJECT_DIR$/backend/templates/order-items/update.html" />
         <option value="$PROJECT_DIR$/backend/forms/order_item_forms.py" />
@@ -211,23 +159,26 @@
         <option value="$PROJECT_DIR$/backend/views/order_views.py" />
         <option value="$PROJECT_DIR$/backend/views/setting_views.py" />
         <option value="$PROJECT_DIR$/backend/views/operator_views.py" />
-        <option value="$PROJECT_DIR$/app/models.py" />
         <option value="$PROJECT_DIR$/backend/forms/mel_activity_forms.py" />
-        <option value="$PROJECT_DIR$/backend/forms/mel_indicator_forms.py" />
-        <option value="$PROJECT_DIR$/backend/forms/mel_result_forms.py" />
         <option value="$PROJECT_DIR$/backend/tables/mel_indicator_tables.py" />
         <option value="$PROJECT_DIR$/backend/tables/mel_result_tables.py" />
         <option value="$PROJECT_DIR$/backend/tables/mel_activity_tables.py" />
-        <option value="$PROJECT_DIR$/backend/urls.py" />
         <option value="$PROJECT_DIR$/backend/views/mel_activity_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/mel_indicator_views.py" />
         <option value="$PROJECT_DIR$/backend/templates/mel-activities/index.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/index.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-results/index.html" />
-        <option value="$PROJECT_DIR$/backend/views/mel_result_views.py" />
-        <option value="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" />
         <option value="$PROJECT_DIR$/app/context_processors.py" />
         <option value="$PROJECT_DIR$/app/settings.py" />
+        <option value="$PROJECT_DIR$/backend/views/mel_indicator_views.py" />
+        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/update-item.html" />
+        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/update.html" />
+        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/create.html" />
+        <option value="$PROJECT_DIR$/backend/forms/mel_indicator_forms.py" />
+        <option value="$PROJECT_DIR$/backend/forms/mel_result_forms.py" />
+        <option value="$PROJECT_DIR$/backend/urls.py" />
+        <option value="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" />
+        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/index.html" />
+        <option value="$PROJECT_DIR$/app/models.py" />
+        <option value="$PROJECT_DIR$/backend/views/mel_result_views.py" />
+        <option value="$PROJECT_DIR$/backend/templates/mel-results/index.html" />
       </list>
     </option>
   </component>
@@ -250,35 +201,6 @@
               <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
               <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="_include" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -296,10 +218,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/backend/tables" />
-      <recent name="$PROJECT_DIR$/backend/forms" />
       <recent name="$PROJECT_DIR$/backend/templates/mel-results" />
       <recent name="$PROJECT_DIR$/backend/templates/mel-indicators" />
+      <recent name="$PROJECT_DIR$/backend/tables" />
+      <recent name="$PROJECT_DIR$/backend/forms" />
       <recent name="$PROJECT_DIR$/backend/templates/mel-activities" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -404,14 +326,7 @@
       <workItem from="1553764522815" duration="56045000" />
       <workItem from="1553974245331" duration="26276000" />
       <workItem from="1554104961090" duration="13213000" />
-      <workItem from="1554361420334" duration="9289000" />
-    </task>
-    <task id="LOCAL-00034" summary="Updates (v1.0.0)&#10;1. Bug Fixes">
-      <created>1534950603405</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1534950603406</updated>
+      <workItem from="1554361420334" duration="22594000" />
     </task>
     <task id="LOCAL-00035" summary="Updates (v1.0.0)&#10;1. Integrated Hardware Access Control APIs for unit testing in settings.">
       <created>1544259935635</created>
@@ -749,11 +664,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554363096934</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Completed setup of mel indicators, results and activities tables.">
+      <created>1554374395517</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1554374395517</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="450234000" />
+    <option name="totallyTimeSpent" value="463539000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -766,9 +688,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1984127" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24603175" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -791,11 +712,11 @@
       <window_info anchor="right" id="Database" order="4" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18498169" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1984127" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.41797283" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993895" weight="0.41797283" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3291536" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -804,7 +725,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4981685" weight="0.4754441" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50183153" side_tool="true" weight="0.42528737" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50061053" side_tool="true" weight="0.41797283" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.32810867" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32810867" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -826,7 +747,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Added attachments using jquery file upload and its basic features.&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Added vendor proposal request submission with attachments&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Added email notification feature in vendors proposals request.&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Added email notification feature with attachments&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database" />
@@ -851,133 +771,13 @@
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added vendor proposal notification to OPM&#10;4. Removed JSON functions&#10;5. Added My Requests for Orders and Product Requests" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation" />
     <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added MEL Roles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added MEL Roles" />
+    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Completed setup of mel indicators, results and activities tables." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Completed setup of mel indicators, results and activities tables." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/update-purchase.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="46" selection-start-line="3" selection-start-column="46" selection-end-line="3" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/update-invoice.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/update-payment-voucher.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="62" column="17" selection-start-line="62" selection-start-column="17" selection-end-line="62" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backups/db_initial_data_after_migration.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="902">
-          <caret line="1442" selection-start-line="1442" selection-end-line="1442" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/index-operator.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="38" column="31" lean-forward="true" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/product-requests/index-operator.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
-          <caret line="45" column="67" selection-start-line="45" selection-start-column="67" selection-end-line="45" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/notification_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="9" column="65" selection-start-line="9" selection-start-column="65" selection-end-line="9" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/operator_log_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="11" column="64" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/order_proposal_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="1427" column="16" selection-start-line="1427" selection-start-column="16" selection-end-line="1427" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/order_item_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="360" column="57" selection-start-line="360" selection-start-column="57" selection-end-line="360" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/product_request_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="18" lean-forward="true" selection-start-line="48" selection-start-column="18" selection-end-line="48" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/product-requests/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="69" lean-forward="true" selection-start-line="6" selection-start-column="69" selection-end-line="6" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/update-email-to-supplier.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="662">
-          <caret line="192" column="21" lean-forward="true" selection-start-line="168" selection-start-column="20" selection-end-line="192" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/operators/signin.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_30032019.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="134" column="13" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/email/email-app.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="320" column="80" selection-start-line="320" selection-start-column="80" selection-end-line="320" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/views/site_views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -1071,23 +871,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/view.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="202" column="34" selection-start-line="202" selection-start-column="34" selection-end-line="202" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="382" column="56" lean-forward="true" selection-start-line="382" selection-start-column="56" selection-end-line="382" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/views/operator_views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -1109,49 +892,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/order_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="69" column="80" lean-forward="true" selection-start-line="30" selection-end-line="69" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/order_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-            <element signature="e#26925#29493#0" />
-            <element signature="e#29587#32171#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/forms/mel_activity_forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/mel_indicator_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/mel_result_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
@@ -1188,30 +932,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="518" column="83" selection-start-line="518" selection-start-column="63" selection-end-line="518" selection-end-column="83" />
-          <folding>
-            <element signature="e#33#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/views/mel_activity_views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="690">
           <caret line="46" column="72" selection-start-line="46" selection-start-column="72" selection-end-line="46" selection-end-column="72" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/mel_indicator_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>
@@ -1225,37 +949,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="49" column="18" selection-start-line="49" selection-start-column="18" selection-end-line="49" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="53" column="47" selection-start-line="53" selection-start-column="47" selection-end-line="53" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/mel_result_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="37" column="78" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="78" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/_include/navigation-left.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="572" column="82" selection-start-line="572" selection-start-column="41" selection-end-line="572" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/context_processors.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="174">
@@ -1265,11 +958,261 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="506" column="43" selection-start-line="506" selection-start-column="43" selection-end-line="506" selection-end-column="43" />
+        <state relative-caret-position="483">
+          <caret line="445" column="39" selection-start-line="445" selection-end-line="445" selection-end-column="39" />
           <folding>
             <element signature="e#323#338#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/operator_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="406" column="9" lean-forward="true" selection-start-line="377" selection-end-line="406" selection-end-column="9" />
+          <folding>
+            <element signature="e#516#4938#0" />
+            <element signature="e#4988#7782#0" />
+            <element signature="e#7840#9214#0" />
+            <element signature="e#9271#12479#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/order_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="713" column="14" lean-forward="true" selection-start-line="664" selection-start-column="4" selection-end-line="713" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+            <element signature="e#26925#29493#0" />
+            <element signature="e#29587#32171#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/operators/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="38" column="52" lean-forward="true" selection-start-line="35" selection-start-column="44" selection-end-line="38" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/operators/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="93" column="78" lean-forward="true" selection-start-line="93" selection-start-column="28" selection-end-line="93" selection-end-column="78" />
+          <folding>
+            <element signature="e#5395#5420#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/orders/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/order_item_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="2" selection-end-column="73" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+            <element signature="e#559#8553#0" />
+            <element signature="e#8644#16638#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/orders/view.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="45" column="114" lean-forward="true" selection-start-line="44" selection-start-column="31" selection-end-line="45" selection-end-column="114" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/inventory_item_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="51" column="10" lean-forward="true" selection-start-line="37" selection-start-column="4" selection-end-line="51" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/operators/update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="715">
+          <caret line="199" column="74" lean-forward="true" selection-start-line="198" selection-start-column="19" selection-end-line="199" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/update-item.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="57" selection-start-line="3" selection-start-column="57" selection-end-line="3" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/mel_indicator_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/migrations/0042_auto_20190404_0830.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/migrations/0043_auto_20190404_1911.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/forms/mel_result_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="16" column="23" lean-forward="true" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="544" column="85" selection-start-line="544" selection-start-column="68" selection-end-line="544" selection-end-column="85" />
+          <folding>
+            <element signature="e#33#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/mel_indicator_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" selection-start-line="15" selection-end-line="67" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#617#3066#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/orders/view-edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="103" column="81" selection-start-line="103" selection-start-column="60" selection-end-line="103" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/_include/navigation-left.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4835">
+          <caret line="561" column="97" selection-start-line="561" selection-start-column="97" selection-end-line="561" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1037">
+          <caret line="17" column="72" selection-start-line="17" selection-start-column="72" selection-end-line="17" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="2802" column="20" selection-start-line="2802" selection-start-column="4" selection-end-line="2802" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/order_item_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="9" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#6441#11259#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/order_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1280">
+          <caret line="94" column="55" lean-forward="true" selection-start-line="94" selection-start-column="55" selection-end-line="94" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/product_request_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/product_request_item_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3980">
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/product_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="260" column="40" lean-forward="true" selection-start-line="260" selection-start-column="20" selection-end-line="260" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/views/mel_result_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="43" column="37" lean-forward="true" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="103" column="77" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="77" />
         </state>
       </provider>
     </entry>
