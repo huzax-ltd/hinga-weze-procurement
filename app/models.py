@@ -2799,11 +2799,11 @@ class Mel_Results(models.Model):
     SINGULAR_TITLE = settings.MODEL_MEL_RESULTS_SINGULAR_TITLE
     NAME = "-".join((TITLE.lower()).split())
 
-    no_of_sub_results = 0
-    no_of_indicators = 0
+    sub_results = ''
+    indicators = ''
 
     mel_result_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
-    mel_indicators_mel_indicator_code = models.CharField('Code', max_length=8, blank=False, default='')
+    mel_indicators_mel_indicator_code = models.CharField('Code', max_length=255, blank=False)
     mel_result_details = models.CharField('Details', max_length=255, blank=False)
     mel_indicator_ids = models.CharField('Indicators', max_length=255, blank=True)
     mel_result_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)

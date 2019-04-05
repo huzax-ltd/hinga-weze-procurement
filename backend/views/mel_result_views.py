@@ -1,11 +1,13 @@
-from django.http import HttpResponseForbidden
+from django.contrib import messages
+from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from app import settings
-from app.models import Operators, Mel_Indicators, Mel_Results
-from backend.forms.mel_result_forms import MelResultSearchIndexForm
+from app.models import Operators, Mel_Indicators, Mel_Results, Mel_Sub_Results
+from app.utils import Utils
+from backend.forms.mel_result_forms import MelResultSearchIndexForm, MelResultCreateForm, MelResultUpdateForm
 from backend.tables.mel_result_tables import MelResultsTable
 
 
@@ -18,7 +20,7 @@ def index(request, id):
         return redirect(reverse("operators_signin"))
     else:
         auth_permissions = Operators.get_auth_permissions(operator)
-        if settings.ACCESS_PERMISSION_MEL_INDICATORS_VIEW in auth_permissions.values():
+        if settings.ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values():
             search_form = MelResultSearchIndexForm(request.POST or None)
             try:
                 mel_indicator = Mel_Indicators.objects.get(mel_indicator_id=id)
@@ -36,8 +38,31 @@ def index(request, id):
 
             results = []
             for item in objects:
-                item.no_of_sub_results = 0
-                item.no_of_indicators = 0
+                li_mel_indicator_ids = item.mel_indicator_ids
+                li_mel_indicator_ids = li_mel_indicator_ids.replace('[', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.replace(']', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.replace('\'', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.replace(',', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.split()
+                item.indicators = '<ul class="li_mel_indicators">'
+                for li_mel_indicator_id in li_mel_indicator_ids:
+                    try:
+                        li_mel_indicator = Mel_Indicators.objects.get(mel_indicator_id=li_mel_indicator_id)
+                        item.indicators = item.indicators + '<li>' + str(
+                            li_mel_indicator.mel_indicator_number) + '. ' + li_mel_indicator.mel_indicator_details + '</li>'
+                    except Mel_Indicators.DoesNotExist:
+                        continue
+                item.indicators = item.indicators + '</ul>'
+
+                mel_sub_results = Mel_Sub_Results.objects.filter(mel_results_mel_result_id=item.mel_result_id).all()
+                item.sub_results = '<ul class="li_mel_indicators">'
+                counter = 1
+                for mel_sub_result in mel_sub_results:
+                    item.sub_results = item.sub_results + '<li>' + str(
+                        counter) + '. ' + mel_sub_result.mel_sub_result_details + '</li>'
+                    counter = counter + 1
+                item.sub_results = item.sub_results + '</ul>'
+
                 results.append(item)
 
             if request.method == 'POST' and search_form.is_valid():
@@ -57,7 +82,7 @@ def index(request, id):
                     'operator': operator,
                     'auth_permissions': auth_permissions,
                     'table': table,
-                    'indicators': results,
+                    'results': results,
                     'search_form': search_form,
                     'display_search': display_search,
                     'model': mel_indicator,
@@ -66,5 +91,219 @@ def index(request, id):
                                                    kwargs={'id': mel_indicator.mel_indicator_code}),
                 }
             )
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def create(request, id):
+    template_url = 'mel-results/create.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_MEL_RESULTS_CREATE in auth_permissions.values():
+            try:
+                mel_indicator = Mel_Indicators.objects.get(mel_indicator_id=id)
+
+                if request.method == 'POST':
+                    form = MelResultCreateForm(request.POST)
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        model = Mel_Results()
+                        model.mel_indicators_mel_indicator_code = mel_indicator.mel_indicator_code
+                        model.mel_result_details = form.cleaned_data['mel_result_details']
+                        model.mel_indicator_ids = ''
+
+                        model.mel_result_created_at = Utils.get_current_datetime_utc()
+                        model.mel_result_created_id = operator.operator_id
+                        model.mel_result_created_by = operator.operator_name
+                        model.mel_result_created_department = operator.operator_department
+                        model.mel_result_created_role = operator.operator_role
+
+                        model.mel_result_updated_at = Utils.get_current_datetime_utc()
+                        model.mel_result_updated_id = operator.operator_id
+                        model.mel_result_updated_by = operator.operator_name
+                        model.mel_result_updated_department = operator.operator_department
+                        model.mel_result_updated_role = operator.operator_role
+
+                        # noinspection PyCallByClass,PyTypeChecker
+                        model.save('Created')
+
+                        messages.success(request, 'Added successfully.')
+                        return redirect(reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}))
+
+                else:
+                    form = MelResultCreateForm(
+                        initial={
+                            'mel_indicator_id': mel_indicator.mel_indicator_id,
+                        },
+                    )
+                    INDICATORS = ()
+                    indicators = Mel_Indicators.objects.all()
+                    indicators = indicators.filter(mel_indicator_code=mel_indicator.mel_indicator_code).order_by(
+                        'mel_indicator_number')
+                    for indicator in indicators:
+                        INDICATORS = INDICATORS + ((indicator.mel_indicator_id,
+                                                    str(
+                                                        indicator.mel_indicator_number) + '. ' + indicator.mel_indicator_details),)
+                    form.fields['mel_indicator_ids'].choices = INDICATORS
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_MEL_DEPARTMENT_RESULTS,
+                        'title': Mel_Results.TITLE,
+                        'name': Mel_Results.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'index_url': reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}),
+                    }
+                )
+
+            except Mel_Indicators.DoesNotExist:
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def update(request, pk):
+    template_url = 'mel-results/update.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values():
+            try:
+                model = Mel_Results.objects.get(mel_result_id=pk)
+                mel_indicator = Mel_Indicators.objects.get(mel_indicator_code=model.mel_indicators_mel_indicator_code,
+                                                           mel_indicator_number=1)
+
+                if request.method == 'POST':
+                    form = MelResultUpdateForm(request.POST)
+                    # noinspection PyArgumentList
+                    if form.is_valid():
+                        model.mel_result_details = form.cleaned_data['mel_result_details']
+                        print(form.cleaned_data['mel_indicator_ids'])
+                        model.mel_indicator_ids = form.cleaned_data['mel_indicator_ids']
+
+                        model.mel_result_updated_at = Utils.get_current_datetime_utc()
+                        model.mel_result_updated_id = operator.operator_id
+                        model.mel_result_updated_by = operator.operator_name
+                        model.mel_result_updated_department = operator.operator_department
+                        model.mel_result_updated_role = operator.operator_role
+
+                        # noinspection PyCallByClass,PyTypeChecker
+                        model.save()
+
+                        messages.success(request, 'Added successfully.')
+                        return redirect(reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}))
+                    else:
+                        error_string = ' '.join([' '.join(x for x in l) for l in list(form.errors.values())])
+                        messages.error(request, '' + error_string)
+                        return redirect(reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}))
+
+                else:
+                    form = MelResultUpdateForm(
+                        initial={
+                            'mel_indicator_id': mel_indicator.mel_indicator_id,
+                            'mel_result_details': model.mel_result_details,
+                            'mel_indicator_ids': [item for item in ','.join(model.mel_indicator_ids)],
+                        }
+                    )
+                    INDICATORS = ()
+                    indicators = Mel_Indicators.objects.all()
+                    indicators = indicators.filter(mel_indicator_code=mel_indicator.mel_indicator_code).order_by(
+                        'mel_indicator_number')
+                    for indicator in indicators:
+                        INDICATORS = INDICATORS + ((indicator.mel_indicator_id,
+                                                    str(
+                                                        indicator.mel_indicator_number) + '. ' + indicator.mel_indicator_details),)
+                    form.fields['mel_indicator_ids'].choices = INDICATORS
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_MEL_DEPARTMENT_RESULTS,
+                        'title': Mel_Results.TITLE,
+                        'name': Mel_Results.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'form': form,
+                        'model': model,
+                        'index_url': reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}),
+                        'view_url': reverse("mel_results_view", kwargs={'pk': model.mel_result_id}),
+                    }
+                )
+
+            except (Mel_Results.DoesNotExist, Mel_Indicators.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+
+        else:
+            return HttpResponseForbidden('Forbidden', content_type='text/plain')
+
+
+# noinspection PyUnusedLocal, PyShadowingBuiltins
+def view(request, pk):
+    template_url = 'mel-results/view.html'
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        if settings.ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values():
+            try:
+                model = Mel_Results.objects.get(mel_result_id=pk)
+                mel_indicator = Mel_Indicators.objects.get(mel_indicator_code=model.mel_indicators_mel_indicator_code,
+                                                           mel_indicator_number=1)
+
+                li_mel_indicator_ids = model.mel_indicator_ids
+                li_mel_indicator_ids = li_mel_indicator_ids.replace('[', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.replace(']', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.replace('\'', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.replace(',', '')
+                li_mel_indicator_ids = li_mel_indicator_ids.split()
+                model.indicators = '<ul class="li_mel_indicators">'
+                for li_mel_indicator_id in li_mel_indicator_ids:
+                    try:
+                        li_mel_indicator = Mel_Indicators.objects.get(mel_indicator_id=li_mel_indicator_id)
+                        model.indicators = model.indicators + '<li>' + str(
+                            li_mel_indicator.mel_indicator_number) + '. ' + li_mel_indicator.mel_indicator_details + '</li>'
+                    except Mel_Indicators.DoesNotExist:
+                        continue
+                model.indicators = model.indicators + '</ul>'
+
+                mel_sub_results = Mel_Sub_Results.objects.filter(mel_results_mel_result_id=model.mel_result_id).all()
+
+                return render(
+                    request, template_url,
+                    {
+                        'section': settings.BACKEND_SECTION_MEL_DEPARTMENT_RESULTS,
+                        'title': Mel_Results.TITLE,
+                        'name': Mel_Results.NAME,
+                        'operator': operator,
+                        'auth_permissions': auth_permissions,
+                        'model': model,
+                        'mel_indicator': mel_indicator,
+                        'mel_sub_results': mel_sub_results,
+                        'index_url': reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}),
+                    }
+                )
+
+            except (Mel_Results.DoesNotExist, Mel_Indicators.DoesNotExist):
+                return HttpResponseNotFound('Not Found', content_type='text/plain')
+
         else:
             return HttpResponseForbidden('Forbidden', content_type='text/plain')

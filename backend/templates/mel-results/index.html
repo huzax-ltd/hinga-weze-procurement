@@ -5,6 +5,10 @@
     {% load static %}
     <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
     <style>
+        td[colspan] {
+            vertical-align: top;
+            text-align: left;
+        }
     </style>
 {% endblock %}
 {% block body %}{% load static %}
@@ -54,8 +58,7 @@
                         <div class="row">
                             <div class="dt-buttons">
                                 {% if ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values %}
-                                    <a class="btn btn-link"
-                                       href="#">
+                                    <a class="btn btn-link">
                                         SELECT PROJECT :
                                     </a>
                                 {% endif %}
@@ -74,56 +77,77 @@
                             </div>
                             <div class="dt-buttons" style="margin-right:5px;">
                                 {% if ACCESS_PERMISSION_MEL_RESULTS_CREATE in auth_permissions.values %}
-                                    <a href="#" id="btn-create-result"
-                                       class="btn btn-outline-primary btn-block fuse-ripple-ready">
-                                        <i class="icon icon-plus"
-                                           style="font-size: 16px; vertical-align: top !important;"></i> ADD NEW RESULT
-                                    </a>
+                                    {% if model.mel_indicator_id|safe != 0|safe %}
+                                        <a id="btn-create-result"
+                                           class="btn btn-outline-primary btn-block fuse-ripple-ready">
+                                            <i class="icon icon-plus"
+                                               style="font-size: 16px; vertical-align: top !important;"></i> ADD NEW
+                                            RESULT
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                    {#                                    <thead>#}
+                                    {#                                    <tr>#}
+                                    {#                                        <td colspan="1" style="font-weight: bold;" width="100">Name</td>#}
+                                    {#                                        <td colspan="9">{{ model.mel_indicator_name|safe }}</td>#}
+                                    {#                                        <td colspan="1" style="font-weight: bold;" width="100">Code</td>#}
+                                    {#                                        <td colspan="1" width="130">{{ model.mel_indicator_code }}</td>#}
+                                    {#                                    </tr>#}
+                                    {#                                    <thead>#}
                                     <thead>
                                     <tr>
-                                        <td colspan="1" style="font-weight: bold;" width="100">Name</td>
-                                        <td colspan="9">{{ model.mel_indicator_name|safe }}</td>
-                                        <td colspan="1" style="font-weight: bold;" width="100">Code</td>
-                                        <td colspan="1" width="100">{{ model.mel_indicator_code }}</td>
-                                    </tr>
-                                    <tr>
                                         <td colspan="1" style="font-weight: bold;">No</td>
-                                        <td colspan="8" style="font-weight: bold;">Intermediate Results</td>
-                                        <td colspan="1" style="font-weight: bold;" width="100">Sub results</td>
-                                        <td colspan="1" style="font-weight: bold;">Indicators</td>
-                                        <td colspan="1" style="font-weight: bold;">Action</td>
+                                        <td colspan="4" style="font-weight: bold;">Intermediate Results</td>
+                                        <td colspan="3" style="font-weight: bold;">Sub results</td>
+                                        <td colspan="3" style="font-weight: bold;">Indicators</td>
+                                        <td colspan="1" style="font-weight: bold;" width="130">Action</td>
                                     </tr>
                                     {% for result in results %}
                                         <tr>
                                             <td colspan="1">{{ forloop.counter }}</td>
-                                            <td colspan="8">{{ result.mel_result_details }}</td>
-                                            <td colspan="1">{{ result.no_of_sub_results }}</td>
-                                            <td colspan="1">{{ result.no_of_indicators }}</td>
+                                            <td colspan="4">{{ result.mel_result_details }}</td>
+                                            <td colspan="3" style="padding: 0;">{{ result.sub_results|safe }}</td>
+                                            <td colspan="3" style="padding: 0;">{{ result.indicators|safe }}</td>
                                             <td colspan="1">
-                                                {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
-                                                    {% if model.mel_indicator_id|safe != 0|safe %}
-                                                        <div class="btn-group">
-                                                            <button class="btn btn-icon ml-1"
-                                                                    id="btn-edit-result-{{ result.mel_result_id }}">
-                                                                <i class="icon icon-eye"></i>
-                                                            </button>
-                                                            <button class="btn btn-icon ml-1"
-                                                                    id="btn-edit-result-{{ result.mel_result_id }}">
-                                                                <i class="icon icon-account-edit"></i>
-                                                            </button>
-                                                            <button class="btn btn-icon ml-1"
-                                                                    id="btn-edit-result-{{ result.mel_result_id }}">
-                                                                <i class="icon icon-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
+                                                <div class="dt-buttons">
+                                                    <button role="button" type="button"
+                                                            class="btn btn-outline-primary fuse-ripple-ready dropdown-toggle"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                        Action
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        {% if ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values %}
+                                                            {% if model.mel_indicator_id|safe != 0|safe %}
+                                                                <a class="dropdown-item"
+                                                                   id="btn-view-result-{{ result.mel_result_id }}">
+                                                                    View
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
+                                                            {% if model.mel_indicator_id|safe != 0|safe %}
+                                                                <a class="dropdown-item"
+                                                                   id="btn-edit-result-{{ result.mel_result_id }}">
+                                                                    Update
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if ACCESS_PERMISSION_MEL_RESULTS_DELETE in auth_permissions.values %}
+                                                            {% if model.mel_indicator_id|safe != 0|safe %}
+                                                                <a class="dropdown-item"
+                                                                   id="btn-delete-result-{{ result.mel_result_id }}">
+                                                                    Delete
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -153,22 +177,37 @@
             $("#modal").on("hidden.bs.modal", function () {
                 location.reload();
             });
-            var url = "{% url 'mel_indicators_create'%}";
-            $("#btn-create-result").modalForm({
-                formURL: url
-            });
+            var url = "{% url 'mel_results_create' id='P1' %}";
+            url = url.replace("P1", "{{ model.mel_indicator_id }}");
+            $("#btn-create-result").attr("href", url);
             {% for result in results %}
+                {% if ACCESS_PERMISSION_MEL_RESULTS_VIEW in auth_permissions.values %}
+                    {% if model.mel_indicator_id|safe != 0|safe %}
+                        url = "{% url 'mel_results_view' pk='P1' %}";
+                        url = url.replace("P1", "{{ result.mel_result_id }}");
+                        $("#btn-view-result-{{ result.mel_result_id }}").attr("href", url);
+                    {% endif %}
+                {% endif %}
                 {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
                     {% if model.mel_indicator_id|safe != 0|safe %}
-                        url = "{% url 'mel_indicators_update_item' id='P1' pk='P2' %}";
-                        url = url.replace("P1", "{{ model.mel_indicator_id }}");
-                        url = url.replace("P2", "{{ result.mel_result_id }}");
-                        $("#btn-edit-result-{{ result.mel_result_id }}").modalForm({
-                            formURL: url
-                        });
+                        url = "{% url 'mel_results_update' pk='P1' %}";
+                        url = url.replace("P1", "{{ result.mel_result_id }}");
+                        $("#btn-edit-result-{{ result.mel_result_id }}").attr("href", url);
                     {% endif %}
                 {% endif %}
             {% endfor %}
+            $(".li_mel_indicators").css({
+                "margin": "0",
+                "padding": "0",
+                "list-style-type": "none",
+            });
+            $(".li_mel_indicators li").css({
+                "border-bottom": "1px solid #efefef",
+                "margin": "0",
+                "padding-left": "10px",
+                "padding-top": "5px",
+                "padding-right": "10px",
+            });
         });
     </script>
     {% include '_include/datatable-js.html' %}
