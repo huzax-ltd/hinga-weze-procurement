@@ -547,6 +547,9 @@ urlpatterns = [
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
+    # other
+    url(r'^mel/results/api/dropdown/results/(?P<code>.+)/$', mel_result_views.api_dropdown_results,
+        name='api_dropdown_results'),
     # create
     url(r'^mel/results/create/(?P<id>.+)/$', mel_result_views.create, name='mel_results_create'),
     url(r'^mel/results/create/(?P<id>.+)/service-worker.js',
@@ -580,8 +583,8 @@ urlpatterns = [
         name='service-worker.js'),
 
     # mel activities
-    url(r'^mel-activities/$', mel_activity_views.index, name='mel_activities_index'),
-    url(r'^mel-activities//service-worker.js',
+    url(r'^mel-activities/(?P<id>.+)/(?P<result_id>.+)/$', mel_activity_views.index, name='mel_activities_index'),
+    url(r'^mel-activities/(?P<id>.+)/(?P<result_id>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),

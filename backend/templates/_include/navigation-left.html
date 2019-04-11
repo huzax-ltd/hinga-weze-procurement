@@ -572,7 +572,8 @@
                     {% if ACCESS_PERMISSION_MEL_ACTIVITIES_VIEW in auth_permissions.values %}
                         {% if section == BACKEND_SECTION_MEL_DEPARTMENT_ACTIVITIES %}
                             <li class="nav-item">
-                                <a class="nav-link ripple  active" href="{% url 'mel_activities_index' %}">
+                                <a class="nav-link ripple  active"
+                                   href="{% url 'mel_activities_index' id=0 result_id=0 %}">
 
                                     <i class="icon s-4 icon-trophy-outline"></i>
 
@@ -581,7 +582,7 @@
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link ripple" href="{% url 'mel_activities_index' %}">
+                                <a class="nav-link ripple" href="{% url 'mel_activities_index'  id=0 result_id=0 %}">
 
                                     <i class="icon s-4 icon-trophy-outline"></i>
 

@@ -2866,8 +2866,6 @@ class Mel_Activities(models.Model):
     mel_activity_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     mel_results_mel_result_id = models.IntegerField('Id', blank=False)
     mel_activity_details = models.CharField('Details', max_length=255, blank=False)
-    mel_activity_target_estimated = models.CharField('Target', max_length=255, blank=False)
-    mel_activity_target_achieved = models.CharField('Achieved', max_length=255, blank=False)
     mel_activity_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     mel_activity_created_id = models.CharField('Created ID', max_length=100, blank=True)
     mel_activity_created_by = models.CharField('Created By', max_length=100, blank=True)

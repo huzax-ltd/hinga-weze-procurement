@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -9,6 +9,32 @@ from app.models import Operators, Mel_Indicators, Mel_Results, Mel_Sub_Results
 from app.utils import Utils
 from backend.forms.mel_result_forms import MelResultSearchIndexForm, MelResultCreateForm, MelResultUpdateForm
 from backend.tables.mel_result_tables import MelResultsTable
+
+
+# noinspection PyUnusedLocal
+def api_dropdown_results(request, code):
+    operator = Operators.login_required(request)
+    if operator is None:
+        Operators.set_redirect_field_name(request, request.path)
+        return redirect(reverse("operators_signin"))
+    else:
+        auth_permissions = Operators.get_auth_permissions(operator)
+        try:
+            mel_indicator = Mel_Indicators.objects.get(mel_indicator_id=code)
+        except Mel_Indicators.DoesNotExist:
+            mel_indicator = Mel_Indicators()
+            mel_indicator.mel_indicator_id = 0
+            mel_indicator.mel_indicator_code = 0
+
+        results = ""
+        results += "<option value=''>--select--</option>"
+        mel_results = Mel_Results.objects.all()
+        mel_results = mel_results.filter(mel_indicators_mel_indicator_code=mel_indicator.mel_indicator_code)
+        for item in mel_results:
+            results += "<option value='" + \
+                       str(item.mel_result_id) + "'>" + str(item.mel_result_details) + "</option>"
+
+        return HttpResponse(results, content_type="text/plain")
 
 
 # noinspection PyUnusedLocal

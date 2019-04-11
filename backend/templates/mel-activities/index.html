@@ -5,6 +5,10 @@
     {% load static %}
     <title>{{ APP_CONSTANT_APP_NAME }} : {{ title }}</title>
     <style>
+        td[colspan] {
+            vertical-align: top;
+            text-align: left;
+        }
     </style>
 {% endblock %}
 {% block body %}{% load static %}
@@ -15,7 +19,7 @@
                 <div class="card body-content-card">
                     <nav class="breadcrumb bg-primary-50">
                         <a class="breadcrumb-item" href="{% url 'operators_dashboard' %}">Home</a>
-                        <span class="breadcrumb-item active">Activities</span>
+                        <span class="breadcrumb-item active">{{ title }}</span>
                     </nav>
                 </div>
                 {% include '_include/alert.html' %}
@@ -51,40 +55,84 @@
             <div class="page-content p-5 body-content-p-t-5">
                 <div class="card body-content-card">
                     <div class="card-body p-5">
-                        <div class="dt-buttons" style="margin-right:3px;">
-                            <button role="button" type="button"
-                                    class="btn btn-outline-primary fuse-ripple-ready dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Multiple Action
-                            </button>
-                            <div class="dropdown-menu">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {% if ACCESS_PERMISSION_MEL_ACTIVITIES_VIEW in auth_permissions.values %}
+                                    <form method="post" action="">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form">
+                                                    <label class="custom-label">
+                                                        {{ search_form.mel_indicator_id.label }}
+                                                        {% if search_form.mel_indicator_id.field.required %}
+                                                            <b style="color: red;">*</b>{% endif %}
+                                                    </label>
+                                                    <div class="form-group mb-4 pt-0">
+                                                        {{ search_form.mel_indicator_id }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="form">
+                                                    <label class="custom-label">
+                                                        {{ search_form.mel_result_id.label }}
+                                                        {% if search_form.mel_result_id.field.required %}
+                                                            <b style="color: red;">*</b>{% endif %}
+                                                    </label>
+                                                    <div class="form-group mb-4 pt-0">
+                                                        {{ search_form.mel_result_id }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
-                        {% if ACCESS_PERMISSION_ORDER_CREATE in auth_permissions.values %}
-                            <div class="dt-buttons" style="margin-right:3px;">
-                                <a class="btn btn-outline-primary fuse-ripple-ready"
-                                   href="{% url 'orders_create' %}">
-                                    <i class="icon icon-plus"
-                                       style="font-size: 16px; vertical-align: top !important;"></i> ADD
-                                </a>
+                        <div class="row">
+                            <div class="col-sm-12">
+
                             </div>
-                        {% endif %}
-                        {% if ACCESS_PERMISSION_ORDER_VIEW in auth_permissions.values %}
-                            <div class="dt-buttons" style="margin-right:3px;">
-                                <a class="btn btn-outline-primary fuse-ripple-ready" href="#"
-                                   onclick="displayDivSearch();">
-                                    <i class="icon icon-magnify"
-                                       style="font-size: 16px; vertical-align: top !important;"></i> SEARCH
-                                </a>
-                            </div>
-                        {% endif %}
-                        {% include '_include/datatable-buttons.html' %}
-                        {% render_table table %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="bootbox modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            {% if result_id|safe == 0|safe %}
+                var data = "<option value=''>--select--</option>";
+                $("select#search-input-select-result-id").html(data);
+            {% endif %}
+            $("#search-input-select-indicator-id").select2({placeholder: "--select--", allowClear: false});
+            $("#search-input-select-indicator-id").on("change", function () {
+                var code = document.getElementById("search-input-select-indicator-id").value;
+                $.get("/backend/mel/results/api/dropdown/results/" + code + "/", function (data) {
+                    $("select#search-input-select-result-id").html(data);
+                });
+            });
+            $("#search-input-select-result-id").select2({placeholder: "--select--", allowClear: false});
+            $("#search-input-select-result-id").on("change", function () {
+                var id = document.getElementById("search-input-select-indicator-id").value;
+                var result_id = document.getElementById("search-input-select-result-id").value;
+                var url = "{% url 'mel_activities_index' id='P1' result_id='P2' %}";
+                url = url.replace("P1", id);
+                url = url.replace("P2", result_id);
+                location.href = url;
+            });
+            $("#modal").on("hidden.bs.modal", function () {
+                location.reload();
+            });
+        });
+    </script>
     {% include '_include/datatable-js.html' %}
     {% include '_include/select_single.html' %}
     {% include '_include/select_multiple.html' %}

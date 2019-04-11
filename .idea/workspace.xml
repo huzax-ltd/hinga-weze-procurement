@@ -1,227 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5a52812-e78d-45d0-9066-6f5b7849675c" name="Default" comment="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed indicators section">
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-results/create.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-results/update.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-results/view.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-sub-results/create.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/templates/mel-sub-results/update.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/views/mel_sub_result_views.py" afterDir="false" />
+    <list default="true" id="84d6beec-5cde-450a-bd35-a4ae86314ac9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/hinga-weze-procurement.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/hinga-weze-procurement.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/watcherTasks.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/forms/mel_result_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/mel_result_forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/mel-results/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/mel-results/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/forms/mel_activity_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/forms/mel_activity_forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/mel-activities/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/mel-activities/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/views/mel_activity_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/mel_activity_views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/views/mel_result_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/mel_result_views.py" afterDir="false" />
     </list>
+    <ignored path="$PROJECT_DIR$/static/templates/fuse/assets/node_modules/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/qtvms$user_attendance_tables.coverage" NAME="user_attendance_tables Coverage Results" MODIFIED="1531322663402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/tables" />
-    <SUITE FILE_PATH="coverage/hinga_weze_procurement$product_request_views.coverage" NAME="product_request_views Coverage Results" MODIFIED="1553955572077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/views" />
-  </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/views/mel_result_views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="51" column="77" selection-start-line="51" selection-start-column="77" selection-end-line="51" selection-end-column="77" />
-              <folding>
-                <element signature="e#0#35#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/view.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="87" column="84" selection-start-line="87" selection-start-column="84" selection-end-line="87" selection-end-column="84" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="550">
-              <caret line="197" column="24" lean-forward="true" selection-start-line="182" selection-start-column="11" selection-end-line="197" selection-end-column="24" />
-              <folding>
-                <element signature="e#6870#6889#0#HTML" expanded="true" />
-                <element signature="e#6960#6979#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>DEPARTMENT_MAV</find>
-      <find>DEPARTMENT_DAF</find>
-      <find>settings</find>
-      <find>DEPARTMENT_MEL</find>
-      <find>CONTACT_URL</find>
-      <find>BACKEND_SECTION_PROCUREMENT_NEW_REQUEST</find>
-      <find>Operators</find>
-      <find>BACKEND_SECTION_MEL_DEPARTMENT_INDICATORS</find>
-      <find>MelResultsTable</find>
-      <find>BACKEND_SECTION_MEL_DEPARTMENT_ACTIVITIES</find>
-      <find>--select--</find>
-      <find>create</find>
-      <find>mel_indicators_index</find>
-      <find>mel_indicators_create</find>
-      <find>order</find>
-      <find>indicators/create</find>
-      <find>mel_indicator_id</find>
-      <find>Indicator</find>
-      <find>mel_indicator_code</find>
-      <find>indicator</find>
-      <find>mel_indicator_tag</find>
-      <find>tag</find>
-      <find>INDICATOR</find>
-      <find>href=&quot;#&quot;</find>
-      <find>code</find>
-      <find>mel_indicators_mel_indicator_code</find>
-      <find>no_of</find>
-      <find>item</find>
-      <find>area</find>
-      <find>mel_results_view</find>
+      <find>www</find>
+      <find>AMPPS</find>
     </findStrings>
-    <replaceStrings>
-      <replace>var(--primary-color-two)</replace>
-      <replace>var(--primary-color-eight)</replace>
-      <replace>var(--primary-color)</replace>
-      <replace>primary-color-dark</replace>
-      <replace>bold</replace>
-      <replace>primary-color-light</replace>
-      <replace>b</replace>
-      <replace>&quot;A1&quot;</replace>
-      <replace>'A1'</replace>
-      <replace>'A2'</replace>
-      <replace>'A3'</replace>
-      <replace>&quot;A3&quot;</replace>
-      <replace>&quot;A2&quot;</replace>
-      <replace>'{{</replace>
-      <replace>}}'</replace>
-      <replace>select_single_url</replace>
-      <replace>select_multiple_url</replace>
-      <replace>select_single</replace>
-      <replace>select_multiple</replace>
-      <replace>1px</replace>
-      <replace>min_length=1,</replace>
-      <replace>MinLengthValidator(1)</replace>
-      <replace>order_created_department</replace>
-      <replace>model</replace>
-      <replace>attachement</replace>
-      <replace>attachment</replace>
-      <replace>attachment_number</replace>
-      <replace>-order-title</replace>
-      <replace>mel_indicator_code</replace>
-      <replace>Result</replace>
-    </replaceStrings>
     <dirStrings>
-      <dir>$PROJECT_DIR$/app</dir>
-      <dir>$PROJECT_DIR$/venv/lib/python3.6/site-packages/django_recaptcha-1.4.0-py3.6.egg-info</dir>
-      <dir>$PROJECT_DIR$/frontend</dir>
-      <dir>$PROJECT_DIR$/backend/templates/doors</dir>
-      <dir>$PROJECT_DIR$/static/templates</dir>
-      <dir>$PROJECT_DIR$/frontend/templates</dir>
-      <dir>$PROJECT_DIR$/frontend/forms</dir>
-      <dir>$PROJECT_DIR$/backend/templates/operators</dir>
-      <dir>$PROJECT_DIR$/backend/templates/_include</dir>
-      <dir>$PROJECT_DIR$/backend/forms</dir>
-      <dir>$PROJECT_DIR$/backend/views</dir>
-      <dir>$PROJECT_DIR$/backend</dir>
-      <dir>$PROJECT_DIR$/backend/templates/orders</dir>
-      <dir>$PROJECT_DIR$/backend/templates/order-proposals</dir>
-      <dir>$PROJECT_DIR$/backend/templates</dir>
-      <dir>$PROJECT_DIR$</dir>
-      <dir>$PROJECT_DIR$/app/migrations</dir>
+      <dir>$PROJECT_DIR$/venv/bin</dir>
+      <dir>$PROJECT_DIR$/venv</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/backups/hinga_weze_procurement_test_db_30032019.sql" />
-        <option value="$PROJECT_DIR$/backend/templates/orders/index-operator.html" />
-        <option value="$PROJECT_DIR$/backend/templates/product-requests/index-operator.html" />
-        <option value="$PROJECT_DIR$/backend/views/notification_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/operator_log_views.py" />
-        <option value="$PROJECT_DIR$/backend/forms/order_forms.py" />
-        <option value="$PROJECT_DIR$/backend/forms/order_proposal_forms.py" />
-        <option value="$PROJECT_DIR$/backend/views/order_item_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/product_request_views.py" />
-        <option value="$PROJECT_DIR$/backend/templates/orders/update-email-to-supplier.html" />
-        <option value="$PROJECT_DIR$/backend/templates/logo.html" />
-        <option value="$PROJECT_DIR$/app/urls.py" />
-        <option value="$PROJECT_DIR$/backend/views/site_views.py" />
-        <option value="$PROJECT_DIR$/app/templates/logo.html" />
-        <option value="$PROJECT_DIR$/backend/templates/_include/select_single.html" />
-        <option value="$PROJECT_DIR$/backend/templates/order-proposals/view.html" />
-        <option value="$PROJECT_DIR$/backend/templates/order-proposals/view-internal.html" />
-        <option value="$PROJECT_DIR$/backend/templates/order-proposals/create.html" />
-        <option value="$PROJECT_DIR$/backend/templates/orders/view.html" />
-        <option value="$PROJECT_DIR$/backend/views/order_proposal_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/order_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/setting_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/operator_views.py" />
-        <option value="$PROJECT_DIR$/backend/forms/mel_activity_forms.py" />
-        <option value="$PROJECT_DIR$/backend/tables/mel_indicator_tables.py" />
-        <option value="$PROJECT_DIR$/backend/tables/mel_result_tables.py" />
-        <option value="$PROJECT_DIR$/backend/tables/mel_activity_tables.py" />
-        <option value="$PROJECT_DIR$/backend/views/mel_activity_views.py" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-activities/index.html" />
-        <option value="$PROJECT_DIR$/app/context_processors.py" />
-        <option value="$PROJECT_DIR$/app/settings.py" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/update-item.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/update.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/create.html" />
-        <option value="$PROJECT_DIR$/backend/templates/_include/navigation-left.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-indicators/index.html" />
-        <option value="$PROJECT_DIR$/app/migrations/0044_auto_20190404_2002.py" />
-        <option value="$PROJECT_DIR$/app/migrations/0043_auto_20190404_1911.py" />
-        <option value="$PROJECT_DIR$/backend/views/mel_indicator_views.py" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-results/update.html" />
-        <option value="$PROJECT_DIR$/app/models.py" />
-        <option value="$PROJECT_DIR$/backend/forms/mel_indicator_forms.py" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-results/create.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-sub-results/update.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-sub-results/create.html" />
-        <option value="$PROJECT_DIR$/backend/urls.py" />
-        <option value="$PROJECT_DIR$/backend/forms/mel_result_forms.py" />
-        <option value="$PROJECT_DIR$/backend/views/mel_sub_result_views.py" />
-        <option value="$PROJECT_DIR$/backend/views/mel_result_views.py" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-results/index.html" />
-        <option value="$PROJECT_DIR$/backend/templates/mel-results/view.html" />
+        <option value="$PROJECT_DIR$/venv/bin/activate.csh" />
+        <option value="$PROJECT_DIR$/venv/bin/activate.fish" />
+        <option value="$PROJECT_DIR$/venv/bin/activate" />
+        <option value="$PROJECT_DIR$/venv/bin/chardetect" />
+        <option value="$PROJECT_DIR$/venv/bin/django-admin" />
+        <option value="$PROJECT_DIR$/venv/bin/django-admin.py" />
+        <option value="$PROJECT_DIR$/venv/bin/easy_install" />
+        <option value="$PROJECT_DIR$/venv/bin/easy_install-3.7" />
+        <option value="$PROJECT_DIR$/venv/bin/f2py" />
+        <option value="$PROJECT_DIR$/venv/bin/pip" />
+        <option value="$PROJECT_DIR$/venv/bin/pip3" />
+        <option value="$PROJECT_DIR$/venv/bin/pip3.7" />
+        <option value="$PROJECT_DIR$/venv/bin/qr" />
+        <option value="$PROJECT_DIR$/venv/bin/runxlrd.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
-    <option name="width" value="1628" />
-    <option name="height" value="1027" />
+    <option name="width" value="1680" />
+    <option name="height" value="1050" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -238,71 +82,7 @@
             <path>
               <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
               <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="forms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="tables" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="mel-indicators" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="mel-results" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="mel-sub-results" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="operators" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="orders" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hinga-weze-procurement" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hinga-weze-procurement" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="venv" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -312,27 +92,13 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/templates" />
-      <recent name="$PROJECT_DIR$/api/views" />
-      <recent name="$PROJECT_DIR$/static/templates/fuse/assets/js/include" />
-      <recent name="$PROJECT_DIR$/docs" />
-      <recent name="$PROJECT_DIR$/frontend/templates/frontend/_include" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/backend/views" />
-      <recent name="$PROJECT_DIR$/backend/templates" />
-      <recent name="$PROJECT_DIR$/backend/templates/mel-results" />
-      <recent name="$PROJECT_DIR$/backend/templates/mel-indicators" />
-      <recent name="$PROJECT_DIR$/backend/tables" />
+      <recent name="$PROJECT_DIR$/venv" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -347,8 +113,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Django server.hinga-weze-procurement">
-    <configuration name="product_request_views" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="hinga-weze-procurement" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -356,14 +122,14 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend/views" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/views/product_request_views.py" />
+      <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -376,8 +142,9 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="app.settings" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -393,941 +160,165 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.product_request_views" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b5a52812-e78d-45d0-9066-6f5b7849675c" name="Default" comment="" />
-      <created>1528451654299</created>
+      <changelist id="84d6beec-5cde-450a-bd35-a4ae86314ac9" name="Default Changelist" comment="" />
+      <created>1554990788907</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1528451654299</updated>
-      <workItem from="1547017435612" duration="11620000" />
-      <workItem from="1547279774125" duration="668000" />
-      <workItem from="1552375891608" duration="11331000" />
-      <workItem from="1552413757805" duration="3406000" />
-      <workItem from="1552464335492" duration="104249000" />
-      <workItem from="1552770141304" duration="463000" />
-      <workItem from="1552896156026" duration="227000" />
-      <workItem from="1552898281208" duration="80721000" />
-      <workItem from="1553104948464" duration="1356000" />
-      <workItem from="1553106968427" duration="122000" />
-      <workItem from="1553107107815" duration="122000" />
-      <workItem from="1553107299022" duration="6207000" />
-      <workItem from="1553114074465" duration="2874000" />
-      <workItem from="1553154823324" duration="19419000" />
-      <workItem from="1553348294030" duration="46278000" />
-      <workItem from="1553622571324" duration="51198000" />
-      <workItem from="1553755833417" duration="5150000" />
-      <workItem from="1553764522815" duration="56045000" />
-      <workItem from="1553974245331" duration="26276000" />
-      <workItem from="1554104961090" duration="13213000" />
-      <workItem from="1554361420334" duration="23945000" />
-      <workItem from="1554447298986" duration="14647000" />
+      <updated>1554990788907</updated>
+      <workItem from="1554990799211" duration="187000" />
+      <workItem from="1554991002971" duration="320000" />
+      <workItem from="1554991345191" duration="1903000" />
     </task>
-    <task id="LOCAL-00036" summary="Updates (v1.0.0)&#10;1. Integrated Hardware Access Control APIs with the system functions.&#10;2. Optimized code&#10;3. Bug Fixes&#10;4. Updated models and database">
-      <created>1544625750211</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1544625750212</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Updates (v1.0.0)&#10;1. Integrated Hardware Access Control APIs with the system functions.&#10;2. Optimized code&#10;3. Bug Fixes&#10;4. Updated models and database&#10;5. Added Hardware Logs Synchronization">
-      <created>1547044515831</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1547044515832</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Updates (v1.0.0)&#10;1. Bug fixes and code optimisation&#10;2. Unused code removed&#10;3. Add basic CRUD functions for operators&#10;4. Added Login, Forgot Password, Reset Password and other features for operators&#10;5. Basic setup of bootstrap datatable&#10;6. Updated UI&#10;etc.">
-      <created>1552663607403</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1552663607403</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Updates (v1.0.0)&#10;1. Removed nifty template and moved necessary plugins to other folder">
-      <created>1552664458524</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1552664458524</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Updates (v1.0.0)&#10;1. Added demo operators data&#10;2. Added operator access permissions&#10;3. Updated UI&#10;4. Bug fixes and code optimization&#10;5. Added Notifications model and updated database&#10;6. Added SuperOperator Section&#10;etc.">
-      <created>1552729825940</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1552729825940</updated>
-    </task>
-    <task id="LOCAL-00041" summary="Updates (v1.0.0)&#10;1. Added Notifications model and updated database.&#10;2. Added Orders Section and create, update, view order function.&#10;3. Updated UI&#10;4. Bug fixes and code optimisation">
-      <created>1552771209115</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1552771209115</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Added CRUD for order items&#10;3. Updated UI">
-      <created>1552919652906</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1552919652906</updated>
-    </task>
-    <task id="LOCAL-00043" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Updated UI&#10;3. Added accessing hierarchical orders based on logged in operator">
-      <created>1552935065262</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1552935065262</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Updated UI&#10;3. Added demo dashboard&#10;4. Added demo order timeline view&#10;5. Added HTML tags for orders and notifications&#10;6. Added Notification section and read features&#10;7. Bug fixes and code optimisation">
-      <created>1553014058709</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1553014058709</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Updated UI&#10;3. Updated multi-level approval or rejected">
-      <created>1553020259113</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1553020259113</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Updated UI&#10;3. Added Notification to DAF&#10;4. Updating Procurement Method&#10;5. Notification to COP for approval&#10;6. Updating USAID Approval of order items, &#10;7. Notification to OPM">
-      <created>1553086065851</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1553086065851</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Updates (v1.0.0)&#10;1. Added Footer">
-      <created>1553086871314</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1553086871314</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Deployed on test server (pythonanywhere.com)">
-      <created>1553095496630</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1553095496630</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Updated order timeline with real values&#10;3. Bug fixes and code optimisation&#10;4. Updated UI">
-      <created>1553113454810</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1553113454810</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Bug fixes and code optimisation&#10;3. Updated UI&#10;4. Commented datetime converter">
-      <created>1553117180506</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1553117180507</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Updates (v1.0.0)&#10;1. Updated changes&#10;2. Bug fixes and code optimisation&#10;3. Updated UI">
-      <created>1553162551818</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1553162551818</updated>
-    </task>
-    <task id="LOCAL-00052" summary="Updates (v1.0.0)&#10;1. Added order assignment step&#10;2. Bug fixes and code optimisation&#10;3. Updated UI">
-      <created>1553242707351</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1553242707351</updated>
-    </task>
-    <task id="LOCAL-00053" summary="Updates (v1.0.0)&#10;1. Bug fixed date time value in input forms">
-      <created>1553246218852</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1553246218852</updated>
-    </task>
-    <task id="LOCAL-00054" summary="Updates (v1.0.0)&#10;1. Added vendor category update step">
-      <created>1553249427219</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1553249427219</updated>
-    </task>
-    <task id="LOCAL-00055" summary="Updates (v1.0.0)&#10;1. Added email draft to vendor without attachment">
-      <created>1553428612693</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1553428612694</updated>
-    </task>
-    <task id="LOCAL-00056" summary="Updates (v1.0.0)&#10;1. Added attachments using jquery file upload and its basic features.&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database">
-      <created>1553540270623</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1553540270623</updated>
-    </task>
-    <task id="LOCAL-00057" summary="Updates (v1.0.0)&#10;1. Added vendor proposal request submission with attachments&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database">
-      <created>1553634242369</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1553634242372</updated>
-    </task>
-    <task id="LOCAL-00058" summary="Updates (v1.0.0)&#10;1. Added email notification feature in vendors proposals request.&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database">
-      <created>1553675388677</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1553675388677</updated>
-    </task>
-    <task id="LOCAL-00059" summary="Updates (v1.0.0)&#10;1. Added email notification feature with attachments&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database">
-      <created>1553689599136</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1553689599136</updated>
-    </task>
-    <task id="LOCAL-00060" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization">
-      <created>1553691357559</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1553691357559</updated>
-    </task>
-    <task id="LOCAL-00061" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization&#10;3. Completed viewing proposals and its details">
-      <created>1553695290583</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1553695290583</updated>
-    </task>
-    <task id="LOCAL-00062" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization&#10;3. Completed proposal evaluating, selecting and sending email notifications">
-      <created>1553717219758</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1553717219758</updated>
-    </task>
-    <task id="LOCAL-00063" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization&#10;3. Completed purchase order generating, sending and acknowledging&#10;4. Updated models and database">
-      <created>1553725811291</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1553725811291</updated>
-    </task>
-    <task id="LOCAL-00064" summary="Updates (v1.0.0)&#10;1. Testing">
-      <created>1553764962670</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1553764962670</updated>
-    </task>
-    <task id="LOCAL-00065" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Added products, inventory, inventory items, product requests and product request items">
-      <created>1553776029517</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1553776029518</updated>
-    </task>
-    <task id="LOCAL-00066" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Imported sample assets alias products data using excel">
-      <created>1553782230451</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1553782230451</updated>
-    </task>
-    <task id="LOCAL-00067" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Bug fixes and code optimisation">
-      <created>1553788808408</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1553788808408</updated>
-    </task>
-    <task id="LOCAL-00068" summary="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Bug fixes and code optimisation&#10;3. Updated stock and inventory permissions">
-      <created>1553844335330</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1553844335330</updated>
-    </task>
-    <task id="LOCAL-00069" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added stocks - goods and assets index sections">
-      <created>1553845837813</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1553845837813</updated>
-    </task>
-    <task id="LOCAL-00070" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added PO requests to stock admin">
-      <created>1553872541708</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1553872541708</updated>
-    </task>
-    <task id="LOCAL-00071" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed items received, pending for stock admin with inventory and products update">
-      <created>1553940710394</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1553940710395</updated>
-    </task>
-    <task id="LOCAL-00072" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Removed Order Attachments and included it in Attachments">
-      <created>1553979449264</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1553979449265</updated>
-    </task>
-    <task id="LOCAL-00073" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Reset Database">
-      <created>1553980011466</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1553980011466</updated>
-    </task>
-    <task id="LOCAL-00074" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Tested all functions and fixed errors">
-      <created>1553987140611</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1553987140611</updated>
-    </task>
-    <task id="LOCAL-00075" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database for invoice processing module">
-      <created>1553990847499</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1553990847499</updated>
-    </task>
-    <task id="LOCAL-00076" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Added Receptionist Operator Role">
-      <created>1553992379648</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1553992379648</updated>
-    </task>
-    <task id="LOCAL-00077" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation">
-      <created>1553993362702</created>
-      <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
-      <option name="project" value="LOCAL" />
-      <updated>1553993362703</updated>
-    </task>
-    <task id="LOCAL-00078" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed invoice processing module">
-      <created>1554036761889</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1554036761889</updated>
-    </task>
-    <task id="LOCAL-00079" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed invoice processing module">
-      <created>1554038611839</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1554038611839</updated>
-    </task>
-    <task id="LOCAL-00080" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added vendor proposal notification to OPM&#10;4. Removed JSON functions&#10;5. Added My Requests for Orders and Product Requests">
-      <created>1554106383648</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1554106383649</updated>
-    </task>
-    <task id="LOCAL-00081" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation">
-      <created>1554126234258</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1554126234258</updated>
-    </task>
-    <task id="LOCAL-00082" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added MEL Roles">
-      <created>1554363096933</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1554363096934</updated>
-    </task>
-    <task id="LOCAL-00083" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Completed setup of mel indicators, results and activities tables.">
-      <created>1554374395517</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1554374395517</updated>
-    </task>
-    <task id="LOCAL-00084" summary="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed indicators section">
-      <created>1554407800066</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1554407800066</updated>
-    </task>
-    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="479537000" />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
+    <option name="totallyTimeSpent" value="2410000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25641027" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1978022" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993895" weight="0.41797283" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3291536" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3291536" />
+      <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.497558" weight="0.4754441" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.502442" side_tool="true" weight="0.4754441" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.32810867" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.32810867" />
-      <window_info anchor="bottom" id="Messages" order="13" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3291536" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3291536" />
+      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" side_tool="true" weight="0.32967034" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1984127" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993895" weight="0.41797283" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3291536" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3291536" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4981685" weight="0.4754441" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50061053" side_tool="true" weight="0.41797283" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.32810867" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.32810867" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="*.php" />
-  </component>
-  <component name="UpdateCopyrightCheckinHandler">
-    <option name="UPDATE_COPYRIGHT" value="true" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Added email notification feature in vendors proposals request.&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Added email notification feature with attachments&#10;2. Updated UI&#10;3. Bug fixes and code optimization&#10;4. Updated models and database" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization&#10;3. Completed viewing proposals and its details" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization&#10;3. Completed proposal evaluating, selecting and sending email notifications" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimization&#10;3. Completed purchase order generating, sending and acknowledging&#10;4. Updated models and database" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Testing" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Added products, inventory, inventory items, product requests and product request items" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Imported sample assets alias products data using excel" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Bug fixes and code optimisation" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated models and database&#10;2. Bug fixes and code optimisation&#10;3. Updated stock and inventory permissions" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added stocks - goods and assets index sections" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added PO requests to stock admin" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed items received, pending for stock admin with inventory and products update" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Removed Order Attachments and included it in Attachments" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Reset Database" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Tested all functions and fixed errors" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database for invoice processing module" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Added Receptionist Operator Role" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed invoice processing module" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added vendor proposal notification to OPM&#10;4. Removed JSON functions&#10;5. Added My Requests for Orders and Product Requests" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Added MEL Roles" />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Completed setup of mel indicators, results and activities tables." />
-    <MESSAGE value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed indicators section" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates (v1.0.0)&#10;1. Updated UI&#10;2. Bug fixes and code optimisation&#10;3. Updated models and database&#10;4. Completed indicators section" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/backend/views/order_proposal_views.py">
+    <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="1229" column="62" selection-start-line="1229" selection-start-column="62" selection-end-line="1229" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="120">
+          <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/setting_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="63" column="9" lean-forward="true" selection-start-line="63" selection-start-column="9" selection-end-line="63" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/mel_activity_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/tables/mel_result_tables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="82" column="39" selection-start-line="82" selection-start-column="39" selection-end-line="82" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/tables/mel_activity_tables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/tables/mel_indicator_tables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="91" column="28" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/mel_activity_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="46" column="72" selection-start-line="46" selection-start-column="72" selection-end-line="46" selection-end-column="72" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-activities/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/context_processors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="46" column="58" lean-forward="true" selection-start-line="46" selection-start-column="58" selection-end-line="46" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="445" column="39" selection-start-line="445" selection-end-line="445" selection-end-column="39" />
-          <folding>
-            <element signature="e#323#338#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/operator_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="406" column="9" lean-forward="true" selection-start-line="377" selection-end-line="406" selection-end-column="9" />
-          <folding>
-            <element signature="e#516#4938#0" />
-            <element signature="e#4988#7782#0" />
-            <element signature="e#7840#9214#0" />
-            <element signature="e#9271#12479#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/order_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="713" column="14" lean-forward="true" selection-start-line="664" selection-start-column="4" selection-end-line="713" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-            <element signature="e#26925#29493#0" />
-            <element signature="e#29587#32171#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/index.html">
+    <entry file="file://$PROJECT_DIR$/venv/pip-selfcheck.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/order_item_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="2" selection-end-column="73" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-            <element signature="e#559#8553#0" />
-            <element signature="e#8644#16638#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/view.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="45" column="114" lean-forward="true" selection-start-line="44" selection-start-column="31" selection-end-line="45" selection-end-column="114" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/inventory_item_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="51" column="10" lean-forward="true" selection-start-line="37" selection-start-column="4" selection-end-line="51" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/operators/update.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="715">
-          <caret line="199" column="74" lean-forward="true" selection-start-line="198" selection-start-column="19" selection-end-line="199" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/update.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/_include/navigation-left.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4835">
-          <caret line="561" column="97" selection-start-line="561" selection-start-column="97" selection-end-line="561" selection-end-column="97" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/order_item_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="9" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#6441#11259#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/product_request_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/product_request_item_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3980">
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/product_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="260" column="40" lean-forward="true" selection-start-line="260" selection-start-column="20" selection-end-line="260" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../qtvms/venv/lib/python3.7/site-packages/django/db/migrations/migration.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="86" selection-start-line="86" selection-end-line="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/migrations/0044_auto_20190404_2002.py" />
-    <entry file="file://$PROJECT_DIR$/app/migrations/0042_auto_20190404_0830.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="53" column="87" selection-start-line="53" selection-start-column="84" selection-end-line="53" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/migrations/0043_auto_20190404_1911.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/update-item.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="700">
-          <caret line="65" selection-start-line="65" selection-end-line="72" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="18" lean-forward="true" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/operators/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
-          <folding>
-            <element signature="e#1689#7770#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/orders/view-edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="109" column="60" lean-forward="true" selection-start-line="109" selection-start-column="60" selection-end-line="109" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/order_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1410">
-          <caret line="94" column="55" lean-forward="true" selection-start-line="94" selection-start-column="55" selection-end-line="94" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/operator_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1516">
-          <caret line="670" selection-start-line="670" selection-end-line="687" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#991#4916#0" />
-            <element signature="e#4981#5692#0" />
-            <element signature="e#5720#13305#0" />
-            <element signature="e#13342#19534#0" />
-            <element signature="e#19577#22550#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/update.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="67" column="65" selection-start-line="67" selection-start-column="65" selection-end-line="67" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="2801" column="15" selection-start-line="2801" selection-start-column="4" selection-end-line="2801" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/tables/operator_tables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="121" column="24" lean-forward="true" selection-start-line="121" selection-start-column="24" selection-end-line="121" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/operators/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="91" column="30" lean-forward="true" selection-start-line="53" selection-start-column="24" selection-end-line="91" selection-end-column="30" />
-          <folding>
-            <element signature="e#2649#2674#0#HTML" expanded="true" />
-            <element signature="e#2625#5248#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/operators/view.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="76" column="28" lean-forward="true" selection-start-line="76" selection-start-column="24" selection-end-line="76" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="760">
-          <caret line="105" column="15" selection-start-line="105" selection-start-column="15" selection-end-line="105" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-sub-results/index.html">
+    <entry file="file://$PROJECT_DIR$/venv/pyvenv.cfg">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-sub-results/create.html">
+    <entry file="file://$PROJECT_DIR$/venv/bin/activate.fish">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="63" selection-start-line="3" selection-start-column="63" selection-end-line="3" selection-end-column="63" />
+        <state relative-caret-position="205">
+          <caret line="31" column="74" selection-start-line="31" selection-start-column="74" selection-end-line="31" selection-end-column="74" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-sub-results/update.html">
+    <entry file="file://$PROJECT_DIR$/venv/bin/activate.csh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="63" />
+        <state relative-caret-position="150">
+          <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/mel_indicator_forms.py">
+    <entry file="file://$PROJECT_DIR$/venv/bin/chardetect">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret selection-end-column="79" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-            <element signature="e#2216#3001#0" />
-            <element signature="e#3095#3880#0" />
-          </folding>
+          <caret selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/mel_indicator_views.py">
+    <entry file="file://$PROJECT_DIR$/venv/bin/django-admin">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="71" selection-start-line="71" selection-end-line="227" selection-end-column="80" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#3161#7421#0" />
-            <element signature="e#7503#11375#0" />
-          </folding>
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/urls.py">
+    <entry file="file://$PROJECT_DIR$/venv/bin/django-admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="551" column="21" selection-start-line="551" selection-start-column="21" selection-end-line="551" selection-end-column="21" />
-          <folding>
-            <element signature="e#33#65#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-indicators/index.html">
+    <entry file="file://$PROJECT_DIR$/venv/bin/easy_install">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="160" column="68" lean-forward="true" selection-start-line="159" selection-start-column="12" selection-end-line="160" selection-end-column="68" />
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/forms/mel_result_forms.py">
+    <entry file="file://$PROJECT_DIR$/venv/bin/easy_install-3.7">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="309" column="33" selection-start-line="309" selection-start-column="33" selection-end-line="309" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/mel_sub_result_views.py">
+    <entry file="file://$PROJECT_DIR$/venv/bin/f2py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="107" column="79" selection-start-line="107" selection-start-column="79" selection-end-line="107" selection-end-column="79" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/views/mel_result_views.py">
+    <entry file="file://$PROJECT_DIR$/venv/bin/pip">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="51" column="77" selection-start-line="51" selection-start-column="77" selection-end-line="51" selection-end-column="77" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/index.html">
+    <entry file="file://$PROJECT_DIR$/venv/bin/pip3">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="197" column="24" lean-forward="true" selection-start-line="182" selection-start-column="11" selection-end-line="197" selection-end-column="24" />
-          <folding>
-            <element signature="e#6870#6889#0#HTML" expanded="true" />
-            <element signature="e#6960#6979#0#HTML" expanded="true" />
-          </folding>
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/templates/mel-results/view.html">
+    <entry file="file://$PROJECT_DIR$/venv/bin/runxlrd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="87" column="84" selection-start-line="87" selection-start-column="84" selection-end-line="87" selection-end-column="84" />
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/bin/qr">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/bin/pip3.7">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="66" selection-start-column="66" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/bin/activate">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="39" column="61" selection-start-line="39" selection-start-column="61" selection-end-line="39" selection-end-column="61" />
         </state>
       </provider>
     </entry>
