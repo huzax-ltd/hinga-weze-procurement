@@ -1188,6 +1188,7 @@ class Orders(models.Model):
 
         return objects
 
+    # noinspection PyUnusedLocal
     @classmethod
     def update_grand_total(cls, request, model, operator):
 
@@ -2766,7 +2767,7 @@ class Mel_Indicators(models.Model):
     mel_indicator_code = models.CharField('Code', max_length=8, blank=False)
     mel_indicator_number = models.IntegerField('Number', blank=False, default=0)
     mel_indicator_name = models.CharField('Name', max_length=100, blank=False)
-    mel_indicator_details = models.CharField('Details', max_length=255, blank=False)
+    mel_indicator_details = models.TextField('Details', blank=False)
     mel_indicator_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     mel_indicator_created_id = models.CharField('Created ID', max_length=100, blank=True)
     mel_indicator_created_by = models.CharField('Created By', max_length=100, blank=True)
@@ -2804,8 +2805,10 @@ class Mel_Results(models.Model):
 
     mel_result_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     mel_indicators_mel_indicator_code = models.CharField('Code', max_length=255, blank=False)
-    mel_result_details = models.CharField('Details', max_length=255, blank=False)
-    mel_indicator_ids = models.CharField('Indicators', max_length=255, blank=True)
+    mel_result_details = models.TextField('Component', blank=False)
+    mel_sub_result_details = models.TextField('Indicator Level', blank=False, default='')
+    mel_result_indicator_ids = models.CharField('Indicators', max_length=255, blank=True)
+    mel_result_domain_of_intervention = models.CharField('Domain of Intervention', max_length=255, blank=True)
     mel_result_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     mel_result_created_id = models.CharField('Created ID', max_length=100, blank=True)
     mel_result_created_by = models.CharField('Created By', max_length=100, blank=True)
@@ -2833,31 +2836,6 @@ class Mel_Results(models.Model):
 
 # Create your models here.
 # noinspection PyUnresolvedReferences
-class Mel_Sub_Results(models.Model):
-    TITLE = settings.MODEL_MEL_SUB_RESULTS_PLURAL_TITLE
-    SINGULAR_TITLE = settings.MODEL_MEL_SUB_RESULTS_SINGULAR_TITLE
-    NAME = "-".join((TITLE.lower()).split())
-
-    mel_sub_result_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
-    mel_results_mel_result_id = models.IntegerField('Id', blank=False)
-    mel_sub_result_details = models.CharField('Details', max_length=255, blank=False)
-    mel_sub_result_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
-    mel_sub_result_created_id = models.CharField('Created ID', max_length=100, blank=True)
-    mel_sub_result_created_by = models.CharField('Created By', max_length=100, blank=True)
-    mel_sub_result_created_department = models.CharField('Created Department', max_length=255, blank=True)
-    mel_sub_result_created_role = models.CharField('Created Role', max_length=255, blank=True)
-    mel_sub_result_updated_at = models.DateTimeField('Updated At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
-    mel_sub_result_updated_id = models.CharField('Updated ID', max_length=100, blank=True)
-    mel_sub_result_updated_by = models.CharField('Updated By', max_length=100, blank=True)
-    mel_sub_result_updated_department = models.CharField('Updated Department', max_length=255, blank=True)
-    mel_sub_result_updated_role = models.CharField('Updated Role', max_length=255, blank=True)
-
-    def __unicode__(self):
-        return self.mel_sub_result_id
-
-
-# Create your models here.
-# noinspection PyUnresolvedReferences
 class Mel_Activities(models.Model):
     TITLE = settings.MODEL_MEL_ACTIVITIES_PLURAL_TITLE
     SINGULAR_TITLE = settings.MODEL_MEL_ACTIVITIES_SINGULAR_TITLE
@@ -2865,7 +2843,64 @@ class Mel_Activities(models.Model):
 
     mel_activity_id = models.AutoField(SINGULAR_TITLE + ' Id', primary_key=True)
     mel_results_mel_result_id = models.IntegerField('Id', blank=False)
-    mel_activity_details = models.CharField('Details', max_length=255, blank=False)
+    mel_activity_district = models.CharField('District', max_length=255, blank=False, default='')
+    mel_activity_details = models.TextField('Planned Activities', blank=False)
+    mel_activity_output = models.TextField('Output', blank=True)
+    mel_activity_annual_target = models.TextField('Annual Target', blank=True)
+
+    mel_activity_planned_jan = models.IntegerField('Planned JAN', blank=False, default=0)
+    mel_activity_achieved_jan = models.IntegerField('Achieved JAN', blank=False, default=0)
+    mel_activity_status_jan = models.CharField('Status JAN', max_length=255, blank=True)
+
+    mel_activity_planned_feb = models.IntegerField('Planned FEB', blank=False, default=0)
+    mel_activity_achieved_feb = models.IntegerField('Achieved FEB', blank=False, default=0)
+    mel_activity_status_feb = models.CharField('Status FEB', max_length=255, blank=True)
+
+    mel_activity_planned_mar = models.IntegerField('Planned MAR', blank=False, default=0)
+    mel_activity_achieved_mar = models.IntegerField('Achieved MAR', blank=False, default=0)
+    mel_activity_status_mar = models.CharField('Status MAR', max_length=255, blank=True)
+
+    mel_activity_planned_apr = models.IntegerField('Planned APR', blank=False, default=0)
+    mel_activity_achieved_apr = models.IntegerField('Achieved APR', blank=False, default=0)
+    mel_activity_status_apr = models.CharField('Status APR', max_length=255, blank=True)
+
+    mel_activity_planned_may = models.IntegerField('Planned MAY', blank=False, default=0)
+    mel_activity_achieved_may = models.IntegerField('Achieved MAY', blank=False, default=0)
+    mel_activity_status_may = models.CharField('Status MAY', max_length=255, blank=True)
+
+    mel_activity_planned_jun = models.IntegerField('Planned JUN', blank=False, default=0)
+    mel_activity_achieved_jun = models.IntegerField('Achieved JUN', blank=False, default=0)
+    mel_activity_status_jun = models.CharField('Status JUN', max_length=255, blank=True)
+
+    mel_activity_planned_jul = models.IntegerField('Planned JUL', blank=False, default=0)
+    mel_activity_achieved_jul = models.IntegerField('Achieved JUL', blank=False, default=0)
+    mel_activity_status_jul = models.CharField('Status JUL', max_length=255, blank=True)
+
+    mel_activity_planned_aug = models.IntegerField('Planned AUG', blank=False, default=0)
+    mel_activity_achieved_aug = models.IntegerField('Achieved AUG', blank=False, default=0)
+    mel_activity_status_aug = models.CharField('Status AUG', max_length=255, blank=True)
+
+    mel_activity_planned_sep = models.IntegerField('Planned SEP', blank=False, default=0)
+    mel_activity_achieved_sep = models.IntegerField('Achieved SEP', blank=False, default=0)
+    mel_activity_status_sep = models.CharField('Status SEP', max_length=255, blank=True)
+
+    mel_activity_planned_oct = models.IntegerField('Planned OCT', blank=False, default=0)
+    mel_activity_achieved_oct = models.IntegerField('Achieved OCT', blank=False, default=0)
+    mel_activity_status_oct = models.CharField('Status OCT', max_length=255, blank=True)
+
+    mel_activity_planned_nov = models.IntegerField('Planned NOV', blank=False, default=0)
+    mel_activity_achieved_nov = models.IntegerField('Achieved NOV', blank=False, default=0)
+    mel_activity_status_nov = models.CharField('Status NOV', max_length=255, blank=True)
+
+    mel_activity_planned_dec = models.IntegerField('Planned DEC', blank=False, default=0)
+    mel_activity_achieved_dec = models.IntegerField('Achieved DEC', blank=False, default=0)
+    mel_activity_status_dec = models.CharField('Status DEC', max_length=255, blank=True)
+
+    mel_activity_managed_id = models.CharField('Managed ID', max_length=100, blank=True)
+    mel_activity_managed_by = models.CharField('Managed By', max_length=100, blank=True)
+    mel_activity_managed_department = models.CharField('Managed Department', max_length=255, blank=True)
+    mel_activity_managed_role = models.CharField('Managed Role', max_length=255, blank=True)
+
     mel_activity_created_at = models.DateTimeField('Created At', default=settings.APP_CONSTANT_DEFAULT_DATETIME)
     mel_activity_created_id = models.CharField('Created ID', max_length=100, blank=True)
     mel_activity_created_by = models.CharField('Created By', max_length=100, blank=True)
@@ -2881,6 +2916,8 @@ class Mel_Activities(models.Model):
     mel_activity_assigned_to_by = models.CharField('Assigned By', max_length=100, blank=True)
     mel_activity_assigned_to_department = models.CharField('Assigned Department', max_length=255, blank=True)
     mel_activity_assigned_to_role = models.CharField('Assigned Role', max_length=255, blank=True)
+
+    mel_activity_status = models.CharField('Status', max_length=255, blank=True)
 
     def __unicode__(self):
         return self.mel_activity_id

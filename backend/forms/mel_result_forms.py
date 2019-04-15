@@ -1,9 +1,8 @@
-from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from django import forms
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from tinymce.widgets import TinyMCE
 
-from app.models import Mel_Indicators, Mel_Results, Mel_Sub_Results
+from app.models import Mel_Indicators, Mel_Results
 
 
 class TinyMCEWidget(TinyMCE):
@@ -302,68 +301,4 @@ class MelResultUpdateForm(forms.ModelForm):
             'mel_indicator_id',
             'mel_result_details',
             'mel_indicator_ids',
-        )
-
-
-class MelSubResultCreateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
-    mel_sub_result_details = forms.CharField(
-        label='Sub Result Details',
-        min_length=1,
-        max_length=255,
-        required=True,
-        validators=[MinLengthValidator(1), MaxLengthValidator(255)],
-        widget=forms.Textarea(
-            attrs={
-                'class': 'form-control',
-                'placeholder': '',
-                'autocomplete': 'off',
-                'aria-label': 'form-label',
-                'rows': 5,
-            }
-        ))
-
-    def clean_mel_sub_result_details(self):
-        data = self.cleaned_data['mel_sub_result_details']
-        return data
-
-    def clean(self):
-        cleaned_data = super(MelSubResultCreateForm, self).clean()
-        return cleaned_data
-
-    class Meta:
-        model = Mel_Sub_Results
-        fields = (
-            'mel_sub_result_details',
-        )
-
-
-class MelSubResultUpdateForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
-    mel_sub_result_details = forms.CharField(
-        label='Sub Result Details',
-        min_length=1,
-        max_length=255,
-        required=True,
-        validators=[MinLengthValidator(1), MaxLengthValidator(255)],
-        widget=forms.Textarea(
-            attrs={
-                'class': 'form-control',
-                'placeholder': '',
-                'autocomplete': 'off',
-                'aria-label': 'form-label',
-                'rows': 5,
-            }
-        ))
-
-    def clean_mel_sub_result_details(self):
-        data = self.cleaned_data['mel_sub_result_details']
-        return data
-
-    def clean(self):
-        cleaned_data = super(MelSubResultUpdateForm, self).clean()
-        return cleaned_data
-
-    class Meta:
-        model = Mel_Sub_Results
-        fields = (
-            'mel_sub_result_details',
         )

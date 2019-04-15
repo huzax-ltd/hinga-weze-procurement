@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from app import settings
-from app.models import Operators, Mel_Indicators, Mel_Results, Mel_Sub_Results
+from app.models import Operators, Mel_Indicators, Mel_Results
 from app.utils import Utils
 from backend.forms.mel_result_forms import MelResultSearchIndexForm, MelResultCreateForm, MelResultUpdateForm
 from backend.tables.mel_result_tables import MelResultsTable
@@ -80,13 +80,8 @@ def index(request, id):
                         continue
                 item.indicators = item.indicators + '</ul>'
 
-                mel_sub_results = Mel_Sub_Results.objects.filter(mel_results_mel_result_id=item.mel_result_id).all()
                 item.sub_results = '<ul class="li_mel_indicators">'
                 counter = 1
-                for mel_sub_result in mel_sub_results:
-                    item.sub_results = item.sub_results + '<li>' + str(
-                        counter) + '. ' + mel_sub_result.mel_sub_result_details + '</li>'
-                    counter = counter + 1
                 item.sub_results = item.sub_results + '</ul>'
 
                 results.append(item)
@@ -311,8 +306,6 @@ def view(request, pk):
                         continue
                 model.indicators = model.indicators + '</ul>'
 
-                mel_sub_results = Mel_Sub_Results.objects.filter(mel_results_mel_result_id=model.mel_result_id).all()
-
                 return render(
                     request, template_url,
                     {
@@ -323,7 +316,6 @@ def view(request, pk):
                         'auth_permissions': auth_permissions,
                         'model': model,
                         'mel_indicator': mel_indicator,
-                        'mel_sub_results': mel_sub_results,
                         'index_url': reverse("mel_results_index", kwargs={'id': mel_indicator.mel_indicator_id}),
                     }
                 )

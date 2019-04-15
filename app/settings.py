@@ -148,31 +148,20 @@ STATIC_PROD = 'https://hingaweze.pythonanywhere.com/static/'
 
 if IS_LOCAL:
     DATABASES = {
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.sqlite3',
-        #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # }
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'hinga_weze_procurement_test_db',
             'USER': 'root',
             'PASSWORD': 'root',
-            'HOST': '/Applications/AMPPS/var/mysql.sock',
-            'PORT': '3306',
-            # 'HOST': '/var/run/mysqld/mysqld.sock',
-            # 'PORT': '3306',
+            'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
+            'PORT': '8889',
             'OPTIONS': {
-                # Ignore MySQL Strict Mode is not set for database connection 'default'
                 'sql_mode': 'traditional',
             }
         }
     }
 else:
     DATABASES = {
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.sqlite3',
-        #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # }
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'HingaWeze$hinga_weze_procurement_test_db',
@@ -180,10 +169,7 @@ else:
             'PASSWORD': 'Kigali@321',
             'HOST': 'HingaWeze.mysql.pythonanywhere-services.com',
             'PORT': '3306',
-            # 'HOST': '/var/run/mysqld/mysqld.sock',
-            # 'PORT': '3306',
             'OPTIONS': {
-                # Ignore MySQL Strict Mode is not set for database connection 'default'
                 'sql_mode': 'traditional',
             }
         }
@@ -497,10 +483,10 @@ MODEL_BACKUPS_PLURAL_TITLE = 'Backups'
 MODEL_BACKUPS_SINGULAR_TITLE = 'Backup'
 MODEL_MEL_INDICATORS_PLURAL_TITLE = 'Indicators'
 MODEL_MEL_INDICATORS_SINGULAR_TITLE = 'Indicator'
-MODEL_MEL_RESULTS_PLURAL_TITLE = 'Intermediate Results'
-MODEL_MEL_RESULTS_SINGULAR_TITLE = 'Intermediate Result'
-MODEL_MEL_SUB_RESULTS_PLURAL_TITLE = 'Sub-intermediate Results'
-MODEL_MEL_SUB_RESULTS_SINGULAR_TITLE = 'Sub-intermediate Result'
+MODEL_MEL_RESULTS_PLURAL_TITLE = 'Components'
+MODEL_MEL_RESULTS_SINGULAR_TITLE = 'Component'
+MODEL_MEL_SUB_RESULTS_PLURAL_TITLE = 'Indicator Levels'
+MODEL_MEL_SUB_RESULTS_SINGULAR_TITLE = 'Indicator Level'
 MODEL_MEL_ACTIVITIES_PLURAL_TITLE = 'Activities'
 MODEL_MEL_ACTIVITIES_SINGULAR_TITLE = 'Activity'
 MODEL_MEL_SUB_ACTIVITIES_PLURAL_TITLE = 'Sub-activities'

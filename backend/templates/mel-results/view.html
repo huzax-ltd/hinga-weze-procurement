@@ -71,36 +71,6 @@
                                 <td colspan="10" style="font-weight: bold;">Sub Results</td>
                                 <td colspan="1" style="font-weight: bold;" width="100">Action</td>
                             </tr>
-                            {% for mel_sub_result in mel_sub_results %}
-                                <tr>
-                                    <td colspan="1">{{ forloop.counter }}</td>
-                                    <td colspan="10">{{ mel_sub_result.mel_sub_result_details }}</td>
-                                    <td colspan="1">
-                                        <div class="dt-buttons">
-                                            <button role="button" type="button"
-                                                    class="btn btn-outline-primary fuse-ripple-ready dropdown-toggle"
-                                                    data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                Action
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
-                                                    <a class="dropdown-item" href="#"
-                                                       id="btn-edit-sub-result-{{ mel_sub_result.mel_sub_result_id }}">
-                                                        Update
-                                                    </a>
-                                                {% endif %}
-                                                {% if ACCESS_PERMISSION_MEL_RESULTS_DELETE in auth_permissions.values %}
-                                                    <a class="dropdown-item"
-                                                       id="btn-delete-sub-result-{{ mel_sub_result.mel_sub_result_id }}">
-                                                        Delete
-                                                    </a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
                             </thead>
                         </table>
                         <br>
@@ -131,20 +101,6 @@
             $("#modal").on("hidden.bs.modal", function () {
                 location.reload();
             });
-            var url = "{% url 'mel_sub_results_create' id='P1' %}";
-            url = url.replace("P1", "{{ model.mel_result_id }}");
-            $("#btn-create-sub-result").modalForm({
-                formURL: url
-            });
-            {% for mel_sub_result in mel_sub_results %}
-                {% if ACCESS_PERMISSION_MEL_RESULTS_UPDATE in auth_permissions.values %}
-                    url = "{% url 'mel_sub_results_update' pk='P1' %}";
-                    url = url.replace("P1", "{{ mel_sub_result.mel_sub_result_id }}");
-                    $("#btn-edit-sub-result-{{ mel_sub_result.mel_sub_result_id }}").modalForm({
-                        formURL: url
-                    });
-                {% endif %}
-            {% endfor %}
             $(".li_mel_indicators").css({
                 "margin": "0",
                 "padding": "0",

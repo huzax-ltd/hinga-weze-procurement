@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 from backend.views import operator_views, operator_log_views, order_views, order_item_views, order_proposal_views, \
     product_views, inventory_item_views, product_request_views, product_request_item_views, site_views, setting_views, \
-    notification_views, mel_indicator_views, mel_result_views, mel_sub_result_views, mel_activity_views
+    notification_views, mel_indicator_views, mel_result_views, mel_activity_views
 
 urlpatterns = [
 
@@ -565,19 +565,6 @@ urlpatterns = [
     # view
     url(r'^mel/results/view/(?P<pk>.+)/$', mel_result_views.view, name='mel_results_view'),
     url(r'^mel/results/view/(?P<pk>.+)/service-worker.js',
-        (TemplateView.as_view(template_name="service-worker/service-worker.js",
-                              content_type='application/javascript', )),
-        name='service-worker.js'),
-    # mel sub results
-    # create
-    url(r'^mel/sub-results/create/(?P<id>.+)/$', mel_sub_result_views.create, name='mel_sub_results_create'),
-    url(r'^mel/sub-results/create/(?P<id>.+)/service-worker.js',
-        (TemplateView.as_view(template_name="service-worker/service-worker.js",
-                              content_type='application/javascript', )),
-        name='service-worker.js'),
-    # update
-    url(r'^mel/sub-results/update/(?P<pk>.+)/$', mel_sub_result_views.update, name='mel_sub_results_update'),
-    url(r'^mel/sub-results/update/(?P<pk>.+)/service-worker.js',
         (TemplateView.as_view(template_name="service-worker/service-worker.js",
                               content_type='application/javascript', )),
         name='service-worker.js'),
